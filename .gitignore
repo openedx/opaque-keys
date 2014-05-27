@@ -5,6 +5,16 @@ __pycache__/
 # C extensions
 *.so
 
+# Editor and IDE artifacts
+*~
+*.swp
+*.orig
+/nbproject
+.idea/
+.redcar/
+codekit-config.json
+.pycharm_helpers/
+
 # Distribution / packaging
 .Python
 env/
