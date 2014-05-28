@@ -1,1 +1,7 @@
 mock
+nose
+coverage
+pep8
+pylint<1.0
+-e .
+-r requirements.txt
