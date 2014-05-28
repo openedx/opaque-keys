@@ -1,0 +1,11 @@
+#!/bin/bash
+pylint xblock | tee /tmp/pylint-xblock.log
+echo
+ERR=`grep -v "\*\*\*\*\*\*\*\*\*\*" /tmp/pylint-xblock.log | wc -l`
+if [ $ERR -ge $1 ]; then
+    echo "Too many pylint violations: $ERR (max is $1)"
+    exit 1
+else
+    echo "$ERR Total Pylint Violations (max is $1)"
+fi
+
