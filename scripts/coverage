@@ -1,0 +1,11 @@
+# Compute coverage
+coverage run -m nose
+coverage html -i
+coverage xml -i -o coverage.xml
+if [ "$1" == "html" ]; then
+   echo "Generating diff_cover.html"
+   diff-cover coverage.xml --html-report diff_cover.html
+else
+   echo "Generating diff_cover report"
+   diff-cover coverage.xml
+fi
