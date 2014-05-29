@@ -42,7 +42,8 @@ class SlashSeparatedCourseKey(CourseKey):
         checks that the values are syntactically valid before creating object
         """
         for part in (org, course, run):
-            LocationBase._check_location_part(part, INVALID_CHARS)
+            # Allow access to _check_location_part
+            LocationBase._check_location_part(part, INVALID_CHARS)  # pylint: disable=protected-access
         super(SlashSeparatedCourseKey, self).__init__(org, course, run)
 
     @classmethod
@@ -69,10 +70,15 @@ class SlashSeparatedCourseKey(CourseKey):
         return Location(self.org, self.course, self.run, block_type, name, None)
 
     def to_deprecated_string(self):
+        """Returns an 'old-style' course id, represented as 'org/course/run'"""
         return u'/'.join([self.org, self.course, self.run])
 
     @classmethod
     def from_deprecated_string(cls, serialized):
+        """
+        Temporary mechanism for creating a CourseKey given a serialized Location.
+        NOTE: this prejudicially takes the org and course from the url not self.
+        """
         return cls._from_string(serialized)
 
     def make_usage_key_from_deprecated_string(self, location_url):
@@ -97,7 +103,7 @@ class LocationBase(object):
     """
     KEY_FIELDS = ('org', 'course', 'run', 'category', 'name', 'revision')
 
-    SERIALIZED_PATTERN = re.compile("""
+    SERIALIZED_PATTERN = re.compile(r"""
         (?P<org>[^/]+)\+
         (?P<course>[^/]+)\+
         (?P<run>[^/]+)\+
@@ -186,19 +192,30 @@ class LocationBase(object):
 
     @property
     def tag(self):
+        """Returns the deprecated tag for this Location."""
         return self.DEPRECATED_TAG
 
     @property
     def definition_key(self):
+        """
+        Return the :class:`DefinitionKey` for the XBlock containing this Location.
+        """
         # Locations are both UsageKeys and DefinitionKeys
         return self
 
     @property
     def block_type(self):
+        """
+        The XBlock type of this Location.
+        """
         return self.category
 
     @classmethod
     def from_deprecated_string(cls, serialized):
+        """
+        Temporary mechanism for creating a CourseKey given a serialized Location.
+        NOTE: this prejudicially takes the tag, org, and course from the url not self.
+        """
         match = URL_RE.match(serialized)
         if match is None:
             raise InvalidKeyError(Location, serialized)
@@ -206,12 +223,19 @@ class LocationBase(object):
         return cls(run=None, **groups)
 
     def to_deprecated_string(self):
+        """
+        Returns an old-style location, represented as:
+        i4x://org/course/category/name
+        """
         url = u"{0.DEPRECATED_TAG}://{0.org}/{0.course}/{0.category}/{0.name}".format(self)
         if self.revision:
             url += u"@{rev}".format(rev=self.revision)  # pylint: disable=E1101
         return url
 
     def _to_string(self):
+        """
+        Return a string representing this location.
+        """
         output = u"+".join(
             unicode(val)
             for val in (self.org, self.course, self.run, self.category, self.name)
@@ -222,6 +246,10 @@ class LocationBase(object):
 
     @classmethod
     def _from_string(cls, serialized):
+        """
+        Return a CourseLocator parsing the given serialized string
+        :param serialized: matches the string to a CourseLocator
+        """
         match = cls.SERIALIZED_PATTERN.match(serialized)
         if not match:
             raise InvalidKeyError(cls, serialized)
@@ -239,6 +267,7 @@ class LocationBase(object):
 
     @property
     def course_key(self):
+        """Returns a SlashSeparatedCourseKey comprised of this location's org, course, and run."""
         return SlashSeparatedCourseKey(self.org, self.course, self.run)
 
     def to_deprecated_son(self, prefix='', tag='i4x'):
@@ -301,6 +330,11 @@ class AssetLocation(LocationBase, AssetKey):
         return self.name
 
     def to_deprecated_string(self):
+        """
+        Returns an old-style location, represented as:
+
+        /c4x/org/course/category/name
+        """
         url = u"/{0.DEPRECATED_TAG}/{0.org}/{0.course}/{0.category}/{0.name}".format(self)
         return url
 
@@ -342,7 +376,8 @@ class AssetLocation(LocationBase, AssetKey):
         return ['c4x', self.org, self.course, self.block_type, self.name, None]
 
 
-class i4xEncoder(json.JSONEncoder):
+# Allow class name to start wtih a lowercase letter
+class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
     """
     If provided as the cls to json.dumps, will serialize and Locations as i4x strings and other
     keys using the unicode strings.

@@ -126,5 +126,7 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
 
     @property
     def block_type(self):
+        """
+        The XBlock type of this definition.
+        """
         return self.category
-

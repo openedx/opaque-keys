@@ -52,8 +52,9 @@ class Locator(OpaqueKey):
     def version(self):
         """
         Returns the ObjectId referencing this specific location.
-        Raises InvalidKeyError if the instance
-        doesn't have a complete enough specification.
+
+        Raises:
+            InvalidKeyError: if the instance doesn't have a complete enough specification.
         """
         raise NotImplementedError()
 
@@ -61,7 +62,9 @@ class Locator(OpaqueKey):
     def as_object_id(cls, value):
         """
         Attempts to cast value as a bson.objectid.ObjectId.
-        If cast fails, raises ValueError
+
+        Raises:
+            ValueError: if casting fails
         """
         try:
             return ObjectId(value)
@@ -69,8 +72,15 @@ class Locator(OpaqueKey):
             raise ValueError('"%s" is not a valid version_guid' % value)
 
 
+# `BlockLocatorBase` is another abstract base class, so don't worry that it doesn't
+# provide implementations for _from_string, _to_string, and version.
+# pylint: disable=abstract-method
 class BlockLocatorBase(Locator):
+    """
+    Abstract base clase for XBlock locators.
 
+    See subclasses for more detail, particularly `CourseLocator` and `BlockUsageLocator`.
+    """
     # Token separating org from offering
     ORG_SEPARATOR = '+'
 
@@ -81,6 +91,9 @@ class BlockLocatorBase(Locator):
 
     ALLOWED_ID_RE = re.compile(r'^' + Locator.ALLOWED_ID_CHARS + '+$', re.UNICODE)
 
+    # pep8 and pylint don't agree on the indentation in this block; let's make
+    # pep8 happy and ignore pylint as that's easier to do.
+    # pylint: disable=bad-continuation
     URL_RE_SOURCE = r"""
         ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<offering>{ALLOWED_ID_CHARS}+)\+?)??
         ({BRANCH_PREFIX}\+(?P<branch>{ALLOWED_ID_CHARS}+)\+?)?
@@ -88,23 +101,26 @@ class BlockLocatorBase(Locator):
         ({BLOCK_TYPE_PREFIX}\+(?P<block_type>{ALLOWED_ID_CHARS}+)\+?)?
         ({BLOCK_PREFIX}\+(?P<block_id>{ALLOWED_ID_CHARS}+))?
         """.format(
-            ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS, BRANCH_PREFIX=BRANCH_PREFIX,
-            VERSION_PREFIX=Locator.VERSION_PREFIX, BLOCK_TYPE_PREFIX=Locator.BLOCK_TYPE_PREFIX, BLOCK_PREFIX=BLOCK_PREFIX
-        )
+        ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
+        BRANCH_PREFIX=BRANCH_PREFIX,
+        VERSION_PREFIX=Locator.VERSION_PREFIX,
+        BLOCK_TYPE_PREFIX=Locator.BLOCK_TYPE_PREFIX,
+        BLOCK_PREFIX=BLOCK_PREFIX,
+    )
 
     URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.IGNORECASE | re.VERBOSE | re.UNICODE)
-
 
     @classmethod
     def parse_url(cls, string):
         """
-        Raises InvalidKeyError if string cannot be parsed.
-
         If it can be parsed as a version_guid with no preceding org + offering, returns a dict
         with key 'version_guid' and the value,
 
         If it can be parsed as a org + offering, returns a dict
         with key 'id' and optional keys 'branch' and 'version_guid'.
+
+        Raises:
+            InvalidKeyError: if string cannot be parsed.
         """
         match = cls.URL_RE.match(string)
         if not match:
@@ -113,10 +129,16 @@ class BlockLocatorBase(Locator):
 
     @property
     def package_id(self):
+        """
+        Returns the package identifier for this `BlockLocator`.
+
+        Returns 'self.org+self.offering' if both are present; else returns None.
+        """
         if self.org and self.offering:
             return u'{}{}{}'.format(self.org, self.ORG_SEPARATOR, self.offering)
         else:
             return None
+# pylint: enable=abstract-method
 
 
 class CourseLocator(BlockLocatorBase, CourseKey):
@@ -213,7 +235,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         by reducing info.
         Returns a copy of itself without any version info.
 
-        :raises: ValueError if the block locator has no org & offering
+        Raises:
+            ValueError: if the block locator has no org & offering
         """
         return CourseLocator(
             org=self.org,
@@ -227,7 +250,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         We only care about the locator's version not its course.
         Returns a copy of itself without any course info.
 
-        :raises: ValueError if the block locator has no version_guid
+        Raises:
+            ValueError: if the block locator has no version_guid
         """
         return CourseLocator(
             org=None,
@@ -315,7 +339,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         Requests CourseLocator to deserialize its part and then adds the local deserialization of block
         """
-        course_key = CourseLocator._from_string(serialized)
+        # Allow access to _from_string protected method
+        course_key = CourseLocator._from_string(serialized)  # pylint: disable=protected-access
         parsed_parts = cls.parse_url(serialized)
         block_id = parsed_parts.get('block_id', None)
         if block_id is None:
@@ -328,7 +353,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         by reducing info.
         Returns a copy of itself without any version info.
 
-        :raises: ValueError if the block locator has no org and offering
+        Raises:
+            ValueError: if the block locator has no org and offering
         """
         return BlockUsageLocator(
             course_key=self.course_key.version_agnostic(),
@@ -341,7 +367,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         We only care about the locator's version not its course.
         Returns a copy of itself without any course info.
 
-        :raises: ValueError if the block locator has no version_guid
+        Raises:
+            ValueError if the block locator has no version_guid
         """
         return BlockUsageLocator(
             course_key=self.course_key.course_agnostic(),
@@ -371,6 +398,14 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
 
     @classmethod
     def _parse_block_ref(cls, block_ref):
+        """
+        Given `block_ref`, tries to parse it into a valid block reference.
+
+        Returns `block_ref` if it is valid.
+
+        Raises:
+            InvalidKeyError: if `block_ref` is invalid.
+        """
         if isinstance(block_ref, LocalId):
             return block_ref
         elif len(block_ref) > 0 and cls.ALLOWED_ID_RE.match(block_ref):
@@ -380,29 +415,36 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
 
     @property
     def definition_key(self):
+        """Returns the definition key for this object."""
         raise NotImplementedError()
 
     @property
     def org(self):
+        """Returns the org for this object's course_key."""
         return self.course_key.org
 
     @property
     def offering(self):
+        """Returns the offering for this object's course_key."""
         return self.course_key.offering
 
     @property
     def package_id(self):
+        """Returns the package_id for this object's course_key."""
         return self.course_key.package_id
 
     @property
     def branch(self):
+        """Returns the branch for this object's course_key."""
         return self.course_key.branch
 
     @property
     def version_guid(self):
+        """Returns the version guid for this object."""
         return self.course_key.version_guid
 
     def version(self):
+        """Returns the version guid for this object."""
         return self.course_key.version_guid
 
     @property
@@ -413,6 +455,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         return self.block_id
 
     def is_fully_specified(self):
+        """Returns boolean; whether or not this object's course_key is fully specified."""
         return self.course_key.is_fully_specified()
 
     @classmethod
@@ -440,8 +483,9 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         Return a string representing this location.
         """
+        # Allow access to _to_string protected method
         return u"{course_key}+{BLOCK_TYPE_PREFIX}+{block_type}+{BLOCK_PREFIX}+{block_id}".format(
-            course_key=self.course_key._to_string(),
+            course_key=self.course_key._to_string(),  # pylint: disable=protected-access
             BLOCK_TYPE_PREFIX=self.BLOCK_TYPE_PREFIX,
             block_type=self.block_type,
             BLOCK_PREFIX=self.BLOCK_PREFIX,

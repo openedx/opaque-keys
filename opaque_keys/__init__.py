@@ -219,7 +219,7 @@ class OpaqueKey(object):
         )
 
     def __ne__(self, other):
-        return not (self == other)
+        return not self == other
 
     def __lt__(self, other):
         if type(self) != type(other):
