@@ -88,7 +88,7 @@ class OpaqueKey(object):
     Deserialization is performed by the :meth:`from_string` method.
     """
     __metaclass__ = OpaqueKeyMetaclass
-    __slots__ = ('_initialized')
+    __slots__ = ('_initialized', 'deprecated')
 
     NAMESPACE_SEPARATOR = u':'
 
@@ -130,7 +130,7 @@ class OpaqueKey(object):
             MissingNamespace: Raised when no namespace can be
                 extracted from `serialized`.
         """
-        namespace, _, rest = serialized.partition(cls.NAMESPACE_SEPARATOR)
+        namespace, __, rest = serialized.partition(cls.NAMESPACE_SEPARATOR)
 
         # If ':' isn't found in the string, then the source string
         # is returned as the first result (i.e. namespace)
@@ -140,7 +140,13 @@ class OpaqueKey(object):
         return (namespace, rest)
 
     def __init__(self, *args, **kwargs):
+        # The __init__ expects child classes to implement KEY_FIELDS
         # pylint: disable=no-member
+
+        # a flag used to indicate that this instance was deserialized from the
+        # deprecated form and should serialize to the deprecated form
+        self.deprecated = kwargs.pop('deprecated', False)
+
         if len(args) + len(kwargs) != len(self.KEY_FIELDS):
             raise TypeError('__init__() takes exactly {} arguments ({} given)'.format(
                 len(self.KEY_FIELDS),
@@ -184,6 +190,9 @@ class OpaqueKey(object):
         """
         Serialize this :class:`OpaqueKey`, in the form ``<CANONICAL_NAMESPACE>:<value of _to_string>``.
         """
+        if self.deprecated:
+            # no namespace on deprecated
+            return self._to_string()
         return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])  # pylint: disable=no-member
 
     def __copy__(self):
@@ -277,4 +286,15 @@ class OpaqueKey(object):
         try:
             return cls._drivers()[namespace].plugin._from_string(rest)
         except KeyError:
+            if hasattr(cls, 'deprecated_fallback'):
+                return getattr(cls, 'deprecated_fallback').from_deprecated_string(serialized)
             raise InvalidKeyError(cls, serialized)
+
+    @classmethod
+    def set_deprecated_fallback(cls, fallback):
+        """
+        Register a deprecated fallback class for this class to revert to.
+        """
+        if hasattr(cls, 'deprecated_fallback'):
+            raise AttributeError("Error: cannot register two fallback classes for {!r}.".format(cls))
+        setattr(cls, 'deprecated_fallback', fallback)

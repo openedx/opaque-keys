@@ -37,27 +37,33 @@ class SlashSeparatedCourseKey(CourseKey):
     KEY_FIELDS = ('org', 'course', 'run')
     __slots__ = KEY_FIELDS
 
-    def __init__(self, org, course, run):
+    def __init__(self, org, course, run, **kwargs):
         """
         checks that the values are syntactically valid before creating object
         """
         for part in (org, course, run):
             # Allow access to _check_location_part
             LocationBase._check_location_part(part, INVALID_CHARS)  # pylint: disable=protected-access
-        super(SlashSeparatedCourseKey, self).__init__(org, course, run)
+        super(SlashSeparatedCourseKey, self).__init__(org, course, run, **kwargs)
 
     @classmethod
-    def _from_string(cls, serialized):
+    def _from_string(cls, serialized, deprecated=True):
         serialized = serialized.replace("+", "/")
         if serialized.count('/') != 2:
             raise InvalidKeyError(cls, serialized)
 
         # Turns encoded slashes into actual slashes
-        return cls(*serialized.split('/'))
+        return cls(*serialized.split('/'), **{'deprecated': deprecated})
 
     def _to_string(self):
-        # Turns slashes into pluses
-        return u'+'.join([self.org, self.course, self.run])
+        # Figure out what should separate the org, course, run identifiers
+        # based on whether or not this is a deprecated string
+        if self.deprecated:
+            joinchar = u'/'
+        else:
+            # New style replaces slashes with plusses
+            joinchar = u'+'
+        return joinchar.join([self.org, self.course, self.run])
 
     @property
     def offering(self):
@@ -79,7 +85,7 @@ class SlashSeparatedCourseKey(CourseKey):
         Temporary mechanism for creating a CourseKey given a serialized Location.
         NOTE: this prejudicially takes the org and course from the url not self.
         """
-        return cls._from_string(serialized)
+        return cls._from_string(serialized, deprecated=True)
 
     def make_usage_key_from_deprecated_string(self, location_url):
         """
@@ -93,7 +99,11 @@ class SlashSeparatedCourseKey(CourseKey):
         if match is None:
             raise InvalidKeyError(Location, location_url)
         groups = match.groupdict()
+        groups['deprecated'] = True
         return Location(run=self.run, **groups)
+
+# register SSCK as the deprecated fallback for CourseKey
+CourseKey.set_deprecated_fallback(SlashSeparatedCourseKey)
 
 
 class LocationBase(object):
@@ -102,6 +112,8 @@ class LocationBase(object):
     content situated in a course.
     """
     KEY_FIELDS = ('org', 'course', 'run', 'category', 'name', 'revision')
+
+    DEPRECATED_TAG = None  # Subclasses should define what DEPRECATED_TAG is
 
     SERIALIZED_PATTERN = re.compile(r"""
         (?P<org>[^/]+)\+
@@ -171,7 +183,7 @@ class LocationBase(object):
         """
         return cls._clean(value, INVALID_HTML_CHARS)
 
-    def __init__(self, org, course, run, category, name, revision=None):
+    def __init__(self, org, course, run, category, name, revision=None, **kwargs):
         """
         Create a new Location that is a clone of the specifed one.
 
@@ -188,7 +200,7 @@ class LocationBase(object):
         self._check_location_part(name, INVALID_CHARS_NAME)
 
         # call the OpaqueKey constructor ensuring the args in the same order as KEY_FIELDS above
-        super(LocationBase, self).__init__(org, course, run, category, name, revision)
+        super(LocationBase, self).__init__(org, course, run, category, name, revision, **kwargs)
 
     @property
     def tag(self):
@@ -220,6 +232,7 @@ class LocationBase(object):
         if match is None:
             raise InvalidKeyError(Location, serialized)
         groups = match.groupdict()
+        groups['deprecated'] = True
         return cls(run=None, **groups)
 
     def to_deprecated_string(self):
@@ -236,6 +249,9 @@ class LocationBase(object):
         """
         Return a string representing this location.
         """
+        if self.deprecated:
+            return self.to_deprecated_string()
+
         output = u"+".join(
             unicode(val)
             for val in (self.org, self.course, self.run, self.category, self.name)
@@ -245,7 +261,7 @@ class LocationBase(object):
         return output
 
     @classmethod
-    def _from_string(cls, serialized):
+    def _from_string(cls, serialized, deprecated=False):
         """
         Return a CourseLocator parsing the given serialized string
         :param serialized: matches the string to a CourseLocator
@@ -254,16 +270,21 @@ class LocationBase(object):
         if not match:
             raise InvalidKeyError(cls, serialized)
 
-        return cls(**match.groupdict())
+        groups = match.groupdict()
+        groups['deprecated'] = deprecated
+        return cls(**groups)
 
     def html_id(self):
         """
         Return a string with a version of the location that is safe for use in
         html id attributes
         """
-        id_fields = [self.DEPRECATED_TAG, self.org, self.course, self.category, self.name, self.revision]
-        id_string = u"-".join([v for v in id_fields if v is not None])
-        return Location.clean_for_html(id_string)
+        if self.deprecated:
+            id_fields = [self.DEPRECATED_TAG, self.org, self.course, self.category, self.name, self.revision]
+            id_string = u"-".join([v for v in id_fields if v is not None])
+            return Location.clean_for_html(id_string)
+        else:
+            return unicode(self)
 
     @property
     def course_key(self):
@@ -287,7 +308,7 @@ class LocationBase(object):
         """
         Return the Location decoding this id_dict and run
         """
-        return cls(id_dict['org'], id_dict['course'], run, id_dict['category'], id_dict['name'], id_dict['revision'])
+        return cls(id_dict['org'], id_dict['course'], run, id_dict['category'], id_dict['name'], id_dict['revision'], **{'deprecated': True})
 
 
 class Location(LocationBase, UsageKey, DefinitionKey):
@@ -313,6 +334,9 @@ class Location(LocationBase, UsageKey, DefinitionKey):
         """
         return Location(course_key.org, course_key.course, course_key.run, self.category, self.name, self.revision)
 
+# register Location as the deprecated fallback for UsageKey
+UsageKey.set_deprecated_fallback(Location)
+
 
 class AssetLocation(LocationBase, AssetKey):
     """
@@ -322,8 +346,8 @@ class AssetLocation(LocationBase, AssetKey):
     DEPRECATED_TAG = 'c4x'
     __slots__ = LocationBase.KEY_FIELDS
 
-    def __init__(self, org, course, run, category, name, revision=None):
-        super(AssetLocation, self).__init__(org, course, run, category, name, revision)
+    def __init__(self, org, course, run, category, name, revision=None, **kwargs):
+        super(AssetLocation, self).__init__(org, course, run, category, name, revision, **kwargs)
 
     @property
     def path(self):
@@ -352,6 +376,7 @@ class AssetLocation(LocationBase, AssetKey):
         if match is None:
             raise InvalidKeyError(Location, serialized)
         groups = match.groupdict()
+        groups['deprecated'] = True
         return cls(run=None, **groups)
 
     def map_into_course(self, course_key):
@@ -374,6 +399,9 @@ class AssetLocation(LocationBase, AssetKey):
         Location fields as an array in the old order with the tag.
         """
         return ['c4x', self.org, self.course, self.block_type, self.name, None]
+
+# Register AssetLocation as the deprecated fallback for AssetKey
+AssetKey.set_deprecated_fallback(AssetLocation)
 
 
 # Allow class name to start wtih a lowercase letter

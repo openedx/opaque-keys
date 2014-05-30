@@ -199,3 +199,10 @@ class KeyTests(TestCase):
 
         with self.assertRaises(TypeError):
             ten >= twelve
+
+    def test_fallback(self):
+        # Verify we cannot set more than one deprecated fallback option
+        DictKey.set_deprecated_fallback(Base10Key)
+
+        with self.assertRaises(AttributeError):
+            DictKey.set_deprecated_fallback(HexKey)
