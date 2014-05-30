@@ -1,3 +1,7 @@
+"""
+Tests of basic opaque key functionality, including from_string -> to_string
+roundtripping.
+"""
 import copy
 import json
 from unittest import TestCase
@@ -8,6 +12,7 @@ from opaque_keys import OpaqueKey, InvalidKeyError
 
 
 def _mk_extension(name, cls):
+    """Returns a mock extension point for testing."""
     return Extension(
         name,
         Mock(name='entry_point_{}'.format(name)),
@@ -16,15 +21,22 @@ def _mk_extension(name, cls):
     )
 
 
+# `DummyKey` is another abstract base class, so don't worry that it doesn't
+# provide implementations for _from_string and _to_string.
+# pylint: disable=abstract-method
 class DummyKey(OpaqueKey):
     """
     Key type for testing
     """
     KEY_TYPE = 'opaque_keys.testing'
     __slots__ = ()
+# pylint: enable=abstract-method
 
 
 class HexKey(DummyKey):
+    """
+    Key type for testing; _from_string takes hex values
+    """
     KEY_FIELDS = ('value',)
     __slots__ = KEY_FIELDS
 
@@ -42,6 +54,9 @@ class HexKey(DummyKey):
 
 
 class Base10Key(DummyKey):
+    """
+    Key type for testing; _from_string takes base 10 values
+    """
     KEY_FIELDS = ('value',)
     # Deliberately not using __slots__, to test both cases
 
@@ -57,6 +72,9 @@ class Base10Key(DummyKey):
 
 
 class DictKey(DummyKey):
+    """
+    Key type for testing; _from_string takes dictionary values
+    """
     KEY_FIELDS = ('value',)
     __slots__ = KEY_FIELDS
 
@@ -72,6 +90,7 @@ class DictKey(DummyKey):
 
 
 class KeyTests(TestCase):
+    """Basic namespace, from_string, and to_string tests."""
     def test_namespace_from_string(self):
         hex_key = DummyKey.from_string('hex:0x10')
         self.assertIsInstance(hex_key, HexKey)

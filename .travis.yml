@@ -1,12 +1,15 @@
 language: python
 python:
   - "2.7"
+before_install:
+  - git fetch origin master:refs/remotes/origin/master
 install:
   - pip install -r test-requirements.txt
   - pip install coveralls
 script:
-  - coverage run -m nose
-  - pep8
-  - scripts/max_pylint_violations 20
+  - scripts/coverage
+  - scripts/quality
+  - scripts/max_pep8_violations 20
+  - scripts/max_pylint_violations 45
 after_success:
   - coveralls

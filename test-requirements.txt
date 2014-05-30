@@ -2,8 +2,9 @@ mock
 nose
 coverage
 pep8
-pylint<1.0
+pylint >= 1.1.0
 ddt
 pymongo
+diff-cover >= 0.2.1
 -e .
 -r requirements.txt

@@ -1,0 +1,11 @@
+#!/bin/bash
+pep8 opaque_keys | tee /tmp/pep8-ok.log
+echo
+ERR=`cat /tmp/pep8-ok.log | wc -l`
+if [ $ERR -ge $1 ]; then
+    echo "Too many pep8 violations: $ERR (max is $1)"
+    exit 1
+else
+    echo "$ERR Total pep8 Violations (max is $1)"
+fi
+

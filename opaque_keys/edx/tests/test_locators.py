@@ -40,6 +40,8 @@ class LocatorTest(TestCase):
         testobj_1 = CourseLocator(version_guid=test_id_1)
         self.check_course_locn_fields(testobj_1, version_guid=test_id_1)
         self.assertEqual(str(testobj_1.version_guid), test_id_1_loc)
+        # Allow access to _to_string
+        # pylint: disable=protected-access
         self.assertEqual(testobj_1._to_string(), u'+'.join((testobj_1.VERSION_PREFIX, test_id_1_loc)))
 
         # Test using a given string
@@ -48,6 +50,8 @@ class LocatorTest(TestCase):
         testobj_2 = CourseLocator(version_guid=test_id_2)
         self.check_course_locn_fields(testobj_2, version_guid=test_id_2)
         self.assertEqual(str(testobj_2.version_guid), test_id_2_loc)
+        # Allow access to _to_string
+        # pylint: disable=protected-access
         self.assertEqual(testobj_2._to_string(), u'+'.join((testobj_2.VERSION_PREFIX, test_id_2_loc)))
 
     @data(
@@ -130,6 +134,8 @@ class LocatorTest(TestCase):
         testurn = '{}+{}'.format(org, offering)
         testobj = CourseLocator(org=org, offering=offering)
         self.check_course_locn_fields(testobj, org=org, offering=offering)
+        # Allow access to _to_string
+        # pylint: disable=protected-access
         self.assertEqual(testobj._to_string(), testurn)
 
     def test_course_constructor_package_id_separate_branch(self):
@@ -145,6 +151,8 @@ class LocatorTest(TestCase):
             branch=test_branch,
         )
         self.assertEqual(testobj.branch, test_branch)
+        # Allow access to _to_string
+        # pylint: disable=protected-access
         self.assertEqual(testobj._to_string(), expected_urn)
 
     def test_block_constructor(self):
@@ -158,12 +166,12 @@ class LocatorTest(TestCase):
         )
         testobj = UsageKey.from_string(testurn)
         self.check_block_locn_fields(
-             testobj,
-             org=expected_org,
-             offering=expected_offering,
-             branch=expected_branch,
-             block_type='problem',
-             block=expected_block_ref
+            testobj,
+            org=expected_org,
+            offering=expected_offering,
+            branch=expected_branch,
+            block_type='problem',
+            block=expected_block_ref
         )
         self.assertEqual(unicode(testobj), testurn)
         testobj = testobj.for_version(ObjectId())
