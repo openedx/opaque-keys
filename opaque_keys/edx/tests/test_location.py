@@ -43,10 +43,38 @@ class TestLocations(TestCase):
         "i4x://org/course/category/name@revision"
     )
     def test_deprecated_roundtrip(self, url):
-        course_id = SlashSeparatedCourseKey('org', 'course', 'run')
+        course_key = SlashSeparatedCourseKey('org', 'course', 'run')
         self.assertEquals(
             url,
-            course_id.make_usage_key_from_deprecated_string(url).to_deprecated_string()
+            course_key.make_usage_key_from_deprecated_string(url).to_deprecated_string()
+        )
+
+    @ddt.data(
+        "foo/bar/baz",
+    )
+    def test_deprecated_roundtrip_for_ssck(self, course_id):
+        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
+        self.assertEquals(
+            course_id,
+            course_key._to_string()  # pylint: disable=protected-access
+        )
+
+    @ddt.data(
+        "foo+bar+baz",
+    )
+    def test_new_roundtrip_for_ssck(self, course_id):
+        course_key = SlashSeparatedCourseKey("foo", "bar", "baz")
+        self.assertEquals(
+            course_id,
+            course_key._to_string()  # pylint: disable=protected-access
+        )
+
+    def test_deprecated_round_trip_asset_location(self):
+        asset_string = "/c4x/org/course/asset/path"
+        asset_location = AssetLocation.from_deprecated_string(asset_string)
+        self.assertEquals(
+            asset_string,
+            asset_location._to_string()  # pylint: disable=protected-access
         )
 
     def test_invalid_chars_ssck(self):
@@ -169,7 +197,8 @@ class TestLocations(TestCase):
         loc = Location('org', 'course', 'run', 'cat', 'name:more_name', 'rev')
         self.assertEquals(loc.html_id(), "location:org+course+run+cat+name:more_name@rev")
 
-        loc.deprecated = True
+    def test_deprecated_html_id(self):
+        loc = Location('org', 'course', 'run', 'cat', 'name:more_name', 'rev', deprecated=True)
         self.assertEquals(loc.html_id(), "i4x-org-course-cat-name_more_name-rev")
 
     def test_replacement(self):

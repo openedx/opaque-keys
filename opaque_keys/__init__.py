@@ -154,7 +154,6 @@ class OpaqueKey(object):
             ))
 
         keyed_args = dict(zip(self.KEY_FIELDS, args))
-
         overlapping_args = keyed_args.viewkeys() & kwargs.viewkeys()
         if overlapping_args:
             raise TypeError('__init__() got multiple values for keyword argument {!r}'.format(overlapping_args[0]))
@@ -227,10 +226,7 @@ class OpaqueKey(object):
         return tuple(getattr(self, field) for field in self.KEY_FIELDS)  # pylint: disable=no-member
 
     def __eq__(self, other):
-        return (
-            type(self) == type(other) and
-            self._key == other._key  # pylint: disable=protected-access
-        )
+        return hash(self) == hash(other)
 
     def __ne__(self, other):
         return not self == other
@@ -241,7 +237,7 @@ class OpaqueKey(object):
         return self._key < other._key  # pylint: disable=protected-access
 
     def __hash__(self):
-        return hash(self._key)
+        return hash(self._key) + hash(type(self))
 
     def __str__(self):
         return unicode(self).encode('utf-8')

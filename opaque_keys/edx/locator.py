@@ -43,9 +43,9 @@ class Locator(OpaqueKey):
     ALLOWED_ID_CHARS = r'[\w\-~.:]'
 
     def __str__(self):
-        '''
+        """
         str(self) returns something like this: "mit.eecs.6002x"
-        '''
+        """
         return unicode(self).encode('utf-8')
 
     @abstractmethod

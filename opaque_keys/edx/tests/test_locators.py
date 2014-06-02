@@ -42,7 +42,11 @@ class LocatorTest(TestCase):
         self.assertEqual(str(testobj_1.version_guid), test_id_1_loc)
         # Allow access to _to_string
         # pylint: disable=protected-access
-        self.assertEqual(testobj_1._to_string(), u'+'.join((testobj_1.VERSION_PREFIX, test_id_1_loc)))
+        testobj_1_string = u'+'.join((testobj_1.VERSION_PREFIX, test_id_1_loc))
+        self.assertEqual(testobj_1._to_string(), testobj_1_string)
+        self.assertEqual(str(testobj_1), u'course-locator:' + testobj_1_string)
+        self.assertEqual(testobj_1.html_id(), u'course-locator:' + testobj_1_string)
+        self.assertEqual(testobj_1.version(), test_id_1)
 
         # Test using a given string
         test_id_2_loc = '519665f6223ebd6980884f2b'
@@ -52,7 +56,11 @@ class LocatorTest(TestCase):
         self.assertEqual(str(testobj_2.version_guid), test_id_2_loc)
         # Allow access to _to_string
         # pylint: disable=protected-access
-        self.assertEqual(testobj_2._to_string(), u'+'.join((testobj_2.VERSION_PREFIX, test_id_2_loc)))
+        testobj_2_string = u'+'.join((testobj_2.VERSION_PREFIX, test_id_2_loc))
+        self.assertEqual(testobj_2._to_string(), testobj_2_string)
+        self.assertEqual(str(testobj_2), u'course-locator:' + testobj_2_string)
+        self.assertEqual(testobj_2.html_id(), u'course-locator:' + testobj_2_string)
+        self.assertEqual(testobj_2.version(), test_id_2)
 
     @data(
         ' mit.eecs',
@@ -177,17 +185,22 @@ class LocatorTest(TestCase):
         testobj = testobj.for_version(ObjectId())
         agnostic = testobj.version_agnostic()
         self.assertIsNone(agnostic.version_guid)
-        self.check_block_locn_fields(agnostic,
-                                     org=expected_org,
-                                     offering=expected_offering,
-                                     branch=expected_branch,
-                                     block=expected_block_ref)
+        self.check_block_locn_fields(
+            agnostic,
+            org=expected_org,
+            offering=expected_offering,
+            branch=expected_branch,
+            block=expected_block_ref
+        )
 
     def test_block_constructor_url_version_prefix(self):
         test_id_loc = '519665f6223ebd6980884f2b'
         testobj = UsageKey.from_string(
             'edx:mit.eecs+6002x+{}+{}+{}+problem+{}+lab2'.format(
-                CourseLocator.VERSION_PREFIX, test_id_loc, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
+                CourseLocator.VERSION_PREFIX,
+                test_id_loc,
+                BlockUsageLocator.BLOCK_TYPE_PREFIX,
+                BlockUsageLocator.BLOCK_PREFIX
             )
         )
         self.check_block_locn_fields(

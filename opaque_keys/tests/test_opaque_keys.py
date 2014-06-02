@@ -5,20 +5,8 @@ roundtripping.
 import copy
 import json
 from unittest import TestCase
-from stevedore.extension import Extension
-from mock import Mock
 
 from opaque_keys import OpaqueKey, InvalidKeyError
-
-
-def _mk_extension(name, cls):
-    """Returns a mock extension point for testing."""
-    return Extension(
-        name,
-        Mock(name='entry_point_{}'.format(name)),
-        cls,
-        Mock(name='obj_{}'.format(name)),
-    )
 
 
 # `DummyKey` is another abstract base class, so don't worry that it doesn't
@@ -39,9 +27,10 @@ class HexKey(DummyKey):
     """
     KEY_FIELDS = ('value',)
     __slots__ = KEY_FIELDS
+    CANONICAL_NAMESPACE = 'hex'
 
     def _to_string(self):
-        return hex(self._value)
+        return hex(self.value)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -53,15 +42,33 @@ class HexKey(DummyKey):
             raise InvalidKeyError(cls, serialized)
 
 
+class HexKeyTwoFields(DummyKey):
+    """
+    Key type for testing; _from_string takes hex values
+    """
+    KEY_FIELDS = ('value', 'new_value')
+    __slots__ = KEY_FIELDS
+
+    def _to_string(self):
+        # For some reason, pylint doesn't think this key has a `value` attribute
+        return hex(self.value)  # pylint: disable=no-member
+
+    @classmethod
+    def _from_string(cls, serialized):
+        raise InvalidKeyError(cls, serialized)
+
+
 class Base10Key(DummyKey):
     """
     Key type for testing; _from_string takes base 10 values
     """
     KEY_FIELDS = ('value',)
     # Deliberately not using __slots__, to test both cases
+    CANONICAL_NAMESPACE = 'base10'
 
     def _to_string(self):
-        return unicode(self._value)
+        # For some reason, pylint doesn't think this key has a `value` attribute
+        return unicode(self.value)  # pylint: disable=no-member
 
     @classmethod
     def _from_string(cls, serialized):
@@ -77,9 +84,11 @@ class DictKey(DummyKey):
     """
     KEY_FIELDS = ('value',)
     __slots__ = KEY_FIELDS
+    CANONICAL_NAMESPACE = 'dict'
 
     def _to_string(self):
-        return json.dumps(self._value)
+        # For some reason, pylint doesn't think this key has a `value` attribute
+        return json.dumps(self.value)  # pylint: disable=no-member
 
     @classmethod
     def _from_string(cls, serialized):
@@ -88,6 +97,9 @@ class DictKey(DummyKey):
         except (ValueError, TypeError):
             raise InvalidKeyError(cls, serialized)
 
+    def __hash__(self):
+        return hash(type(self)) + sum([hash(elt) for elt in self.value.keys()])
+
 
 class KeyTests(TestCase):
     """Basic namespace, from_string, and to_string tests."""
@@ -95,10 +107,33 @@ class KeyTests(TestCase):
         hex_key = DummyKey.from_string('hex:0x10')
         self.assertIsInstance(hex_key, HexKey)
         self.assertEquals(hex_key.value, 16)
+        self.assertEquals(hex_key._to_string(), '0x10')  # pylint: disable=protected-access
+        self.assertEquals(len(hex_key), len('hex:') + len('0x10'))
 
         base_key = DummyKey.from_string('base10:15')
         self.assertIsInstance(base_key, Base10Key)
         self.assertEquals(base_key.value, 15)
+        self.assertEquals(base_key._to_string(), '15')  # pylint: disable=protected-access
+        self.assertEquals(len(base_key), len('base10:') + len('15'))
+
+        dict_key = DummyKey.from_string('dict:{"foo": "bar"}')
+        self.assertIsInstance(dict_key, DictKey)
+        self.assertEquals(dict_key.value, {"foo": "bar"})
+        self.assertEquals(dict_key._to_string(), '{"foo": "bar"}')  # pylint: disable=protected-access
+        self.assertEquals(len(dict_key), len('dict:') + len('{"foo": "bar"}'))
+
+    def test_bad_keys(self):
+        with self.assertRaises(InvalidKeyError):
+            DummyKey.from_string('hex:10')
+
+        with self.assertRaises(InvalidKeyError):
+            DummyKey.from_string('hex:0xZZ')
+
+        with self.assertRaises(InvalidKeyError):
+            DummyKey.from_string('base10:0x10')
+
+        with self.assertRaises(InvalidKeyError):
+            DummyKey.from_string('dict:abcd')
 
     def test_unknown_namespace(self):
         with self.assertRaises(InvalidKeyError):
@@ -111,15 +146,25 @@ class KeyTests(TestCase):
         with self.assertRaises(InvalidKeyError):
             DummyKey.from_string('15')
 
+        with self.assertRaises(InvalidKeyError):
+            DummyKey.from_string(None)
+
     def test_immutability(self):
         key = HexKey(10)
 
         with self.assertRaises(AttributeError):
             key.value = 11  # pylint: disable=attribute-defined-outside-init
 
+        with self.assertRaises(AttributeError):
+            delattr(key, 'value')
+
     def test_equality(self):
         self.assertEquals(DummyKey.from_string('hex:0x10'), DummyKey.from_string('hex:0x10'))
         self.assertNotEquals(DummyKey.from_string('hex:0x10'), DummyKey.from_string('base10:16'))
+
+    def test_hash_equality(self):
+        self.assertEquals(hash(DummyKey.from_string('hex:0x10')), hash(DummyKey.from_string('hex:0x10')))
+        self.assertNotEquals(hash(DummyKey.from_string('hex:0x10')), hash(DummyKey.from_string('base10:16')))
 
     def test_constructor(self):
         with self.assertRaises(TypeError):
@@ -133,6 +178,9 @@ class KeyTests(TestCase):
 
         with self.assertRaises(TypeError):
             HexKey(value=10, bar=20)
+
+        with self.assertRaises(TypeError):
+            HexKeyTwoFields(10, value=10)
 
         self.assertEquals(HexKey(10).value, 10)
         self.assertEquals(HexKey(value=10).value, 10)
@@ -156,11 +204,12 @@ class KeyTests(TestCase):
 
         self.assertEquals(original, copied)
         self.assertEquals(id(original), id(copied))
-        self.assertEquals(id(original.value), id(copied.value))
+        # For some reason, pylint doesn't think DictKey has a `value` attribute
+        self.assertEquals(id(original.value), id(copied.value))  # pylint: disable=no-member
 
         self.assertEquals(original, deep)
         self.assertEquals(id(original), id(deep))
-        self.assertEquals(id(original.value), id(deep.value))
+        self.assertEquals(id(original.value), id(deep.value))  # pylint: disable=no-member
 
         self.assertEquals(copy.deepcopy([original]), [original])
 
