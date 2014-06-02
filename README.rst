@@ -1,4 +1,4 @@
-Part of `edX code`__.
+Part of `edX code`_.
 
 .. _`edX code`: http://code.edx.org/
 
@@ -10,7 +10,7 @@ Opaque-keys is an API used by edx-platform to construct database keys.
 respect to key format, and uses an API to get information about the key
 and to construct new keys.
 
-See the `edx-platform wiki documentation`__ for more detail.
+See the `edx-platform wiki documentation`_ for more detail.
 
 .. |build-status| image:: https://travis-ci.org/edx/opaque-keys.png  
    :target: https://travis-ci.org/edx/opaque-keys
