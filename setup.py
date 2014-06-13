@@ -5,6 +5,7 @@ setup(
     version="0.1",
     packages=[
         "opaque_keys",
+        "opaque_keys.edx",
     ],
     install_requires=[
         "stevedore"
