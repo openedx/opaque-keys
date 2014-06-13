@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="opaque_keys",
-    version="0.1",
+    version="0.1.1",
     packages=[
         "opaque_keys",
         "opaque_keys.edx",
