@@ -92,6 +92,7 @@ class OpaqueKey(object):
 
     NAMESPACE_SEPARATOR = u':'
 
+    # ============= ABSTRACT METHODS ==============
     @classmethod
     @abstractmethod
     def _from_string(cls, serialized):
@@ -117,6 +118,39 @@ class OpaqueKey(object):
         """
         raise NotImplementedError()
 
+    # ============= SERIALIZATION ==============
+
+    def __unicode__(self):
+        """
+        Serialize this :class:`OpaqueKey`, in the form ``<CANONICAL_NAMESPACE>:<value of _to_string>``.
+        """
+        if self.deprecated:
+            # no namespace on deprecated
+            return self._to_string()
+        return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])  # pylint: disable=no-member
+
+    @classmethod
+    def from_string(cls, serialized):
+        """
+        Return a :class:`OpaqueKey` object deserialized from
+        the `serialized` argument. This object will be an instance
+        of a subclass of the `cls` argument.
+
+        Args:
+            serialized: A stringified form of a :class:`OpaqueKey`
+        """
+        if serialized is None:
+            raise InvalidKeyError(cls, serialized)
+
+        # pylint: disable=protected-access
+        namespace, rest = cls._separate_namespace(serialized)
+        try:
+            return cls._drivers()[namespace].plugin._from_string(rest)
+        except KeyError:
+            if hasattr(cls, 'deprecated_fallback'):
+                return getattr(cls, 'deprecated_fallback').from_deprecated_string(serialized)
+            raise InvalidKeyError(cls, serialized)
+
     @classmethod
     def _separate_namespace(cls, serialized):
         """
@@ -139,6 +173,28 @@ class OpaqueKey(object):
 
         return (namespace, rest)
 
+    @classmethod
+    def _drivers(cls):
+        """
+        Return a driver manager for all key classes that are
+        subclasses of `cls`.
+        """
+        return EnabledExtensionManager(
+            cls.KEY_TYPE,  # pylint: disable=no-member
+            check_func=lambda extension: issubclass(extension.plugin, cls),
+            invoke_on_load=False,
+        )
+
+    @classmethod
+    def set_deprecated_fallback(cls, fallback):
+        """
+        Register a deprecated fallback class for this class to revert to.
+        """
+        if hasattr(cls, 'deprecated_fallback'):
+            raise AttributeError("Error: cannot register two fallback classes for {!r}.".format(cls))
+        setattr(cls, 'deprecated_fallback', fallback)
+
+    # ============= VALUE SEMANTICS ==============
     def __init__(self, *args, **kwargs):
         # The __init__ expects child classes to implement KEY_FIELDS
         # pylint: disable=no-member
@@ -184,15 +240,6 @@ class OpaqueKey(object):
 
     def __delattr__(self, name):
         raise AttributeError("Can't delete {!r}. OpaqueKeys are immutable.".format(name))
-
-    def __unicode__(self):
-        """
-        Serialize this :class:`OpaqueKey`, in the form ``<CANONICAL_NAMESPACE>:<value of _to_string>``.
-        """
-        if self.deprecated:
-            # no namespace on deprecated
-            return self._to_string()
-        return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])  # pylint: disable=no-member
 
     def __copy__(self):
         """
@@ -252,45 +299,3 @@ class OpaqueKey(object):
         """Return the number of characters in the serialized OpaqueKey"""
         return len(unicode(self))
 
-    @classmethod
-    def _drivers(cls):
-        """
-        Return a driver manager for all key classes that are
-        subclasses of `cls`.
-        """
-        return EnabledExtensionManager(
-            cls.KEY_TYPE,  # pylint: disable=no-member
-            check_func=lambda extension: issubclass(extension.plugin, cls),
-            invoke_on_load=False,
-        )
-
-    @classmethod
-    def from_string(cls, serialized):
-        """
-        Return a :class:`OpaqueKey` object deserialized from
-        the `serialized` argument. This object will be an instance
-        of a subclass of the `cls` argument.
-
-        Args:
-            serialized: A stringified form of a :class:`OpaqueKey`
-        """
-        if serialized is None:
-            raise InvalidKeyError(cls, serialized)
-
-        # pylint: disable=protected-access
-        namespace, rest = cls._separate_namespace(serialized)
-        try:
-            return cls._drivers()[namespace].plugin._from_string(rest)
-        except KeyError:
-            if hasattr(cls, 'deprecated_fallback'):
-                return getattr(cls, 'deprecated_fallback').from_deprecated_string(serialized)
-            raise InvalidKeyError(cls, serialized)
-
-    @classmethod
-    def set_deprecated_fallback(cls, fallback):
-        """
-        Register a deprecated fallback class for this class to revert to.
-        """
-        if hasattr(cls, 'deprecated_fallback'):
-            raise AttributeError("Error: cannot register two fallback classes for {!r}.".format(cls))
-        setattr(cls, 'deprecated_fallback', fallback)
