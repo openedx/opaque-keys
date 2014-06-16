@@ -232,3 +232,30 @@ class TestLocations(TestCase):
             AssetLocation("edX", "toy", "2012_Fall", 'asset', 'foo.bar'),
             loc.map_into_course(course_key)
         )
+
+    SON_KEYS = ('tag', 'org', 'course', 'category', 'name', 'revision')
+
+    @ddt.data(
+        (Location, '_id.', 'i4x', ('o', 'c', 'r', 'ct', 'n', 'v')),
+        (Location, '', 'i4x', ('o', 'c', 'r', 'ct', 'n', 'v')),
+        (AssetLocation, '_id.', 'c4x', ('o', 'c', 'r', 'ct', 'n', 'v')),
+    )
+    @ddt.unpack
+    def test_to_deprecated_son(self, key_cls, prefix, tag, source):
+        source_key = key_cls(*source)
+        son = source_key.to_deprecated_son(prefix=prefix, tag=tag)
+        self.assertEquals(son.keys(), [prefix + key for key in self.SON_KEYS])
+        for key in self.SON_KEYS:
+            if key == 'tag':
+                self.assertEquals(son[prefix + key], tag)
+            else:
+                self.assertEquals(son[prefix + key], getattr(source_key, key))
+
+    @ddt.data(
+        Location('o', 'c', 'r', 'ct', 'n', None),
+        Location('o', 'c', 'r', 'ct', 'n', 'v'),
+        AssetLocation('o', 'c', 'r', 'ct', 'n', None),
+        AssetLocation('o', 'c', 'r', 'ct', 'n', 'v'),
+    )
+    def test_deprecated_son_roundtrip(self, key):
+        self.assertEquals(key, key.__class__._from_deprecated_son(key.to_deprecated_son(), key.run))
