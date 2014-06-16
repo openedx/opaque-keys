@@ -1,4 +1,6 @@
 # Compute coverage
+set -e
+
 coverage run -m nose
 coverage html -i
 coverage xml -i -o coverage.xml
