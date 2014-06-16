@@ -14,14 +14,14 @@ class CourseKey(OpaqueKey):
     __slots__ = ()
 
     @abstractproperty
-    def org(self):
+    def org(self):  # pragma: no cover
         """
         The organization that this course belongs to.
         """
         raise NotImplementedError()
 
     @abstractproperty
-    def offering(self):
+    def offering(self):  # pragma: no cover
         """
         The offering identifier for this course.
 
@@ -30,7 +30,7 @@ class CourseKey(OpaqueKey):
         raise NotImplementedError()
 
     @abstractmethod
-    def make_usage_key(self, block_type, block_id):
+    def make_usage_key(self, block_type, block_id):  # pragma: no cover
         """
         Return a usage key, given the given the specified block_type and block_id.
 
@@ -40,7 +40,7 @@ class CourseKey(OpaqueKey):
         raise NotImplementedError()
 
     @abstractmethod
-    def make_asset_key(self, asset_type, path):
+    def make_asset_key(self, asset_type, path):  # pragma: no cover
         """
         Return an asset key, given the given the specified path.
 
@@ -58,7 +58,7 @@ class DefinitionKey(OpaqueKey):
     __slots__ = ()
 
     @abstractproperty
-    def block_type(self):
+    def block_type(self):  # pragma: no cover
         """
         The XBlock type of this definition.
         """
@@ -73,14 +73,14 @@ class CourseObjectMixin(object):
     __slots__ = ()
 
     @abstractproperty
-    def course_key(self):
+    def course_key(self):  # pragma: no cover
         """
         Return the :class:`CourseKey` for the course containing this usage.
         """
         raise NotImplementedError()
 
     @abstractmethod
-    def map_into_course(self, course_key):
+    def map_into_course(self, course_key):  # pragma: no cover
         """
         Return a new :class:`UsageKey` or :class:`AssetKey` representing this usage inside the
         course identified by the supplied :class:`CourseKey`. It returns the same type as
@@ -103,7 +103,7 @@ class AssetKey(CourseObjectMixin, OpaqueKey):
     __slots__ = ()
 
     @abstractproperty
-    def path(self):
+    def path(self):  # pragma: no cover
         """
         Return the path for this asset.
         """
@@ -118,7 +118,7 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
     __slots__ = ()
 
     @abstractproperty
-    def definition_key(self):
+    def definition_key(self):  # pragma: no cover
         """
         Return the :class:`DefinitionKey` for the XBlock containing this usage.
         """
