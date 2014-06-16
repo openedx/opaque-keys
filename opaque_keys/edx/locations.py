@@ -56,14 +56,7 @@ class SlashSeparatedCourseKey(CourseKey):
         return cls(*serialized.split('/'), **{'deprecated': deprecated})
 
     def _to_string(self):
-        # Figure out what should separate the org, course, run identifiers
-        # based on whether or not this is a deprecated string
-        if self.deprecated:
-            joinchar = u'/'
-        else:
-            # New style replaces slashes with plusses
-            joinchar = u'+'
-        return joinchar.join([self.org, self.course, self.run])
+        return u'+'.join([self.org, self.course, self.run])
 
     @property
     def offering(self):
