@@ -47,13 +47,11 @@ class SlashSeparatedCourseKey(CourseKey):
         super(SlashSeparatedCourseKey, self).__init__(org, course, run, **kwargs)
 
     @classmethod
-    def _from_string(cls, serialized, deprecated=False):
-        serialized = serialized.replace("+", "/")
-        if serialized.count('/') != 2:
+    def _from_string(cls, serialized):
+        if serialized.count('+') != 2:
             raise InvalidKeyError(cls, serialized)
 
-        # Turns encoded slashes into actual slashes
-        return cls(*serialized.split('/'), deprecated=deprecated)
+        return cls(*serialized.split('+'))
 
     def _to_string(self):
         return u'+'.join([self.org, self.course, self.run])
@@ -78,7 +76,10 @@ class SlashSeparatedCourseKey(CourseKey):
         Temporary mechanism for creating a CourseKey given a serialized Location.
         NOTE: this prejudicially takes the org and course from the url not self.
         """
-        return cls._from_string(serialized, deprecated=True)
+        if serialized.count('/') != 2:
+            raise InvalidKeyError(cls, serialized)
+
+        return cls(*serialized.split('/'), deprecated=True)
 
 # register SSCK as the deprecated fallback for CourseKey
 CourseKey.set_deprecated_fallback(SlashSeparatedCourseKey)
