@@ -53,7 +53,7 @@ class SlashSeparatedCourseKey(CourseKey):
             raise InvalidKeyError(cls, serialized)
 
         # Turns encoded slashes into actual slashes
-        return cls(*serialized.split('/'), **{'deprecated': deprecated})
+        return cls(*serialized.split('/'), deprecated=deprecated)
 
     def _to_string(self):
         return u'+'.join([self.org, self.course, self.run])
@@ -79,21 +79,6 @@ class SlashSeparatedCourseKey(CourseKey):
         NOTE: this prejudicially takes the org and course from the url not self.
         """
         return cls._from_string(serialized, deprecated=True)
-
-    def make_usage_key_from_deprecated_string(self, location_url):
-        """
-        Temporary mechanism for creating a UsageKey given a CourseKey and a serialized Location. NOTE:
-        this prejudicially takes the tag, org, and course from the url not self.
-
-        Raises:
-            InvalidKeyError: if the url does not parse
-        """
-        match = URL_RE.match(location_url)
-        if match is None:
-            raise InvalidKeyError(Location, location_url)
-        groups = match.groupdict()
-        groups['deprecated'] = True
-        return Location(run=self.run, **groups)
 
 # register SSCK as the deprecated fallback for CourseKey
 CourseKey.set_deprecated_fallback(SlashSeparatedCourseKey)
@@ -235,8 +220,7 @@ class LocationBase(object):
         if match is None:
             raise InvalidKeyError(Location, serialized)
         groups = match.groupdict()
-        groups['deprecated'] = True
-        return cls(run=None, **groups)
+        return cls(run=None, deprecated=True, **groups)
 
     def _to_string(self):
         """
@@ -251,7 +235,7 @@ class LocationBase(object):
         return output
 
     @classmethod
-    def _from_string(cls, serialized, deprecated=False):
+    def _from_string(cls, serialized):
         """
         Return a Location parsing the given serialized string
         :param serialized: matches the string to a Location
@@ -261,7 +245,6 @@ class LocationBase(object):
             raise InvalidKeyError(cls, serialized)
 
         groups = match.groupdict()
-        groups['deprecated'] = deprecated
         return cls(**groups)
 
     def html_id(self):
@@ -298,7 +281,7 @@ class LocationBase(object):
         """
         Return the Location decoding this id_dict and run
         """
-        return cls(id_dict['org'], id_dict['course'], run, id_dict['category'], id_dict['name'], id_dict['revision'], **{'deprecated': True})
+        return cls(id_dict['org'], id_dict['course'], run, id_dict['category'], id_dict['name'], id_dict['revision'], deprecated=True)
 
 
 class Location(LocationBase, UsageKey, DefinitionKey):
@@ -366,8 +349,7 @@ class AssetLocation(LocationBase, AssetKey):
         if match is None:
             raise InvalidKeyError(Location, serialized)
         groups = match.groupdict()
-        groups['deprecated'] = True
-        return cls(run=None, **groups)
+        return cls(run=None, deprecated=True, **groups)
 
     def map_into_course(self, course_key):
         """
