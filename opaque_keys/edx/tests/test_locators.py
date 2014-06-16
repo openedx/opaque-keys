@@ -92,7 +92,7 @@ class LocatorTest(TestCase):
         with self.assertRaises(InvalidKeyError):
             CourseKey.from_string('course-locator:test+{}'.format(bad_id))
 
-    @data('course-locator:', 'course-locator:/mit.eecs', 'http:mit.eecs', 'course-locator//mit.eecs')
+    @data('course-locator:', 'course-locator:/mit.eecs', 'http:mit.eecs')
     def test_course_constructor_bad_url(self, bad_url):
         with self.assertRaises(InvalidKeyError):
             CourseKey.from_string(bad_url)

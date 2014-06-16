@@ -126,7 +126,7 @@ class OpaqueKey(object):
         """
         if self.deprecated:
             # no namespace on deprecated
-            return self._to_string()
+            return self._to_deprecated_string()
         return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])  # pylint: disable=no-member
 
     @classmethod
@@ -143,12 +143,12 @@ class OpaqueKey(object):
             raise InvalidKeyError(cls, serialized)
 
         # pylint: disable=protected-access
-        namespace, rest = cls._separate_namespace(serialized)
         try:
+            namespace, rest = cls._separate_namespace(serialized)
             return cls._drivers()[namespace].plugin._from_string(rest)
-        except KeyError:
+        except (InvalidKeyError, KeyError):
             if hasattr(cls, 'deprecated_fallback'):
-                return getattr(cls, 'deprecated_fallback').from_deprecated_string(serialized)
+                return getattr(cls, 'deprecated_fallback')._from_deprecated_string(serialized)
             raise InvalidKeyError(cls, serialized)
 
     @classmethod

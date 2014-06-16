@@ -6,7 +6,7 @@ import ddt
 from unittest import TestCase
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.locations import Location, AssetLocation, SlashSeparatedCourseKey
-from opaque_keys.edx.keys import UsageKey
+from opaque_keys.edx.keys import UsageKey, CourseKey, AssetKey
 
 # Pairs for testing the clean* functions.
 # The first item in the tuple is the input string.
@@ -43,20 +43,18 @@ class TestLocations(TestCase):
         "i4x://org/course/category/name@revision"
     )
     def test_deprecated_roundtrip(self, url):
-        course_key = SlashSeparatedCourseKey('org', 'course', 'run')
         self.assertEquals(
             url,
-            course_key.make_usage_key_from_deprecated_string(url).to_deprecated_string()
+            unicode(UsageKey.from_string(url))
         )
 
     @ddt.data(
         "foo/bar/baz",
     )
     def test_deprecated_roundtrip_for_ssck(self, course_id):
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
         self.assertEquals(
             course_id,
-            course_key._to_string()  # pylint: disable=protected-access
+            unicode(CourseKey.from_string(course_id))
         )
 
     @ddt.data(
@@ -69,12 +67,13 @@ class TestLocations(TestCase):
             course_key._to_string()  # pylint: disable=protected-access
         )
 
-    def test_deprecated_round_trip_asset_location(self):
-        asset_string = "/c4x/org/course/asset/path"
-        asset_location = AssetLocation.from_deprecated_string(asset_string)
+    @ddt.data(
+        "/c4x/org/course/asset/path",
+    )
+    def test_deprecated_round_trip_asset_location(self, path):
         self.assertEquals(
-            asset_string,
-            asset_location._to_string()  # pylint: disable=protected-access
+            path,
+            unicode(AssetKey.from_string(path)),
         )
 
     def test_invalid_chars_ssck(self):
