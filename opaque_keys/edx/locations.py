@@ -47,7 +47,7 @@ class SlashSeparatedCourseKey(CourseKey):
         super(SlashSeparatedCourseKey, self).__init__(org, course, run, **kwargs)
 
     @classmethod
-    def _from_string(cls, serialized, deprecated=True):
+    def _from_string(cls, serialized, deprecated=False):
         serialized = serialized.replace("+", "/")
         if serialized.count('/') != 2:
             raise InvalidKeyError(cls, serialized)
@@ -253,8 +253,8 @@ class LocationBase(object):
     @classmethod
     def _from_string(cls, serialized, deprecated=False):
         """
-        Return a CourseLocator parsing the given serialized string
-        :param serialized: matches the string to a CourseLocator
+        Return a Location parsing the given serialized string
+        :param serialized: matches the string to a Location
         """
         match = cls.SERIALIZED_PATTERN.match(serialized)
         if not match:

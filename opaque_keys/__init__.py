@@ -167,7 +167,8 @@ class OpaqueKey(object):
         namespace, __, rest = serialized.partition(cls.NAMESPACE_SEPARATOR)
 
         # If ':' isn't found in the string, then the source string
-        # is returned as the first result (i.e. namespace)
+        # is returned as the first result (i.e. namespace); this happens
+        # in the case of a malformed input or a deprecated string.
         if namespace == serialized:
             raise InvalidKeyError(cls, serialized)
 
@@ -270,7 +271,7 @@ class OpaqueKey(object):
     @property
     def _key(self):
         """Returns a tuple of key fields"""
-        return tuple(getattr(self, field) for field in self.KEY_FIELDS)  # pylint: disable=no-member
+        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (type(self),)  # pylint: disable=no-member
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -284,7 +285,7 @@ class OpaqueKey(object):
         return self._key < other._key  # pylint: disable=protected-access
 
     def __hash__(self):
-        return hash(self._key) + hash(type(self))
+        return hash(self._key)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
