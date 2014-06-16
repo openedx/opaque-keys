@@ -98,6 +98,16 @@ class TestLocations(TestCase):
                 valid_base.replace(**{key: u'funny thing'})
 
     @ddt.data(
+        "org/course/run/foo",
+        "org/course",
+        "org+course+run+foo",
+        "org+course",
+    )
+    def test_invalid_format_location(self, course_id):
+        with self.assertRaises(InvalidKeyError):
+            SlashSeparatedCourseKey.from_string(course_id)
+
+    @ddt.data(
         ((), {
             'org': 'org',
             'course': 'course',

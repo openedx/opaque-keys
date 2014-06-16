@@ -6,7 +6,7 @@ from unittest import TestCase
 import random
 from bson.objectid import ObjectId
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.locator import Locator, CourseLocator, BlockUsageLocator, DefinitionLocator
+from opaque_keys.edx.locator import Locator, CourseLocator, BlockUsageLocator, DefinitionLocator, VersionTree
 from ddt import ddt, data
 from opaque_keys.edx.keys import UsageKey, CourseKey, DefinitionKey
 
@@ -292,6 +292,22 @@ class LocatorTest(TestCase):
         object_id = '{:024x}'.format(random.randrange(16 ** 24))
         definition_locator = DefinitionLocator('html', object_id)
         self.assertEqual(object_id, str(definition_locator.version()))
+
+    def test_version_tree(self):
+        """
+        Test making a VersionTree object.
+        """
+        with self.assertRaises(TypeError):
+            VersionTree("invalid")
+
+        versionless_locator = CourseLocator(org="mit.eecs", offering="6.002x")
+        with self.assertRaises(ValueError):
+            VersionTree(versionless_locator)
+
+        test_id_loc = '519665f6223ebd6980884f2b'
+        test_id = ObjectId(test_id_loc)
+        valid_locator = CourseLocator(version_guid=test_id)
+        self.assertEqual(VersionTree(valid_locator).children, [])
 
     # ------------------------------------------------------------------
     # Utilities
