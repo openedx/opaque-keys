@@ -21,11 +21,20 @@ class CourseKey(OpaqueKey):
         raise NotImplementedError()
 
     @abstractproperty
-    def offering(self):  # pragma: no cover
+    def course(self):  # pragma: no cover
         """
-        The offering identifier for this course.
+        The name for this course.
 
-        This is complement of the org; in old-style IDs, "course/run"
+        In old-style IDs, it's the "course" in org/course/run
+        """
+        raise NotImplementedError()
+
+    @abstractproperty
+    def run(self):  # pragma: no cover
+        """
+        The run for this course.
+
+        In old-style IDs, it's the "run" in org/course/run
         """
         raise NotImplementedError()
 

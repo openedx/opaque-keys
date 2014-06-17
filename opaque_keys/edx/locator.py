@@ -95,7 +95,7 @@ class BlockLocatorBase(Locator):
     # pep8 happy and ignore pylint as that's easier to do.
     # pylint: disable=bad-continuation
     URL_RE_SOURCE = r"""
-        ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<offering>{ALLOWED_ID_CHARS}+)\+?)??
+        ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)\+(?P<run>{ALLOWED_ID_CHARS}+)\+?)??
         ({BRANCH_PREFIX}\+(?P<branch>{ALLOWED_ID_CHARS}+)\+?)?
         ({VERSION_PREFIX}\+(?P<version_guid>[A-F0-9]+)\+?)?
         ({BLOCK_TYPE_PREFIX}\+(?P<block_type>{ALLOWED_ID_CHARS}+)\+?)?
@@ -132,10 +132,12 @@ class BlockLocatorBase(Locator):
         """
         Returns the package identifier for this `BlockLocator`.
 
-        Returns 'self.org+self.offering' if both are present; else returns None.
+        Returns 'self.org+self.course+self.run' if both are present; else returns None.
         """
-        if self.org and self.offering:
-            return u'{}{}{}'.format(self.org, self.ORG_SEPARATOR, self.offering)
+        if self.org and self.course and self.run:
+            # will there ever be a case where we want ORG_SEPARATOR and COURSE_SEPARATOR to be different?
+            # if no, we should combine them
+            return self.ORG_SEPARATOR.join([self.org, self.course, self.run])
         else:
             return None
 # pylint: enable=abstract-method
@@ -145,50 +147,49 @@ class CourseLocator(BlockLocatorBase, CourseKey):
     """
     Examples of valid CourseLocator specifications:
      CourseLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))
-     CourseLocator(org='mit.eecs', offering='6.002x')
-     CourseLocator(org='mit.eecs', offering='6002x', branch = 'published')
+     CourseLocator(org='mit.eecs', course='6.002x', run='T2_2014')
+     CourseLocator(org='mit.eecs', course='6002x', run='fall_2014' branch = 'published')
      CourseLocator.from_string('course-locator:version+519665f6223ebd6980884f2b')
      CourseLocator.from_string('course-locator:mit.eecs+6002x')
      CourseLocator.from_string('course-locator:mit.eecs+6002x+branch+published')
      CourseLocator.from_string('course-locator:mit.eecs+6002x+branch+published+version+519665f6223ebd6980884f2b')
 
-    Should have at least a specific org & offering (id for the course as if it were a project w/
-    versions) with optional 'branch',
+    Should have at least a specific org, course, and run with optional 'branch',
     or version_guid (which points to a specific version). Can contain both in which case
     the persistence layer may raise exceptions if the given version != the current such version
     of the course.
     """
     CANONICAL_NAMESPACE = 'course-locator'
-    KEY_FIELDS = ('org', 'offering', 'branch', 'version_guid')
+    KEY_FIELDS = ('org', 'course', 'run', 'branch', 'version_guid')
 
     # stubs to fake out the abstractproperty class instrospection and allow treatment as attrs in instances
     org = None
-    offering = None
 
-    def __init__(self, org=None, offering=None, branch=None, version_guid=None):
+    def __init__(self, org=None, course=None, run=None, branch=None, version_guid=None):
         """
         Construct a CourseLocator
 
         Args:
             version_guid (string or ObjectId): optional unique id for the version
-            org, offering (string): the standard definition. Optional only if version_guid given
+            org, run (string): the standard definition. Optional only if version_guid given
             branch (string): the branch such as 'draft', 'published', 'staged', 'beta'
         """
         if version_guid:
             version_guid = self.as_object_id(version_guid)
 
-        if not all(field is None or self.ALLOWED_ID_RE.match(field) for field in [org, offering, branch]):
-            raise InvalidKeyError(self.__class__, [org, offering, branch])
+        if not all(field is None or self.ALLOWED_ID_RE.match(field) for field in [org, course, run, branch]):
+            raise InvalidKeyError(self.__class__, [org, course, run, branch])
 
         super(CourseLocator, self).__init__(
             org=org,
-            offering=offering,
+            course=course,
+            run=run,
             branch=branch,
             version_guid=version_guid
         )
 
-        if self.version_guid is None and (self.org is None or self.offering is None):
-            raise InvalidKeyError(self.__class__, "Either version_guid or org and offering should be set")
+        if self.version_guid is None and (self.org is None or self.course is None or self.run is None):
+            raise InvalidKeyError(self.__class__, "Either version_guid or org, course, and run should be set")
 
     def version(self):
         """
@@ -236,11 +237,12 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         Returns a copy of itself without any version info.
 
         Raises:
-            ValueError: if the block locator has no org & offering
+            ValueError: if the block locator has no org & course, run
         """
         return CourseLocator(
             org=self.org,
-            offering=self.offering,
+            course=self.course,
+            run=self.run,
             branch=self.branch,
             version_guid=None
         )
@@ -255,7 +257,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         """
         return CourseLocator(
             org=None,
-            offering=None,
+            course=None,
+            run=None,
             branch=None,
             version_guid=self.version_guid
         )
@@ -268,7 +271,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
             raise InvalidKeyError(self.__class__, "Branches must have full course ids not just versions")
         return CourseLocator(
             org=self.org,
-            offering=self.offering,
+            course=self.course,
+            run=self.run,
             branch=branch,
             version_guid=None
         )
@@ -280,7 +284,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         """
         return CourseLocator(
             org=self.org,
-            offering=self.offering,
+            course=self.course,
+            run=self.run,
             branch=self.branch,
             version_guid=version_guid
         )
@@ -290,7 +295,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         Return a string representing this location.
         """
         parts = []
-        if self.offering:
+        if self.course and self.run:
             parts.append(unicode(self.package_id))
             if self.branch:
                 parts.append(u"{prefix}+{branch}".format(prefix=self.BRANCH_PREFIX, branch=self.branch))
@@ -308,7 +313,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
     the defined element in the course. Courses can be a version of an offering, the
     current draft head, or the current production version.
 
-    Locators can contain both a version and a org + offering w/ branch. The split mongo functions
+    Locators can contain both a version and a org + course + run w/ branch. The split mongo functions
     may raise errors if these conflict w/ the current db state (i.e., the course's branch !=
     the version_guid)
 
@@ -354,7 +359,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Returns a copy of itself without any version info.
 
         Raises:
-            ValueError: if the block locator has no org and offering
+            ValueError: if the block locator has no org, course, and run
         """
         return BlockUsageLocator(
             course_key=self.course_key.version_agnostic(),
@@ -424,9 +429,14 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         return self.course_key.org
 
     @property
-    def offering(self):
-        """Returns the offering for this object's course_key."""
-        return self.course_key.offering
+    def course(self):
+        """Returns the course for this object's course_key."""
+        return self.course_key.course
+
+    @property
+    def run(self):
+        """Returns the run for this object's course_key."""
+        return self.course_key.run
 
     @property
     def package_id(self):
