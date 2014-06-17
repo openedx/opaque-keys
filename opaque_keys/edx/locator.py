@@ -32,7 +32,7 @@ class LocalId(object):
 
 class Locator(OpaqueKey):
     """
-    A locator is like a URL, it refers to a course resource.
+    A locator identifies a course resource.
 
     Locator is an abstract base class: do not instantiate
     """
@@ -43,9 +43,9 @@ class Locator(OpaqueKey):
     ALLOWED_ID_CHARS = r'[\w\-~.:]'
 
     def __str__(self):
-        '''
+        """
         str(self) returns something like this: "mit.eecs.6002x"
-        '''
+        """
         return unicode(self).encode('utf-8')
 
     @abstractmethod

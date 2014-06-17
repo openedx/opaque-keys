@@ -6,7 +6,7 @@ from unittest import TestCase
 import random
 from bson.objectid import ObjectId
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.locator import Locator, CourseLocator, BlockUsageLocator, DefinitionLocator
+from opaque_keys.edx.locator import Locator, CourseLocator, BlockUsageLocator, DefinitionLocator, VersionTree
 from ddt import ddt, data
 from opaque_keys.edx.keys import UsageKey, CourseKey, DefinitionKey
 
@@ -42,7 +42,11 @@ class LocatorTest(TestCase):
         self.assertEqual(str(testobj_1.version_guid), test_id_1_loc)
         # Allow access to _to_string
         # pylint: disable=protected-access
-        self.assertEqual(testobj_1._to_string(), u'+'.join((testobj_1.VERSION_PREFIX, test_id_1_loc)))
+        testobj_1_string = u'+'.join((testobj_1.VERSION_PREFIX, test_id_1_loc))
+        self.assertEqual(testobj_1._to_string(), testobj_1_string)
+        self.assertEqual(str(testobj_1), u'course-locator:' + testobj_1_string)
+        self.assertEqual(testobj_1.html_id(), u'course-locator:' + testobj_1_string)
+        self.assertEqual(testobj_1.version(), test_id_1)
 
         # Test using a given string
         test_id_2_loc = '519665f6223ebd6980884f2b'
@@ -52,7 +56,11 @@ class LocatorTest(TestCase):
         self.assertEqual(str(testobj_2.version_guid), test_id_2_loc)
         # Allow access to _to_string
         # pylint: disable=protected-access
-        self.assertEqual(testobj_2._to_string(), u'+'.join((testobj_2.VERSION_PREFIX, test_id_2_loc)))
+        testobj_2_string = u'+'.join((testobj_2.VERSION_PREFIX, test_id_2_loc))
+        self.assertEqual(testobj_2._to_string(), testobj_2_string)
+        self.assertEqual(str(testobj_2), u'course-locator:' + testobj_2_string)
+        self.assertEqual(testobj_2.html_id(), u'course-locator:' + testobj_2_string)
+        self.assertEqual(testobj_2.version(), test_id_2)
 
     @data(
         ' mit.eecs',
@@ -84,7 +92,7 @@ class LocatorTest(TestCase):
         with self.assertRaises(InvalidKeyError):
             CourseKey.from_string('course-locator:test+{}'.format(bad_id))
 
-    @data('course-locator:', 'course-locator:/mit.eecs', 'http:mit.eecs', 'course-locator//mit.eecs')
+    @data('course-locator:', 'course-locator:/mit.eecs', 'http:mit.eecs')
     def test_course_constructor_bad_url(self, bad_url):
         with self.assertRaises(InvalidKeyError):
             CourseKey.from_string(bad_url)
@@ -177,17 +185,22 @@ class LocatorTest(TestCase):
         testobj = testobj.for_version(ObjectId())
         agnostic = testobj.version_agnostic()
         self.assertIsNone(agnostic.version_guid)
-        self.check_block_locn_fields(agnostic,
-                                     org=expected_org,
-                                     offering=expected_offering,
-                                     branch=expected_branch,
-                                     block=expected_block_ref)
+        self.check_block_locn_fields(
+            agnostic,
+            org=expected_org,
+            offering=expected_offering,
+            branch=expected_branch,
+            block=expected_block_ref
+        )
 
     def test_block_constructor_url_version_prefix(self):
         test_id_loc = '519665f6223ebd6980884f2b'
         testobj = UsageKey.from_string(
             'edx:mit.eecs+6002x+{}+{}+{}+problem+{}+lab2'.format(
-                CourseLocator.VERSION_PREFIX, test_id_loc, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
+                CourseLocator.VERSION_PREFIX,
+                test_id_loc,
+                BlockUsageLocator.BLOCK_TYPE_PREFIX,
+                BlockUsageLocator.BLOCK_PREFIX
             )
         )
         self.check_block_locn_fields(
@@ -279,6 +292,22 @@ class LocatorTest(TestCase):
         object_id = '{:024x}'.format(random.randrange(16 ** 24))
         definition_locator = DefinitionLocator('html', object_id)
         self.assertEqual(object_id, str(definition_locator.version()))
+
+    def test_version_tree(self):
+        """
+        Test making a VersionTree object.
+        """
+        with self.assertRaises(TypeError):
+            VersionTree("invalid")
+
+        versionless_locator = CourseLocator(org="mit.eecs", offering="6.002x")
+        with self.assertRaises(ValueError):
+            VersionTree(versionless_locator)
+
+        test_id_loc = '519665f6223ebd6980884f2b'
+        test_id = ObjectId(test_id_loc)
+        valid_locator = CourseLocator(version_guid=test_id)
+        self.assertEqual(VersionTree(valid_locator).children, [])
 
     # ------------------------------------------------------------------
     # Utilities

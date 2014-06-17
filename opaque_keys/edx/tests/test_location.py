@@ -6,6 +6,7 @@ import ddt
 from unittest import TestCase
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.locations import Location, AssetLocation, SlashSeparatedCourseKey
+from opaque_keys.edx.keys import UsageKey, CourseKey, AssetKey
 
 # Pairs for testing the clean* functions.
 # The first item in the tuple is the input string.
@@ -26,21 +27,37 @@ class TestLocations(TestCase):
     Tests of :class:`.Location`
     """
     @ddt.data(
-        "org+course+run+category+name",
-        "org+course+run+category+name@revision"
+        "location:org+course+run+category+name",
+        "location:org+course+run+category+name@revision",
+        "i4x://org/course/category/name",
+        "i4x://org/course/category/name@revision",
+        # now try the extended char sets
+        "location:org.dept%sub-prof+course.num%section-4+run.hour%min-99+category+name:12%33-44",
+        "i4x://org.dept%sub-prof/course.num%section-4/category/name:12%33-44",
     )
     def test_string_roundtrip(self, url):
-        self.assertEquals(url, Location._from_string(url)._to_string())  # pylint: disable=protected-access
-
-    @ddt.data(
-        "i4x://org/course/category/name",
-        "i4x://org/course/category/name@revision"
-    )
-    def test_deprecated_roundtrip(self, url):
-        course_id = SlashSeparatedCourseKey('org', 'course', 'run')
         self.assertEquals(
             url,
-            course_id.make_usage_key_from_deprecated_string(url).to_deprecated_string()
+            unicode(UsageKey.from_string(url))
+        )
+
+    @ddt.data(
+        "foo/bar/baz",
+        "slashes:foo+bar+baz",
+    )
+    def test_roundtrip_for_ssck(self, course_id):
+        self.assertEquals(
+            course_id,
+            unicode(CourseKey.from_string(course_id))
+        )
+
+    @ddt.data(
+        "/c4x/org/course/asset/path",
+    )
+    def test_deprecated_round_trip_asset_location(self, path):
+        self.assertEquals(
+            path,
+            unicode(AssetKey.from_string(path)),
         )
 
     def test_invalid_chars_ssck(self):
@@ -63,6 +80,16 @@ class TestLocations(TestCase):
             with self.assertRaises(InvalidKeyError):
                 # this ends up calling the constructor where the legality check should occur
                 valid_base.replace(**{key: u'funny thing'})
+
+    @ddt.data(
+        "org/course/run/foo",
+        "org/course",
+        "org+course+run+foo",
+        "org+course",
+    )
+    def test_invalid_format_location(self, course_id):
+        with self.assertRaises(InvalidKeyError):
+            SlashSeparatedCourseKey.from_string(course_id)
 
     @ddt.data(
         ((), {
@@ -161,6 +188,10 @@ class TestLocations(TestCase):
 
     def test_html_id(self):
         loc = Location('org', 'course', 'run', 'cat', 'name:more_name', 'rev')
+        self.assertEquals(loc.html_id(), "location:org+course+run+cat+name:more_name@rev")
+
+    def test_deprecated_html_id(self):
+        loc = Location('org', 'course', 'run', 'cat', 'name:more_name', 'rev', deprecated=True)
         self.assertEquals(loc.html_id(), "i4x-org-course-cat-name_more_name-rev")
 
     def test_replacement(self):
@@ -195,3 +226,30 @@ class TestLocations(TestCase):
             AssetLocation("edX", "toy", "2012_Fall", 'asset', 'foo.bar'),
             loc.map_into_course(course_key)
         )
+
+    SON_KEYS = ('tag', 'org', 'course', 'category', 'name', 'revision')
+
+    @ddt.data(
+        (Location, '_id.', 'i4x', ('o', 'c', 'r', 'ct', 'n', 'v')),
+        (Location, '', 'i4x', ('o', 'c', 'r', 'ct', 'n', 'v')),
+        (AssetLocation, '_id.', 'c4x', ('o', 'c', 'r', 'ct', 'n', 'v')),
+    )
+    @ddt.unpack
+    def test_to_deprecated_son(self, key_cls, prefix, tag, source):
+        source_key = key_cls(*source)
+        son = source_key.to_deprecated_son(prefix=prefix, tag=tag)
+        self.assertEquals(son.keys(), [prefix + key for key in self.SON_KEYS])
+        for key in self.SON_KEYS:
+            if key == 'tag':
+                self.assertEquals(son[prefix + key], tag)
+            else:
+                self.assertEquals(son[prefix + key], getattr(source_key, key))
+
+    @ddt.data(
+        Location('o', 'c', 'r', 'ct', 'n', None),
+        Location('o', 'c', 'r', 'ct', 'n', 'v'),
+        AssetLocation('o', 'c', 'r', 'ct', 'n', None),
+        AssetLocation('o', 'c', 'r', 'ct', 'n', 'v'),
+    )
+    def test_deprecated_son_roundtrip(self, key):
+        self.assertEquals(key, key.__class__._from_deprecated_son(key.to_deprecated_son(), key.run))

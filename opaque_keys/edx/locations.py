@@ -37,26 +37,23 @@ class SlashSeparatedCourseKey(CourseKey):
     KEY_FIELDS = ('org', 'course', 'run')
     __slots__ = KEY_FIELDS
 
-    def __init__(self, org, course, run):
+    def __init__(self, org, course, run, **kwargs):
         """
         checks that the values are syntactically valid before creating object
         """
         for part in (org, course, run):
             # Allow access to _check_location_part
             LocationBase._check_location_part(part, INVALID_CHARS)  # pylint: disable=protected-access
-        super(SlashSeparatedCourseKey, self).__init__(org, course, run)
+        super(SlashSeparatedCourseKey, self).__init__(org, course, run, **kwargs)
 
     @classmethod
     def _from_string(cls, serialized):
-        serialized = serialized.replace("+", "/")
-        if serialized.count('/') != 2:
+        if serialized.count('+') != 2:
             raise InvalidKeyError(cls, serialized)
 
-        # Turns encoded slashes into actual slashes
-        return cls(*serialized.split('/'))
+        return cls(*serialized.split('+'))
 
     def _to_string(self):
-        # Turns slashes into pluses
         return u'+'.join([self.org, self.course, self.run])
 
     @property
@@ -69,31 +66,23 @@ class SlashSeparatedCourseKey(CourseKey):
     def make_usage_key(self, block_type, name):
         return Location(self.org, self.course, self.run, block_type, name, None)
 
-    def to_deprecated_string(self):
+    def _to_deprecated_string(self):
         """Returns an 'old-style' course id, represented as 'org/course/run'"""
         return u'/'.join([self.org, self.course, self.run])
 
     @classmethod
-    def from_deprecated_string(cls, serialized):
+    def _from_deprecated_string(cls, serialized):
         """
         Temporary mechanism for creating a CourseKey given a serialized Location.
         NOTE: this prejudicially takes the org and course from the url not self.
         """
-        return cls._from_string(serialized)
+        if serialized.count('/') != 2:
+            raise InvalidKeyError(cls, serialized)
 
-    def make_usage_key_from_deprecated_string(self, location_url):
-        """
-        Temporary mechanism for creating a UsageKey given a CourseKey and a serialized Location. NOTE:
-        this prejudicially takes the tag, org, and course from the url not self.
+        return cls(*serialized.split('/'), deprecated=True)
 
-        Raises:
-            InvalidKeyError: if the url does not parse
-        """
-        match = URL_RE.match(location_url)
-        if match is None:
-            raise InvalidKeyError(Location, location_url)
-        groups = match.groupdict()
-        return Location(run=self.run, **groups)
+# register SSCK as the deprecated fallback for CourseKey
+CourseKey.set_deprecated_fallback(SlashSeparatedCourseKey)
 
 
 class LocationBase(object):
@@ -102,6 +91,8 @@ class LocationBase(object):
     content situated in a course.
     """
     KEY_FIELDS = ('org', 'course', 'run', 'category', 'name', 'revision')
+
+    DEPRECATED_TAG = None  # Subclasses should define what DEPRECATED_TAG is
 
     SERIALIZED_PATTERN = re.compile(r"""
         (?P<org>[^/]+)\+
@@ -171,7 +162,7 @@ class LocationBase(object):
         """
         return cls._clean(value, INVALID_HTML_CHARS)
 
-    def __init__(self, org, course, run, category, name, revision=None):
+    def __init__(self, org, course, run, category, name, revision=None, **kwargs):
         """
         Create a new Location that is a clone of the specifed one.
 
@@ -188,7 +179,7 @@ class LocationBase(object):
         self._check_location_part(name, INVALID_CHARS_NAME)
 
         # call the OpaqueKey constructor ensuring the args in the same order as KEY_FIELDS above
-        super(LocationBase, self).__init__(org, course, run, category, name, revision)
+        super(LocationBase, self).__init__(org, course, run, category, name, revision, **kwargs)
 
     @property
     def tag(self):
@@ -210,19 +201,7 @@ class LocationBase(object):
         """
         return self.category
 
-    @classmethod
-    def from_deprecated_string(cls, serialized):
-        """
-        Temporary mechanism for creating a CourseKey given a serialized Location.
-        NOTE: this prejudicially takes the tag, org, and course from the url not self.
-        """
-        match = URL_RE.match(serialized)
-        if match is None:
-            raise InvalidKeyError(Location, serialized)
-        groups = match.groupdict()
-        return cls(run=None, **groups)
-
-    def to_deprecated_string(self):
+    def _to_deprecated_string(self):
         """
         Returns an old-style location, represented as:
         i4x://org/course/category/name
@@ -231,6 +210,18 @@ class LocationBase(object):
         if self.revision:
             url += u"@{rev}".format(rev=self.revision)  # pylint: disable=E1101
         return url
+
+    @classmethod
+    def _from_deprecated_string(cls, serialized):
+        """
+        Temporary mechanism for creating a CourseKey given a serialized Location.
+        NOTE: this prejudicially takes the tag, org, and course from the url not self.
+        """
+        match = URL_RE.match(serialized)
+        if match is None:
+            raise InvalidKeyError(Location, serialized)
+        groups = match.groupdict()
+        return cls(run=None, deprecated=True, **groups)
 
     def _to_string(self):
         """
@@ -247,23 +238,27 @@ class LocationBase(object):
     @classmethod
     def _from_string(cls, serialized):
         """
-        Return a CourseLocator parsing the given serialized string
-        :param serialized: matches the string to a CourseLocator
+        Return a Location parsing the given serialized string
+        :param serialized: matches the string to a Location
         """
         match = cls.SERIALIZED_PATTERN.match(serialized)
         if not match:
             raise InvalidKeyError(cls, serialized)
 
-        return cls(**match.groupdict())
+        groups = match.groupdict()
+        return cls(**groups)
 
     def html_id(self):
         """
         Return a string with a version of the location that is safe for use in
         html id attributes
         """
-        id_fields = [self.DEPRECATED_TAG, self.org, self.course, self.category, self.name, self.revision]
-        id_string = u"-".join([v for v in id_fields if v is not None])
-        return Location.clean_for_html(id_string)
+        if self.deprecated:
+            id_fields = [self.DEPRECATED_TAG, self.org, self.course, self.category, self.name, self.revision]
+            id_string = u"-".join([v for v in id_fields if v is not None])
+            return Location.clean_for_html(id_string)
+        else:
+            return unicode(self)
 
     @property
     def course_key(self):
@@ -287,7 +282,7 @@ class LocationBase(object):
         """
         Return the Location decoding this id_dict and run
         """
-        return cls(id_dict['org'], id_dict['course'], run, id_dict['category'], id_dict['name'], id_dict['revision'])
+        return cls(id_dict['org'], id_dict['course'], run, id_dict['category'], id_dict['name'], id_dict['revision'], deprecated=True)
 
 
 class Location(LocationBase, UsageKey, DefinitionKey):
@@ -313,6 +308,9 @@ class Location(LocationBase, UsageKey, DefinitionKey):
         """
         return Location(course_key.org, course_key.course, course_key.run, self.category, self.name, self.revision)
 
+# register Location as the deprecated fallback for UsageKey
+UsageKey.set_deprecated_fallback(Location)
+
 
 class AssetLocation(LocationBase, AssetKey):
     """
@@ -322,22 +320,6 @@ class AssetLocation(LocationBase, AssetKey):
     DEPRECATED_TAG = 'c4x'
     __slots__ = LocationBase.KEY_FIELDS
 
-    def __init__(self, org, course, run, category, name, revision=None):
-        super(AssetLocation, self).__init__(org, course, run, category, name, revision)
-
-    @property
-    def path(self):
-        return self.name
-
-    def to_deprecated_string(self):
-        """
-        Returns an old-style location, represented as:
-
-        /c4x/org/course/category/name
-        """
-        url = u"/{0.DEPRECATED_TAG}/{0.org}/{0.course}/{0.category}/{0.name}".format(self)
-        return url
-
     ASSET_URL_RE = re.compile(r"""
         /?c4x/
         (?P<org>[^/]+)/
@@ -346,13 +328,29 @@ class AssetLocation(LocationBase, AssetKey):
         (?P<name>[^/]+)
     """, re.VERBOSE | re.IGNORECASE)
 
+    def __init__(self, org, course, run, category, name, revision=None, **kwargs):
+        super(AssetLocation, self).__init__(org, course, run, category, name, revision, **kwargs)
+
+    @property
+    def path(self):
+        return self.name
+
+    def _to_deprecated_string(self):
+        """
+        Returns an old-style location, represented as:
+
+        /c4x/org/course/category/name
+        """
+        url = u"/{0.DEPRECATED_TAG}/{0.org}/{0.course}/{0.category}/{0.name}".format(self)
+        return url
+
     @classmethod
-    def from_deprecated_string(cls, serialized):
+    def _from_deprecated_string(cls, serialized):
         match = cls.ASSET_URL_RE.match(serialized)
         if match is None:
             raise InvalidKeyError(Location, serialized)
         groups = match.groupdict()
-        return cls(run=None, **groups)
+        return cls(run=None, deprecated=True, **groups)
 
     def map_into_course(self, course_key):
         """
@@ -375,6 +373,9 @@ class AssetLocation(LocationBase, AssetKey):
         """
         return ['c4x', self.org, self.course, self.block_type, self.name, None]
 
+# Register AssetLocation as the deprecated fallback for AssetKey
+AssetKey.set_deprecated_fallback(AssetLocation)
+
 
 # Allow class name to start wtih a lowercase letter
 class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
@@ -384,8 +385,5 @@ class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
     """
     def default(self, key):
         if isinstance(key, OpaqueKey):
-            if isinstance(key, (LocationBase, SlashSeparatedCourseKey)):
-                return key.to_deprecated_string()
-            else:
-                return unicode(key)
+            return unicode(key)
         super(i4xEncoder, self).default(key)
