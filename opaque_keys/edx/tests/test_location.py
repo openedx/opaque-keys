@@ -30,19 +30,12 @@ class TestLocations(TestCase):
         "location:org+course+run+category+name",
         "location:org+course+run+category+name@revision",
         "i4x://org/course/category/name",
-        "i4x://org/course/category/name@draft",
+        "i4x://org/course/category/name@revision",
         # now try the extended char sets
         "location:org.dept%sub-prof+course.num%section-4+run.hour%min-99+category+name:12%33-44",
         "i4x://org.dept%sub-prof/course.num%section-4/category/name:12%33-44",
     )
     def test_string_roundtrip(self, url):
-        self.assertEquals(url, unicode(UsageKey.from_string(url)))
-
-    @ddt.data(
-        "i4x://org/course/category/name",
-        "i4x://org/course/category/name@revision"
-    )
-    def test_deprecated_roundtrip(self, url):
         self.assertEquals(
             url,
             unicode(UsageKey.from_string(url))
@@ -50,21 +43,12 @@ class TestLocations(TestCase):
 
     @ddt.data(
         "foo/bar/baz",
+        "slashes:foo+bar+baz",
     )
-    def test_deprecated_roundtrip_for_ssck(self, course_id):
+    def test_roundtrip_for_ssck(self, course_id):
         self.assertEquals(
             course_id,
             unicode(CourseKey.from_string(course_id))
-        )
-
-    @ddt.data(
-        "foo+bar+baz",
-    )
-    def test_new_roundtrip_for_ssck(self, course_id):
-        course_key = SlashSeparatedCourseKey("foo", "bar", "baz")
-        self.assertEquals(
-            course_id,
-            course_key._to_string()  # pylint: disable=protected-access
         )
 
     @ddt.data(
