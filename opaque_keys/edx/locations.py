@@ -56,10 +56,6 @@ class SlashSeparatedCourseKey(CourseKey):
     def _to_string(self):
         return u'+'.join([self.org, self.course, self.run])
 
-    @property
-    def offering(self):
-        return u'/'.join([self.course, self.run])
-
     def make_asset_key(self, asset_type, path):
         return AssetLocation(self.org, self.course, self.run, asset_type, path, None)
 

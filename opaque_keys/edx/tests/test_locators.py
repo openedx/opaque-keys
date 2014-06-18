@@ -84,13 +84,13 @@ class LocatorTest(TestCase):
         Test all sorts of badly-formed package_ids (and urls with those package_ids)
         """
         with self.assertRaises(InvalidKeyError):
-            CourseLocator(org=bad_id, offering='test')
+            CourseLocator(org=bad_id, course='test', run='2014_T2')
 
         with self.assertRaises(InvalidKeyError):
-            CourseLocator(org='test', offering=bad_id)
+            CourseLocator(org='test', course=bad_id, run='2014_T2')
 
         with self.assertRaises(InvalidKeyError):
-            CourseKey.from_string('course-locator:test+{}'.format(bad_id))
+            CourseKey.from_string('course-locator:test+{}+2014_T2'.format(bad_id))
 
     @data('course-locator:', 'course-locator:/mit.eecs', 'http:mit.eecs')
     def test_course_constructor_bad_url(self, bad_url):
@@ -112,50 +112,56 @@ class LocatorTest(TestCase):
     def test_course_constructor_url_package_id_and_version_guid(self):
         test_id_loc = '519665f6223ebd6980884f2b'
         testobj = CourseKey.from_string(
-            'course-locator:mit.eecs+honors.6002x+{}+{}'.format(CourseLocator.VERSION_PREFIX, test_id_loc)
+            'course-locator:mit.eecs+honors.6002x+2014_T2+{}+{}'.format(CourseLocator.VERSION_PREFIX, test_id_loc)
         )
         self.check_course_locn_fields(
             testobj,
             org='mit.eecs',
-            offering='honors.6002x',
+            course='honors.6002x',
+            run='2014_T2',
             version_guid=ObjectId(test_id_loc)
         )
 
     def test_course_constructor_url_package_id_branch_and_version_guid(self):
         test_id_loc = '519665f6223ebd6980884f2b'
         org = 'mit.eecs'
-        offering = '~6002x'
-        testobj = CourseKey.from_string('course-locator:{}+{}+{}+draft-1+{}+{}'.format(
-            org, offering, CourseLocator.BRANCH_PREFIX, CourseLocator.VERSION_PREFIX, test_id_loc
+        course = '~6002x'
+        run = '2014_T2'
+        testobj = CourseKey.from_string('course-locator:{}+{}+{}+{}+draft-1+{}+{}'.format(
+            org, course, run, CourseLocator.BRANCH_PREFIX, CourseLocator.VERSION_PREFIX, test_id_loc
         ))
         self.check_course_locn_fields(
             testobj,
             org=org,
-            offering=offering,
+            course=course,
+            run=run,
             branch='draft-1',
             version_guid=ObjectId(test_id_loc)
         )
 
     def test_course_constructor_package_id_no_branch(self):
         org = 'mit.eecs'
-        offering = '6002x'
-        testurn = '{}+{}'.format(org, offering)
-        testobj = CourseLocator(org=org, offering=offering)
-        self.check_course_locn_fields(testobj, org=org, offering=offering)
+        course = '6002x'
+        run = '2014_T2'
+        testurn = '{}+{}+{}'.format(org, course, run)
+        testobj = CourseLocator(org=org, course=course, run=run)
+        self.check_course_locn_fields(testobj, org=org, course=course, run=run)
         # Allow access to _to_string
         # pylint: disable=protected-access
         self.assertEqual(testobj._to_string(), testurn)
 
     def test_course_constructor_package_id_separate_branch(self):
         org = 'mit.eecs'
-        offering = '6002x'
+        course = '6002x'
+        run = '2014_T2'
         test_branch = 'published'
-        expected_urn = '{}+{}+{}+{}'.format(org, offering, CourseLocator.BRANCH_PREFIX, test_branch)
-        testobj = CourseLocator(org=org, offering=offering, branch=test_branch)
+        expected_urn = '{}+{}+{}+{}+{}'.format(org, course, run, CourseLocator.BRANCH_PREFIX, test_branch)
+        testobj = CourseLocator(org=org, course=course, run=run, branch=test_branch)
         self.check_course_locn_fields(
             testobj,
             org=org,
-            offering=offering,
+            course=course,
+            run=run,
             branch=test_branch,
         )
         self.assertEqual(testobj.branch, test_branch)
@@ -165,18 +171,20 @@ class LocatorTest(TestCase):
 
     def test_block_constructor(self):
         expected_org = 'mit.eecs'
-        expected_offering = '6002x'
+        expected_course = '6002x'
+        expected_run = '2014_T2'
         expected_branch = 'published'
         expected_block_ref = 'HW3'
-        testurn = 'edx:{}+{}+{}+{}+{}+{}+{}+{}'.format(
-            expected_org, expected_offering, CourseLocator.BRANCH_PREFIX, expected_branch,
+        testurn = 'edx:{}+{}+{}+{}+{}+{}+{}+{}+{}'.format(
+            expected_org, expected_course, expected_run, CourseLocator.BRANCH_PREFIX, expected_branch,
             BlockUsageLocator.BLOCK_TYPE_PREFIX, 'problem', BlockUsageLocator.BLOCK_PREFIX, 'HW3'
         )
         testobj = UsageKey.from_string(testurn)
         self.check_block_locn_fields(
             testobj,
             org=expected_org,
-            offering=expected_offering,
+            course=expected_course,
+            run=expected_run,
             branch=expected_branch,
             block_type='problem',
             block=expected_block_ref
@@ -188,7 +196,8 @@ class LocatorTest(TestCase):
         self.check_block_locn_fields(
             agnostic,
             org=expected_org,
-            offering=expected_offering,
+            course=expected_course,
+            run=expected_run,
             branch=expected_branch,
             block=expected_block_ref
         )
@@ -196,7 +205,7 @@ class LocatorTest(TestCase):
     def test_block_constructor_url_version_prefix(self):
         test_id_loc = '519665f6223ebd6980884f2b'
         testobj = UsageKey.from_string(
-            'edx:mit.eecs+6002x+{}+{}+{}+problem+{}+lab2'.format(
+            'edx:mit.eecs+6002x+2014_T2+{}+{}+{}+problem+{}+lab2'.format(
                 CourseLocator.VERSION_PREFIX,
                 test_id_loc,
                 BlockUsageLocator.BLOCK_TYPE_PREFIX,
@@ -206,7 +215,8 @@ class LocatorTest(TestCase):
         self.check_block_locn_fields(
             testobj,
             org='mit.eecs',
-            offering='6002x',
+            course='6002x',
+            run='2014_T2',
             block_type='problem',
             block='lab2',
             version_guid=ObjectId(test_id_loc)
@@ -216,16 +226,18 @@ class LocatorTest(TestCase):
             agnostic,
             block='lab2',
             org=None,
-            offering=None,
+            course=None,
+            run=None,
             version_guid=ObjectId(test_id_loc)
         )
-        self.assertIsNone(agnostic.offering)
+        self.assertIsNone(agnostic.course)
+        self.assertIsNone(agnostic.run)
         self.assertIsNone(agnostic.org)
 
     def test_block_constructor_url_kitchen_sink(self):
         test_id_loc = '519665f6223ebd6980884f2b'
         testobj = UsageKey.from_string(
-            'edx:mit.eecs+6002x+{}+draft+{}+{}+{}+problem+{}+lab2'.format(
+            'edx:mit.eecs+6002x+2014_T2+{}+draft+{}+{}+{}+problem+{}+lab2'.format(
                 CourseLocator.BRANCH_PREFIX, CourseLocator.VERSION_PREFIX, test_id_loc,
                 BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
             )
@@ -233,7 +245,8 @@ class LocatorTest(TestCase):
         self.check_block_locn_fields(
             testobj,
             org='mit.eecs',
-            offering='6002x',
+            course='6002x',
+            run='2014_T2',
             branch='draft',
             block='lab2',
             version_guid=ObjectId(test_id_loc)
@@ -244,16 +257,17 @@ class LocatorTest(TestCase):
         It seems we used to use colons in names; so, ensure they're acceptable.
         """
         org = 'mit.eecs'
-        offering = '1'
+        course = 'foo'
+        run = '2014_T2'
         branch = 'foo'
         block_id = 'problem:with-colon~2'
         testobj = BlockUsageLocator(
-            CourseLocator(org=org, offering=offering, branch=branch),
+            CourseLocator(org=org, course=course, run=run, branch=branch),
             block_type='problem',
             block_id=block_id
         )
         self.check_block_locn_fields(
-            testobj, org=org, offering=offering, branch=branch, block=block_id
+            testobj, org=org, course=course, run=run, branch=branch, block=block_id
         )
 
     def test_relative(self):
@@ -261,26 +275,27 @@ class LocatorTest(TestCase):
         Test making a relative usage locator.
         """
         org = 'mit.eecs'
-        offering = '1'
+        course = 'ponypower'
+        run = "2014_T2"
         branch = 'foo'
-        baseobj = CourseLocator(org=org, offering=offering, branch=branch)
+        baseobj = CourseLocator(org=org, course=course, run=run, branch=branch)
         block_id = 'problem:with-colon~2'
         testobj = BlockUsageLocator.make_relative(baseobj, 'problem', block_id)
         self.check_block_locn_fields(
-            testobj, org=org, offering=offering, branch=branch, block=block_id
+            testobj, org=org, course=course, run=run, branch=branch, block=block_id
         )
         block_id = 'completely_different'
         testobj = BlockUsageLocator.make_relative(testobj, 'problem', block_id)
         self.check_block_locn_fields(
-            testobj, org=org, offering=offering, branch=branch, block=block_id
+            testobj, org=org, course=course, run=run, branch=branch, block=block_id
         )
 
     def test_repr(self):
-        testurn = u'edx:mit.eecs+6002x+{}+published+{}+problem+{}+HW3'.format(
+        testurn = u'edx:mit.eecs+6002x+2014_T2+{}+published+{}+problem+{}+HW3'.format(
             CourseLocator.BRANCH_PREFIX, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
         )
         testobj = UsageKey.from_string(testurn)
-        self.assertEqual("BlockUsageLocator(CourseLocator(u'mit.eecs', u'6002x', u'published', None), u'problem', u'HW3')", repr(testobj))
+        self.assertEqual("BlockUsageLocator(CourseLocator(u'mit.eecs', u'6002x', u'2014_T2', u'published', None), u'problem', u'HW3')", repr(testobj))
 
     def test_description_locator_url(self):
         object_id = '{:024x}'.format(random.randrange(16 ** 24))
@@ -300,7 +315,7 @@ class LocatorTest(TestCase):
         with self.assertRaises(TypeError):
             VersionTree("invalid")
 
-        versionless_locator = CourseLocator(org="mit.eecs", offering="6.002x")
+        versionless_locator = CourseLocator(org="mit.eecs", course="6.002x", run="2014")
         with self.assertRaises(ValueError):
             VersionTree(versionless_locator)
 
@@ -313,21 +328,22 @@ class LocatorTest(TestCase):
     # Utilities
 
     def check_course_locn_fields(self, testobj, version_guid=None,
-                                 org=None, offering=None, branch=None):
+                                 org=None, course=None, run=None, branch=None):
         """
-        Checks the version, org, offering, and branch in testobj
+        Checks the version, org, course, run, and branch in testobj
         """
         self.assertEqual(testobj.version_guid, version_guid)
         self.assertEqual(testobj.org, org)
-        self.assertEqual(testobj.offering, offering)
+        self.assertEqual(testobj.course, course)
+        self.assertEqual(testobj.run, run)
         self.assertEqual(testobj.branch, branch)
 
     def check_block_locn_fields(self, testobj, version_guid=None,
-                                org=None, offering=None, branch=None, block_type=None, block=None):
+                                org=None, course=None, run=None, branch=None, block_type=None, block=None):
         """
         Does adds a block id check over and above the check_course_locn_fields tests
         """
-        self.check_course_locn_fields(testobj, version_guid, org, offering,
+        self.check_course_locn_fields(testobj, version_guid, org, course, run,
                                       branch)
         if block_type is not None:
             self.assertEqual(testobj.block_type, block_type)
