@@ -5,7 +5,8 @@ import ddt
 
 from unittest import TestCase
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.locations import Location, AssetLocation, SlashSeparatedCourseKey
+from opaque_keys.edx.locations import Location, AssetLocation
+from opaque_keys.edx.locator import CourseLocator
 from opaque_keys.edx.keys import UsageKey, CourseKey, AssetKey
 
 # Pairs for testing the clean* functions.
@@ -43,13 +44,19 @@ class TestLocations(TestCase):
 
     @ddt.data(
         "foo/bar/baz",
-        "slashes:foo+bar+baz",
     )
     def test_roundtrip_for_ssck(self, course_id):
         self.assertEquals(
             course_id,
             unicode(CourseKey.from_string(course_id))
         )
+
+    @ddt.data(
+        "foo!/bar/baz",
+    )
+    def test_invalid_chars_in_ssck_string(self, course_id):
+        with self.assertRaises(InvalidKeyError):
+            CourseKey.from_string(course_id)
 
     @ddt.data(
         "/c4x/org/course/asset/path",
@@ -60,27 +67,6 @@ class TestLocations(TestCase):
             unicode(AssetKey.from_string(path)),
         )
 
-    def test_invalid_chars_ssck(self):
-        """
-        Test that the ssck constructor fails if given invalid chars
-        """
-        valid_base = SlashSeparatedCourseKey(u'org.dept-1%2', u'course.sub-2%3', u'run.faster-4%5')
-        for key in SlashSeparatedCourseKey.KEY_FIELDS:
-            with self.assertRaises(InvalidKeyError):
-                # this ends up calling the constructor where the legality check should occur
-                valid_base.replace(**{key: u'funny thing'})
-
-    def test_invalid_chars_location(self):
-        """
-        Test that the location constructor fails if given invalid chars
-        """
-        course_key = SlashSeparatedCourseKey(u'org.dept-1%2', u'course.sub-2%3', u'run.faster-4%5')
-        valid_base = course_key.make_usage_key('tomato-again%9', 'block-head:sub-4%9')
-        for key in SlashSeparatedCourseKey.KEY_FIELDS:
-            with self.assertRaises(InvalidKeyError):
-                # this ends up calling the constructor where the legality check should occur
-                valid_base.replace(**{key: u'funny thing'})
-
     @ddt.data(
         "org/course/run/foo",
         "org/course",
@@ -89,7 +75,7 @@ class TestLocations(TestCase):
     )
     def test_invalid_format_location(self, course_id):
         with self.assertRaises(InvalidKeyError):
-            SlashSeparatedCourseKey.from_string(course_id)
+            CourseLocator.from_string(course_id)
 
     @ddt.data(
         ((), {
@@ -213,7 +199,7 @@ class TestLocations(TestCase):
 
     def test_map_into_course_location(self):
         loc = Location('org', 'course', 'run', 'cat', 'name:more_name', 'rev')
-        course_key = SlashSeparatedCourseKey("edX", "toy", "2012_Fall")
+        course_key = CourseLocator("edX", "toy", "2012_Fall")
         self.assertEquals(
             Location("edX", "toy", "2012_Fall", 'cat', 'name:more_name', 'rev'),
             loc.map_into_course(course_key)
@@ -221,7 +207,7 @@ class TestLocations(TestCase):
 
     def test_map_into_course_asset_location(self):
         loc = AssetLocation('org', 'course', 'run', 'asset', 'foo.bar')
-        course_key = SlashSeparatedCourseKey("edX", "toy", "2012_Fall")
+        course_key = CourseLocator("edX", "toy", "2012_Fall")
         self.assertEquals(
             AssetLocation("edX", "toy", "2012_Fall", 'asset', 'foo.bar'),
             loc.map_into_course(course_key)

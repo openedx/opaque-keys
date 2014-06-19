@@ -30,57 +30,6 @@ INVALID_CHARS_NAME = re.compile(r"[^\w.:%-]", re.UNICODE)
 INVALID_HTML_CHARS = re.compile(r"[^\w-]", re.UNICODE)
 
 
-class SlashSeparatedCourseKey(CourseKey):
-    """Course key for old style org/course/run course identifiers"""
-
-    CANONICAL_NAMESPACE = 'slashes'
-    KEY_FIELDS = ('org', 'course', 'run')
-    __slots__ = KEY_FIELDS
-
-    def __init__(self, org, course, run, **kwargs):
-        """
-        checks that the values are syntactically valid before creating object
-        """
-        for part in (org, course, run):
-            # Allow access to _check_location_part
-            LocationBase._check_location_part(part, INVALID_CHARS)  # pylint: disable=protected-access
-        super(SlashSeparatedCourseKey, self).__init__(org, course, run, **kwargs)
-
-    @classmethod
-    def _from_string(cls, serialized):
-        if serialized.count('+') != 2:
-            raise InvalidKeyError(cls, serialized)
-
-        return cls(*serialized.split('+'))
-
-    def _to_string(self):
-        return u'+'.join([self.org, self.course, self.run])
-
-    def make_asset_key(self, asset_type, path):
-        return AssetLocation(self.org, self.course, self.run, asset_type, path, None)
-
-    def make_usage_key(self, block_type, name):
-        return Location(self.org, self.course, self.run, block_type, name, None)
-
-    def _to_deprecated_string(self):
-        """Returns an 'old-style' course id, represented as 'org/course/run'"""
-        return u'/'.join([self.org, self.course, self.run])
-
-    @classmethod
-    def _from_deprecated_string(cls, serialized):
-        """
-        Temporary mechanism for creating a CourseKey given a serialized Location.
-        NOTE: this prejudicially takes the org and course from the url not self.
-        """
-        if serialized.count('/') != 2:
-            raise InvalidKeyError(cls, serialized)
-
-        return cls(*serialized.split('/'), deprecated=True)
-
-# register SSCK as the deprecated fallback for CourseKey
-CourseKey.set_deprecated_fallback(SlashSeparatedCourseKey)
-
-
 class LocationBase(object):
     """
     Encodes a type of Location, which identifies a piece of
@@ -258,8 +207,8 @@ class LocationBase(object):
 
     @property
     def course_key(self):
-        """Returns a SlashSeparatedCourseKey comprised of this location's org, course, and run."""
-        return SlashSeparatedCourseKey(self.org, self.course, self.run)
+        """Returns a CourseLocator comprised of this location's org, course, and run."""
+        return CourseLocator(self.org, self.course, self.run)
 
     def to_deprecated_son(self, prefix='', tag='i4x'):
         """
