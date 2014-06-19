@@ -118,6 +118,37 @@ class OpaqueKey(object):
         """
         raise NotImplementedError()
 
+    @classmethod
+    def _from_deprecated_string(cls, serialized):
+        """
+        Return an instance of `cls` parsed from its deprecated `serialized` form.
+
+        This will be called only if :meth:`OpaqueKey.from_string` is unable to
+        parse a key out of `serialized`, and only if `set_deprecated_fallback` has
+        been called to register a fallback class.
+
+        Args:
+            cls: The :class:`OpaqueKey` subclass.
+            serialized (unicode): A serialized :class:`OpaqueKey`, with namespace already removed.
+
+        Raises:
+            InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
+                understood by `cls`.
+        """
+        raise NotImplementedError()
+
+    def _to_deprecated_string(self):
+        """
+        Return a deprecated serialization of `self`.
+
+        This will be called only if `set_deprecated_fallback` has
+        been called to register a fallback class, and the key being
+        serialized has the attribute `deprecated=True`.
+
+        This serialization should not include the namespace prefix.
+        """
+        raise NotImplementedError()
+
     # ============= SERIALIZATION ==============
 
     def __unicode__(self):
@@ -203,7 +234,6 @@ class OpaqueKey(object):
         # a flag used to indicate that this instance was deserialized from the
         # deprecated form and should serialize to the deprecated form
         self.deprecated = kwargs.pop('deprecated', False)
-
         if len(args) + len(kwargs) != len(self.KEY_FIELDS):
             raise TypeError('__init__() takes exactly {} arguments ({} given)'.format(
                 len(self.KEY_FIELDS),
@@ -299,4 +329,3 @@ class OpaqueKey(object):
     def __len__(self):
         """Return the number of characters in the serialized OpaqueKey"""
         return len(unicode(self))
-
