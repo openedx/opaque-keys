@@ -14,6 +14,7 @@ from bson.errors import InvalidId
 from opaque_keys import OpaqueKey, InvalidKeyError
 
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey
+from opaque_keys.edx.locations import LocationBase
 
 log = logging.getLogger(__name__)
 
@@ -161,35 +162,55 @@ class CourseLocator(BlockLocatorBase, CourseKey):
     """
     CANONICAL_NAMESPACE = 'course-locator'
     KEY_FIELDS = ('org', 'course', 'run', 'branch', 'version_guid')
+    __slots__ = KEY_FIELDS
+
+    # Characters that are forbidden in the deprecated format
+    INVALID_CHARS_DEPRECATED = re.compile(r"[^\w.%-]", re.UNICODE)
 
     # stubs to fake out the abstractproperty class instrospection and allow treatment as attrs in instances
     org = None
 
-    def __init__(self, org=None, course=None, run=None, branch=None, version_guid=None):
+    def __init__(self, org=None, course=None, run=None, branch=None, version_guid=None, deprecated=False, **kwargs):
         """
         Construct a CourseLocator
 
         Args:
             version_guid (string or ObjectId): optional unique id for the version
-            org, run (string): the standard definition. Optional only if version_guid given
+            org, course, run (string): the standard definition. Optional only if version_guid given
             branch (string): the branch such as 'draft', 'published', 'staged', 'beta'
         """
-        if version_guid:
-            version_guid = self.as_object_id(version_guid)
+        if deprecated:
+            for part in (org, course, run):
+                self._check_location_part(part, self.INVALID_CHARS_DEPRECATED)
 
-        if not all(field is None or self.ALLOWED_ID_RE.match(field) for field in [org, course, run, branch]):
-            raise InvalidKeyError(self.__class__, [org, course, run, branch])
+        else:
+
+            if version_guid:
+                version_guid = self.as_object_id(version_guid)
+
+            if not all(field is None or self.ALLOWED_ID_RE.match(field) for field in [org, course, run, branch]):
+                raise InvalidKeyError(self.__class__, [org, course, run, branch])
 
         super(CourseLocator, self).__init__(
             org=org,
             course=course,
             run=run,
             branch=branch,
-            version_guid=version_guid
+            version_guid=version_guid,
+            deprecated=deprecated,
+            **kwargs
         )
 
         if self.version_guid is None and (self.org is None or self.course is None or self.run is None):
             raise InvalidKeyError(self.__class__, "Either version_guid or org, course, and run should be set")
+
+    def _check_location_part(self, val, regexp):
+        if val is None:
+            return
+        if not isinstance(val, basestring):
+            raise InvalidKeyError(self.__class__, "{!r} is not a string".format(val))
+        if regexp.search(val) is not None:
+            raise InvalidKeyError(self.__class__, "Invalid characters in {!r}.".format(val))
 
     def version(self):
         """
@@ -228,7 +249,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         )
 
     def make_asset_key(self, asset_type, path):
-        raise NotImplementedError()
+        return AssetLocation(self.org, self.course, self.run, asset_type, path, None)
 
     def version_agnostic(self):
         """
@@ -302,6 +323,23 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         if self.version_guid:
             parts.append(u"{prefix}+{guid}".format(prefix=self.VERSION_PREFIX, guid=self.version_guid))
         return u"+".join(parts)
+
+    def _to_deprecated_string(self):
+        """Returns an 'old-style' course id, represented as 'org/course/run'"""
+        return u'/'.join([self.org, self.course, self.run])
+
+    @classmethod
+    def _from_deprecated_string(cls, serialized):
+        """
+        Temporary mechanism for creating a CourseKey given a serialized Location.
+        NOTE: this prejudicially takes the org and course from the url not self.
+        """
+        if serialized.count('/') != 2:
+            raise InvalidKeyError(cls, serialized)
+
+        return cls(*serialized.split('/'), deprecated=True)
+
+CourseKey.set_deprecated_fallback(CourseLocator)
 
 
 class BlockUsageLocator(BlockLocatorBase, UsageKey):
