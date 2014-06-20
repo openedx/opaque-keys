@@ -274,7 +274,8 @@ class AssetLocation(LocationBase, AssetKey):
     """, re.VERBOSE | re.IGNORECASE)
 
     def __init__(self, org, course, run, category, name, revision=None, **kwargs):
-        super(AssetLocation, self).__init__(org, course, run, category, name, revision, **kwargs)
+        deprecated = kwargs.pop('deprecated', False)
+        super(AssetLocation, self).__init__(org, course, run, category, name, revision, deprecated=deprecated, **kwargs)
 
     @property
     def path(self):
@@ -287,6 +288,8 @@ class AssetLocation(LocationBase, AssetKey):
         /c4x/org/course/category/name
         """
         url = u"/{0.DEPRECATED_TAG}/{0.org}/{0.course}/{0.category}/{0.name}".format(self)
+        if self.revision:
+            url += u"@{rev}".format(rev=self.revision)  # pylint: disable=E1101
         return url
 
     @classmethod
