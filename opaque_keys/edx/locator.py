@@ -14,7 +14,7 @@ from bson.errors import InvalidId
 from opaque_keys import OpaqueKey, InvalidKeyError
 
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey
-from opaque_keys.edx.locations import LocationBase
+from opaque_keys.edx.locations import LocationBase, AssetLocation
 
 log = logging.getLogger(__name__)
 
@@ -249,7 +249,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         )
 
     def make_asset_key(self, asset_type, path):
-        return AssetLocation(self.org, self.course, self.run, asset_type, path, None)
+        deprecated = self.deprecated
+        return AssetLocation(self.org, self.course, self.run, asset_type, path, None, deprecated=deprecated)
 
     def version_agnostic(self):
         """
@@ -375,7 +376,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         if block_id is None:
             raise InvalidKeyError(self.__class__, "Missing block id")
 
-        super(BlockUsageLocator, self).__init__(course_key=course_key, block_type=block_type, block_id=block_id)
+        super(BlockUsageLocator, self).__init__(course_key=course_key, block_type=block_type, block_id=block_id, deprecated=course_key.deprecated)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -539,6 +540,17 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
             BLOCK_PREFIX=self.BLOCK_PREFIX,
             block_id=self.block_id
         )
+
+    def _to_deprecated_string(self):
+        url = u"i4x://{org}/{course}/{category}/{name}".format(
+            org=self.course_key.org,
+            course=self.course_key.course,
+            category=self.block_type,
+            name=self.block_id,
+        )
+        if self.course_key.version_guid:
+            url += u"@{rev}".format(rev=self.version_guid)  # pylint: disable=E1101
+        return url
 
     def html_id(self):
         """

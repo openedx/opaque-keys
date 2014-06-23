@@ -252,6 +252,28 @@ class LocatorTest(TestCase):
             version_guid=ObjectId(test_id_loc)
         )
 
+    def test_make_usage_key(self):
+        # Deprecated CourseKeys should return deprecated strings
+        course_key = CourseKey.from_string("foo/bar/baz")
+        usage_key = unicode(course_key.make_usage_key('html', 'test_html'))
+        self.assertEqual(usage_key, "i4x://foo/bar/html/test_html")
+
+        # Newer CourseKeys should return regular strings
+        course_key = CourseLocator("foo", "bar", "baz")
+        usage_key = unicode(course_key.make_usage_key('html', 'test_html'))
+        self.assertEqual(usage_key, "edx:foo+bar+baz+type+html+block+test_html")
+
+    def test_make_asset_key(self):
+        # Deprecated AssetKeys should return deprecated strings
+        course_key = CourseKey.from_string("foo/bar/baz")
+        asset_key = unicode(course_key.make_asset_key("picture", "path.jpg"))
+        self.assertEqual(asset_key, "/c4x/foo/bar/picture/path.jpg")
+
+        # Newer AssetKeys should return regular strings
+        course_key = CourseLocator("foo", "bar", "baz")
+        asset_key = unicode(course_key.make_asset_key("picture", "path.jpg"))
+        self.assertEqual(asset_key, "asset-location:foo+bar+baz+picture+path.jpg")
+
     def test_colon_name(self):
         """
         It seems we used to use colons in names; so, ensure they're acceptable.

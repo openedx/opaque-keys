@@ -127,6 +127,7 @@ class OpaqueKey(object):
         if self.deprecated:
             # no namespace on deprecated
             return self._to_deprecated_string()
+
         return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])  # pylint: disable=no-member
 
     @classmethod
