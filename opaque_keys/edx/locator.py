@@ -6,6 +6,7 @@ from __future__ import absolute_import
 import logging
 import inspect
 import re
+from bson.son import SON
 from abc import abstractmethod
 
 from bson.objectid import ObjectId
@@ -13,8 +14,7 @@ from bson.errors import InvalidId
 
 from opaque_keys import OpaqueKey, InvalidKeyError
 
-from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey
-from opaque_keys.edx.locations import LocationBase
+from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey
 
 log = logging.getLogger(__name__)
 
@@ -42,6 +42,7 @@ class Locator(OpaqueKey):
     # Prefix for the version portion of a locator URL, when it is preceded by a course ID
     VERSION_PREFIX = r"version"
     ALLOWED_ID_CHARS = r'[\w\-~.:]'
+    DEPRECATED_ALLOWED_ID_CHARS = r'[\w\-~.:%]'
 
     def __str__(self):
         """
@@ -91,6 +92,7 @@ class BlockLocatorBase(Locator):
     BLOCK_PREFIX = r"block"
 
     ALLOWED_ID_RE = re.compile(r'^' + Locator.ALLOWED_ID_CHARS + '+$', re.UNICODE)
+    DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + '+$', re.UNICODE)
 
     # pep8 and pylint don't agree on the indentation in this block; let's make
     # pep8 happy and ignore pylint as that's easier to do.
@@ -183,8 +185,16 @@ class CourseLocator(BlockLocatorBase, CourseKey):
             for part in (org, course, run):
                 self._check_location_part(part, self.INVALID_CHARS_DEPRECATED)
 
-        else:
+            fields = [org, course]
+            # Deprecated style allowed to have None for run and branch
+            if run is not None:
+                fields.append(run)
+            if branch is not None:
+                fields.append(branch)
+            if not all(self.DEPRECATED_ALLOWED_ID_RE.match(field) for field in fields):
+                raise InvalidKeyError(self.__class__, fields)
 
+        else:
             if version_guid:
                 version_guid = self.as_object_id(version_guid)
 
@@ -201,7 +211,10 @@ class CourseLocator(BlockLocatorBase, CourseKey):
             **kwargs
         )
 
-        if self.version_guid is None and (self.org is None or self.course is None or self.run is None):
+        if self.deprecated and (self.org is None or self.course is None):
+            raise InvalidKeyError(self.__class__, "Deprecated strings must set both org and course.")
+
+        if not self.deprecated and self.version_guid is None and (self.org is None or self.course is None or self.run is None):
             raise InvalidKeyError(self.__class__, "Either version_guid or org, course, and run should be set")
 
     def _check_location_part(self, val, regexp):
@@ -249,7 +262,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         )
 
     def make_asset_key(self, asset_type, path):
-        return AssetLocation(self.org, self.course, self.run, asset_type, path, None)
+        return AssetLocator(self, asset_type, path, deprecated=self.deprecated)
 
     def version_agnostic(self):
         """
@@ -331,8 +344,19 @@ class CourseLocator(BlockLocatorBase, CourseKey):
     @classmethod
     def _from_deprecated_string(cls, serialized):
         """
-        Temporary mechanism for creating a CourseKey given a serialized Location.
-        NOTE: this prejudicially takes the org and course from the url not self.
+        Return an instance of `cls` parsed from its deprecated `serialized` form.
+
+        This will be called only if :meth:`OpaqueKey.from_string` is unable to
+        parse a key out of `serialized`, and only if `set_deprecated_fallback` has
+        been called to register a fallback class.
+
+        Args:
+            cls: The :class:`OpaqueKey` subclass.
+            serialized (unicode): A serialized :class:`OpaqueKey`, with namespace already removed.
+
+        Raises:
+            InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
+                understood by `cls`.
         """
         if serialized.count('/') != 2:
             raise InvalidKeyError(cls, serialized)
@@ -359,23 +383,98 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         package_identifier: course_guid | version_guid
         block : guid
         branch : string
+
+    BlockUsageLocators also support deprecated Location-style formatting with the following mapping:
+    Location(org, course, run, category, name, revision) is represented as a BlockUsageLocator with:
+      - course_key = a CourseKey comprised of (org, course, run, branch=revision)
+      - block_type = category
+      - block_id = name
     """
     CANONICAL_NAMESPACE = 'edx'
     KEY_FIELDS = ('course_key', 'block_type', 'block_id')
 
-    # fake out class instrospection as this is an attr in this class's instances
+    DEPRECATED_TAG = 'i4x'  # to combine Locations with BlockUsageLocators
+
+    # fake out class introspection as this is an attr in this class's instances
     course_key = None
     block_type = None
 
-    def __init__(self, course_key, block_type, block_id):
+    DEPRECATED_URL_RE = re.compile("""
+        ([^:/]+://?|/[^/]+)
+        (?P<org>[^/]+)/
+        (?P<course>[^/]+)/
+        (?P<category>[^/]+)/     # category == block_type
+        (?P<name>[^@]+)          # name == block_id
+        (@(?P<revision>[^/]+))?  # branch == revision
+    """, re.VERBOSE)
+
+    # TODO (cpennington): We should decide whether we want to expand the
+    # list of valid characters in a location
+    DEPRECATED_INVALID_CHARS = re.compile(r"[^\w.%-]", re.UNICODE)
+    # Names are allowed to have colons.
+    DEPRECATED_INVALID_CHARS_NAME = re.compile(r"[^\w.:%-]", re.UNICODE)
+
+    # html ids can contain word chars and dashes
+    DEPRECATED_INVALID_HTML_CHARS = re.compile(r"[^\w-]", re.UNICODE)
+
+    def __init__(self, course_key, block_type, block_id, **kwargs):
         """
         Construct a BlockUsageLocator
         """
-        block_id = self._parse_block_ref(block_id)
+        deprecated = kwargs.get('deprecated', False)
+        block_id = self._parse_block_ref(block_id, deprecated)
         if block_id is None:
             raise InvalidKeyError(self.__class__, "Missing block id")
 
-        super(BlockUsageLocator, self).__init__(course_key=course_key, block_type=block_type, block_id=block_id)
+        super(BlockUsageLocator, self).__init__(course_key=course_key, block_type=block_type, block_id=block_id, **kwargs)
+
+    @classmethod
+    def _clean(cls, value, invalid):
+        """
+        Should only be called on deprecated-style values
+
+        invalid should be a compiled regexp of chars to replace with '_'
+        """
+        return re.sub('_+', '_', invalid.sub('_', value))
+
+    @classmethod
+    def clean(cls, value):
+        """
+        Should only be called on deprecated-style values
+
+        Return value, made into a form legal for locations
+        """
+        return cls._clean(value, cls.DEPRECATED_INVALID_CHARS)
+
+    @classmethod
+    def clean_keeping_underscores(cls, value):
+        """
+        Should only be called on deprecated-style values
+
+        Return value, replacing INVALID_CHARS, but not collapsing multiple '_' chars.
+        This for cleaning asset names, as the YouTube ID's may have underscores in them, and we need the
+        transcript asset name to match. In the future we may want to change the behavior of _clean.
+        """
+        return cls.DEPRECATED_INVALID_CHARS.sub('_', value)
+
+    @classmethod
+    def clean_for_url_name(cls, value):
+        """
+        Should only be called on deprecated-style values
+
+        Convert value into a format valid for location names (allows colons).
+        """
+        return cls._clean(value, cls.DEPRECATED_INVALID_CHARS_NAME)
+
+    @classmethod
+    def clean_for_html(cls, value):
+        """
+        Should only be called on deprecated-style values
+
+        Convert a string into a form that's safe for use in html ids, classes, urls, etc.
+        Replaces all INVALID_HTML_CHARS with '_', collapses multiple '_' chars
+        """
+        return cls._clean(value, cls.DEPRECATED_INVALID_HTML_CHARS)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -440,7 +539,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         )
 
     @classmethod
-    def _parse_block_ref(cls, block_ref):
+    def _parse_block_ref(cls, block_ref, deprecated=False):
         """
         Given `block_ref`, tries to parse it into a valid block reference.
 
@@ -449,9 +548,11 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Raises:
             InvalidKeyError: if `block_ref` is invalid.
         """
-        if isinstance(block_ref, LocalId):
-            return block_ref
-        elif len(block_ref) > 0 and cls.ALLOWED_ID_RE.match(block_ref):
+        is_local_id = isinstance(block_ref, LocalId)
+        is_valid_deprecated = deprecated and cls.DEPRECATED_ALLOWED_ID_RE.match(block_ref)
+        is_valid = cls.ALLOWED_ID_RE.match(block_ref)
+
+        if (is_local_id or is_valid or is_valid_deprecated):
             return block_ref
         else:
             raise InvalidKeyError(cls, block_ref)
@@ -525,7 +626,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Return a new instance which has the this block_id in the given course
         :param course_key: a CourseKey object representing the new course to map into
         """
-        return BlockUsageLocator.make_relative(course_key, self.block_type, self.block_id)
+        return self.replace(course_key=course_key)
 
     def _to_string(self):
         """
@@ -548,7 +649,87 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         place, but I have no way to override. We should clearly define the purpose and restrictions of this
         (e.g., I'm assuming periods are fine).
         """
-        return unicode(self)
+        if self.deprecated:
+            id_fields = [self.DEPRECATED_TAG, self.org, self.course, self.block_type, self.name, self.version_guid]
+            id_string = u"-".join([v for v in id_fields if v is not None])
+            return self.clean_for_html(id_string)
+        else:
+            return unicode(self)
+
+    def _to_deprecated_string(self):
+        """
+        Returns an old-style location, represented as:
+        i4x://org/course/category/name[@revision]  # Revision is optional
+        """
+        url = u"{0.DEPRECATED_TAG}://{0.course_key.org}/{0.course_key.course}/{0.block_type}/{0.block_id}".format(self)
+        if self.course_key.branch:
+            url += u"@{rev}".format(rev=self.course_key.branch)
+        return url
+
+    @classmethod
+    def _from_deprecated_string(cls, serialized):
+        """
+        Return an instance of `cls` parsed from its deprecated `serialized` form.
+
+        This will be called only if :meth:`OpaqueKey.from_string` is unable to
+        parse a key out of `serialized`, and only if `set_deprecated_fallback` has
+        been called to register a fallback class.
+
+        Args:
+            cls: The :class:`OpaqueKey` subclass.
+            serialized (unicode): A serialized :class:`OpaqueKey`, with namespace already removed.
+
+        Raises:
+            InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
+                understood by `cls`.
+        """
+        match = cls.DEPRECATED_URL_RE.match(serialized)
+        if match is None:
+            raise InvalidKeyError(BlockUsageLocator, serialized)
+        groups = match.groupdict()
+        course_key = CourseLocator(
+            org=groups['org'],
+            course=groups['course'],
+            run=None,
+            branch=groups.get('revision'),
+            deprecated=True,
+        )
+        return cls(course_key, groups['category'], groups['name'], deprecated=True)
+
+    def to_deprecated_son(self, prefix='', tag='i4x'):
+        """
+        Returns a SON object that represents this location
+        """
+        # This preserves the old SON keys ('tag', 'org', 'course', 'category', 'name', 'revision'),
+        # because that format was used to store data historically in mongo
+
+        # adding tag b/c deprecated form used it
+        son = SON({prefix + 'tag': tag})
+        for field_name in ('org', 'course'):
+            # Temporary filtering of run field because deprecated form left it out
+            son[prefix + field_name] = getattr(self.course_key, field_name)
+        for (dep_field_name, field_name) in [('category', 'block_type'), ('name', 'block_id')]:
+            son[prefix + dep_field_name] = getattr(self, field_name)
+
+        son[prefix + 'revision'] = getattr(self.course_key, 'branch')
+        return son
+
+    @classmethod
+    def _from_deprecated_son(cls, id_dict, run):
+        """
+        Return the Location decoding this id_dict and run
+        """
+        course_key = CourseLocator(
+            id_dict['org'],
+            id_dict['course'],
+            run,
+            id_dict['revision'],
+            deprecated=True,
+        )
+        return cls(course_key, id_dict['category'], id_dict['name'], deprecated=True)
+
+# register BlockUsageLocator as the deprecated fallback for UsageKey
+UsageKey.set_deprecated_fallback(BlockUsageLocator)
 
 
 class DefinitionLocator(Locator, DefinitionKey):
@@ -629,3 +810,63 @@ class VersionTree(object):
         else:
             self.children = [VersionTree(child, tree_dict)
                              for child in tree_dict.get(locator.version(), [])]
+
+
+class AssetLocator(BlockUsageLocator, AssetKey):
+    """
+    An AssetKey implementation class.
+    """
+    CANONICAL_NAMESPACE = 'asset-location'
+    DEPRECATED_TAG = 'c4x'
+    __slots__ = BlockUsageLocator.KEY_FIELDS
+
+    ASSET_URL_RE = re.compile(r"""
+        /?c4x/
+        (?P<org>[^/]+)/
+        (?P<course>[^/]+)/
+        (?P<category>[^/]+)/
+        (?P<name>[^@]+)
+        (@(?P<revision>[^/]+))?
+    """, re.VERBOSE | re.IGNORECASE)
+
+    @property
+    def path(self):
+        return self.name
+
+    def _to_deprecated_string(self):
+        """
+        Returns an old-style location, represented as:
+
+        /c4x/org/course/category/name
+        """
+        url = u"/{0.DEPRECATED_TAG}/{0.course_key.org}/{0.course_key.course}/{0.block_type}/{0.block_id}".format(self)
+        if self.course_key.branch:
+            url += '@{}'.format(self.course_key.branch)
+        return url
+
+    @classmethod
+    def _from_deprecated_string(cls, serialized):
+        match = cls.ASSET_URL_RE.match(serialized)
+        if match is None:
+            raise InvalidKeyError(cls, serialized)
+        groups = match.groupdict()
+        course_key = CourseLocator(
+            groups['org'],
+            groups['course'],
+            None,
+            groups.get('revision', None),
+            deprecated=True
+        )
+
+        return cls(course_key, groups['category'], groups['name'], deprecated=True)
+
+    def to_deprecated_list_repr(self):
+        """
+        Thumbnail locations are stored as lists [c4x, org, course, thumbnail, path, None] in contentstore.mongo
+        That should be the only use of this method, but the method is general enough to provide the pre-opaque
+        Location fields as an array in the old order with the tag.
+        """
+        return ['c4x', self.org, self.course, self.block_type, self.name, None]
+
+# Register AssetLocation as the deprecated fallback for AssetKey
+AssetKey.set_deprecated_fallback(AssetLocator)

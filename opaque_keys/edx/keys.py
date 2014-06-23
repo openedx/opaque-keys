@@ -1,6 +1,7 @@
 """
 OpaqueKey abstract classes for edx-platform object types (courses, definitions, usages, and assets).
 """
+import json
 from abc import abstractmethod, abstractproperty
 
 from opaque_keys import OpaqueKey
@@ -139,3 +140,15 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
         The XBlock type of this definition.
         """
         return self.category
+
+
+# Allow class name to start with a lowercase letter
+class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
+    """
+    If provided as the cls to json.dumps, will serialize and Locations as i4x strings and other
+    keys using the unicode strings.
+    """
+    def default(self, key):
+        if isinstance(key, OpaqueKey):
+            return unicode(key)
+        super(i4xEncoder, self).default(key)

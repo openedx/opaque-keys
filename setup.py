@@ -17,15 +17,13 @@ setup(
             'dict = opaque_keys.tests.test_opaque_keys:DictKey',
         ],
         'course_key': [
-            'slashes = opaque_keys.edx.locations:SlashSeparatedCourseKey',
             'course-locator = opaque_keys.edx.locator:CourseLocator',
         ],
         'usage_key': [
-            'location = opaque_keys.edx.locations:Location',
             'edx = opaque_keys.edx.locator:BlockUsageLocator',
         ],
         'asset_key': [
-            'asset-location = opaque_keys.edx.locations:AssetLocation',
+            'asset-location = opaque_keys.edx.locator:AssetLocator',
         ],
         'definition_key': [
             'defx = opaque_keys.edx.locator:DefinitionLocator',

@@ -1,0 +1,329 @@
+"""
+Thorough tests of BlockUsageLocator, as well as UsageKeys generally
+"""
+import ddt
+
+from bson.objectid import ObjectId
+
+from opaque_keys import InvalidKeyError
+from opaque_keys.edx.keys import UsageKey, CourseKey
+from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator
+
+from opaque_keys.edx.tests import LocatorBaseTest
+
+# Pairs for testing the clean* functions.
+# The first item in the tuple is the input string.
+# The second item in the tuple is what the result of
+# replacement should be.
+GENERAL_PAIRS = [
+    ('', ''),
+    (' ', '_'),
+    ('abc,', 'abc_'),
+    ('ab    fg!@//\\aj', 'ab_fg_aj'),
+    (u"ab\xA9", "ab_"),  # no unicode allowed for now
+]
+
+
+@ddt.ddt
+class TestBlockUsageLocators(LocatorBaseTest):
+    """
+    Tests of :class:`.BlockUsageLocator`
+    """
+    @ddt.data(
+        "edx:org+course+run+{}+category+{}+name".format(BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX),
+        "edx:org+course+run+{}+revision+{}+category+{}+name".format(CourseLocator.BRANCH_PREFIX, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX),
+        "i4x://org/course/category/name",
+        "i4x://org/course/category/name@revision",
+        # now try the extended char sets - we expect that "%" should be OK in deprecated-style ids,
+        # but should not be valid in new-style ids
+        "edx:org.dept.sub-prof+course.num.section-4+run.hour.min-99+{}+category+{}+name:12.33-44".format(BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX),
+        "i4x://org.dept%sub-prof/course.num%section-4/category/name:12%33-44",
+    )
+    def test_string_roundtrip(self, url):
+        self.assertEquals(
+            url,
+            unicode(UsageKey.from_string(url))
+        )
+
+    @ddt.data(
+        ((), {
+            'org': 'org',
+            'course': 'course',
+            'run': 'run',
+            'category': 'category',
+            'name': 'name',
+        }, 'org', 'course', 'run', 'category', 'name', None),
+        ((), {
+            'org': 'org',
+            'course': 'course',
+            'run': 'run',
+            'category': 'category',
+            'name': 'name:more_name',
+        }, 'org', 'course', 'run', 'category', 'name:more_name', None),
+        (['org', 'course', 'run', 'category', 'name'], {}, 'org', 'course', 'run', 'category', 'name', None),
+    )
+    @ddt.unpack
+    def test_valid_locations(self, args, kwargs, org, course, run, category, name, revision):  # pylint: disable=unused-argument
+        course_key = CourseLocator(
+            org=org,
+            course=course,
+            run=run,
+            branch=revision,
+            deprecated=True,
+        )
+        locator = BlockUsageLocator(course_key, block_type=category, block_id=name, deprecated=True)
+        self.assertEquals(org, locator.course_key.org)
+        self.assertEquals(course, locator.course_key.course)
+        self.assertEquals(run, locator.course_key.run)
+        self.assertEquals(category, locator.block_type)
+        self.assertEquals(name, locator.block_id)
+        self.assertEquals(revision, locator.course_key.branch)
+
+    @ddt.data(
+        (("foo",), {}),
+        (["foo", "bar"], {}),
+        (["foo", "bar", "baz", "blat/blat", "foo"], {}),
+        (["foo", "bar", "baz", "blat", "foo/bar"], {}),
+        (["foo", "bar", "baz", "blat:blat", "foo:bar"], {}),  # ':' ok in name, not in category
+        (('org', 'course', 'run', 'category', 'name with spaces', 'revision'), {}),
+        (('org', 'course', 'run', 'category', 'name/with/slashes', 'revision'), {}),
+        (('org', 'course', 'run', 'category', 'name', u'\xae'), {}),
+        (('org', 'course', 'run', 'category', u'\xae', 'revision'), {}),
+        ((), {
+            'tag': 'tag',
+            'course': 'course',
+            'category': 'category',
+            'name': 'name@more_name',
+            'org': 'org'
+        }),
+        ((), {
+            'tag': 'tag',
+            'course': 'course',
+            'category': 'category',
+            'name': 'name ',   # extra space
+            'org': 'org'
+        }),
+    )
+    @ddt.unpack
+    def test_invalid_locations(self, *args, **kwargs):
+        with self.assertRaises(TypeError):
+            BlockUsageLocator(*args, **kwargs)
+
+    @ddt.data(
+        ('a:b', 'a_b'),  # no colons in non-name components
+        ('a-b', 'a-b'),  # dashes ok
+        ('a.b', 'a.b'),  # dot ok
+        *GENERAL_PAIRS
+    )
+    def test_clean(self, pair):
+        self.assertEquals(BlockUsageLocator.clean(pair[0]), pair[1])
+
+    @ddt.data(
+        ('a:b', 'a:b'),  # colons ok in names
+        ('a-b', 'a-b'),  # dashes ok in names
+        ('a.b', 'a.b'),  # dot ok in names
+        *GENERAL_PAIRS
+    )
+    def test_clean_for_url_name(self, pair):
+        self.assertEquals(BlockUsageLocator.clean_for_url_name(pair[0]), pair[1])
+
+    @ddt.data(
+        ("a:b", "a_b"),   # no colons for html use
+        ("a-b", "a-b"),   # dashes ok (though need to be replaced in various use locations. ugh.)
+        ('a.b', 'a_b'),   # no dots.
+        *GENERAL_PAIRS
+    )
+    def test_clean_for_html(self, pair):
+        self.assertEquals(BlockUsageLocator.clean_for_html(pair[0]), pair[1])
+
+    def test_html_id(self):
+        course_key = CourseLocator('org', 'course', 'run')
+        locator = BlockUsageLocator(course_key, block_type='cat', block_id='name:more_name')
+        self.assertEquals(locator.html_id(), "edx:org+course+run+type+cat+block+name:more_name")
+
+    def test_deprecated_html_id(self):
+        course_key = CourseLocator('org', 'course', 'run', version_guid='rev', deprecated=True)
+        locator = BlockUsageLocator(course_key, block_type='cat', block_id='name:more_name', deprecated=True)
+        self.assertEquals(locator.html_id(), "i4x-org-course-cat-name_more_name-rev")
+
+    def test_replacement(self):
+        course_key = CourseLocator('org', 'course', 'run', 'rev', deprecated=True)
+        self.assertEquals(
+            BlockUsageLocator(course_key, 'c', 'n', deprecated=True).replace(block_id='new_name'),
+            BlockUsageLocator(course_key, 'c', 'new_name', deprecated=True),
+        )
+
+        with self.assertRaises(InvalidKeyError):
+            BlockUsageLocator(course_key, 'c', 'n', deprecated=True).replace(block_id=u'name\xae')
+
+    @ddt.data('course_key', 'block_type', 'block_id')
+    def test_immutable(self, attr):
+        course_key = CourseLocator('org', 'course', 'run', 'rev', deprecated=True)
+        loc = BlockUsageLocator(course_key, 'c', 'n')
+        with self.assertRaises(AttributeError):
+            setattr(loc, attr, attr)
+
+    def test_map_into_course_location(self):
+        original_course = CourseKey.from_string('org/course/run')
+        new_course = CourseKey.from_string('edX/toy/2012_Fall')
+        loc = BlockUsageLocator(original_course, 'cat', 'name:more_name', deprecated=True)
+        self.assertEquals(
+            BlockUsageLocator(new_course, 'cat', 'name:more_name', deprecated=True),
+            loc.map_into_course(new_course)
+        )
+
+    @ddt.data(
+        (BlockUsageLocator, '_id.', 'i4x', (CourseLocator('org', 'course', 'run', 'rev', deprecated=True), 'ct', 'n')),
+        (BlockUsageLocator, '', 'i4x', (CourseLocator('org', 'course', 'run', 'rev', deprecated=True), 'ct', 'n')),
+    )
+    @ddt.unpack
+    def test_to_deprecated_son(self, key_cls, prefix, tag, source):
+        source_key = key_cls(*source, deprecated=True)
+        son = source_key.to_deprecated_son(prefix=prefix, tag=tag)
+        self.assertEquals(son.keys(), [prefix + key for key in ('tag', 'org', 'course', 'category', 'name', 'revision')])
+
+        self.assertEquals(son[prefix + 'tag'], tag)
+        self.assertEquals(son[prefix + 'org'], source_key.course_key.org)
+        self.assertEquals(son[prefix + 'course'], source_key.course_key.course)
+        self.assertEquals(son[prefix + 'category'], source_key.block_type)
+        self.assertEquals(son[prefix + 'name'], source_key.block_id)
+        self.assertEquals(son[prefix + 'revision'], source_key.course_key.branch)
+
+    @ddt.data(
+        (UsageKey.from_string('i4x://org/course/ct/n'), 'run'),
+        (UsageKey.from_string('i4x://org/course/ct/n@rev'), 'run'),
+    )
+    @ddt.unpack
+    def test_deprecated_son_roundtrip(self, key, run):
+        self.assertEquals(
+            key.replace(course_key=key.course_key.replace(run=run)),
+            key.__class__._from_deprecated_son(key.to_deprecated_son(), run)  # pylint: disable=protected-access
+        )
+
+    def test_block_constructor(self):
+        expected_org = 'mit.eecs'
+        expected_course = '6002x'
+        expected_run = '2014_T2'
+        expected_branch = 'published'
+        expected_block_ref = 'HW3'
+        testurn = 'edx:{}+{}+{}+{}+{}+{}+{}+{}+{}'.format(
+            expected_org, expected_course, expected_run, CourseLocator.BRANCH_PREFIX, expected_branch,
+            BlockUsageLocator.BLOCK_TYPE_PREFIX, 'problem', BlockUsageLocator.BLOCK_PREFIX, 'HW3'
+        )
+        testobj = UsageKey.from_string(testurn)
+        self.check_block_locn_fields(
+            testobj,
+            org=expected_org,
+            course=expected_course,
+            run=expected_run,
+            branch=expected_branch,
+            block_type='problem',
+            block=expected_block_ref
+        )
+        self.assertEqual(unicode(testobj), testurn)
+        testobj = testobj.for_version(ObjectId())
+        agnostic = testobj.version_agnostic()
+        self.assertIsNone(agnostic.version_guid)
+        self.check_block_locn_fields(
+            agnostic,
+            org=expected_org,
+            course=expected_course,
+            run=expected_run,
+            branch=expected_branch,
+            block=expected_block_ref
+        )
+
+    def test_block_constructor_url_version_prefix(self):
+        test_id_loc = '519665f6223ebd6980884f2b'
+        testobj = UsageKey.from_string(
+            'edx:mit.eecs+6002x+2014_T2+{}+{}+{}+problem+{}+lab2'.format(
+                CourseLocator.VERSION_PREFIX,
+                test_id_loc,
+                BlockUsageLocator.BLOCK_TYPE_PREFIX,
+                BlockUsageLocator.BLOCK_PREFIX
+            )
+        )
+        self.check_block_locn_fields(
+            testobj,
+            org='mit.eecs',
+            course='6002x',
+            run='2014_T2',
+            block_type='problem',
+            block='lab2',
+            version_guid=ObjectId(test_id_loc)
+        )
+        agnostic = testobj.course_agnostic()
+        self.check_block_locn_fields(
+            agnostic,
+            block='lab2',
+            org=None,
+            course=None,
+            run=None,
+            version_guid=ObjectId(test_id_loc)
+        )
+        self.assertIsNone(agnostic.course)
+        self.assertIsNone(agnostic.run)
+        self.assertIsNone(agnostic.org)
+
+    def test_block_constructor_url_kitchen_sink(self):
+        test_id_loc = '519665f6223ebd6980884f2b'
+        testobj = UsageKey.from_string(
+            'edx:mit.eecs+6002x+2014_T2+{}+draft+{}+{}+{}+problem+{}+lab2'.format(
+                CourseLocator.BRANCH_PREFIX, CourseLocator.VERSION_PREFIX, test_id_loc,
+                BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
+            )
+        )
+        self.check_block_locn_fields(
+            testobj,
+            org='mit.eecs',
+            course='6002x',
+            run='2014_T2',
+            branch='draft',
+            block='lab2',
+            version_guid=ObjectId(test_id_loc)
+        )
+
+    def test_colon_name(self):
+        """
+        It seems we used to use colons in names; so, ensure they're acceptable.
+        """
+        org = 'mit.eecs'
+        course = 'foo'
+        run = '2014_T2'
+        branch = 'foo'
+        block_id = 'problem:with-colon~2'
+        testobj = BlockUsageLocator(
+            CourseLocator(org=org, course=course, run=run, branch=branch),
+            block_type='problem',
+            block_id=block_id
+        )
+        self.check_block_locn_fields(
+            testobj, org=org, course=course, run=run, branch=branch, block=block_id
+        )
+
+    def test_relative(self):
+        """
+        Test making a relative usage locator.
+        """
+        org = 'mit.eecs'
+        course = 'ponypower'
+        run = "2014_T2"
+        branch = 'foo'
+        baseobj = CourseLocator(org=org, course=course, run=run, branch=branch)
+        block_id = 'problem:with-colon~2'
+        testobj = BlockUsageLocator.make_relative(baseobj, 'problem', block_id)
+        self.check_block_locn_fields(
+            testobj, org=org, course=course, run=run, branch=branch, block=block_id
+        )
+        block_id = 'completely_different'
+        testobj = BlockUsageLocator.make_relative(testobj, 'problem', block_id)
+        self.check_block_locn_fields(
+            testobj, org=org, course=course, run=run, branch=branch, block=block_id
+        )
+
+    def test_repr(self):
+        testurn = u'edx:mit.eecs+6002x+2014_T2+{}+published+{}+problem+{}+HW3'.format(
+            CourseLocator.BRANCH_PREFIX, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
+        )
+        testobj = UsageKey.from_string(testurn)
+        self.assertEqual("BlockUsageLocator(CourseLocator(u'mit.eecs', u'6002x', u'2014_T2', u'published', None), u'problem', u'HW3')", repr(testobj))
