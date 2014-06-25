@@ -258,7 +258,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         return BlockUsageLocator(
             course_key=self,
             block_type=block_type,
-            block_id=block_id
+            block_id=block_id,
+            deprecated=self.deprecated,
         )
 
     def make_asset_key(self, asset_type, path):

@@ -45,10 +45,16 @@ class TestCourseKeys(LocatorBaseTest):
             CourseLocator.from_string(course_id)
 
     def test_make_usage_key(self):
-        course = CourseKey.from_string('org/course/run')
+        depr_course = CourseKey.from_string('org/course/run')
         self.assertEquals(
-            BlockUsageLocator(course, 'category', 'name', deprecated=True),
-            course.make_usage_key('category', 'name')
+            unicode(BlockUsageLocator(depr_course, 'category', 'name', deprecated=True)),
+            unicode(depr_course.make_usage_key('category', 'name'))
+        )
+
+        course = CourseKey.from_string('course-locator:org+course+run')
+        self.assertEquals(
+            unicode(BlockUsageLocator(course, 'block_type', 'block_id')),
+            unicode(course.make_usage_key('block_type', 'block_id'))
         )
 
     def test_course_constructor_underspecified(self):
