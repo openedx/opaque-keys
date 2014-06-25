@@ -137,9 +137,9 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
     @property
     def block_type(self):
         """
-        The XBlock type of this definition.
+        The XBlock type of this usage.
         """
-        return self.category
+        raise NotImplementedError()
 
 
 # Allow class name to start with a lowercase letter
