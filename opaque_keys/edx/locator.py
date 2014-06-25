@@ -6,6 +6,7 @@ from __future__ import absolute_import
 import logging
 import inspect
 import re
+import warnings
 from bson.son import SON
 from abc import abstractmethod
 
@@ -51,7 +52,7 @@ class Locator(OpaqueKey):
         return unicode(self).encode('utf-8')
 
     @abstractmethod
-    def version(self):
+    def version(self):  # pragma: no cover
         """
         Returns the ObjectId referencing this specific location.
 
@@ -217,13 +218,14 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         if not self.deprecated and self.version_guid is None and (self.org is None or self.course is None or self.run is None):
             raise InvalidKeyError(self.__class__, "Either version_guid or org, course, and run should be set")
 
-    def _check_location_part(self, val, regexp):
+    @classmethod
+    def _check_location_part(cls, val, regexp):
         if val is None:
             return
         if not isinstance(val, basestring):
-            raise InvalidKeyError(self.__class__, "{!r} is not a string".format(val))
+            raise InvalidKeyError(cls, "{!r} is not a string".format(val))
         if regexp.search(val) is not None:
-            raise InvalidKeyError(self.__class__, "Invalid characters in {!r}.".format(val))
+            raise InvalidKeyError(cls, "Invalid characters in {!r}.".format(val))
 
     def version(self):
         """
@@ -341,6 +343,14 @@ class CourseLocator(BlockLocatorBase, CourseKey):
     def _to_deprecated_string(self):
         """Returns an 'old-style' course id, represented as 'org/course/run'"""
         return u'/'.join([self.org, self.course, self.run])
+
+    def to_deprecated_string(self):
+        """Deprecated. Use unicode(key) instead."""
+        warnings.warn(
+            "to_deprecated_string is deprecated! Use unicode(key) instead.",
+            DeprecationWarning
+        )
+        return unicode(self)
 
     @classmethod
     def _from_deprecated_string(cls, serialized):
@@ -559,8 +569,11 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
             raise InvalidKeyError(cls, block_ref)
 
     @property
-    def definition_key(self):
-        """Returns the definition key for this object."""
+    def definition_key(self):  # pragma: no cover
+        """
+        Returns the definition key for this object.
+        Undefined for Locators.
+        """
         raise NotImplementedError()
 
     @property
@@ -600,8 +613,10 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
     @property
     def name(self):
         """
-        The ambiguously named field from Location which code expects to find
+        Deprecated. The ambiguously named field from Location which code
+        expects to find. Equivalent to block_id.
         """
+        warnings.warn("Name is no longer supported as a property of Locators. Please use the block_id property.", DeprecationWarning)
         return self.block_id
 
     def is_fully_specified(self):
@@ -651,7 +666,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         (e.g., I'm assuming periods are fine).
         """
         if self.deprecated:
-            id_fields = [self.DEPRECATED_TAG, self.org, self.course, self.block_type, self.name, self.version_guid]
+            id_fields = [self.DEPRECATED_TAG, self.org, self.course, self.block_type, self.block_id, self.version_guid]
             id_string = u"-".join([v for v in id_fields if v is not None])
             return self.clean_for_html(id_string)
         else:
@@ -666,6 +681,14 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         if self.course_key.branch:
             url += u"@{rev}".format(rev=self.course_key.branch)
         return url
+
+    def to_deprecated_string(self):
+        """Deprecated. Use unicode(key) instead."""
+        warnings.warn(
+            "to_deprecated_string is deprecated! Use unicode(key) instead.",
+            DeprecationWarning
+        )
+        return unicode(self)
 
     @classmethod
     def _from_deprecated_string(cls, serialized):

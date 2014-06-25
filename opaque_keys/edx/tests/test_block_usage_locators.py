@@ -64,13 +64,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
     )
     @ddt.unpack
     def test_valid_locations(self, args, kwargs, org, course, run, category, name, revision):  # pylint: disable=unused-argument
-        course_key = CourseLocator(
-            org=org,
-            course=course,
-            run=run,
-            branch=revision,
-            deprecated=True,
-        )
+        course_key = CourseLocator(org=org, course=course, run=run, branch=revision, deprecated=True)
         locator = BlockUsageLocator(course_key, block_type=category, block_id=name, deprecated=True)
         self.assertEquals(org, locator.course_key.org)
         self.assertEquals(course, locator.course_key.course)

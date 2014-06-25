@@ -9,8 +9,9 @@ from unittest import TestCase
 from opaque_keys import OpaqueKey, InvalidKeyError
 
 
-# `DummyKey` is another abstract base class, so don't worry that it doesn't
-# provide implementations for _from_string and _to_string.
+# The following key classes are all test keys, so don't worry that they don't
+# provide implementations for: _from_string, _to_string, _from_deprecated_string,
+# and/or _to_deprecated_string.
 # pylint: disable=abstract-method
 class DummyKey(OpaqueKey):
     """
@@ -18,7 +19,6 @@ class DummyKey(OpaqueKey):
     """
     KEY_TYPE = 'opaque_keys.testing'
     __slots__ = ()
-# pylint: enable=abstract-method
 
 
 class HexKey(DummyKey):
@@ -98,7 +98,8 @@ class DictKey(DummyKey):
             raise InvalidKeyError(cls, serialized)
 
     def __hash__(self):
-        return hash(type(self)) + sum([hash(elt) for elt in self.value.keys()])
+        return hash(type(self)) + sum([hash(elt) for elt in self.value.keys()])  # pylint: disable=no-member
+# pylint: enable=abstract-method
 
 
 class KeyTests(TestCase):
