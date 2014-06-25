@@ -258,7 +258,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         return BlockUsageLocator(
             course_key=self,
             block_type=block_type,
-            block_id=block_id
+            block_id=block_id,
+            deprecated=self.deprecated,
         )
 
     def make_asset_key(self, asset_type, path):
@@ -868,5 +869,5 @@ class AssetLocator(BlockUsageLocator, AssetKey):
         """
         return ['c4x', self.org, self.course, self.block_type, self.name, None]
 
-# Register AssetLocation as the deprecated fallback for AssetKey
+# Register AssetLocator as the deprecated fallback for AssetKey
 AssetKey.set_deprecated_fallback(AssetLocator)
