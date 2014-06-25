@@ -141,6 +141,13 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
         """
         raise NotImplementedError()
 
+    @property
+    def block_id(self):
+        """
+        The name of this usage.
+        """
+        raise NotImplementedError()
+
 
 # Allow class name to start with a lowercase letter
 class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
