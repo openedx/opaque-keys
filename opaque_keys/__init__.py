@@ -257,10 +257,12 @@ class OpaqueKey(object):
     def replace(self, **kwargs):
         """
         Return: a new :class:`OpaqueKey` with ``KEY_FIELDS`` specified in ``kwargs`` replaced
-            their corresponding values.
+            their corresponding values. Deprecation value is also preserved.
         """
         existing_values = {key: getattr(self, key) for key in self.KEY_FIELDS}  # pylint: disable=no-member
         existing_values.update(kwargs)
+        if 'deprecated' not in existing_values:
+            existing_values['deprecated'] = self.deprecated
         return type(self)(**existing_values)
 
     def __setattr__(self, name, value):

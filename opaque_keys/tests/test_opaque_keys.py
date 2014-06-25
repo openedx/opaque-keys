@@ -198,6 +198,22 @@ class KeyTests(TestCase):
         self.assertEquals(HexKey(10), hex10)
         self.assertEquals(HexKey(11), hex11)
 
+    def test_replace_deprecated_property(self):
+        deprecated_hex10 = HexKey(10, deprecated=True)
+        deprecated_hex11 = deprecated_hex10.replace(value=11)
+        not_deprecated_hex10 = deprecated_hex10.replace(deprecated=False)
+        deprecated_hex10_copy = deprecated_hex10.replace()
+
+        self.assertNotEquals(deprecated_hex10, deprecated_hex11)
+        self.assertEquals(deprecated_hex10, deprecated_hex10_copy)
+        self.assertEquals(HexKey(10), deprecated_hex10)
+        self.assertEquals(HexKey(11), deprecated_hex11)
+        self.assertEquals(HexKey(10, deprecated=False), not_deprecated_hex10)
+
+        self.assertTrue(deprecated_hex11.deprecated)
+        self.assertTrue(deprecated_hex10_copy.deprecated)
+        self.assertFalse(not_deprecated_hex10.deprecated)
+
     def test_copy(self):
         original = DictKey({'foo': 'bar'})
         copied = copy.copy(original)
