@@ -57,6 +57,13 @@ class TestCourseKeys(LocatorBaseTest):
             unicode(course.make_usage_key('block_type', 'block_id'))
         )
 
+    def test_convert_deprecation(self):
+        depr_course = CourseKey.from_string('org/course/run')
+        course = CourseKey.from_string('course-locator:org+course+run')
+
+        self.assertEquals(unicode(depr_course.replace(deprecated=False)), unicode(course))
+        self.assertEquals(unicode(course.replace(deprecated=True)), unicode(depr_course))
+
     def test_course_constructor_underspecified(self):
         with self.assertRaises(InvalidKeyError):
             CourseLocator()
