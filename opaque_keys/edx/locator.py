@@ -509,11 +509,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Raises:
             ValueError: if the block locator has no org, course, and run
         """
-        return BlockUsageLocator(
-            course_key=self.course_key.version_agnostic(),
-            block_type=self.block_type,
-            block_id=self.block_id,
-        )
+        return self.replace(course_key=self.course_key.version_agnostic())
 
     def course_agnostic(self):
         """
@@ -523,31 +519,19 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Raises:
             ValueError if the block locator has no version_guid
         """
-        return BlockUsageLocator(
-            course_key=self.course_key.course_agnostic(),
-            block_type=self.block_type,
-            block_id=self.block_id
-        )
+        return self.replace(course_key=self.course_key.course_agnostic())
 
     def for_branch(self, branch):
         """
         Return a UsageLocator for the same block in a different branch of the course.
         """
-        return BlockUsageLocator(
-            self.course_key.for_branch(branch),
-            block_type=self.block_type,
-            block_id=self.block_id
-        )
+        return self.replace(course_key=self.course_key.for_branch(branch))
 
     def for_version(self, version_guid):
         """
         Return a UsageLocator for the same block in a different branch of the course.
         """
-        return BlockUsageLocator(
-            self.course_key.for_version(version_guid),
-            block_type=self.block_type,
-            block_id=self.block_id
-        )
+        return self.replace(course_key=self.course_key.for_version(version_guid))
 
     @classmethod
     def _parse_block_ref(cls, block_ref, deprecated=False):
