@@ -306,7 +306,7 @@ class OpaqueKey(object):
         return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (type(self),)  # pylint: disable=no-member
 
     def __eq__(self, other):
-        return hash(self) == hash(other)
+        return isinstance(other, OpaqueKey) and self._key == other._key
 
     def __ne__(self, other):
         return not self == other
