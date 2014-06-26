@@ -187,8 +187,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
                 self._check_location_part(part, self.INVALID_CHARS_DEPRECATED)
 
             fields = [org, course]
-            # Deprecated style allowed to have None for run and branch
-            if run is not None:
+            # Deprecated style allowed to have None for run and branch, and allowed to have '' for run
+            if run:
                 fields.append(run)
             if branch is not None:
                 fields.append(branch)
@@ -434,7 +434,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         deprecated = kwargs.get('deprecated', False)
         block_id = self._parse_block_ref(block_id, deprecated)
-        if block_id is None:
+        if block_id is None and not deprecated:
             raise InvalidKeyError(self.__class__, "Missing block id")
 
         super(BlockUsageLocator, self).__init__(course_key=course_key, block_type=block_type, block_id=block_id, **kwargs)
@@ -543,11 +543,17 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Raises:
             InvalidKeyError: if `block_ref` is invalid.
         """
-        is_local_id = isinstance(block_ref, LocalId)
+
+        if deprecated and block_ref is None:
+            return None
+
+        if isinstance(block_ref, LocalId):
+            return block_ref
+
         is_valid_deprecated = deprecated and cls.DEPRECATED_ALLOWED_ID_RE.match(block_ref)
         is_valid = cls.ALLOWED_ID_RE.match(block_ref)
 
-        if (is_local_id or is_valid or is_valid_deprecated):
+        if (is_valid or is_valid_deprecated):
             return block_ref
         else:
             raise InvalidKeyError(cls, block_ref)
@@ -836,6 +842,9 @@ class AssetLocator(BlockUsageLocator, AssetKey):
         (?P<name>[^@]+)
         (@(?P<revision>[^/]+))?
     """, re.VERBOSE | re.IGNORECASE)
+
+    # Allow empty asset ids. Used to generate a prefix url
+    DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + '*$', re.UNICODE)
 
     @property
     def path(self):

@@ -4,6 +4,7 @@ Tests of AssetLocators
 import ddt
 
 from unittest import TestCase
+from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey
 
 from opaque_keys.edx.locator import AssetLocator, CourseLocator
@@ -41,6 +42,7 @@ class TestAssetLocators(TestCase):
 
     @ddt.data(
         (AssetLocator, '_id.', 'c4x', (CourseLocator('org', 'course', 'run', 'rev', deprecated=True), 'ct', 'n')),
+        (AssetLocator, '_id.', 'c4x', (CourseLocator('org', 'course', 'run', 'rev', deprecated=True), 'ct', None)),
     )
     @ddt.unpack
     def test_deprecated_son(self, key_cls, prefix, tag, source):
@@ -67,7 +69,6 @@ class TestAssetLocators(TestCase):
             key.__class__._from_deprecated_son(key.to_deprecated_son(), run)  # pylint: disable=protected-access
         )
 
-
     def test_replace(self):
         asset_key = AssetKey.from_string('/c4x/o/c/asset/path')
         self.assertEquals(
@@ -77,4 +78,13 @@ class TestAssetLocators(TestCase):
         self.assertEquals(
             'bar',
             asset_key.replace(asset_type='bar').asset_type
+        )
+
+    def test_empty_path(self):
+        with self.assertRaises(InvalidKeyError):
+            CourseKey.from_string('course-locator:org+course+run').make_asset_key('asset', '')
+
+        self.assertEquals(
+            '/c4x/org/course/asset/',
+            unicode(CourseKey.from_string('org/course/run').make_asset_key('asset', ''))
         )
