@@ -258,6 +258,9 @@ class OpaqueKey(object):
         """
         Return: a new :class:`OpaqueKey` with ``KEY_FIELDS`` specified in ``kwargs`` replaced
             their corresponding values. Deprecation value is also preserved.
+
+        Subclasses should override this if they have required properties that aren't included in their
+        ``KEY_FIELDS``.
         """
         existing_values = {key: getattr(self, key) for key in self.KEY_FIELDS}  # pylint: disable=no-member
         existing_values.update(kwargs)
