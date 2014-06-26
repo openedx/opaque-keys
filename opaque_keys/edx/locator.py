@@ -841,6 +841,17 @@ class AssetLocator(BlockUsageLocator, AssetKey):
     def path(self):
         return self.name
 
+    @property
+    def asset_type(self):
+        return self.block_type
+
+    def replace(self, **kwargs):
+        if 'path' in kwargs and 'block_id' not in kwargs:
+            kwargs['block_id'] = kwargs.pop('path')
+        if 'asset_type' in kwargs and 'block_type' not in kwargs:
+            kwargs['block_type'] = kwargs.pop('asset_type')
+        return super(AssetLocator, self).replace(**kwargs)
+
     def _to_deprecated_string(self):
         """
         Returns an old-style location, represented as:

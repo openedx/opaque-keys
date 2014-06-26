@@ -66,3 +66,15 @@ class TestAssetLocators(TestCase):
             key.replace(course_key=key.course_key.replace(run=run)),
             key.__class__._from_deprecated_son(key.to_deprecated_son(), run)  # pylint: disable=protected-access
         )
+
+
+    def test_replace(self):
+        asset_key = AssetKey.from_string('/c4x/o/c/asset/path')
+        self.assertEquals(
+            'foo',
+            asset_key.replace(path='foo').path
+        )
+        self.assertEquals(
+            'bar',
+            asset_key.replace(asset_type='bar').asset_type
+        )
