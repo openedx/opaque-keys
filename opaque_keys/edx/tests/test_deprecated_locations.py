@@ -2,27 +2,37 @@
 Tests of deprecated Locations and SlashSeparatedCourseKeys
 """
 import re
-import warnings
-from unittest import TestCase
-from contextlib import contextmanager
 
 from opaque_keys import InvalidKeyError
 
 from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator
 from opaque_keys.edx.locations import AssetLocation, Location, SlashSeparatedCourseKey
+from opaque_keys.edx.tests import TestDeprecated
 
 # Allow protected method access throughout this test file
 # pylint: disable=protected-access
 
 
-class TestDeprecated(TestCase):
-    """Base class (with utility methods) for deprecated Location tests"""
-    @contextmanager
-    def assertDeprecationWarning(self, count=1):
-        """Asserts that the contained code raises `count` deprecation warnings"""
-        with warnings.catch_warnings(record=True) as caught:
-            yield
-        self.assertEquals(count, len([warning for warning in caught if issubclass(warning.category, DeprecationWarning)]))
+class TestLocationDeprecatedBase(TestDeprecated):
+    """Base for all Location Test Classes"""
+    def check_deprecated_replace(self, cls):
+        """
+        Both AssetLocation and Location must implement their own replace method. This helps test them.
+
+        NOTE: This replace function accesses deprecated variables and therefore throws multiple deprecation warnings.
+        """
+        with self.assertDeprecationWarning(count=13):
+            loc = cls("foo", "bar", "baz", "cat", "name")
+            loc_boo = loc.replace(org='boo')
+            loc_copy = loc.replace()
+            loc_course_key_replaced = loc.replace(course_key=loc.course_key)
+        self.assertTrue(isinstance(loc_boo, BlockUsageLocator))
+        self.assertTrue(loc_boo.deprecated)
+        self.assertNotEquals(id(loc), id(loc_boo))
+        self.assertNotEquals(id(loc), id(loc_copy))
+        self.assertNotEquals(loc, loc_boo)
+        self.assertEquals(loc, loc_copy)
+        self.assertEquals(loc, loc_course_key_replaced)
 
 
 class TestSSCK(TestDeprecated):
@@ -53,8 +63,20 @@ class TestSSCK(TestDeprecated):
             with self.assertRaises(InvalidKeyError):
                 SlashSeparatedCourseKey.from_string("foo/bar")
 
+    def test_deprecated_replace(self):
+        with self.assertDeprecationWarning(count=3):
+            ssck = SlashSeparatedCourseKey("foo", "bar", "baz")
+            ssck_boo = ssck.replace(org='boo')
+            ssck_copy = ssck.replace()
+        self.assertTrue(isinstance(ssck_boo, CourseLocator))
+        self.assertTrue(ssck_boo.deprecated)
+        self.assertNotEquals(id(ssck), id(ssck_boo))
+        self.assertNotEquals(id(ssck), id(ssck_copy))
+        self.assertNotEquals(ssck, ssck_boo)
+        self.assertEquals(ssck, ssck_copy)
 
-class TestLocation(TestDeprecated):
+
+class TestLocation(TestLocationDeprecatedBase):
     """Tests that Location raises a deprecation warning and returns a BlockUsageLocator"""
     def test_deprecated_init(self):
         with self.assertDeprecationWarning():
@@ -74,11 +96,17 @@ class TestLocation(TestDeprecated):
             self.assertEquals('a._:%-', Location.clean_for_url_name('a.*:%-'))
             self.assertEquals('a_-', Location.clean_for_html('a.*:%-'))
 
+    def test_deprecated_replace(self):
+        self.check_deprecated_replace(Location)
 
-class TestAssetLocation(TestDeprecated):
+
+class TestAssetLocation(TestLocationDeprecatedBase):
     """Tests that AssetLocation raises a deprecation warning and returns an AssetLocator"""
     def test_deprecated_init(self):
         with self.assertDeprecationWarning():
             loc = AssetLocation("foo", "bar", "baz", "cat", "name")
         self.assertTrue(isinstance(loc, AssetLocator))
         self.assertTrue(loc.deprecated)
+
+    def test_deprecated_replace(self):
+        self.check_deprecated_replace(AssetLocation)

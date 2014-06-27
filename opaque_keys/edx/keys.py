@@ -113,7 +113,7 @@ class AssetKey(CourseObjectMixin, OpaqueKey):
     __slots__ = ()
 
     @abstractproperty
-    def asset_type(self): # pragma: no cover
+    def asset_type(self):  # pragma: no cover
         """
         Return what type of asset this is.
         """

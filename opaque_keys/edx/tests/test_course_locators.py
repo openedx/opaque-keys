@@ -10,11 +10,11 @@ from opaque_keys.edx.keys import CourseKey
 
 from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator
 
-from opaque_keys.edx.tests import LocatorBaseTest
+from opaque_keys.edx.tests import LocatorBaseTest, TestDeprecated
 
 
 @ddt.ddt
-class TestCourseKeys(LocatorBaseTest):
+class TestCourseKeys(LocatorBaseTest, TestDeprecated):
     """
     Tests of :class:`.CourseKey` and :class:`.CourseLocator`
     """
@@ -215,6 +215,38 @@ class TestCourseKeys(LocatorBaseTest):
         # Allow access to _to_string
         # pylint: disable=protected-access
         self.assertEqual(testobj._to_string(), expected_urn)
+
+    def test_course_constructor_deprecated_offering(self):
+        org = 'mit.eecs'
+        course = '6002x'
+        run = '2014_T2'
+        offering = '{}/{}'.format(course, run)
+        test_branch = 'published'
+        with self.assertDeprecationWarning(count=2):
+            testobj = CourseLocator(org=org, offering=offering, branch=test_branch)
+            with self.assertRaises(InvalidKeyError):
+                CourseLocator(org=org, offering='', branch=test_branch)
+            with self.assertRaises(InvalidKeyError):
+                CourseLocator(org=org, offering=course, branch=test_branch)
+        self.check_course_locn_fields(
+            testobj,
+            org=org,
+            course=course,
+            run=run,
+            branch=test_branch,
+        )
+
+    @ddt.data(
+        "i4x://org/course/category/name",
+        "i4x://org/course/category/name@revision"
+    )
+    def test_make_usage_key_from_deprecated_string_roundtrip(self, url):
+        course_key = CourseLocator('org', 'course', 'run')
+        with self.assertDeprecationWarning(count=2):
+            self.assertEquals(
+                url,
+                course_key.make_usage_key_from_deprecated_string(url).to_deprecated_string()
+            )
 
     def test_empty_run(self):
         with self.assertRaises(InvalidKeyError):

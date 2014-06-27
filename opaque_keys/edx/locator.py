@@ -182,6 +182,14 @@ class CourseLocator(BlockLocatorBase, CourseKey):
             org, course, run (string): the standard definition. Optional only if version_guid given
             branch (string): the branch such as 'draft', 'published', 'staged', 'beta'
         """
+        offering_arg = kwargs.pop('offering', None)
+        if offering_arg:
+            warnings.warn(
+                "offering is deprecated! Use course and run instead.",
+                DeprecationWarning
+            )
+            course, __, run = offering_arg.partition("/")
+
         if deprecated:
             for part in (org, course, run):
                 self._check_location_part(part, self.INVALID_CHARS_DEPRECATED)
@@ -229,9 +237,29 @@ class CourseLocator(BlockLocatorBase, CourseKey):
 
     def version(self):
         """
-        Returns the ObjectId referencing this specific location.
+        Deprecated. The ambiguously named field from CourseLocation which code
+        expects to find. Equivalent to version_guid.
         """
+        warnings.warn(
+            "version is no longer supported as a property of Locators. Please use the version_guid property.",
+            DeprecationWarning
+        )
         return self.version_guid
+
+    @property
+    def offering(self):
+        """
+        Deprecated. Use course and run independently.
+        """
+        warnings.warn(
+            "Offering is no longer a supported property of Locator. Please use the course and run properties.",
+            DeprecationWarning
+        )
+        if not self.course and not self.run:
+            return None
+        elif not self.run and self.course:
+            return self.course
+        return "/".join([self.course, self.run])
 
     @classmethod
     def _from_string(cls, serialized):
@@ -266,6 +294,21 @@ class CourseLocator(BlockLocatorBase, CourseKey):
 
     def make_asset_key(self, asset_type, path):
         return AssetLocator(self, asset_type, path, deprecated=self.deprecated)
+
+    def make_usage_key_from_deprecated_string(self, location_url):
+        """
+        Deprecated mechanism for creating a UsageKey given a CourseKey and a serialized Location.
+
+        NOTE: this prejudicially takes the tag, org, and course from the url not self.
+
+        Raises:
+            InvalidKeyError: if the url does not parse
+        """
+        warnings.warn(
+            "make_usage_key_from_deprecated_string is deprecated! Please use make_usage_key",
+            DeprecationWarning
+        )
+        return BlockUsageLocator.from_string(location_url).replace(run=self.run)
 
     def version_agnostic(self):
         """
@@ -415,6 +458,28 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
 
         super(BlockUsageLocator, self).__init__(course_key=course_key, block_type=block_type, block_id=block_id, **kwargs)
 
+    def replace(self, **kwargs):
+        # BlockUsageLocator allows for the replacement of 'KEY_FIELDS' in 'self.course_key'.
+        # This includes the deprecated 'KEY_FIELDS' of CourseLocator `'revision'` and `'version'`.
+        course_key_kwargs = {}
+        for key in CourseLocator.KEY_FIELDS:
+            if key in kwargs:
+                course_key_kwargs[key] = kwargs.pop(key)
+        if 'revision' in kwargs and 'branch' not in course_key_kwargs:
+            course_key_kwargs['branch'] = kwargs.pop('revision')
+        if 'version' in kwargs and 'version_guid' not in course_key_kwargs:
+            course_key_kwargs['version_guid'] = kwargs.pop('version')
+        if len(course_key_kwargs) > 0:
+            kwargs['course_key'] = self.course_key.replace(**course_key_kwargs)
+
+        # `'name'` and `'category'` are deprecated `KEY_FIELDS`.
+        # Their values are reassigned to the new keys.
+        if 'name' in kwargs and 'block_id' not in kwargs:
+            kwargs['block_id'] = kwargs.pop('name')
+        if 'category' in kwargs and 'block_type' not in kwargs:
+            kwargs['block_type'] = kwargs.pop('category')
+        return super(BlockUsageLocator, self).replace(**kwargs)
+
     @classmethod
     def _clean(cls, value, invalid):
         """
@@ -558,6 +623,21 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         return self.course_key.run
 
     @property
+    def offering(self):
+        """
+        Deprecated. Use course and run independently.
+        """
+        warnings.warn(
+            "Offering is no longer a supported property of Locator. Please use the course and run properties.",
+            DeprecationWarning
+        )
+        if not self.course and not self.run:
+            return None
+        elif not self.run and self.course:
+            return self.course
+        return "/".join([self.course, self.run])
+
+    @property
     def package_id(self):
         """Returns the package_id for this object's course_key."""
         return self.course_key.package_id
@@ -572,7 +652,17 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """Returns the version guid for this object."""
         return self.course_key.version_guid
 
+    @property
     def version(self):
+        """
+        Deprecated. The ambiguously named field from CourseLocation which code
+        expects to find. Equivalent to version_guid.
+        """
+        warnings.warn(
+            "Version is no longer supported as a property of Locators. Please use the version_guid property.",
+            DeprecationWarning
+        )
+
         """Returns the version guid for this object."""
         return self.course_key.version_guid
 
@@ -582,8 +672,35 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Deprecated. The ambiguously named field from Location which code
         expects to find. Equivalent to block_id.
         """
-        warnings.warn("Name is no longer supported as a property of Locators. Please use the block_id property.", DeprecationWarning)
+        warnings.warn(
+            "Name is no longer supported as a property of Locators. Please use the block_id property.",
+            DeprecationWarning
+        )
         return self.block_id
+
+    @property
+    def category(self):
+        """
+        Deprecated. The ambiguously named field from Location which code
+        expects to find. Equivalent to block_type.
+        """
+        warnings.warn(
+            "Category is no longer supported as a property of Locators. Please use the block_type property.",
+            DeprecationWarning
+        )
+        return self.block_type
+
+    @property
+    def revision(self):
+        """
+        Deprecated. The ambiguously named field from Location which code
+        expects to find. Equivalent to branch.
+        """
+        warnings.warn(
+            "Revision is no longer supported as a property of Locators. Please use the branch property.",
+            DeprecationWarning
+        )
+        return self.branch
 
     def is_fully_specified(self):
         """Returns boolean; whether or not this object's course_key is fully specified."""
@@ -831,6 +948,9 @@ class AssetLocator(BlockUsageLocator, AssetKey):
         return self.block_type
 
     def replace(self, **kwargs):
+
+        # `'path'` and `'asset_type'` are deprecated `KEY_FIELDS`.
+        # Their values are reassigned to the new keys.
         if 'path' in kwargs and 'block_id' not in kwargs:
             kwargs['block_id'] = kwargs.pop('path')
         if 'asset_type' in kwargs and 'block_type' not in kwargs:
@@ -848,6 +968,19 @@ class AssetLocator(BlockUsageLocator, AssetKey):
             url += '@{}'.format(self.course_key.branch)
         return url
 
+    def to_deprecated_string(self):
+        """Deprecated. Use unicode(key) instead."""
+        warnings.warn(
+            "to_deprecated_string is deprecated! Use unicode(key) instead.",
+            DeprecationWarning
+        )
+        return unicode(self)
+
+    @property
+    def tag(self):
+        """Returns the deprecated tag for this Location."""
+        return self.DEPRECATED_TAG
+
     @classmethod
     def _from_deprecated_string(cls, serialized):
         match = cls.ASSET_URL_RE.match(serialized)
@@ -861,7 +994,6 @@ class AssetLocator(BlockUsageLocator, AssetKey):
             groups.get('revision', None),
             deprecated=True
         )
-
         return cls(course_key, groups['category'], groups['name'], deprecated=True)
 
     def to_deprecated_list_repr(self):

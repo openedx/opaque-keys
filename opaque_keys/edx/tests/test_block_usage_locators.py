@@ -140,11 +140,25 @@ class TestBlockUsageLocators(LocatorBaseTest):
         locator = BlockUsageLocator(course_key, block_type='cat', block_id='name:more_name', deprecated=True)
         self.assertEquals(locator.html_id(), "i4x-org-course-cat-name_more_name-rev")
 
-    def test_replacement(self):
+    @ddt.data(
+        'course',
+        'org',
+        'run',
+        'branch',
+        'version_guid',
+        'revision',
+        'version',
+        'block_id',
+        'block_type',
+        'name',
+        'category'
+    )
+    def test_replacement(self, key):
         course_key = CourseLocator('org', 'course', 'run', 'rev', deprecated=True)
+        kwargs = {key: 'newvalue'}
         self.assertEquals(
-            BlockUsageLocator(course_key, 'c', 'n', deprecated=True).replace(block_id='new_name'),
-            BlockUsageLocator(course_key, 'c', 'new_name', deprecated=True),
+            getattr(BlockUsageLocator(course_key, 'c', 'n', deprecated=True).replace(**kwargs), key),
+            'newvalue'
         )
 
         with self.assertRaises(InvalidKeyError):

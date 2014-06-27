@@ -5,6 +5,7 @@ from __future__ import absolute_import
 import warnings
 
 from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator
+from opaque_keys.edx.keys import i4xEncoder as real_i4xEncoder
 
 # Python 2.7 by default suppresses DeprecationWarnings. Make sure we show these, always.
 warnings.simplefilter('always', DeprecationWarning)
@@ -12,6 +13,18 @@ warnings.simplefilter('always', DeprecationWarning)
 # This file passes through to protected members of the non-deprecated classes,
 # and that's ok. It also may not implement all of the current UsageKey methods.
 # pylint: disable=protected-access, abstract-method
+
+
+class i4xEncoder(real_i4xEncoder):  # pylint: disable=invalid-name
+    """Deprecated. Use :class:`keys.i4xEncoder`"""
+
+    def __init__(self, *args, **kwargs):
+        """Deprecated. Use :class:`keys.i4xEncoder.default`"""
+        warnings.warn(
+            "locations.i4xEncoder.default is deprecated! Please use keys.i4xEncoder.default",
+            DeprecationWarning
+        )
+        super(i4xEncoder, self).__init__(*args, **kwargs)
 
 
 class SlashSeparatedCourseKey(CourseLocator):
@@ -40,6 +53,22 @@ class SlashSeparatedCourseKey(CourseLocator):
             DeprecationWarning
         )
         return CourseLocator.from_string(serialized)
+
+    def replace(self, **kwargs):
+        """
+        Return: a new :class:`SlashSeparatedCourseKey` with specific ``kwargs`` replacing
+            their corresponding values.
+
+        Using CourseLocator's replace function results in a mismatch of __init__ args and kwargs.
+            Replace tries to instantiate a SlashSeparatedCourseKey object with CourseLocator args and kwargs.
+        """
+        # Deprecation value is hard coded as True in __init__ and therefore does not need to be passed through.
+        return SlashSeparatedCourseKey(
+            kwargs.pop('org', self.org),
+            kwargs.pop('course', self.course),
+            kwargs.pop('run', self.run),
+            **kwargs
+        )
 
 
 class LocationBase(object):
@@ -72,8 +101,10 @@ class LocationBase(object):
     @property
     def tag(self):
         """Deprecated. Returns the deprecated tag for this Location."""
-        self._deprecation_warning()
-        warnings.warn("Tag is no longer supported as a property of Locators.", DeprecationWarning)
+        warnings.warn(
+            "Tag is no longer supported as a property of Locators.",
+            DeprecationWarning
+        )
         return self.DEPRECATED_TAG
 
     @classmethod
@@ -115,13 +146,13 @@ class LocationBase(object):
     def __init__(self, org, course, run, category, name, revision=None, **kwargs):
         self._deprecation_warning()
 
-        course_key = CourseLocator(
+        course_key = kwargs.pop('course_key', CourseLocator(
             org=org,
             course=course,
             run=run,
             branch=revision,
             deprecated=True
-        )
+        ))
         super(LocationBase, self).__init__(course_key, category, name, deprecated=True, **kwargs)
 
     @classmethod
@@ -148,14 +179,62 @@ class Location(LocationBase, BlockUsageLocator):
 
     DEPRECATED_TAG = 'i4x'
 
+    def replace(self, **kwargs):
+        """
+        Return: a new :class:`Location` with specific ``kwargs`` replacing
+            their corresponding values.
+
+        Using BlockUsageLocator's replace function results in a mismatch of __init__ args and kwargs.
+            Replace tries to instantiate a Location object with BlockUsageLocator's args and kwargs.
+        """
+        #  NOTE: Deprecation value is hard coded as True in __init__ and therefore does not need to be passed through.
+        return Location(
+            kwargs.pop('org', self.course_key.org),
+            kwargs.pop('course', self.course_key.course),
+            kwargs.pop('run', self.course_key.run),
+            kwargs.pop('category', self.category),
+            kwargs.pop('name', self.name),
+            revision=kwargs.pop('revision', self.revision),
+            **kwargs
+        )
+
 
 class AssetLocation(LocationBase, AssetLocator):
     """Deprecated. Use :class:`locator.AssetLocator`"""
 
     DEPRECATED_TAG = 'c4x'
 
+    def replace(self, **kwargs):
+        """
+        Return: a new :class:`AssetLocation` with specific ``kwargs`` replacing
+            their corresponding values.
+
+        Using AssetLocator's replace function results in a mismatch of __init__ args and kwargs.
+            Replace tries to instantiate an AssetLocation object with AssetLocators args and kwargs.
+        """
+        # NOTE: Deprecation value is hard coded as True in __init__ and therefore does not need to be passed through.
+        return AssetLocation(
+            kwargs.pop('org', self.org),
+            kwargs.pop('course', self.course),
+            kwargs.pop('run', self.run),
+            kwargs.pop('category', self.category),
+            kwargs.pop('name', self.name),
+            revision=kwargs.pop('revision', self.revision),
+            **kwargs
+        )
+
     @classmethod
     def _from_deprecated_string(cls, serialized):
         """Deprecated. See AssetLocator._from_deprecated_string"""
         cls._deprecation_warning()
         return AssetLocator._from_deprecated_string(serialized)
+
+    @classmethod
+    def _from_deprecated_son(cls, id_dict, run):
+        """Deprecated. See BlockUsageLocator._from_deprecated_son"""
+        cls._deprecation_warning()
+        return AssetLocator._from_deprecated_son(id_dict, run)
+
+    @classmethod
+    def from_deprecated_string(cls, serialized):
+        return cls._from_deprecated_string(serialized)

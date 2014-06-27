@@ -2,6 +2,18 @@
 Utilities for other Location tests to use
 """
 from unittest import TestCase
+import warnings
+from contextlib import contextmanager
+
+
+class TestDeprecated(TestCase):
+    """Base class (with utility methods) for deprecated Location tests"""
+    @contextmanager
+    def assertDeprecationWarning(self, count=1):
+        """Asserts that the contained code raises `count` deprecation warnings"""
+        with warnings.catch_warnings(record=True) as caught:
+            yield
+        self.assertEquals(count, len([warning for warning in caught if issubclass(warning.category, DeprecationWarning)]))
 
 
 class LocatorBaseTest(TestCase):
