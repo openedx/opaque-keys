@@ -276,13 +276,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         Raises:
             ValueError: if the block locator has no org & course, run
         """
-        return CourseLocator(
-            org=self.org,
-            course=self.course,
-            run=self.run,
-            branch=self.branch,
-            version_guid=None
-        )
+        return self.replace(version_guid=None)
 
     def course_agnostic(self):
         """
@@ -292,13 +286,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         Raises:
             ValueError: if the block locator has no version_guid
         """
-        return CourseLocator(
-            org=None,
-            course=None,
-            run=None,
-            branch=None,
-            version_guid=self.version_guid
-        )
+        return self.replace(org=None, course=None, run=None, branch=None)
 
     def for_branch(self, branch):
         """
@@ -306,26 +294,14 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         """
         if self.org is None:
             raise InvalidKeyError(self.__class__, "Branches must have full course ids not just versions")
-        return CourseLocator(
-            org=self.org,
-            course=self.course,
-            run=self.run,
-            branch=branch,
-            version_guid=None
-        )
+        return self.replace(branch=branch, version_guid=None)
 
     def for_version(self, version_guid):
         """
         Return a new CourseLocator for another version of the same course and branch. Usually used
         when the head is updated (and thus the course x branch now points to this version)
         """
-        return CourseLocator(
-            org=self.org,
-            course=self.course,
-            run=self.run,
-            branch=self.branch,
-            version_guid=version_guid
-        )
+        return self.replace(version_guid=version_guid)
 
     def _to_string(self):
         """
