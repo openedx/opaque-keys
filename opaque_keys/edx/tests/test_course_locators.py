@@ -215,3 +215,12 @@ class TestCourseKeys(LocatorBaseTest):
         # Allow access to _to_string
         # pylint: disable=protected-access
         self.assertEqual(testobj._to_string(), expected_urn)
+
+    def test_empty_run(self):
+        with self.assertRaises(InvalidKeyError):
+            CourseLocator('org', 'course', '')
+
+        self.assertEquals(
+            'org/course/',
+            unicode(CourseLocator('org', 'course', '', deprecated=True))
+        )

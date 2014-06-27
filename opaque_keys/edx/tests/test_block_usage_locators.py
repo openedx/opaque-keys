@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import UsageKey, CourseKey
-from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator
+from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator, LocalId
 
 from opaque_keys.edx.tests import LocatorBaseTest
 
@@ -321,3 +321,14 @@ class TestBlockUsageLocators(LocatorBaseTest):
         )
         testobj = UsageKey.from_string(testurn)
         self.assertEqual("BlockUsageLocator(CourseLocator(u'mit.eecs', u'6002x', u'2014_T2', u'published', None), u'problem', u'HW3')", repr(testobj))
+
+    def test_local_id(self):
+        local_id = LocalId()
+        self.assertEquals(
+            BlockUsageLocator(
+                CourseLocator('org', 'course', 'run'),
+                'problem',
+                local_id
+            ).block_id,
+            local_id
+        )
