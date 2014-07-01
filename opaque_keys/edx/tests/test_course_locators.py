@@ -20,6 +20,7 @@ class TestCourseKeys(LocatorBaseTest):
     """
     @ddt.data(
         "foo/bar/baz",
+        "foo/bar/",
     )
     def test_deprecated_roundtrip(self, course_id):
         self.assertEquals(
