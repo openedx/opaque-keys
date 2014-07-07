@@ -306,7 +306,7 @@ class OpaqueKey(object):
     @property
     def _key(self):
         """Returns a tuple of key fields"""
-        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (type(self),)  # pylint: disable=no-member
+        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE,)  # pylint: disable=no-member
 
     def __eq__(self, other):
         return isinstance(other, OpaqueKey) and self._key == other._key
