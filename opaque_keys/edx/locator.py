@@ -186,7 +186,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         if offering_arg:
             warnings.warn(
                 "offering is deprecated! Use course and run instead.",
-                DeprecationWarning
+                DeprecationWarning,
+                stacklevel=2
             )
             course, __, run = offering_arg.partition("/")
 
@@ -242,7 +243,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         """
         warnings.warn(
             "version is no longer supported as a property of Locators. Please use the version_guid property.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return self.version_guid
 
@@ -253,7 +255,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         """
         warnings.warn(
             "Offering is no longer a supported property of Locator. Please use the course and run properties.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         if not self.course and not self.run:
             return None
@@ -306,7 +309,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         """
         warnings.warn(
             "make_usage_key_from_deprecated_string is deprecated! Please use make_usage_key",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return BlockUsageLocator.from_string(location_url).replace(run=self.run)
 
@@ -367,7 +371,8 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         """Deprecated. Use unicode(key) instead."""
         warnings.warn(
             "to_deprecated_string is deprecated! Use unicode(key) instead.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return unicode(self)
 
@@ -629,7 +634,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         warnings.warn(
             "Offering is no longer a supported property of Locator. Please use the course and run properties.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         if not self.course and not self.run:
             return None
@@ -660,7 +666,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         warnings.warn(
             "Version is no longer supported as a property of Locators. Please use the version_guid property.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
 
         """Returns the version guid for this object."""
@@ -674,7 +681,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         warnings.warn(
             "Name is no longer supported as a property of Locators. Please use the block_id property.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return self.block_id
 
@@ -686,7 +694,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         warnings.warn(
             "Category is no longer supported as a property of Locators. Please use the block_type property.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return self.block_type
 
@@ -698,7 +707,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         warnings.warn(
             "Revision is no longer supported as a property of Locators. Please use the branch property.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return self.branch
 
@@ -769,7 +779,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """Deprecated. Use unicode(key) instead."""
         warnings.warn(
             "to_deprecated_string is deprecated! Use unicode(key) instead.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return unicode(self)
 
@@ -972,7 +983,8 @@ class AssetLocator(BlockUsageLocator, AssetKey):
         """Deprecated. Use unicode(key) instead."""
         warnings.warn(
             "to_deprecated_string is deprecated! Use unicode(key) instead.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return unicode(self)
 
