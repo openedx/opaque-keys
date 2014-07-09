@@ -22,7 +22,8 @@ class i4xEncoder(real_i4xEncoder):  # pylint: disable=invalid-name
         """Deprecated. Use :class:`keys.i4xEncoder.default`"""
         warnings.warn(
             "locations.i4xEncoder.default is deprecated! Please use keys.i4xEncoder.default",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         super(i4xEncoder, self).__init__(*args, **kwargs)
 
@@ -32,7 +33,8 @@ class SlashSeparatedCourseKey(CourseLocator):
     def __init__(self, org, course, run, **kwargs):
         warnings.warn(
             "SlashSeparatedCourseKey is deprecated! Please use locator.CourseLocator",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         super(SlashSeparatedCourseKey, self).__init__(org, course, run, deprecated=True, **kwargs)
 
@@ -41,7 +43,8 @@ class SlashSeparatedCourseKey(CourseLocator):
         """Deprecated. Use :class:`locator.CourseLocator.from_string`"""
         warnings.warn(
             "SlashSeparatedCourseKey is deprecated! Please use locator.CourseLocator",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return CourseLocator.from_string(serialized)
 
@@ -50,7 +53,8 @@ class SlashSeparatedCourseKey(CourseLocator):
         """Deprecated. Use :meth:`locator.CourseLocator.from_string`."""
         warnings.warn(
             "SlashSeparatedCourseKey is deprecated! Please use locator.CourseLocator",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return CourseLocator.from_string(serialized)
 
@@ -83,19 +87,19 @@ class LocationBase(object):
             warnings.warn(
                 "Location is deprecated! Please use locator.BlockUsageLocator",
                 DeprecationWarning,
-                stacklevel=2
+                stacklevel=3
             )
         elif issubclass(cls, AssetLocation):
             warnings.warn(
                 "AssetLocation is deprecated! Please use locator.AssetLocator",
                 DeprecationWarning,
-                stacklevel=2
+                stacklevel=3
             )
         else:
             warnings.warn(
                 "{} is deprecated!".format(cls),
                 DeprecationWarning,
-                stacklevel=2
+                stacklevel=3
             )
 
     @property
@@ -103,7 +107,8 @@ class LocationBase(object):
         """Deprecated. Returns the deprecated tag for this Location."""
         warnings.warn(
             "Tag is no longer supported as a property of Locators.",
-            DeprecationWarning
+            DeprecationWarning,
+            stacklevel=2
         )
         return self.DEPRECATED_TAG
 
