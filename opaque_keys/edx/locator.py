@@ -8,7 +8,7 @@ import inspect
 import re
 import warnings
 from bson.son import SON
-from abc import abstractmethod
+from abc import abstractmethod, abstractproperty
 
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
@@ -51,7 +51,7 @@ class Locator(OpaqueKey):
         """
         return unicode(self).encode('utf-8')
 
-    @abstractmethod
+    @abstractproperty
     def version(self):  # pragma: no cover
         """
         Returns the ObjectId referencing this specific location.
@@ -235,6 +235,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         if regexp.search(val) is not None:
             raise InvalidKeyError(cls, "Invalid characters in {!r}.".format(val))
 
+    @property
     def version(self):
         """
         Deprecated. The ambiguously named field from CourseLocation which code
@@ -909,14 +910,14 @@ class VersionTree(object):
         """
         if not isinstance(locator, Locator) and not inspect.isabstract(locator):
             raise TypeError("locator {} must be a concrete subclass of Locator".format(locator))
-        if not locator.version():
+        if not locator.version:
             raise ValueError("locator must be version specific (Course has version_guid or definition had id)")
         self.locator = locator
         if tree_dict is None:
             self.children = []
         else:
             self.children = [VersionTree(child, tree_dict)
-                             for child in tree_dict.get(locator.version(), [])]
+                             for child in tree_dict.get(locator.version, [])]
 
 
 class AssetLocator(BlockUsageLocator, AssetKey):
