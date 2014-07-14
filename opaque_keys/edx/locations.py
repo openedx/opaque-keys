@@ -7,9 +7,6 @@ import warnings
 from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator
 from opaque_keys.edx.keys import i4xEncoder as real_i4xEncoder
 
-# Python 2.7 by default suppresses DeprecationWarnings. Make sure we show these, always.
-warnings.simplefilter('always', DeprecationWarning)
-
 # This file passes through to protected members of the non-deprecated classes,
 # and that's ok. It also may not implement all of the current UsageKey methods.
 # pylint: disable=protected-access, abstract-method
