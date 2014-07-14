@@ -8,6 +8,17 @@ from contextlib import contextmanager
 
 class TestDeprecated(TestCase):
     """Base class (with utility methods) for deprecated Location tests"""
+    def setUp(self):
+        # Manually invoke the catch_warnings context manager so we can capture DeprecationWarnings
+        # during this test run
+        self.cws = warnings.catch_warnings()
+        self.cws.__enter__()
+        # Python 2.7 by default suppresses DeprecationWarnings. Make sure we show these, always, during tests.
+        warnings.simplefilter('always', DeprecationWarning)
+
+        # Manually exit the catch_warnings context manager when the test is done
+        self.addCleanup(self.cws.__exit__)
+
     @contextmanager
     def assertDeprecationWarning(self, count=1):
         """Asserts that the contained code raises `count` deprecation warnings"""
