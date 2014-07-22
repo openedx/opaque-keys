@@ -153,17 +153,17 @@ class CourseLocator(BlockLocatorBase, CourseKey):
      CourseLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))
      CourseLocator(org='mit.eecs', course='6.002x', run='T2_2014')
      CourseLocator(org='mit.eecs', course='6002x', run='fall_2014' branch = 'published')
-     CourseLocator.from_string('course-locator:version@519665f6223ebd6980884f2b')
-     CourseLocator.from_string('course-locator:mit.eecs+6002x')
-     CourseLocator.from_string('course-locator:mit.eecs+6002x+branch@published')
-     CourseLocator.from_string('course-locator:mit.eecs+6002x+branch@published+version@519665f6223ebd6980884f2b')
+     CourseLocator.from_string('course-v1:version@519665f6223ebd6980884f2b')
+     CourseLocator.from_string('course-v1:mit.eecs+6002x')
+     CourseLocator.from_string('course-v1:mit.eecs+6002x+branch@published')
+     CourseLocator.from_string('course-v1:mit.eecs+6002x+branch@published+version@519665f6223ebd6980884f2b')
 
     Should have at least a specific org, course, and run with optional 'branch',
     or version_guid (which points to a specific version). Can contain both in which case
     the persistence layer may raise exceptions if the given version != the current such version
     of the course.
     """
-    CANONICAL_NAMESPACE = 'course-locator'
+    CANONICAL_NAMESPACE = 'course-v1'
     KEY_FIELDS = ('org', 'course', 'run', 'branch', 'version_guid')
     __slots__ = KEY_FIELDS
 
@@ -426,7 +426,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
       - block_type = category
       - block_id = name
     """
-    CANONICAL_NAMESPACE = 'edx'
+    CANONICAL_NAMESPACE = 'block-v1'
     KEY_FIELDS = ('course_key', 'block_type', 'block_id')
 
     DEPRECATED_TAG = 'i4x'  # to combine Locations with BlockUsageLocators
@@ -855,7 +855,7 @@ class DefinitionLocator(Locator, DefinitionKey):
     """
     Container for how to locate a description (the course-independent content).
     """
-    CANONICAL_NAMESPACE = 'defx'
+    CANONICAL_NAMESPACE = 'def-v1'
     KEY_FIELDS = ('definition_id', 'block_type')
 
     # override the abstractproperty
@@ -935,7 +935,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):
     """
     An AssetKey implementation class.
     """
-    CANONICAL_NAMESPACE = 'asset-location'
+    CANONICAL_NAMESPACE = 'asset-v1'
     DEPRECATED_TAG = 'c4x'
     __slots__ = BlockUsageLocator.KEY_FIELDS
 

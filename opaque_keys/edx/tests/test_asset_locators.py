@@ -82,7 +82,7 @@ class TestAssetLocators(TestCase):
 
     def test_empty_path(self):
         with self.assertRaises(InvalidKeyError):
-            CourseKey.from_string('course-locator:org+course+run').make_asset_key('asset', '')
+            CourseKey.from_string('course-v1:org+course+run').make_asset_key('asset', '')
 
         self.assertEquals(
             '/c4x/org/course/asset/',
