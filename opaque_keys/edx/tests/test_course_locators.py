@@ -86,7 +86,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         self.assertEqual(str(testobj_1.version_guid), test_id_1_loc)
         # Allow access to _to_string
         # pylint: disable=protected-access
-        testobj_1_string = u'+'.join((testobj_1.VERSION_PREFIX, test_id_1_loc))
+        testobj_1_string = u'@'.join((testobj_1.VERSION_PREFIX, test_id_1_loc))
         self.assertEqual(testobj_1._to_string(), testobj_1_string)
         self.assertEqual(str(testobj_1), u'course-locator:' + testobj_1_string)
         self.assertEqual(testobj_1.html_id(), u'course-locator:' + testobj_1_string)
@@ -100,7 +100,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         self.assertEqual(str(testobj_2.version_guid), test_id_2_loc)
         # Allow access to _to_string
         # pylint: disable=protected-access
-        testobj_2_string = u'+'.join((testobj_2.VERSION_PREFIX, test_id_2_loc))
+        testobj_2_string = u'@'.join((testobj_2.VERSION_PREFIX, test_id_2_loc))
         self.assertEqual(testobj_2._to_string(), testobj_2_string)
         self.assertEqual(str(testobj_2), u'course-locator:' + testobj_2_string)
         self.assertEqual(testobj_2.html_id(), u'course-locator:' + testobj_2_string)
@@ -109,19 +109,19 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
     @ddt.data(
         ' mit.eecs',
         'mit.eecs ',
-        CourseLocator.VERSION_PREFIX + '+mit.eecs',
-        BlockUsageLocator.BLOCK_PREFIX + '+black+mit.eecs',
+        CourseLocator.VERSION_PREFIX + '@mit.eecs',
+        BlockUsageLocator.BLOCK_PREFIX + '@black+mit.eecs',
         'mit.ee cs',
         'mit.ee,cs',
         'mit.ee+cs',
         'mit.ee&cs',
         'mit.ee()cs',
-        CourseLocator.BRANCH_PREFIX + '+this',
+        CourseLocator.BRANCH_PREFIX + '@this',
         'mit.eecs+' + CourseLocator.BRANCH_PREFIX,
-        'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '+this+' + CourseLocator.BRANCH_PREFIX + '+that',
-        'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '+this+' + CourseLocator.BRANCH_PREFIX,
-        'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '+this ',
-        'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '+th%is ',
+        'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@this+' + CourseLocator.BRANCH_PREFIX + '@that',
+        'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@this+' + CourseLocator.BRANCH_PREFIX,
+        'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@this ',
+        'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@th%is ',
     )
     def test_course_constructor_bad_package_id(self, bad_id):
         """
@@ -148,7 +148,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         # Test parsing a url when it starts with a version ID and there is also a block ID.
         # This hits the parsers parse_guid method.
         test_id_loc = '519665f6223ebd6980884f2b'
-        testobj = CourseKey.from_string("course-locator:{}+{}+{}+hw3".format(
+        testobj = CourseKey.from_string("course-locator:{}@{}+{}@hw3".format(
             CourseLocator.VERSION_PREFIX, test_id_loc, CourseLocator.BLOCK_PREFIX
         ))
         self.check_course_locn_fields(
@@ -159,7 +159,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
     def test_course_constructor_url_package_id_and_version_guid(self):
         test_id_loc = '519665f6223ebd6980884f2b'
         testobj = CourseKey.from_string(
-            'course-locator:mit.eecs+honors.6002x+2014_T2+{}+{}'.format(CourseLocator.VERSION_PREFIX, test_id_loc)
+            'course-locator:mit.eecs+honors.6002x+2014_T2+{}@{}'.format(CourseLocator.VERSION_PREFIX, test_id_loc)
         )
         self.check_course_locn_fields(
             testobj,
@@ -174,7 +174,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         org = 'mit.eecs'
         course = '~6002x'
         run = '2014_T2'
-        testobj = CourseKey.from_string('course-locator:{}+{}+{}+{}+draft-1+{}+{}'.format(
+        testobj = CourseKey.from_string('course-locator:{}+{}+{}+{}@draft-1+{}@{}'.format(
             org, course, run, CourseLocator.BRANCH_PREFIX, CourseLocator.VERSION_PREFIX, test_id_loc
         ))
         self.check_course_locn_fields(
@@ -202,7 +202,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         course = '6002x'
         run = '2014_T2'
         test_branch = 'published'
-        expected_urn = '{}+{}+{}+{}+{}'.format(org, course, run, CourseLocator.BRANCH_PREFIX, test_branch)
+        expected_urn = '{}+{}+{}+{}@{}'.format(org, course, run, CourseLocator.BRANCH_PREFIX, test_branch)
         testobj = CourseLocator(org=org, course=course, run=run, branch=test_branch)
         self.check_course_locn_fields(
             testobj,
