@@ -100,10 +100,10 @@ class BlockLocatorBase(Locator):
     # pylint: disable=bad-continuation
     URL_RE_SOURCE = r"""
         ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)\+(?P<run>{ALLOWED_ID_CHARS}+)\+?)??
-        ({BRANCH_PREFIX}\+(?P<branch>{ALLOWED_ID_CHARS}+)\+?)?
-        ({VERSION_PREFIX}\+(?P<version_guid>[A-F0-9]+)\+?)?
-        ({BLOCK_TYPE_PREFIX}\+(?P<block_type>{ALLOWED_ID_CHARS}+)\+?)?
-        ({BLOCK_PREFIX}\+(?P<block_id>{ALLOWED_ID_CHARS}+))?
+        ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+)\+?)?
+        ({VERSION_PREFIX}@(?P<version_guid>[A-F0-9]+)\+?)?
+        ({BLOCK_TYPE_PREFIX}@(?P<block_type>{ALLOWED_ID_CHARS}+)\+?)?
+        ({BLOCK_PREFIX}@(?P<block_id>{ALLOWED_ID_CHARS}+))?
         """.format(
         ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
         BRANCH_PREFIX=BRANCH_PREFIX,
@@ -153,17 +153,17 @@ class CourseLocator(BlockLocatorBase, CourseKey):
      CourseLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))
      CourseLocator(org='mit.eecs', course='6.002x', run='T2_2014')
      CourseLocator(org='mit.eecs', course='6002x', run='fall_2014' branch = 'published')
-     CourseLocator.from_string('course-locator:version+519665f6223ebd6980884f2b')
-     CourseLocator.from_string('course-locator:mit.eecs+6002x')
-     CourseLocator.from_string('course-locator:mit.eecs+6002x+branch+published')
-     CourseLocator.from_string('course-locator:mit.eecs+6002x+branch+published+version+519665f6223ebd6980884f2b')
+     CourseLocator.from_string('course-v1:version@519665f6223ebd6980884f2b')
+     CourseLocator.from_string('course-v1:mit.eecs+6002x')
+     CourseLocator.from_string('course-v1:mit.eecs+6002x+branch@published')
+     CourseLocator.from_string('course-v1:mit.eecs+6002x+branch@published+version@519665f6223ebd6980884f2b')
 
     Should have at least a specific org, course, and run with optional 'branch',
     or version_guid (which points to a specific version). Can contain both in which case
     the persistence layer may raise exceptions if the given version != the current such version
     of the course.
     """
-    CANONICAL_NAMESPACE = 'course-locator'
+    CANONICAL_NAMESPACE = 'course-v1'
     KEY_FIELDS = ('org', 'course', 'run', 'branch', 'version_guid')
     __slots__ = KEY_FIELDS
 
@@ -359,9 +359,9 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         if self.course and self.run:
             parts.append(unicode(self.package_id))
             if self.branch:
-                parts.append(u"{prefix}+{branch}".format(prefix=self.BRANCH_PREFIX, branch=self.branch))
+                parts.append(u"{prefix}@{branch}".format(prefix=self.BRANCH_PREFIX, branch=self.branch))
         if self.version_guid:
-            parts.append(u"{prefix}+{guid}".format(prefix=self.VERSION_PREFIX, guid=self.version_guid))
+            parts.append(u"{prefix}@{guid}".format(prefix=self.VERSION_PREFIX, guid=self.version_guid))
         return u"+".join(parts)
 
     def _to_deprecated_string(self):
@@ -426,7 +426,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
       - block_type = category
       - block_id = name
     """
-    CANONICAL_NAMESPACE = 'edx'
+    CANONICAL_NAMESPACE = 'block-v1'
     KEY_FIELDS = ('course_key', 'block_type', 'block_id')
 
     DEPRECATED_TAG = 'i4x'  # to combine Locations with BlockUsageLocators
@@ -743,7 +743,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Return a string representing this location.
         """
         # Allow access to _to_string protected method
-        return u"{course_key}+{BLOCK_TYPE_PREFIX}+{block_type}+{BLOCK_PREFIX}+{block_id}".format(
+        return u"{course_key}+{BLOCK_TYPE_PREFIX}@{block_type}+{BLOCK_PREFIX}@{block_id}".format(
             course_key=self.course_key._to_string(),  # pylint: disable=protected-access
             BLOCK_TYPE_PREFIX=self.BLOCK_TYPE_PREFIX,
             block_type=self.block_type,
@@ -855,7 +855,7 @@ class DefinitionLocator(Locator, DefinitionKey):
     """
     Container for how to locate a description (the course-independent content).
     """
-    CANONICAL_NAMESPACE = 'defx'
+    CANONICAL_NAMESPACE = 'def-v1'
     KEY_FIELDS = ('definition_id', 'block_type')
 
     # override the abstractproperty
@@ -879,10 +879,10 @@ class DefinitionLocator(Locator, DefinitionKey):
         Return a string representing this location.
         unicode(self) returns something like this: "519665f6223ebd6980884f2b+type+problem"
         '''
-        return u"{}+{}+{}".format(unicode(self.definition_id), self.BLOCK_TYPE_PREFIX, self.block_type)
+        return u"{}+{}@{}".format(unicode(self.definition_id), self.BLOCK_TYPE_PREFIX, self.block_type)
 
     URL_RE = re.compile(
-        r"^(?P<definition_id>[A-F0-9]+)\+{}\+(?P<block_type>{ALLOWED_ID_CHARS}+)$".format(
+        r"^(?P<definition_id>[A-F0-9]+)\+{}@(?P<block_type>{ALLOWED_ID_CHARS}+)$".format(
             Locator.BLOCK_TYPE_PREFIX, ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
         ),
         re.IGNORECASE | re.VERBOSE | re.UNICODE
@@ -935,7 +935,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):
     """
     An AssetKey implementation class.
     """
-    CANONICAL_NAMESPACE = 'asset-location'
+    CANONICAL_NAMESPACE = 'asset-v1'
     DEPRECATED_TAG = 'c4x'
     __slots__ = BlockUsageLocator.KEY_FIELDS
 
