@@ -155,7 +155,9 @@ class OpaqueKey(object):
         """
         Serialize this :class:`OpaqueKey`, in the form ``<CANONICAL_NAMESPACE>:<value of _to_string>``.
         """
-        if self.deprecated:
+        # Use getattr in case __unicode__ is called during initialization before the deprecated
+        # attribute has been set
+        if getattr(self, 'deprecated', False):
             # no namespace on deprecated
             return self._to_deprecated_string()
         return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])  # pylint: disable=no-member
