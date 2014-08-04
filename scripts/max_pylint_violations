@@ -1,7 +1,7 @@
 #!/bin/bash
 pylint opaque_keys | tee /tmp/pylint-ok.log
 echo
-ERR=`grep -v "\*\*\*\*\*\*\*\*\*\*" /tmp/pylint-ok.log | wc -l`
+ERR=`grep -E "^[C|R|W|E]:" /tmp/pylint-ok.log | wc -l`
 if [ $ERR -ge $1 ]; then
     echo "Too many pylint violations: $ERR (max is $1)"
     exit 1
