@@ -280,7 +280,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
 
     def html_id(self):
         """
-        Generate a discussion group id based on course
+        Return an id which can be used on an html page as an id attr of an html element.
 
         To make compatible with old Location object functionality. I don't believe this behavior fits at this
         place, but I have no way to override. We should clearly define the purpose and restrictions of this
@@ -753,7 +753,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
 
     def html_id(self):
         """
-        Generate a discussion group id based on course
+        Return an id which can be used on an html page as an id attr of an html element.  It is currently also
+        persisted by some clients to identify blocks.
 
         To make compatible with old Location object functionality. I don't believe this behavior fits at this
         place, but I have no way to override. We should clearly define the purpose and restrictions of this
@@ -764,7 +765,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
             id_string = u"-".join([v for v in id_fields if v is not None])
             return self.clean_for_html(id_string)
         else:
-            return unicode(self)
+            return self.block_id
 
     def _to_deprecated_string(self):
         """
