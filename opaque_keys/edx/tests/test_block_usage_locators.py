@@ -133,7 +133,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
     def test_html_id(self):
         course_key = CourseLocator('org', 'course', 'run')
         locator = BlockUsageLocator(course_key, block_type='cat', block_id='name:more_name')
-        self.assertEquals(locator.html_id(), "block-v1:org+course+run+type@cat+block@name:more_name")
+        self.assertEquals(locator.html_id(), "name:more_name")
 
     def test_deprecated_html_id(self):
         course_key = CourseLocator('org', 'course', 'run', version_guid='rev', deprecated=True)
