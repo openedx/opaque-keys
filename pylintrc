@@ -67,9 +67,6 @@ disable=
 # (visual studio) and html
 output-format=text
 
-# Include message's id in output
-include-ids=yes
-
 # Put messages in a separate file for each module / package specified on the
 # command line instead of printing them on stdout. Reports (if any) will be
 # written in a file name "pylint_global.[txt|html]".
@@ -88,9 +85,6 @@ evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / stateme
 # Add a comment according to your evaluation note. This is used by the global
 # evaluation report (RP0004).
 comment=no
-
-# Display symbolic names of messages in reports
-symbols=yes
 
 
 [TYPECHECK]

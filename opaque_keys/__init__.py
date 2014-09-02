@@ -313,7 +313,7 @@ class OpaqueKey(object):
         return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE,)  # pylint: disable=no-member
 
     def __eq__(self, other):
-        return isinstance(other, OpaqueKey) and self._key == other._key
+        return isinstance(other, OpaqueKey) and self._key == other._key  # pylint: disable=protected-access
 
     def __ne__(self, other):
         return not self == other
