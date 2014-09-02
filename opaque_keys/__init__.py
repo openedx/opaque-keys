@@ -173,10 +173,14 @@ class OpaqueKey(object):
         if serialized is None:
             raise InvalidKeyError(cls, serialized)
 
+        # Ensure all extensions are loaded. Extensions may modify the deprecated_fallback attribute of the class, so
+        # they must be loaded before processing any keys.
+        drivers = cls._drivers()
+
         # pylint: disable=protected-access
         try:
             namespace, rest = cls._separate_namespace(serialized)
-            return cls._drivers()[namespace].plugin._from_string(rest)
+            return drivers[namespace].plugin._from_string(rest)
         except (InvalidKeyError, KeyError):
             if hasattr(cls, 'deprecated_fallback'):
                 return getattr(cls, 'deprecated_fallback')._from_deprecated_string(serialized)
@@ -309,7 +313,7 @@ class OpaqueKey(object):
         return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE,)  # pylint: disable=no-member
 
     def __eq__(self, other):
-        return isinstance(other, OpaqueKey) and self._key == other._key
+        return isinstance(other, OpaqueKey) and self._key == other._key  # pylint: disable=protected-access
 
     def __ne__(self, other):
         return not self == other
