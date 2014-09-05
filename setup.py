@@ -8,7 +8,8 @@ setup(
         "opaque_keys.edx",
     ],
     install_requires=[
-        "stevedore"
+        "stevedore",
+        "pymongo"
     ],
     entry_points={
         'opaque_keys.testing': [
