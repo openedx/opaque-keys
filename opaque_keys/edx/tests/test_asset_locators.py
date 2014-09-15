@@ -69,6 +69,11 @@ class TestAssetLocators(TestCase):
             key.__class__._from_deprecated_son(key.to_deprecated_son(), run)  # pylint: disable=protected-access
         )
 
+    def test_old_charset(self):
+        # merely not raising InvalidKeyError suffices
+        AssetLocator(CourseLocator('a', 'b', 'c'), 'asset', 'subs_%20S2x5jhbWl_o.srt.sjson')
+        AssetLocator(CourseLocator('a', 'b', 'c'), 'asset', 'subs_%20S2x5jhbWl_o.srt.sjson', deprecated=True)
+
     def test_replace(self):
         asset_key = AssetKey.from_string('/c4x/o/c/asset/path')
         self.assertEquals(

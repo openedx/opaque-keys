@@ -949,6 +949,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):
         (@(?P<revision>[^/]+))?
     """, re.VERBOSE | re.IGNORECASE)
 
+    ALLOWED_ID_RE = BlockUsageLocator.DEPRECATED_ALLOWED_ID_RE
     # Allow empty asset ids. Used to generate a prefix url
     DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + '*$', re.UNICODE)
 
