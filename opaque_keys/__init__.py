@@ -83,7 +83,10 @@ class OpaqueKey(object):
 
     OpaqueKeys will not have optional constructor parameters (due to the implementation of
     ``KEY_FIELDS``), by default. However, an implementation class can provide a default,
-    as long as it passes that default to a call to ``super().__init__``.
+    as long as it passes that default to a call to ``super().__init__``. If the KeyImplementation
+    sets the class attribute ``CHECKED_INIT`` to ``False``, then the :class:`OpaqueKey` base
+    class constructor will not validate any of the ``KEY_FIELDS`` arguments, and will instead
+    just expect all ``KEY_FIELDS`` to be passed as ``kwargs``.
 
     :class:`OpaqueKey` objects are immutable.
 
@@ -93,8 +96,8 @@ class OpaqueKey(object):
     __metaclass__ = OpaqueKeyMetaclass
     __slots__ = ('_initialized', 'deprecated')
 
-
     NAMESPACE_SEPARATOR = u':'
+    CHECKED_INIT = True
 
     # ============= ABSTRACT METHODS ==============
     @classmethod
@@ -266,6 +269,18 @@ class OpaqueKey(object):
         # a flag used to indicate that this instance was deserialized from the
         # deprecated form and should serialize to the deprecated form
         self.deprecated = kwargs.pop('deprecated', False)
+
+        if self.CHECKED_INIT:
+            self._checked_init(*args, **kwargs)
+        else:
+            self._unchecked_init(**kwargs)
+        self._initialized = True
+
+    def _checked_init(self, *args, **kwargs):
+        """
+        Set all KEY_FIELDS using the contents of args and kwargs, treating
+        KEY_FIELDS as the arg order, and validating number and order of args.
+        """
         if len(args) + len(kwargs) != len(self.KEY_FIELDS):
             raise TypeError('__init__() takes exactly {} arguments ({} given)'.format(
                 len(self.KEY_FIELDS),
@@ -283,8 +298,14 @@ class OpaqueKey(object):
             if key not in self.KEY_FIELDS:
                 raise TypeError('__init__() got an unexpected argument {!r}'.format(key))
 
+        self._unchecked_init(**keyed_args)
+
+    def _unchecked_init(self, **kwargs):
+        """
+        Set all kwargs as attributes.
+        """
+        for key, value in kwargs.viewitems():
             setattr(self, key, value)
-        self._initialized = True
 
     def replace(self, **kwargs):
         """
