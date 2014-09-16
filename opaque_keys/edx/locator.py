@@ -166,6 +166,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
     CANONICAL_NAMESPACE = 'course-v1'
     KEY_FIELDS = ('org', 'course', 'run', 'branch', 'version_guid')
     __slots__ = KEY_FIELDS
+    CHECKED_INIT = False
 
     # Characters that are forbidden in the deprecated format
     INVALID_CHARS_DEPRECATED = re.compile(r"[^\w.%-]", re.UNICODE)
@@ -428,6 +429,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
     """
     CANONICAL_NAMESPACE = 'block-v1'
     KEY_FIELDS = ('course_key', 'block_type', 'block_id')
+    CHECKED_INIT = False
 
     DEPRECATED_TAG = 'i4x'  # to combine Locations with BlockUsageLocators
 
@@ -858,6 +860,7 @@ class DefinitionLocator(Locator, DefinitionKey):
     """
     CANONICAL_NAMESPACE = 'def-v1'
     KEY_FIELDS = ('definition_id', 'block_type')
+    CHECKED_INIT = False
 
     # override the abstractproperty
     block_type = None

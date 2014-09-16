@@ -35,6 +35,9 @@ class OpaqueKeyMetaclass(ABCMeta):
         return super(OpaqueKeyMetaclass, mcs).__new__(mcs, name, bases, attrs)
 
 
+PLUGIN_CACHE = {}
+
+
 @total_ordering
 class OpaqueKey(object):
     """
@@ -80,7 +83,10 @@ class OpaqueKey(object):
 
     OpaqueKeys will not have optional constructor parameters (due to the implementation of
     ``KEY_FIELDS``), by default. However, an implementation class can provide a default,
-    as long as it passes that default to a call to ``super().__init__``.
+    as long as it passes that default to a call to ``super().__init__``. If the KeyImplementation
+    sets the class attribute ``CHECKED_INIT`` to ``False``, then the :class:`OpaqueKey` base
+    class constructor will not validate any of the ``KEY_FIELDS`` arguments, and will instead
+    just expect all ``KEY_FIELDS`` to be passed as ``kwargs``.
 
     :class:`OpaqueKey` objects are immutable.
 
@@ -91,6 +97,7 @@ class OpaqueKey(object):
     __slots__ = ('_initialized', 'deprecated')
 
     NAMESPACE_SEPARATOR = u':'
+    CHECKED_INIT = True
 
     # ============= ABSTRACT METHODS ==============
     @classmethod
@@ -173,15 +180,11 @@ class OpaqueKey(object):
         if serialized is None:
             raise InvalidKeyError(cls, serialized)
 
-        # Ensure all extensions are loaded. Extensions may modify the deprecated_fallback attribute of the class, so
-        # they must be loaded before processing any keys.
-        drivers = cls._drivers()
-
         # pylint: disable=protected-access
         try:
             namespace, rest = cls._separate_namespace(serialized)
-            return drivers[namespace].plugin._from_string(rest)
-        except (InvalidKeyError, KeyError):
+            return cls.get_namespace_plugin(namespace)._from_string(rest)
+        except InvalidKeyError:
             if hasattr(cls, 'deprecated_fallback'):
                 return getattr(cls, 'deprecated_fallback')._from_deprecated_string(serialized)
             raise InvalidKeyError(cls, serialized)
@@ -208,6 +211,34 @@ class OpaqueKey(object):
             raise InvalidKeyError(cls, serialized)
 
         return (namespace, rest)
+
+    @classmethod
+    def get_namespace_plugin(cls, namespace):
+        """
+        Return the registered OpaqueKey subclass of cls for the supplied namespace
+        """
+        # The cache is stored per-calling-class, rather than per-KEY_TYPE,
+        # because we should raise InvalidKeyError if the namespace
+        # doesn't specify a subclass of cls
+        cache_key = (cls, namespace)
+        if cache_key not in PLUGIN_CACHE:
+            # Ensure all extensions are loaded. Extensions may modify the deprecated_fallback attribute of the class, so
+            # they must be loaded before processing any keys.
+            drivers = cls._drivers()
+
+            try:
+                PLUGIN_CACHE[cache_key] = drivers[namespace].plugin
+            except KeyError as key_error:
+                # Cache that the namespace doesn't correspond to a known plugin,
+                # so that we don't waste time checking every time we hit
+                # a particular unknown namespace (like i4x)
+                PLUGIN_CACHE[cache_key] = InvalidKeyError(cls, '{}:*'.format(namespace))
+
+        plugin = PLUGIN_CACHE[cache_key]
+        if isinstance(plugin, Exception):
+            raise plugin
+        else:
+            return plugin
 
     @classmethod
     def _drivers(cls):
@@ -238,6 +269,18 @@ class OpaqueKey(object):
         # a flag used to indicate that this instance was deserialized from the
         # deprecated form and should serialize to the deprecated form
         self.deprecated = kwargs.pop('deprecated', False)
+
+        if self.CHECKED_INIT:
+            self._checked_init(*args, **kwargs)
+        else:
+            self._unchecked_init(**kwargs)
+        self._initialized = True
+
+    def _checked_init(self, *args, **kwargs):
+        """
+        Set all KEY_FIELDS using the contents of args and kwargs, treating
+        KEY_FIELDS as the arg order, and validating number and order of args.
+        """
         if len(args) + len(kwargs) != len(self.KEY_FIELDS):
             raise TypeError('__init__() takes exactly {} arguments ({} given)'.format(
                 len(self.KEY_FIELDS),
@@ -255,8 +298,14 @@ class OpaqueKey(object):
             if key not in self.KEY_FIELDS:
                 raise TypeError('__init__() got an unexpected argument {!r}'.format(key))
 
+        self._unchecked_init(**keyed_args)
+
+    def _unchecked_init(self, **kwargs):
+        """
+        Set all kwargs as attributes.
+        """
+        for key, value in kwargs.viewitems():
             setattr(self, key, value)
-        self._initialized = True
 
     def replace(self, **kwargs):
         """
