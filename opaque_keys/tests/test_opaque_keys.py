@@ -192,7 +192,7 @@ class KeyTests(TestCase):
         hex_copy = hex10.replace()
 
         self.assertNotEquals(id(hex10), id(hex11))
-        self.assertNotEquals(id(hex10), id(hex_copy))
+        self.assertEquals(id(hex10), id(hex_copy))
         self.assertNotEquals(hex10, hex11)
         self.assertEquals(hex10, hex_copy)
         self.assertEquals(HexKey(10), hex10)
