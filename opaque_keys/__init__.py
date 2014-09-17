@@ -98,6 +98,7 @@ class OpaqueKey(object):
 
     NAMESPACE_SEPARATOR = u':'
     CHECKED_INIT = True
+    KEY_FIELDS = ()
 
     # ============= ABSTRACT METHODS ==============
     @classmethod
@@ -305,6 +306,8 @@ class OpaqueKey(object):
         Set all kwargs as attributes.
         """
         for key, value in kwargs.viewitems():
+            if key not in self.KEY_FIELDS:
+                continue
             setattr(self, key, value)
 
     def replace(self, **kwargs):
@@ -318,7 +321,7 @@ class OpaqueKey(object):
         existing_values = {key: getattr(self, key) for key in self.KEY_FIELDS}  # pylint: disable=no-member
         existing_values['deprecated'] = self.deprecated
 
-        if all(value == existing_values[key] for (key, value) in kwargs.iteritems()):
+        if all(value == existing_values[key] for (key, value) in kwargs.iteritems() if key in existing_values):
             return self
 
         existing_values.update(kwargs)
