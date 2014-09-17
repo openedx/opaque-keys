@@ -229,7 +229,7 @@ class OpaqueKey(object):
 
             try:
                 PLUGIN_CACHE[cache_key] = drivers[namespace].plugin
-            except KeyError as key_error:
+            except KeyError:
                 # Cache that the namespace doesn't correspond to a known plugin,
                 # so that we don't waste time checking every time we hit
                 # a particular unknown namespace (like i4x)
