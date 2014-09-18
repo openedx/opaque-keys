@@ -493,19 +493,34 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         for key in CourseLocator.KEY_FIELDS:
             if key in kwargs:
                 course_key_kwargs[key] = kwargs.pop(key)
-        if 'revision' in kwargs and 'branch' not in course_key_kwargs:
-            course_key_kwargs['branch'] = kwargs.pop('revision')
-        if 'version' in kwargs and 'version_guid' not in course_key_kwargs:
-            course_key_kwargs['version_guid'] = kwargs.pop('version')
+        if 'revision' in kwargs:
+            course_key_kwargs.setdefault('branch', kwargs.pop('revision'))
+        if 'version' in kwargs:
+            course_key_kwargs.setdefault('version_guid', kwargs.pop('version'))
         if len(course_key_kwargs) > 0:
+            if 'course_key' in kwargs:
+                raise ValueError("Use either course_key replacement or CourseLocator key field replacement, but not both")
             kwargs['course_key'] = self.course_key.replace(**course_key_kwargs)
 
         # `'name'` and `'category'` are deprecated `KEY_FIELDS`.
         # Their values are reassigned to the new keys.
-        if 'name' in kwargs and 'block_id' not in kwargs:
-            kwargs['block_id'] = kwargs.pop('name')
-        if 'category' in kwargs and 'block_type' not in kwargs:
-            kwargs['block_type'] = kwargs.pop('category')
+        if 'name' in kwargs:
+            kwargs.setdefault('block_id', kwargs.pop('name'))
+        if 'category' in kwargs:
+            kwargs.setdefault('block_type', kwargs.pop('category'))
+
+        if 'course_key' in kwargs:
+            new_course_key = kwargs['course_key']
+            if new_course_key.is_version_agnostic and self.course_key.is_version_agnostic:
+                # Replace won't update version agnostic course keys that
+                # differ by _branch, but we want to, so force an update
+                if (
+                    new_course_key._branch != self.course_key._branch or
+                    new_course_key._version_guid != self.course_key._version_guid
+                ):
+                    kwargs.setdefault('block_type', self.block_type)
+                    kwargs.setdefault('block_id', self.block_id)
+                    return self.__class__(**kwargs)
         return super(BlockUsageLocator, self).replace(**kwargs)
 
     @classmethod
@@ -594,11 +609,14 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         Return a UsageLocator for the same block in a different branch of the course.
         """
+        if branch == self._branch:
+            return self
+
         if self.course_key.is_version_agnostic:
             # We use make_usage_key rather than replace(course_key=...) because replace
             # will only return a new value when the course_key is different,
             # and version-agnostic CourseLocators are equal even if their smuggled branches differ
-            return self.course_key.for_branch(branch).make_usage_key(self.block_type, self.block_id)
+            return self.__class__(self.course_key.for_branch(branch), self.block_type, self.block_id)
         else:
             return self.replace(course_key=self.course_key.for_branch(branch))
 
@@ -606,11 +624,14 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         Return a UsageLocator for the same block in a different branch of the course.
         """
+        if version_guid == self._version_guid:
+            return self
+
         if self.course_key.is_version_agnostic:
             # We use make_usage_key rather than replace(course_key=...) because replace
             # will only return a new value when the course_key is different,
             # and version-agnostic CourseLocators are equal even if their smuggled version_guids differ
-            return self.course_key.for_version(version_guid).make_usage_key(self.block_type, self.block_id)
+            return self.__class__(self.course_key.for_version(version_guid), self.block_type, self.block_id)
         else:
             return self.replace(course_key=self.course_key.for_version(version_guid))
 

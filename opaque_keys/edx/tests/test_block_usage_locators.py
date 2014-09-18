@@ -349,3 +349,5 @@ class TestBlockUsageLocators(LocatorBaseTest):
 
         self.assertEquals('branch', usage._branch)
         self.assertEquals('new_branch', usage.for_branch('new_branch')._branch)
+        self.assertEquals('new_branch', usage.replace(branch='new_branch')._branch)
+        self.assertEquals('new_branch', usage.replace(revision='new_branch')._branch)

@@ -33,7 +33,8 @@ class SlashSeparatedCourseKey(CourseLocator):
             DeprecationWarning,
             stacklevel=2
         )
-        super(SlashSeparatedCourseKey, self).__init__(org, course, run, deprecated=True, **kwargs)
+        kwargs['deprecated'] = True
+        super(SlashSeparatedCourseKey, self).__init__(org, course, run, **kwargs)
 
     @classmethod
     def from_deprecated_string(cls, serialized):
