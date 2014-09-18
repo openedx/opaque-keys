@@ -11,6 +11,9 @@ from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator, LocalId
 
 from opaque_keys.edx.tests import LocatorBaseTest
 
+# Access to protected members is allowed in tests
+# pylint: disable=protected-access
+
 # Pairs for testing the clean* functions.
 # The first item in the tuple is the input string.
 # The second item in the tuple is what the result of
@@ -329,13 +332,6 @@ class TestBlockUsageLocators(LocatorBaseTest):
             testobj, org=org, course=course, run=run, branch=branch, block=block_id
         )
 
-    def test_repr(self):
-        testurn = u'block-v1:mit.eecs+6002x+2014_T2+{}@published+{}@problem+{}@HW3'.format(
-            CourseLocator.BRANCH_PREFIX, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
-        )
-        testobj = UsageKey.from_string(testurn)
-        self.assertEqual("BlockUsageLocator(CourseLocator(u'mit.eecs', u'6002x', u'2014_T2', u'published', None), u'problem', u'HW3')", repr(testobj))
-
     def test_local_id(self):
         local_id = LocalId()
         self.assertEquals(
@@ -346,3 +342,12 @@ class TestBlockUsageLocators(LocatorBaseTest):
             ).block_id,
             local_id
         )
+
+    def test_version_agnostic_for_branch(self):
+        course = CourseLocator(org='org', course='course', run='run', branch='branch', version_agnostic=True)
+        usage = course.make_usage_key('type', 'id')
+
+        self.assertEquals('branch', usage._branch)
+        self.assertEquals('new_branch', usage.for_branch('new_branch')._branch)
+        self.assertEquals('new_branch', usage.replace(branch='new_branch')._branch)
+        self.assertEquals('new_branch', usage.replace(revision='new_branch')._branch)

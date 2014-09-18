@@ -165,16 +165,13 @@ class CourseLocator(BlockLocatorBase, CourseKey):
     """
     CANONICAL_NAMESPACE = 'course-v1'
     KEY_FIELDS = ('org', 'course', 'run', 'branch', 'version_guid')
-    __slots__ = KEY_FIELDS
+    __slots__ = KEY_FIELDS + ('version_agnostic', '_branch', '_version_guid')
     CHECKED_INIT = False
 
     # Characters that are forbidden in the deprecated format
     INVALID_CHARS_DEPRECATED = re.compile(r"[^\w.%-]", re.UNICODE)
 
-    # stubs to fake out the abstractproperty class instrospection and allow treatment as attrs in instances
-    org = None
-
-    def __init__(self, org=None, course=None, run=None, branch=None, version_guid=None, deprecated=False, **kwargs):
+    def __init__(self, org=None, course=None, run=None, branch=None, version_guid=None, deprecated=False, version_agnostic=False, **kwargs):
         """
         Construct a CourseLocator
 
@@ -212,12 +209,16 @@ class CourseLocator(BlockLocatorBase, CourseKey):
             if not all(field is None or self.ALLOWED_ID_RE.match(field) for field in [org, course, run, branch]):
                 raise InvalidKeyError(self.__class__, [org, course, run, branch])
 
+        self.is_version_agnostic = version_agnostic
+        self._branch = branch
+        self._version_guid = version_guid
+
         super(CourseLocator, self).__init__(
             org=org,
             course=course,
             run=run,
-            branch=branch,
-            version_guid=version_guid,
+            branch=None if self.is_version_agnostic else branch,
+            version_guid=None if self.is_version_agnostic else version_guid,
             deprecated=deprecated,
             **kwargs
         )
@@ -227,6 +228,9 @@ class CourseLocator(BlockLocatorBase, CourseKey):
 
         if not self.deprecated and self.version_guid is None and (self.org is None or self.course is None or self.run is None):
             raise InvalidKeyError(self.__class__, "Either version_guid or org, course, and run should be set")
+
+        if not self.deprecated and self.is_version_agnostic and (self.org is None or self.course is None or self.run is None):
+            raise InvalidKeyError(self.__class__, "Version agnostic keys must have org, course, and run")
 
     @classmethod
     def _check_location_part(cls, val, regexp):
@@ -325,7 +329,10 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         Raises:
             ValueError: if the block locator has no org & course, run
         """
-        return self.replace(version_guid=None)
+        if self.is_version_agnostic:
+            return self
+        else:
+            return self.replace(version_guid=None)
 
     def course_agnostic(self):
         """
@@ -400,6 +407,19 @@ class CourseLocator(BlockLocatorBase, CourseKey):
 
         return cls(*serialized.split('/'), deprecated=True)
 
+    def replace(self, **kwargs):
+        kwargs.setdefault('branch', self._branch)
+        kwargs.setdefault('version_guid', self._version_guid)
+        kwargs.setdefault('version_agnostic', self.is_version_agnostic)
+        return super(CourseLocator, self).replace(**kwargs)
+
+    def __repr__(self):
+        return '{}({}, version_agnostic={})'.format(
+            self.__class__.__name__,
+            ', '.join(repr(getattr(self, key)) for key in self.KEY_FIELDS),  # pylint: disable=no-member
+            self.is_version_agnostic,
+        )
+
 CourseKey.set_deprecated_fallback(CourseLocator)
 
 
@@ -473,19 +493,34 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         for key in CourseLocator.KEY_FIELDS:
             if key in kwargs:
                 course_key_kwargs[key] = kwargs.pop(key)
-        if 'revision' in kwargs and 'branch' not in course_key_kwargs:
-            course_key_kwargs['branch'] = kwargs.pop('revision')
-        if 'version' in kwargs and 'version_guid' not in course_key_kwargs:
-            course_key_kwargs['version_guid'] = kwargs.pop('version')
+        if 'revision' in kwargs:
+            course_key_kwargs.setdefault('branch', kwargs.pop('revision'))
+        if 'version' in kwargs:
+            course_key_kwargs.setdefault('version_guid', kwargs.pop('version'))
         if len(course_key_kwargs) > 0:
+            if 'course_key' in kwargs:
+                raise ValueError("Use either course_key replacement or CourseLocator key field replacement, but not both")
             kwargs['course_key'] = self.course_key.replace(**course_key_kwargs)
 
         # `'name'` and `'category'` are deprecated `KEY_FIELDS`.
         # Their values are reassigned to the new keys.
-        if 'name' in kwargs and 'block_id' not in kwargs:
-            kwargs['block_id'] = kwargs.pop('name')
-        if 'category' in kwargs and 'block_type' not in kwargs:
-            kwargs['block_type'] = kwargs.pop('category')
+        if 'name' in kwargs:
+            kwargs.setdefault('block_id', kwargs.pop('name'))
+        if 'category' in kwargs:
+            kwargs.setdefault('block_type', kwargs.pop('category'))
+
+        if 'course_key' in kwargs:
+            new_course_key = kwargs['course_key']
+            if new_course_key.is_version_agnostic and self.course_key.is_version_agnostic:
+                # Replace won't update version agnostic course keys that
+                # differ by _branch, but we want to, so force an update
+                if (
+                    new_course_key._branch != self.course_key._branch or
+                    new_course_key._version_guid != self.course_key._version_guid
+                ):
+                    kwargs.setdefault('block_type', self.block_type)
+                    kwargs.setdefault('block_id', self.block_id)
+                    return self.__class__(**kwargs)
         return super(BlockUsageLocator, self).replace(**kwargs)
 
     @classmethod
@@ -574,13 +609,31 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         Return a UsageLocator for the same block in a different branch of the course.
         """
-        return self.replace(course_key=self.course_key.for_branch(branch))
+        if branch == self._branch:
+            return self
+
+        if self.course_key.is_version_agnostic:
+            # We use make_usage_key rather than replace(course_key=...) because replace
+            # will only return a new value when the course_key is different,
+            # and version-agnostic CourseLocators are equal even if their smuggled branches differ
+            return self.__class__(self.course_key.for_branch(branch), self.block_type, self.block_id)
+        else:
+            return self.replace(course_key=self.course_key.for_branch(branch))
 
     def for_version(self, version_guid):
         """
         Return a UsageLocator for the same block in a different branch of the course.
         """
-        return self.replace(course_key=self.course_key.for_version(version_guid))
+        if version_guid == self._version_guid:
+            return self
+
+        if self.course_key.is_version_agnostic:
+            # We use make_usage_key rather than replace(course_key=...) because replace
+            # will only return a new value when the course_key is different,
+            # and version-agnostic CourseLocators are equal even if their smuggled version_guids differ
+            return self.__class__(self.course_key.for_version(version_guid), self.block_type, self.block_id)
+        else:
+            return self.replace(course_key=self.course_key.for_version(version_guid))
 
     @classmethod
     def _parse_block_ref(cls, block_ref, deprecated=False):
@@ -657,9 +710,19 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         return self.course_key.branch
 
     @property
+    def _branch(self):
+        """Return the hidden branch even if this object is version-agnostic"""
+        return self.course_key._branch  # pylint: disable=protected-access
+
+    @property
     def version_guid(self):
         """Returns the version guid for this object."""
         return self.course_key.version_guid
+
+    @property
+    def _version_guid(self):
+        """Return the hidden version_guid even if this object is version-agnostic"""
+        return self.course_key._version_guid  # pylint: disable=protected-access
 
     @property
     def version(self):
@@ -727,7 +790,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         if hasattr(course_locator, 'course_key'):
             course_locator = course_locator.course_key
-        return BlockUsageLocator(
+        return cls(
             course_key=course_locator,
             block_type=block_type,
             block_id=block_id

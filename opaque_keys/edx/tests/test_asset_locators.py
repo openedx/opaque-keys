@@ -93,3 +93,12 @@ class TestAssetLocators(TestCase):
             '/c4x/org/course/asset/',
             unicode(CourseKey.from_string('org/course/run').make_asset_key('asset', ''))
         )
+
+    def test_version_agnostic_for_branch(self):
+        course = CourseLocator(org='org', course='course', run='run', branch='branch', version_agnostic=True)
+        asset = course.make_asset_key('type', 'id')
+        new_asset = asset.for_branch('new_branch')
+
+        self.assertIsInstance(new_asset, AssetLocator)
+        self.assertEquals('branch', asset._branch)
+        self.assertEquals('new_branch', new_asset._branch)

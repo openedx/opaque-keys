@@ -12,6 +12,8 @@ from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator
 
 from opaque_keys.edx.tests import LocatorBaseTest, TestDeprecated
 
+# Access to protected members is allowed in tests
+# pylint: disable=protected-access, no-member, maybe-no-member
 
 @ddt.ddt
 class TestCourseKeys(LocatorBaseTest, TestDeprecated):
@@ -256,3 +258,33 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
             'org/course/',
             unicode(CourseLocator('org', 'course', '', deprecated=True))
         )
+
+    def test_version_agnostic(self):
+        guid = ObjectId()
+        course_key = CourseLocator('org', 'course', 'run', branch='branch', version_guid=guid, version_agnostic=True)
+
+        self.assertEquals(None, course_key.branch)
+        self.assertEquals('branch', course_key._branch)
+        self.assertEquals(None, course_key.version_guid)
+        self.assertEquals(guid, course_key._version_guid)
+
+    def test_version_agnostic_replace(self):
+        guid = ObjectId()
+        course_key = CourseLocator('org', 'course', 'run', branch='branch', version_guid=guid, version_agnostic=True)
+        new_course = course_key.replace(course='new_course')
+
+        self.assertEquals(True, new_course.is_version_agnostic)
+        self.assertEquals(None, new_course.branch)
+        self.assertEquals('branch', new_course._branch)
+        self.assertEquals(None, new_course.version_guid)
+        self.assertEquals(guid, new_course._version_guid)
+
+    def test_version_agnostic_for_branch(self):
+        guid = ObjectId()
+        course_key = CourseLocator('org', 'course', 'run', branch='branch', version_guid=guid, version_agnostic=True)
+        new_course = course_key.for_branch(branch='new_branch')
+
+        self.assertEquals(None, course_key.branch)
+        self.assertEquals('branch', course_key._branch)
+        self.assertEquals(None, new_course.branch)
+        self.assertEquals('new_branch', new_course._branch)
