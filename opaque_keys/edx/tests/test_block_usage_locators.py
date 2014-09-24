@@ -2,6 +2,7 @@
 Thorough tests of BlockUsageLocator, as well as UsageKeys generally
 """
 import ddt
+from itertools import product
 
 from bson.objectid import ObjectId
 
@@ -171,14 +172,16 @@ class TestBlockUsageLocators(LocatorBaseTest):
         with self.assertRaises(AttributeError):
             setattr(loc, attr, attr)
 
-    def test_map_into_course_location(self):
-        original_course = CourseKey.from_string('org/course/run')
-        new_course = CourseKey.from_string('edX/toy/2012_Fall')
-        loc = BlockUsageLocator(original_course, 'cat', 'name:more_name', deprecated=True)
-        self.assertEquals(
-            BlockUsageLocator(new_course, 'cat', 'name:more_name', deprecated=True),
-            loc.map_into_course(new_course)
-        )
+    @ddt.data(*product((True, False), repeat=2))
+    @ddt.unpack
+    def test_map_into_course_location(self, deprecated_source, deprecated_dest):
+        original_course = CourseLocator('org', 'course', 'run', deprecated=deprecated_source)
+        new_course = CourseLocator('edX', 'toy', '2012_Fall', deprecated=deprecated_dest)
+        loc = BlockUsageLocator(original_course, 'cat', 'name:more_name', deprecated=deprecated_source)
+        expected = BlockUsageLocator(new_course, 'cat', 'name:more_name', deprecated=deprecated_dest)
+        actual = loc.map_into_course(new_course)
+
+        self.assertEquals(expected, actual)
 
     @ddt.data(
         (BlockUsageLocator, '_id.', 'i4x', (CourseLocator('org', 'course', 'run', 'rev', deprecated=True), 'ct', 'n')),

@@ -459,7 +459,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         Construct a BlockUsageLocator
         """
-        deprecated = kwargs.get('deprecated', False)
+        # Always use the deprecated status of the course key
+        deprecated = kwargs['deprecated'] = course_key.deprecated
         block_id = self._parse_block_ref(block_id, deprecated)
         if block_id is None and not deprecated:
             raise InvalidKeyError(self.__class__, "Missing block id")

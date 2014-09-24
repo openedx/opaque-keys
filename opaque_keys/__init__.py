@@ -351,18 +351,21 @@ class OpaqueKey(object):
         for key in state_dict:
             if key in self.KEY_FIELDS:  # pylint: disable=no-member
                 setattr(self, key, state_dict[key])
+        self.deprecated = state_dict['deprecated']
+        self._initialized = True
 
     def __getstate__(self):
         # used by pickle to get fields on an unpickled object
         pickleable_dict = {}
         for key in self.KEY_FIELDS:  # pylint: disable=no-member
             pickleable_dict[key] = getattr(self, key)
+        pickleable_dict['deprecated'] = self.deprecated
         return pickleable_dict
 
     @property
     def _key(self):
         """Returns a tuple of key fields"""
-        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE,)  # pylint: disable=no-member
+        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE, self.deprecated)  # pylint: disable=no-member
 
     def __eq__(self, other):
         return isinstance(other, OpaqueKey) and self._key == other._key  # pylint: disable=protected-access
