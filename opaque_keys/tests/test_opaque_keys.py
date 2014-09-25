@@ -4,6 +4,7 @@ roundtripping.
 """
 import copy
 import json
+import pickle
 from unittest import TestCase
 
 from opaque_keys import OpaqueKey, InvalidKeyError
@@ -206,8 +207,8 @@ class KeyTests(TestCase):
 
         self.assertNotEquals(deprecated_hex10, deprecated_hex11)
         self.assertEquals(deprecated_hex10, deprecated_hex10_copy)
-        self.assertEquals(HexKey(10), deprecated_hex10)
-        self.assertEquals(HexKey(11), deprecated_hex11)
+        self.assertNotEquals(HexKey(10), deprecated_hex10)
+        self.assertNotEquals(HexKey(11), deprecated_hex11)
         self.assertEquals(HexKey(10, deprecated=False), not_deprecated_hex10)
 
         self.assertTrue(deprecated_hex11.deprecated)
@@ -272,3 +273,12 @@ class KeyTests(TestCase):
 
         with self.assertRaises(AttributeError):
             DictKey.set_deprecated_fallback(HexKey)
+
+    def test_pickle(self):
+        ten = HexKey(value=10)
+        deprecated_hex10 = ten.replace(deprecated=True)
+        dec_ten = Base10Key(value=10)
+
+        self.assertEquals(ten, pickle.loads(pickle.dumps(ten)))
+        self.assertEquals(deprecated_hex10, pickle.loads(pickle.dumps(deprecated_hex10)))
+        self.assertEquals(dec_ten, pickle.loads(pickle.dumps(dec_ten)))
