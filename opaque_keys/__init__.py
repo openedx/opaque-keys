@@ -12,6 +12,7 @@ from collections import namedtuple
 from functools import total_ordering
 
 from stevedore.enabled import EnabledExtensionManager
+from _collections import defaultdict
 
 
 class InvalidKeyError(Exception):
@@ -33,9 +34,6 @@ class OpaqueKeyMetaclass(ABCMeta):
             for field in attrs.get('KEY_FIELDS', []):
                 attrs.setdefault(field, None)
         return super(OpaqueKeyMetaclass, mcs).__new__(mcs, name, bases, attrs)
-
-
-PLUGIN_CACHE = {}
 
 
 @total_ordering
@@ -181,6 +179,8 @@ class OpaqueKey(object):
             raise InvalidKeyError(cls, serialized)
 
         # pylint: disable=protected-access
+        # load drivers before checking for attr
+        cls._drivers()
         try:
             namespace, rest = cls._separate_namespace(serialized)
             return cls.get_namespace_plugin(namespace)._from_string(rest)
@@ -220,25 +220,20 @@ class OpaqueKey(object):
         # The cache is stored per-calling-class, rather than per-KEY_TYPE,
         # because we should raise InvalidKeyError if the namespace
         # doesn't specify a subclass of cls
-        cache_key = (cls, namespace)
-        if cache_key not in PLUGIN_CACHE:
-            # Ensure all extensions are loaded. Extensions may modify the deprecated_fallback attribute of the class, so
-            # they must be loaded before processing any keys.
-            drivers = cls._drivers()
 
-            try:
-                PLUGIN_CACHE[cache_key] = drivers[namespace].plugin
-            except KeyError as key_error:
-                # Cache that the namespace doesn't correspond to a known plugin,
-                # so that we don't waste time checking every time we hit
-                # a particular unknown namespace (like i4x)
-                PLUGIN_CACHE[cache_key] = InvalidKeyError(cls, '{}:*'.format(namespace))
+        # Ensure all extensions are loaded. Extensions may modify the deprecated_fallback attribute of the class, so
+        # they must be loaded before processing any keys.
+        drivers = cls._drivers()
 
-        plugin = PLUGIN_CACHE[cache_key]
-        if isinstance(plugin, Exception):
-            raise plugin
-        else:
-            return plugin
+        try:
+            return drivers[namespace].plugin
+        except KeyError:
+            # Cache that the namespace doesn't correspond to a known plugin,
+            # so that we don't waste time checking every time we hit
+            # a particular unknown namespace (like i4x)
+            raise InvalidKeyError(cls, '{}:*'.format(namespace))
+
+    LOADED_DRIVERS = defaultdict()  # If you change default, change test_default_deprecated
 
     @classmethod
     def _drivers(cls):
@@ -246,11 +241,13 @@ class OpaqueKey(object):
         Return a driver manager for all key classes that are
         subclasses of `cls`.
         """
-        return EnabledExtensionManager(
-            cls.KEY_TYPE,  # pylint: disable=no-member
-            check_func=lambda extension: issubclass(extension.plugin, cls),
-            invoke_on_load=False,
-        )
+        if cls not in cls.LOADED_DRIVERS:
+            cls.LOADED_DRIVERS[cls] = EnabledExtensionManager(
+                cls.KEY_TYPE,  # pylint: disable=no-member
+                check_func=lambda extension: issubclass(extension.plugin, cls),
+                invoke_on_load=False,
+            )
+        return cls.LOADED_DRIVERS[cls]
 
     @classmethod
     def set_deprecated_fallback(cls, fallback):
@@ -294,7 +291,7 @@ class OpaqueKey(object):
 
         keyed_args.update(kwargs)
 
-        for key, value in keyed_args.viewitems():
+        for key in keyed_args.viewkeys():
             if key not in self.KEY_FIELDS:
                 raise TypeError('__init__() got an unexpected argument {!r}'.format(key))
 

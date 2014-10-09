@@ -8,7 +8,7 @@ import inspect
 import re
 import warnings
 from bson.son import SON
-from abc import abstractmethod, abstractproperty
+from abc import abstractproperty
 
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
