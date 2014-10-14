@@ -4,8 +4,9 @@ Deprecated OpaqueKey implementations used by XML and Mongo modulestores
 from __future__ import absolute_import
 import warnings
 
-from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator
+from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator, Locator
 from opaque_keys.edx.keys import i4xEncoder as real_i4xEncoder
+import re
 
 # This file passes through to protected members of the non-deprecated classes,
 # and that's ok. It also may not implement all of the current UsageKey methods.
@@ -199,6 +200,36 @@ class Location(LocationBase, BlockUsageLocator):
             revision=kwargs.pop('revision', self.revision),
             **kwargs
         )
+
+
+class DeprecatedLocation(BlockUsageLocator):
+    '''
+    The short-lived location:org+course+run+block_type+block_id syntax
+    '''
+    CANONICAL_NAMESPACE = 'location'
+    URL_RE_SOURCE = r"""
+        (?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)\+(?P<run>{ALLOWED_ID_CHARS}+)\+
+        (?P<block_type>{ALLOWED_ID_CHARS}+)\+
+        (?P<block_id>{ALLOWED_ID_CHARS}+)
+        """.format(
+        ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
+    )
+
+    URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.IGNORECASE | re.VERBOSE | re.UNICODE)
+
+    @classmethod
+    def _from_string(cls, serialized):
+        """
+        see super
+        """
+        # Allow access to _from_string protected method
+        parsed_parts = cls.parse_url(serialized)
+        course_key = CourseLocator(
+            parsed_parts.get('org'), parsed_parts.get('course'), parsed_parts.get('run'),
+            # specifically not saying deprecated=True b/c that would lose the run on serialization
+        )
+        block_id = parsed_parts.get('block_id')
+        return cls(course_key, parsed_parts.get('block_type'), block_id)
 
 
 class AssetLocation(LocationBase, AssetLocator):
