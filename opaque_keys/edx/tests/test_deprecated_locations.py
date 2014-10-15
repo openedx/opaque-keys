@@ -8,6 +8,7 @@ from opaque_keys import InvalidKeyError
 from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator
 from opaque_keys.edx.locations import AssetLocation, Location, SlashSeparatedCourseKey
 from opaque_keys.edx.tests import TestDeprecated
+from opaque_keys.edx.keys import CourseKey, UsageKey
 
 # Allow protected method access throughout this test file
 # pylint: disable=protected-access
@@ -43,11 +44,6 @@ class TestSSCK(TestDeprecated):
         self.assertTrue(isinstance(ssck, CourseLocator))
         self.assertTrue(ssck.deprecated)
 
-    def test_deprecated_from_string(self):
-        with self.assertDeprecationWarning():
-            with self.assertRaises(InvalidKeyError):
-                SlashSeparatedCourseKey.from_string("slashes:foo+bar+baz")
-
     def test_deprecated_from_string_bad(self):
         with self.assertDeprecationWarning():
             with self.assertRaises(InvalidKeyError):
@@ -74,6 +70,34 @@ class TestSSCK(TestDeprecated):
         self.assertNotEquals(id(ssck), id(ssck_copy))
         self.assertNotEquals(ssck, ssck_boo)
         self.assertEquals(ssck, ssck_copy)
+
+
+class TestV0Strings(TestDeprecated):
+    """
+    Test that we can parse slashes:org+course+run and locations:org+course+run+type+id
+    strings which were short-lived
+    """
+    def test_parse_slashes(self):
+        """
+        Test that we can parse slashes:org+course+run strings which were short-lived
+        """
+        parsed_key = CourseKey.from_string('slashes:DemoUniversity+DM01+2014')
+        self.assertEqual(parsed_key.org, 'DemoUniversity')
+        self.assertEqual(parsed_key.course, 'DM01')
+        self.assertEqual(parsed_key.run, '2014')
+
+    def test_parse_location(self):
+        """
+        Test that we can parse location:org+course+run+type+id
+        """
+        parsed_key = UsageKey.from_string(
+            'location:GradingUniv+GT101+2014+chapter+4420ef6679b34ee8ba0cfd6d514b1b38'
+        )
+        self.assertEqual(parsed_key.org, 'GradingUniv')
+        self.assertEqual(parsed_key.course, 'GT101')
+        self.assertEqual(parsed_key.run, '2014')
+        self.assertEqual(parsed_key.block_type, 'chapter')
+        self.assertEqual(parsed_key.block_id, '4420ef6679b34ee8ba0cfd6d514b1b38')
 
 
 class TestLocation(TestLocationDeprecatedBase):

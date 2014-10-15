@@ -19,9 +19,12 @@ setup(
         ],
         'course_key': [
             'course-v1 = opaque_keys.edx.locator:CourseLocator',
+            # don't use slashes in any new code
+            'slashes = opaque_keys.edx.locator:CourseLocator',
         ],
         'usage_key': [
             'block-v1 = opaque_keys.edx.locator:BlockUsageLocator',
+            'location = opaque_keys.edx.locations:DeprecatedLocation',
         ],
         'asset_key': [
             'asset-v1 = opaque_keys.edx.locator:AssetLocator',
