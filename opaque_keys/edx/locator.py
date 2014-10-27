@@ -1097,7 +1097,7 @@ class LibraryUsageLocator(BlockUsageLocator):
         block_id = self._parse_block_ref(block_id, False)
 
         if not all(self.ALLOWED_ID_RE.match(val) for val in (block_type, block_id)):
-            raise InvalidKeyError(self.__class__, "Invalid block_type or block_id")
+            raise InvalidKeyError(self.__class__, "Invalid block_type or block_id ('{}', '{}')".format(block_type, block_id))
 
         # We skip the BlockUsageLocator init and go to its superclass:
         # pylint: disable=bad-super-call

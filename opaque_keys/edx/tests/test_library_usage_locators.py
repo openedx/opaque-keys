@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Tests of LibraryUsageLocator
 """
@@ -29,14 +30,15 @@ class TestLibraryUsageLocators(LocatorBaseTest):
             unicode(UsageKey.from_string(url))
         )
 
-    def test_constructor(self):
-        org = "TestX"
-        lib = "lib3"
-        block_type = "html"
-        block_id = "html17"
+    @ddt.data(
+        ("TestX", "lib3", "html", "html17"),
+        (u"ΩmegaX", u"Ωμέγα", u"html", u"html15"),
+    )
+    @ddt.unpack
+    def test_constructor(self, org, lib, block_type, block_id):
         lib_key = LibraryLocator(org=org, library=lib)
         lib_usage_key = LibraryUsageLocator(library_key=lib_key, block_type=block_type, block_id=block_id)
-        lib_usage_key2 = UsageKey.from_string("lib-block-v1:{}+{}+{}@{}+{}@{}".format(
+        lib_usage_key2 = UsageKey.from_string(u"lib-block-v1:{}+{}+{}@{}+{}@{}".format(
             org, lib,
             BLOCK_TYPE_PREFIX, block_type,
             BLOCK_PREFIX, block_id
@@ -54,18 +56,23 @@ class TestLibraryUsageLocators(LocatorBaseTest):
         with self.assertRaises(InvalidKeyError):
             LibraryUsageLocator(library_key=lib_key, block_type="html", block_id="html1", deprecated=True)
 
-    def test_constructor_invalid(self):
+    @ddt.data(
+        {'block_type': 'html', 'block_id': ''},
+        {'block_type': '', 'block_id': 'html15'},
+        {'block_type': '+$%@', 'block_id': 'html15'},
+        {'block_type': 'html', 'block_id': '+$%@'},
+    )
+    def test_constructor_invalid(self, kwargs):
         lib_key = LibraryLocator(org="TestX", library="problem-bank-15")
         with self.assertRaises(InvalidKeyError):
-            LibraryUsageLocator(library_key=lib_key, block_type="html", block_id="")
+            LibraryUsageLocator(library_key=lib_key, **kwargs)
+
+    @ddt.data(
+        "lib-block-v1:org+lib+{}@category".format(BLOCK_TYPE_PREFIX),
+    )
+    def test_constructor_invalid_from_string(self, url):
         with self.assertRaises(InvalidKeyError):
-            LibraryUsageLocator(library_key=lib_key, block_type="", block_id="html15")
-        with self.assertRaises(InvalidKeyError):
-            LibraryUsageLocator(library_key=lib_key, block_type="+$%@", block_id="html15")
-        with self.assertRaises(InvalidKeyError):
-            LibraryUsageLocator(library_key=lib_key, block_type="html", block_id="+$%@")
-        with self.assertRaises(InvalidKeyError):
-            UsageKey.from_string("lib-block-v1:org+lib+{}@category".format(BLOCK_TYPE_PREFIX))
+            UsageKey.from_string(url)
 
     def test_superclass_make_relative(self):
         lib_key = LibraryLocator(org="TestX", library="problem-bank-15")

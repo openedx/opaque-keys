@@ -112,6 +112,9 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         self.assertEqual(lib_key, lib_key2)
         self.assertEqual(lib_key.branch, branch)
 
+    def test_for_branch(self):
+        lib_key = LibraryLocator(org='TestX', library='test', branch='initial')
+
         branch2 = "br2"
         branch2_key = lib_key.for_branch(branch2)
         self.assertEqual(branch2_key.branch, branch2)
@@ -128,15 +131,16 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         with self.assertRaises(InvalidKeyError):
             version_only_lib_key.for_branch("test")
 
-    def test_lib_key_constructor_underspecified(self):
+    @ddt.data(
+        {},
+        {'branch': 'published'},
+        {'library': 'lib5'},
+        {'library': 'lib5', 'branch': 'published'},
+        {'org': 'TestX'},
+    )
+    def test_lib_key_constructor_underspecified(self, constructor_kwargs):
         with self.assertRaises(InvalidKeyError):
-            LibraryLocator()
-        with self.assertRaises(InvalidKeyError):
-            LibraryLocator(branch='published')
-        with self.assertRaises(InvalidKeyError):
-            LibraryLocator(library='lib5')
-        with self.assertRaises(InvalidKeyError):
-            LibraryLocator(org='TextX')
+            LibraryLocator(**constructor_kwargs)
 
     def test_lib_key_constructor_overspecified(self):
         with self.assertRaises(ValueError):
@@ -157,38 +161,25 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         with self.assertRaises(InvalidKeyError):
             LibraryLocator(version_guid=None)
 
-    def test_lib_key_constructor_version_guid(self):
-        # generate a random location
-        test_id_1 = ObjectId()
-        test_id_1_loc = str(test_id_1)
-        testobj_1 = LibraryLocator(version_guid=test_id_1)
-        self.assertEqual(testobj_1.version_guid, test_id_1)
-        self.assertEqual(testobj_1.org, None)
-        self.assertEqual(testobj_1.library, None)
-        self.assertEqual(str(testobj_1.version_guid), test_id_1_loc)
-        # Allow access to _to_string
-        # pylint: disable=protected-access
-        testobj_1_string = u'@'.join((testobj_1.VERSION_PREFIX, test_id_1_loc))
-        self.assertEqual(testobj_1._to_string(), testobj_1_string)
-        self.assertEqual(str(testobj_1), u'library-v1:' + testobj_1_string)
-        self.assertEqual(testobj_1.html_id(), u'library-v1:' + testobj_1_string)
-        self.assertEqual(testobj_1.version_guid, test_id_1)
+    @ddt.data(
+        ObjectId(),  # generate a random version ID
+        '519665f6223ebd6980884f2b'
+    )
+    def test_lib_key_constructor_version_guid(self, version_id):
+        version_id_str = str(version_id)
+        version_id_obj = ObjectId(version_id)
 
-        # Test using a given string
-        test_id_2_loc = '519665f6223ebd6980884f2b'
-        test_id_2 = ObjectId(test_id_2_loc)
-        testobj_2 = LibraryLocator(version_guid=test_id_2)
-        self.assertEqual(testobj_2.version_guid, test_id_2)
-        self.assertEqual(testobj_2.org, None)
-        self.assertEqual(testobj_2.library, None)
-        self.assertEqual(str(testobj_2.version_guid), test_id_2_loc)
+        lib_key = LibraryLocator(version_guid=version_id)
+        self.assertEqual(lib_key.version_guid, version_id_obj)
+        self.assertEqual(lib_key.org, None)
+        self.assertEqual(lib_key.library, None)
+        self.assertEqual(str(lib_key.version_guid), version_id_str)
         # Allow access to _to_string
         # pylint: disable=protected-access
-        testobj_2_string = u'@'.join((testobj_2.VERSION_PREFIX, test_id_2_loc))
-        self.assertEqual(testobj_2._to_string(), testobj_2_string)
-        self.assertEqual(str(testobj_2), u'library-v1:' + testobj_2_string)
-        self.assertEqual(testobj_2.html_id(), u'library-v1:' + testobj_2_string)
-        self.assertEqual(testobj_2.version_guid, test_id_2)
+        expected_str = u'@'.join((lib_key.VERSION_PREFIX, version_id_str))
+        self.assertEqual(lib_key._to_string(), expected_str)
+        self.assertEqual(str(lib_key), u'library-v1:' + expected_str)
+        self.assertEqual(lib_key.html_id(), u'library-v1:' + expected_str)
 
     def test_library_constructor_version_url(self):
         # Test parsing a url when it starts with a version ID and there is also a block ID.
