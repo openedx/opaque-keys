@@ -95,6 +95,8 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
             lib_key._to_deprecated_string()  # pylint: disable=protected-access
         with self.assertRaises(NotImplementedError):
             LibraryLocator._from_deprecated_string('test/test/test')  # pylint: disable=protected-access
+        with self.assertRaises(InvalidKeyError):
+            LibraryLocator(org='org', library='code', deprecated=True)
 
     def test_lib_key_no_offering(self):
         with self.assertRaises(ValueError):

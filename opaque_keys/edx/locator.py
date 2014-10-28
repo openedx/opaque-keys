@@ -99,10 +99,10 @@ class BlockLocatorBase(Locator):
     # pep8 happy and ignore pylint as that's easier to do.
     # pylint: disable=bad-continuation
     URL_RE_SOURCE = r"""
-        ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)(\+(?P<run>{ALLOWED_ID_CHARS}+))?(\+(?=.))?)??
-        ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+)(\+(?=.))?)?
-        ({VERSION_PREFIX}@(?P<version_guid>[A-F0-9]+)(\+(?=.))?)?
-        ({BLOCK_TYPE_PREFIX}@(?P<block_type>{ALLOWED_ID_CHARS}+)(\+(?=.))?)?
+        ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)(\+(?P<run>{ALLOWED_ID_CHARS}+))?{SEP})??
+        ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+){SEP})?
+        ({VERSION_PREFIX}@(?P<version_guid>[A-F0-9]+){SEP})?
+        ({BLOCK_TYPE_PREFIX}@(?P<block_type>{ALLOWED_ID_CHARS}+){SEP})?
         ({BLOCK_PREFIX}@(?P<block_id>{ALLOWED_ID_CHARS}+))?
         """.format(
         ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
@@ -110,6 +110,7 @@ class BlockLocatorBase(Locator):
         VERSION_PREFIX=Locator.VERSION_PREFIX,
         BLOCK_TYPE_PREFIX=Locator.BLOCK_TYPE_PREFIX,
         BLOCK_PREFIX=BLOCK_PREFIX,
+        SEP=r'(\+(?=.)|$)',  # Separator: requires a non-trailing '+' or end of string
     )
 
     URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.IGNORECASE | re.VERBOSE | re.UNICODE)
@@ -409,11 +410,8 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
     at their root.
 
     Libraries are treated analogously to courses for now. Once opaque keys are
-    better supported, they will no longer have 'run' or 'branch' properties,
-    and may no longer conform to CourseKey but rather some more general key
-    type.
-
-    'course' is a deprecated alias for 'library'
+    better supported, they will no longer have the 'run' property, and may no
+    longer conform to CourseKey but rather some more general key type.
 
     Examples of valid LibraryLocator specifications:
      LibraryLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))
@@ -421,6 +419,9 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
      LibraryLocator.from_string('library-v1:UniX+PhysicsProbs')
 
     version_guid is optional.
+
+    The constructor accepts 'course' as a deprecated alias for the 'library'
+    attribute.
 
     branch is optional. BUT whether 'branch' is None or 'library', this locator
     will set its branch as 'library'. This is to improve compatbility with code
@@ -445,7 +446,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
 
         Args:
             version_guid (string or ObjectId): optional unique id for the version
-            org, lbirary: the standard definition. Optional only if version_guid given.
+            org, library: the standard definition. Optional only if version_guid given.
             branch (string): the optional branch such as 'draft', 'published', 'staged', 'beta'
         """
         if 'offering' in kwargs:
@@ -463,7 +464,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
 
         run = kwargs.pop('run', self.RUN)
         if run != self.RUN:
-            raise ValueError("Invalid run. Should be 'library' or None.")
+            raise ValueError("Invalid run. Should be '{}' or None.".format(self.RUN))
 
         if branch is None:
             branch = self.DEFAULT_BRANCH
@@ -474,7 +475,8 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         if not all(field is None or self.ALLOWED_ID_RE.match(field) for field in [org, library, branch]):
             raise InvalidKeyError(self.__class__, [org, library, branch])
 
-        kwargs['deprecated'] = False  # There is no such thing as a deprecated LibraryLocator
+        if kwargs.get('deprecated', False):
+            raise InvalidKeyError(self.__class__, 'LibraryLocator cannot have deprecated=True')
 
         super(LibraryLocator, self).__init__(
             org=org,
