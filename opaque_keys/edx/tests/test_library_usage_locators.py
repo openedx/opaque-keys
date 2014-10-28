@@ -46,7 +46,7 @@ class TestLibraryUsageLocators(LocatorBaseTest):
         self.assertEquals(lib_usage_key, lib_usage_key2)
         self.assertEquals(lib_usage_key.library_key, lib_key)
         self.assertEquals(lib_usage_key.library_key, lib_key)
-        self.assertEquals(lib_usage_key.branch, LibraryLocator.DEFAULT_BRANCH)
+        self.assertEquals(lib_usage_key.branch, None)
         self.assertEquals(lib_usage_key.run, LibraryLocator.RUN)
         self.assertIsInstance(lib_usage_key2, LibraryUsageLocator)
         self.assertIsInstance(lib_usage_key2.library_key, LibraryLocator)

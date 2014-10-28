@@ -423,12 +423,9 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
     The constructor accepts 'course' as a deprecated alias for the 'library'
     attribute.
 
-    branch is optional. BUT whether 'branch' is None or 'library', this locator
-    will set its branch as 'library'. This is to improve compatbility with code
-    that assumes branch=None maps to split mongo's 'default-branch'.
+    branch is optional.
     """
     CANONICAL_NAMESPACE = 'library-v1'
-    DEFAULT_BRANCH = 'library'  # For backwards compatibility, we store all content in a 'library' branch.
     RUN = 'library'  # For backwards compatibility, LibraryLocators have a read-only 'run' property equal to this
     KEY_FIELDS = ('org', 'library', 'branch', 'version_guid')
     __slots__ = KEY_FIELDS
@@ -465,9 +462,6 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         run = kwargs.pop('run', self.RUN)
         if run != self.RUN:
             raise ValueError("Invalid run. Should be '{}' or None.".format(self.RUN))
-
-        if branch is None:
-            branch = self.DEFAULT_BRANCH
 
         if version_guid:
             version_guid = self.as_object_id(version_guid)
@@ -577,9 +571,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         """
         Return a new CourseLocator for another branch of the same library (also version agnostic)
         """
-        if branch is None:
-            branch = self.DEFAULT_BRANCH
-        if self.org is None:
+        if self.org is None and branch is not None:
             raise InvalidKeyError(self.__class__, "Branches must have full library ids not just versions")
         return self.replace(branch=branch, version_guid=None)
 
@@ -609,7 +601,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         parts = []
         if self.library:
             parts.append(unicode(self.package_id))
-            if self.branch and self.branch != self.DEFAULT_BRANCH:
+            if self.branch:
                 parts.append(u"{prefix}@{branch}".format(prefix=self.BRANCH_PREFIX, branch=self.branch))
         if self.version_guid:
             parts.append(u"{prefix}@{guid}".format(prefix=self.VERSION_PREFIX, guid=self.version_guid))
@@ -1145,13 +1137,13 @@ class LibraryUsageLocator(BlockUsageLocator):
 
     def for_branch(self, branch):
         """
-        Return a UsageLocator for the same block in a different branch of the course.
+        Return a UsageLocator for the same block in a different branch of the library.
         """
         return self.replace(library_key=self.library_key.for_branch(branch))
 
     def for_version(self, version_guid):
         """
-        Return a UsageLocator for the same block in a different branch of the course.
+        Return a UsageLocator for the same block in a different version of the library.
         """
         return self.replace(library_key=self.library_key.for_version(version_guid))
 

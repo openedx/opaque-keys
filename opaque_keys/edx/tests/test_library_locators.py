@@ -41,7 +41,7 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
             self.assertEqual(lib_key.course, code)
         with self.assertDeprecationWarning():
             self.assertEqual(lib_key.run, 'library')
-        self.assertEqual(lib_key.branch, 'library')
+        self.assertEqual(lib_key.branch, None)
 
     def test_constructor_using_course(self):
         org = 'TestX'
@@ -122,8 +122,7 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         self.assertEqual(branch2_key.branch, branch2)
 
         normal_branch = lib_key.for_branch(None)
-        self.assertNotEqual(normal_branch.branch, None)
-        self.assertEqual(normal_branch.branch, LibraryLocator.DEFAULT_BRANCH)
+        self.assertEqual(normal_branch.branch, None)
 
     def test_version_only_lib_key(self):
         version_only_lib_key = LibraryLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))
