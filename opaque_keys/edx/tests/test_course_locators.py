@@ -139,7 +139,13 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         with self.assertRaises(InvalidKeyError):
             CourseKey.from_string('course-v1:test+{}+2014_T2'.format(bad_id))
 
-    @ddt.data('course-v1:', 'course-v1:/mit.eecs', 'http:mit.eecs')
+    @ddt.data(
+        'course-v1:',
+        'course-v1:/mit.eecs',
+        'http:mit.eecs',
+        'course-v1:mit+course+run{}@branch'.format(CourseLocator.BRANCH_PREFIX),
+        'course-v1:mit+course+run+',
+    )
     def test_course_constructor_bad_url(self, bad_url):
         with self.assertRaises(InvalidKeyError):
             CourseKey.from_string(bad_url)
