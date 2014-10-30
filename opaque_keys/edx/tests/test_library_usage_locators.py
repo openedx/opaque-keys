@@ -20,9 +20,9 @@ class TestLibraryUsageLocators(LocatorBaseTest):
     Tests of :class:`.LibraryUsageLocator`
     """
     @ddt.data(
-        "lib-block-v1:org+lib+{}@category+{}@name".format(BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
-        "lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name".format(VERSION_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
-        "lib-block-v1:org+lib+{}@revision+{}@category+{}@name".format(LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
+        u"lib-block-v1:org+lib+{}@category+{}@name".format(BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
+        u"lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name".format(VERSION_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
+        u"lib-block-v1:org+lib+{}@revision+{}@category+{}@name".format(LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
     )
     def test_string_roundtrip(self, url):
         self.assertEquals(
