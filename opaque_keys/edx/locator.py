@@ -1265,7 +1265,8 @@ class VersionTree(object):
                              for child in tree_dict.get(locator.version, [])]
 
 
-class AssetLocator(BlockUsageLocator, AssetKey):
+# Have AssetKey be the first base class so we use its KEY_TYPE definition
+class AssetLocator(AssetKey, BlockUsageLocator):
     """
     An AssetKey implementation class.
     """
