@@ -84,9 +84,6 @@ class BlockLocatorBase(Locator):
 
     See subclasses for more detail, particularly `CourseLocator` and `BlockUsageLocator`.
     """
-    # Token separating org from offering
-    ORG_SEPARATOR = '+'
-
     # Prefix for the branch portion of a locator URL
     BRANCH_PREFIX = r"branch"
     # Prefix for the block portion of a locator URL
@@ -132,22 +129,8 @@ class BlockLocatorBase(Locator):
             raise InvalidKeyError(cls, string)
         return match.groupdict()
 
-    @property
-    def package_id(self):
-        """
-        Returns the package identifier for this `BlockLocator`.
 
-        Returns 'self.org+self.course+self.run' if both are present; else returns None.
-        """
-        if self.org and self.course and self.run:
-            # will there ever be a case where we want ORG_SEPARATOR and COURSE_SEPARATOR to be different?
-            # if no, we should combine them
-            return self.ORG_SEPARATOR.join([self.org, self.course, self.run])
-        else:
-            return None
 # pylint: enable=abstract-method
-
-
 class CourseLocator(BlockLocatorBase, CourseKey):
     """
     Examples of valid CourseLocator specifications:
@@ -359,7 +342,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         """
         parts = []
         if self.course and self.run:
-            parts.append(unicode(self.package_id))
+            parts.extend([self.org, self.course, self.run])
             if self.branch:
                 parts.append(u"{prefix}@{branch}".format(prefix=self.BRANCH_PREFIX, branch=self.branch))
         if self.version_guid:
@@ -582,25 +565,13 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         """
         return self.replace(version_guid=version_guid)
 
-    @property
-    def package_id(self):
-        """
-        Returns the package identifier for this `LibraryLocator`.
-
-        Returns 'self.org+self.library' if both are present; else returns None.
-        """
-        if self.org and self.library:
-            return self.ORG_SEPARATOR.join([self.org, self.library])
-        else:
-            return None
-
     def _to_string(self):
         """
         Return a string representing this location.
         """
         parts = []
         if self.library:
-            parts.append(unicode(self.package_id))
+            parts.extend([self.org, self.course])
             if self.branch:
                 parts.append(u"{prefix}@{branch}".format(prefix=self.BRANCH_PREFIX, branch=self.branch))
         if self.version_guid:
@@ -860,11 +831,6 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         elif not self.run and self.course:
             return self.course
         return "/".join([self.course, self.run])
-
-    @property
-    def package_id(self):
-        """Returns the package_id for this object's course_key."""
-        return self.course_key.package_id
 
     @property
     def branch(self):

@@ -128,7 +128,6 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         version_only_lib_key = LibraryLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))
         self.assertEqual(version_only_lib_key.org, None)
         self.assertEqual(version_only_lib_key.library, None)
-        self.assertEqual(version_only_lib_key.package_id, None)
         with self.assertRaises(InvalidKeyError):
             version_only_lib_key.for_branch("test")
 
