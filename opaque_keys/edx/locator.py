@@ -1169,7 +1169,7 @@ class DefinitionLocator(Locator, DefinitionKey):
             try:
                 definition_id = self.as_object_id(definition_id)
             except ValueError:
-                raise InvalidKeyError(self, definition_id)
+                raise InvalidKeyError(DefinitionLocator, definition_id)
             super(DefinitionLocator, self).__init__(definition_id=definition_id, block_type=block_type)
         elif isinstance(definition_id, ObjectId):
             super(DefinitionLocator, self).__init__(definition_id=definition_id, block_type=block_type)

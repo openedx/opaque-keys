@@ -34,6 +34,12 @@ setup(
         'definition_key': [
             'def-v1 = opaque_keys.edx.locator:DefinitionLocator',
         ],
+        'aside_usage_key': [
+            'aside-usage-v1 = opaque_keys.edx.asides:AsideUsageKeyV1',
+        ],
+        'aside_definition_key': [
+            'aside-def-v1 = opaque_keys.edx.asides:AsideDefinitionKeyV1',
+        ]
     }
 
 )

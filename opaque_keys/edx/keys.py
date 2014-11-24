@@ -1,4 +1,5 @@
 """
+;
 OpaqueKey abstract classes for edx-platform object types (courses, definitions, usages, and assets).
 """
 import json
@@ -141,17 +142,61 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
         """
         raise NotImplementedError()
 
-    @property
+    @abstractproperty
     def block_type(self):
         """
         The XBlock type of this usage.
         """
         raise NotImplementedError()
 
-    @property
+    @abstractproperty
     def block_id(self):
         """
         The name of this usage.
+        """
+        raise NotImplementedError()
+
+
+class AsideDefinitionKey(OpaqueKey):
+    """
+    A definition key for an aside.
+    """
+    KEY_TYPE = 'aside_definition_key'
+    __slots__ = ()
+
+    @abstractproperty
+    def definition_key(self):
+        """
+        Return the DefinitionKey that this aside is decorating.
+        """
+        raise NotImplementedError()
+
+    @abstractproperty
+    def aside_type(self):
+        """
+        Return the type of this aside.
+        """
+        raise NotImplementedError()
+
+
+class AsideUsageKey(OpaqueKey):
+    """
+    A usage key for an aside.
+    """
+    KEY_TYPE = 'aside_usage_key'
+    __slots__ = ()
+
+    @abstractproperty
+    def usage_key(self):
+        """
+        Return the UsageKey that this aside is decorating.
+        """
+        raise NotImplementedError()
+
+    @abstractproperty
+    def aside_type(self):
+        """
+        Return the type of this aside.
         """
         raise NotImplementedError()
 

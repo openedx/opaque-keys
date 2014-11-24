@@ -94,6 +94,8 @@ class OpaqueKey(object):
     __metaclass__ = OpaqueKeyMetaclass
     __slots__ = ('_initialized', 'deprecated')
 
+    KEY_FIELDS = []
+    CANONICAL_NAMESPACE = None
     NAMESPACE_SEPARATOR = u':'
     CHECKED_INIT = True
 
