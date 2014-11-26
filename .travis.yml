@@ -9,7 +9,7 @@ install:
 script:
   - scripts/coverage
   - scripts/quality
-  - scripts/max_pep8_violations 20
+  - scripts/max_pep8_violations 1
   - scripts/max_pylint_violations 45
 after_success:
   - coveralls
