@@ -27,19 +27,15 @@ setup(
             'block-v1 = opaque_keys.edx.locator:BlockUsageLocator',
             'lib-block-v1 = opaque_keys.edx.locator:LibraryUsageLocator',
             'location = opaque_keys.edx.locations:DeprecatedLocation',
+            'aside-usage-v1 = opaque_keys.edx.asides:AsideUsageKeyV1',
         ],
         'asset_key': [
             'asset-v1 = opaque_keys.edx.locator:AssetLocator',
         ],
         'definition_key': [
             'def-v1 = opaque_keys.edx.locator:DefinitionLocator',
-        ],
-        'aside_usage_key': [
-            'aside-usage-v1 = opaque_keys.edx.asides:AsideUsageKeyV1',
-        ],
-        'aside_definition_key': [
             'aside-def-v1 = opaque_keys.edx.asides:AsideDefinitionKeyV1',
-        ]
+        ],
     }
 
 )
