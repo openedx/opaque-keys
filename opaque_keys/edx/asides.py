@@ -44,6 +44,10 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):
     def __init__(self, definition_key, aside_type):
         super(AsideDefinitionKeyV1, self).__init__(definition_key=definition_key, aside_type=aside_type)
 
+    @property
+    def block_type(self):
+        return self.definition_key.block_type
+
     @classmethod
     def _from_string(cls, serialized):
         """
@@ -80,6 +84,18 @@ class AsideUsageKeyV1(AsideUsageKey):
 
     def __init__(self, usage_key, aside_type):
         super(AsideUsageKeyV1, self).__init__(usage_key=usage_key, aside_type=aside_type)
+
+    @property
+    def block_id(self):
+        return self.usage_key.block_id
+
+    @property
+    def block_type(self):
+        return self.usage_key.block_type
+
+    @property
+    def definition_key(self):
+        return self.usage_key.definition_key
 
     @classmethod
     def _from_string(cls, serialized):

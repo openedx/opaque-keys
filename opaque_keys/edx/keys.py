@@ -157,11 +157,10 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
         raise NotImplementedError()
 
 
-class AsideDefinitionKey(OpaqueKey):
+class AsideDefinitionKey(DefinitionKey):
     """
     A definition key for an aside.
     """
-    KEY_TYPE = 'aside_definition_key'
     __slots__ = ()
 
     @abstractproperty
@@ -179,11 +178,10 @@ class AsideDefinitionKey(OpaqueKey):
         raise NotImplementedError()
 
 
-class AsideUsageKey(OpaqueKey):
+class AsideUsageKey(UsageKey):
     """
     A usage key for an aside.
     """
-    KEY_TYPE = 'aside_usage_key'
     __slots__ = ()
 
     @abstractproperty
