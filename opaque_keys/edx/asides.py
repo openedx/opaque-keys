@@ -32,7 +32,7 @@ def _decode(value):
     return value.replace('$::', '::').replace('$$', '$')
 
 
-class AsideDefinitionKeyV1(AsideDefinitionKey):
+class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-method
     """
     A definition key for an aside.
     """
@@ -73,7 +73,7 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):
         return u'{}::{}'.format(_encode(unicode(self.definition_key)), _encode(unicode(self.aside_type)))
 
 
-class AsideUsageKeyV1(AsideUsageKey):
+class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
     """
     A usage key for an aside.
     """

@@ -209,3 +209,28 @@ class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
         if isinstance(key, OpaqueKey):
             return unicode(key)
         super(i4xEncoder, self).default(key)
+
+
+class BlockTypeKey(OpaqueKey):
+    """
+    A key class that encodes XBlock-family block types, including which family the block
+    was loaded from.
+    """
+    KEY_TYPE = 'block_type'
+    __slots__ = ()
+
+    @abstractproperty
+    def block_family(self):
+        """
+        Return the block-family identifier (the entry-point used to load that block
+        family).
+        """
+        raise NotImplementedError()
+
+    @abstractproperty
+    def block_type(self):
+        """
+        Return the block_type of this block (the key in the entry-point to load the block
+        with).
+        """
+        raise NotImplementedError()

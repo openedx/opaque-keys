@@ -36,6 +36,9 @@ setup(
             'def-v1 = opaque_keys.edx.locator:DefinitionLocator',
             'aside-def-v1 = opaque_keys.edx.asides:AsideDefinitionKeyV1',
         ],
+        'block_type': [
+            'block-type-v1 = opaque_keys.edx.block_types:BlockTypeKeyV1',
+        ]
     }
 
 )
