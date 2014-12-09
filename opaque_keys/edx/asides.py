@@ -97,6 +97,27 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
     def definition_key(self):
         return self.usage_key.definition_key
 
+    @property
+    def course_key(self):
+        """
+        Return the :class:`CourseKey` for the course containing this usage.
+        """
+        return self.usage_key.course_key
+
+    def map_into_course(self, course_key):
+        """
+        Return a new :class:`UsageKey` or :class:`AssetKey` representing this usage inside the
+        course identified by the supplied :class:`CourseKey`. It returns the same type as
+        `self`
+
+        Args:
+            course_key (:class:`CourseKey`): The course to map this object into.
+
+        Returns:
+            A new :class:`CourseObjectMixin` instance.
+        """
+        return self.replace(usage_key=self.usage_key.map_into_course(course_key))
+
     @classmethod
     def _from_string(cls, serialized):
         """
