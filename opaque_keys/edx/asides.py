@@ -41,12 +41,31 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
-    def __init__(self, definition_key, aside_type):
-        super(AsideDefinitionKeyV1, self).__init__(definition_key=definition_key, aside_type=aside_type)
+    DEFINITION_KEY_FIELDS = ('block_type', )
+
+    def __init__(self, definition_key, aside_type, deprecated=False):
+        super(AsideDefinitionKeyV1, self).__init__(definition_key=definition_key, aside_type=aside_type, deprecated=deprecated)
 
     @property
     def block_type(self):
         return self.definition_key.block_type
+
+    def replace(self, **kwargs):
+        """
+        Return: a new :class:`AsideDefinitionKeyV1` with ``KEY_FIELDS`` specified in ``kwargs`` replaced
+            with their corresponding values. Deprecation value is also preserved.
+        """
+        if 'definition_key' in kwargs:
+            for attr in self.DEFINITION_KEY_FIELDS:
+                kwargs.pop(attr, None)
+        else:
+            kwargs['definition_key'] = self.definition_key.replace(**{
+                key: kwargs.pop(key)
+                for key
+                in self.DEFINITION_KEY_FIELDS
+                if key in kwargs
+            })
+        return super(AsideDefinitionKeyV1, self).replace(**kwargs)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -82,8 +101,10 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
-    def __init__(self, usage_key, aside_type):
-        super(AsideUsageKeyV1, self).__init__(usage_key=usage_key, aside_type=aside_type)
+    USAGE_KEY_ATTRS = ('block_id', 'block_type', 'definition_key', 'course_key')
+
+    def __init__(self, usage_key, aside_type, deprecated=False):
+        super(AsideUsageKeyV1, self).__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
 
     @property
     def block_id(self):
@@ -117,6 +138,23 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
             A new :class:`CourseObjectMixin` instance.
         """
         return self.replace(usage_key=self.usage_key.map_into_course(course_key))
+
+    def replace(self, **kwargs):
+        """
+        Return: a new :class:`AsideUsageKeyV1` with ``KEY_FIELDS`` specified in ``kwargs`` replaced
+            with their corresponding values. Deprecation value is also preserved.
+        """
+        if 'usage_key' in kwargs:
+            for attr in self.USAGE_KEY_ATTRS:
+                kwargs.pop(attr, None)
+        else:
+            kwargs['usage_key'] = self.usage_key.replace(**{
+                key: kwargs.pop(key)
+                for key
+                in self.USAGE_KEY_ATTRS
+                if key in kwargs
+            })
+        return super(AsideUsageKeyV1, self).replace(**kwargs)
 
     @classmethod
     def _from_string(cls, serialized):
