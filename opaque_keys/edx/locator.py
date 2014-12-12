@@ -1162,17 +1162,13 @@ class DefinitionLocator(Locator, DefinitionKey):
     block_type = None
     definition_id = None
 
-    def __init__(self, block_type, definition_id):
-        if isinstance(definition_id, LocalId):
-            super(DefinitionLocator, self).__init__(definition_id=definition_id, block_type=block_type)
-        elif isinstance(definition_id, basestring):
+    def __init__(self, block_type, definition_id, deprecated=False):
+        if isinstance(definition_id, basestring):
             try:
                 definition_id = self.as_object_id(definition_id)
             except ValueError:
                 raise InvalidKeyError(DefinitionLocator, definition_id)
-            super(DefinitionLocator, self).__init__(definition_id=definition_id, block_type=block_type)
-        elif isinstance(definition_id, ObjectId):
-            super(DefinitionLocator, self).__init__(definition_id=definition_id, block_type=block_type)
+        super(DefinitionLocator, self).__init__(definition_id=definition_id, block_type=block_type, deprecated=False)
 
     def _to_string(self):
         '''

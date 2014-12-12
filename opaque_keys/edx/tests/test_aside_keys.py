@@ -77,3 +77,29 @@ class TestAsideKeys(TestCase):
         deserialized = AsideDefinitionKey.from_string(aside_key)
         serialized = unicode(deserialized)
         self.assertEquals(aside_key, serialized)
+
+    @ddt.data(
+        ('aside_type', 'bside'),
+        ('usage_key', BlockUsageLocator(CourseLocator('borg', 'horse', 'gun'), 'lock_type', 'lock_id')),
+        ('block_id', 'lock_id'),
+        ('block_type', 'lock_type'),
+        # BlockUsageLocator can't `replace` a definition_key, so skip for now
+        # ('definition_key', DefinitionLocator('block_type', 'abcd1234abcd1234abcd1234')),
+        ('course_key', CourseLocator('borg', 'horse', 'gun')),
+    )
+    @ddt.unpack
+    def test_usage_key_replace(self, attr, value):
+        key = AsideUsageKeyV1(BlockUsageLocator(CourseLocator('org', 'course', 'run'), 'block_type', 'block_id'), 'aside')
+        new_key = key.replace(**{attr: value})
+        self.assertEquals(getattr(new_key, attr), value)
+
+    @ddt.data(
+        ('aside_type', 'bside'),
+        ('definition_key', DefinitionLocator('block_type', 'abcd1234abcd1234abcd1234')),
+        ('block_type', 'lock_type'),
+    )
+    @ddt.unpack
+    def test_definition_key_replace(self, attr, value):
+        key = AsideDefinitionKeyV1(DefinitionLocator('block_type', 'abcd1234abcd1234abcd1234'), 'aside')
+        new_key = key.replace(**{attr: value})
+        self.assertEquals(getattr(new_key, attr), value)
