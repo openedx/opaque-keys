@@ -193,8 +193,10 @@ class CourseLocator(BlockLocatorBase, CourseKey):
             if version_guid:
                 version_guid = self.as_object_id(version_guid)
 
-            if not all(field is None or self.ALLOWED_ID_RE.match(field) for field in [org, course, run, branch]):
-                raise InvalidKeyError(self.__class__, [org, course, run, branch])
+            for name, value in [['org', org], ['course', course], ['run', run], ['branch', branch]]:
+                if not (value is None or self.ALLOWED_ID_RE.match(value)):
+                    raise InvalidKeyError(self.__class__,
+                                          "Special characters not allowed in field {}: '{}'".format(name, value))
 
         super(CourseLocator, self).__init__(
             org=org,
@@ -449,8 +451,10 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         if version_guid:
             version_guid = self.as_object_id(version_guid)
 
-        if not all(field is None or self.ALLOWED_ID_RE.match(field) for field in [org, library, branch]):
-            raise InvalidKeyError(self.__class__, [org, library, branch])
+        for name, value in [['org', org], ['library', library], ['branch', branch]]:
+            if not (value is None or self.ALLOWED_ID_RE.match(value)):
+                raise InvalidKeyError(self.__class__,
+                                      "Special characters not allowed in field {}: '{}'".format(name, value))
 
         if kwargs.get('deprecated', False):
             raise InvalidKeyError(self.__class__, 'LibraryLocator cannot have deprecated=True')
