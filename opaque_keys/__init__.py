@@ -374,7 +374,7 @@ class OpaqueKey(object):
 
     def __lt__(self, other):
         if type(self) != type(other):
-            raise TypeError()
+            raise TypeError('Cannot compare {} to {}.'.format(type(self), type(other)))
         return self._key < other._key  # pylint: disable=protected-access
 
     def __hash__(self):
