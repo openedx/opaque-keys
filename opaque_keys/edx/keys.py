@@ -127,6 +127,22 @@ class AssetKey(CourseObjectMixin, OpaqueKey):
         """
         raise NotImplementedError()
 
+    @abstractproperty
+    def to_url(self):  # pragma: no cover
+        """
+        Return string representation for use in urls.
+        """
+        raise NotImplementedError
+
+    @classmethod
+    def from_url(cls, url):  # pragma: no cover
+        """
+        Return AssetKey from url.
+        """
+        if 'block/' in url:
+            url = url.replace('block/', 'block@', 1)
+        return cls.from_string(url)
+
 
 class UsageKey(CourseObjectMixin, OpaqueKey):
     """

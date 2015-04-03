@@ -88,6 +88,8 @@ class BlockLocatorBase(Locator):
     BRANCH_PREFIX = r"branch"
     # Prefix for the block portion of a locator URL
     BLOCK_PREFIX = r"block"
+    # prefix for separator for between BLOCK_PREFIX and block_id
+    Separator = r"(?:@|/)"
 
     ALLOWED_ID_RE = re.compile(r'^' + Locator.ALLOWED_ID_CHARS + '+$', re.UNICODE)
     DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + '+$', re.UNICODE)
@@ -100,13 +102,14 @@ class BlockLocatorBase(Locator):
         ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+){SEP})?
         ({VERSION_PREFIX}@(?P<version_guid>[A-F0-9]+){SEP})?
         ({BLOCK_TYPE_PREFIX}@(?P<block_type>{ALLOWED_ID_CHARS}+){SEP})?
-        ({BLOCK_PREFIX}@(?P<block_id>{ALLOWED_ID_CHARS}+))?
+        ({BLOCK_PREFIX}{Separator}(?P<block_id>{ALLOWED_ID_CHARS}+))?
         """.format(
         ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
         BRANCH_PREFIX=BRANCH_PREFIX,
         VERSION_PREFIX=Locator.VERSION_PREFIX,
         BLOCK_TYPE_PREFIX=Locator.BLOCK_TYPE_PREFIX,
         BLOCK_PREFIX=BLOCK_PREFIX,
+        Separator=Separator,
         SEP=r'(\+(?=.)|$)',  # Separator: requires a non-trailing '+' or end of string
     )
 
@@ -924,16 +927,17 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         return self.replace(course_key=course_key)
 
-    def _to_string(self):
+    def _to_string(self, separator='@'):
         """
         Return a string representing this location.
         """
         # Allow access to _to_string protected method
-        return u"{course_key}+{BLOCK_TYPE_PREFIX}@{block_type}+{BLOCK_PREFIX}@{block_id}".format(
+        return u"{course_key}+{BLOCK_TYPE_PREFIX}@{block_type}+{BLOCK_PREFIX}{separator}{block_id}".format(
             course_key=self.course_key._to_string(),  # pylint: disable=protected-access
             BLOCK_TYPE_PREFIX=self.BLOCK_TYPE_PREFIX,
             block_type=self.block_type,
             BLOCK_PREFIX=self.BLOCK_PREFIX,
+            separator=separator,
             block_id=self.block_id
         )
 
@@ -1237,6 +1241,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):
     """
     CANONICAL_NAMESPACE = 'asset-v1'
     DEPRECATED_TAG = 'c4x'
+
     __slots__ = BlockUsageLocator.KEY_FIELDS
 
     ASSET_URL_RE = re.compile(r"""
@@ -1244,7 +1249,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):
         (?P<org>[^/]+)/
         (?P<course>[^/]+)/
         (?P<category>[^/]+)/
-        (?P<name>[^@]+)
+        (?P<name>[^@|/]+)
         (@(?P<revision>[^/]+))?
     """, re.VERBOSE | re.IGNORECASE)
 
@@ -1309,6 +1314,23 @@ class AssetLocator(BlockUsageLocator, AssetKey):
             deprecated=True
         )
         return cls(course_key, groups['category'], groups['name'], deprecated=True)
+
+    def to_url(self):
+        """
+        Return string representation for use in urls.
+
+        Usage:
+        Url can use for relative_path e.g
+        instead of block@block_id pattern its return block/block_id
+
+        Browsers construct url's to assets by appending block_id after last forward slash of
+        existing asset urls. For assets stored in split mongo the block_id is separated by "@"
+        in the string representation of AssetKey. For use in url's we use string representation
+        in which the block_id is separated by "/" instead of "@"
+        """
+        if self.deprecated:
+            self._to_deprecated_string()
+        return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string(separator='/')])
 
     def to_deprecated_list_repr(self):
         """
