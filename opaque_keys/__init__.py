@@ -373,8 +373,8 @@ class OpaqueKey(object):
         return not self == other
 
     def __lt__(self, other):
-        if type(self) != type(other):
-            raise TypeError('Cannot compare {} to {}.'.format(type(self), type(other)))
+        if (self.KEY_FIELDS, self.CANONICAL_NAMESPACE, self.deprecated) != (other.KEY_FIELDS, other.CANONICAL_NAMESPACE, other.deprecated):
+            raise TypeError("{!r} is incompatible with {!r}".format(self, other))
         return self._key < other._key  # pylint: disable=protected-access
 
     def __hash__(self):
