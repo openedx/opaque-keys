@@ -88,6 +88,7 @@ class BlockLocatorBase(Locator):
     BRANCH_PREFIX = r"branch"
     # Prefix for the block portion of a locator URL
     BLOCK_PREFIX = r"block"
+    BLOCK_ALLOWED_ID_CHARS = r'[\w\-~.:%]'
 
     ALLOWED_ID_RE = re.compile(r'^' + Locator.ALLOWED_ID_CHARS + '+$', re.UNICODE)
     DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + '+$', re.UNICODE)
@@ -100,9 +101,10 @@ class BlockLocatorBase(Locator):
         ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+){SEP})?
         ({VERSION_PREFIX}@(?P<version_guid>[A-F0-9]+){SEP})?
         ({BLOCK_TYPE_PREFIX}@(?P<block_type>{ALLOWED_ID_CHARS}+){SEP})?
-        ({BLOCK_PREFIX}@(?P<block_id>{ALLOWED_ID_CHARS}+))?
+        ({BLOCK_PREFIX}@(?P<block_id>{BLOCK_ALLOWED_ID_CHARS}+))?
         """.format(
         ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
+        BLOCK_ALLOWED_ID_CHARS=BLOCK_ALLOWED_ID_CHARS,
         BRANCH_PREFIX=BRANCH_PREFIX,
         VERSION_PREFIX=Locator.VERSION_PREFIX,
         BLOCK_TYPE_PREFIX=Locator.BLOCK_TYPE_PREFIX,

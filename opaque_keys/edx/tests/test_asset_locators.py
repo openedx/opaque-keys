@@ -15,6 +15,7 @@ class TestAssetLocators(TestCase):
     """
     Tests of :class:`AssetLocator`
     """
+
     @ddt.data(
         "/c4x/org/course/asset/path",
     )
@@ -48,7 +49,10 @@ class TestAssetLocators(TestCase):
     def test_deprecated_son(self, key_cls, prefix, tag, source):
         source_key = key_cls(*source, deprecated=True)
         son = source_key.to_deprecated_son(prefix=prefix, tag=tag)
-        self.assertEquals(son.keys(), [prefix + key for key in ('tag', 'org', 'course', 'category', 'name', 'revision')])
+        self.assertEquals(
+            son.keys(),
+            [prefix + key for key in ('tag', 'org', 'course', 'category', 'name', 'revision')]
+        )
 
         self.assertEquals(son[prefix + 'tag'], tag)
         self.assertEquals(son[prefix + 'category'], source_key.block_type)
@@ -93,3 +97,19 @@ class TestAssetLocators(TestCase):
             '/c4x/org/course/asset/',
             unicode(CourseKey.from_string('org/course/run').make_asset_key('asset', ''))
         )
+
+    @ddt.data(
+        [
+            "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction%20To%20New.srt.sjson",
+            "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction~To~New.srt.sjson",
+            "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction:To:New.srt.sjson",
+            "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction-To-New.srt.sjson",
+        ],
+    )
+    def test_asset_with_special_character(self, paths):
+        for path in paths:
+            asset_locator = AssetKey.from_string(path)
+            self.assertEquals(
+                path,
+                unicode(asset_locator),
+            )
