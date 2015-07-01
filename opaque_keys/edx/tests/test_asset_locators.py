@@ -6,7 +6,6 @@ import ddt
 from unittest import TestCase
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey
-
 from opaque_keys.edx.locator import AssetLocator, CourseLocator
 
 
@@ -90,13 +89,12 @@ class TestAssetLocators(TestCase):
         )
 
     def test_empty_path(self):
+        """ Test InvalidKeyError when asset path is empty """
         with self.assertRaises(InvalidKeyError):
-            CourseKey.from_string('course-v1:org+course+run').make_asset_key('asset', '')
+            CourseKey.from_string('course-locator:org+course+run').make_asset_key('asset', '')
 
-        self.assertEquals(
-            '/c4x/org/course/asset/',
-            unicode(CourseKey.from_string('org/course/run').make_asset_key('asset', ''))
-        )
+        with self.assertRaises(InvalidKeyError):
+            CourseKey.from_string('org/course/run').make_asset_key('asset', '')
 
     @ddt.data(
         [
