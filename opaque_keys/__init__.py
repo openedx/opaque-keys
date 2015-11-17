@@ -233,7 +233,7 @@ class OpaqueKey(object):
             # Cache that the namespace doesn't correspond to a known plugin,
             # so that we don't waste time checking every time we hit
             # a particular unknown namespace (like i4x)
-            raise InvalidKeyError(cls, '{}:*'.format(namespace))
+            raise InvalidKeyError(cls, u'{}:*'.format(namespace))
 
     LOADED_DRIVERS = defaultdict()  # If you change default, change test_default_deprecated
 
