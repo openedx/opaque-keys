@@ -137,6 +137,9 @@ class KeyTests(TestCase):
         with self.assertRaises(InvalidKeyError):
             DummyKey.from_string('dict:abcd')
 
+        with self.assertRaises(InvalidKeyError):
+            DummyKey.from_string(u'\xfb:abcd')
+
     def test_unknown_namespace(self):
         with self.assertRaises(InvalidKeyError):
             DummyKey.from_string('no_namespace:0x10')
