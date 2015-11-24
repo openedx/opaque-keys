@@ -198,7 +198,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
             for name, value in [['org', org], ['course', course], ['run', run], ['branch', branch]]:
                 if not (value is None or self.ALLOWED_ID_RE.match(value)):
                     raise InvalidKeyError(self.__class__,
-                                          "Special characters not allowed in field {}: '{}'".format(name, value))
+                                          u"Special characters not allowed in field {}: '{}'".format(name, value))
 
         super(CourseLocator, self).__init__(
             org=org,

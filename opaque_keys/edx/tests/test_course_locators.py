@@ -122,6 +122,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@this+' + CourseLocator.BRANCH_PREFIX,
         'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@this ',
         'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@th%is ',
+        u'\ufffd',
     )
     def test_course_constructor_bad_package_id(self, bad_id):
         """
@@ -137,7 +138,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
             CourseLocator(org='test', course='test', run=bad_id)
 
         with self.assertRaises(InvalidKeyError):
-            CourseKey.from_string('course-v1:test+{}+2014_T2'.format(bad_id))
+            CourseKey.from_string(u'course-v1:test+{}+2014_T2'.format(bad_id))
 
     @ddt.data(
         'course-v1:',
