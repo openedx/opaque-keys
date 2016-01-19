@@ -92,7 +92,7 @@ class OpaqueKey(object):
     Deserialization is performed by the :meth:`from_string` method.
     """
     __metaclass__ = OpaqueKeyMetaclass
-    __slots__ = ('_initialized', 'deprecated')
+    __slots__ = ('_initialized', 'deprecated', '_lazy_key')
 
     KEY_FIELDS = []
     CANONICAL_NAMESPACE = None
@@ -268,6 +268,7 @@ class OpaqueKey(object):
         # a flag used to indicate that this instance was deserialized from the
         # deprecated form and should serialize to the deprecated form
         self.deprecated = kwargs.pop('deprecated', False)
+        self._lazy_key = None
 
         if self.CHECKED_INIT:
             self._checked_init(*args, **kwargs)
@@ -324,7 +325,7 @@ class OpaqueKey(object):
         return type(self)(**existing_values)
 
     def __setattr__(self, name, value):
-        if getattr(self, '_initialized', False):
+        if getattr(self, '_initialized', False) and name != '_lazy_key':
             raise AttributeError("Can't set {!r}. OpaqueKeys are immutable.".format(name))
 
         super(OpaqueKey, self).__setattr__(name, value)
@@ -352,6 +353,7 @@ class OpaqueKey(object):
                 setattr(self, key, state_dict[key])
         self.deprecated = state_dict['deprecated']
         self._initialized = True
+        self._lazy_key = None
 
     def __getstate__(self):
         # used by pickle to get fields on an unpickled object
@@ -364,7 +366,12 @@ class OpaqueKey(object):
     @property
     def _key(self):
         """Returns a tuple of key fields"""
-        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE, self.deprecated)  # pylint: disable=no-member
+        if self._lazy_key is None:
+            self._lazy_key = (
+                tuple(getattr(self, field) for field in self.KEY_FIELDS) +
+                (self.CANONICAL_NAMESPACE, self.deprecated)  # pylint: disable=no-member
+            )
+        return self._lazy_key
 
     def __eq__(self, other):
         return isinstance(other, OpaqueKey) and self._key == other._key  # pylint: disable=protected-access
