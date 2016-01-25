@@ -2,8 +2,8 @@ Part of `edX code`_.
 
 .. _`edX code`: http://code.edx.org/
 
-opaque-keys  |build-status| |coverage-status|
-=============================================
+edx-opaque-keys  |build-status| |coverage-status|
+=================================================
 
 Opaque-keys provides the ability to create and introspect course and xblock identities through a
 clear and consistent API. See the code's docstrings for more information.

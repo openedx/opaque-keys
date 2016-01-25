@@ -1,8 +1,10 @@
 from setuptools import setup
 
 setup(
-    name="opaque_keys",
+    name="edx-opaque-keys",
     version="0.1.2",
+    author="edX",
+    url="https://github.com/edx/opaque-keys",
     packages=[
         "opaque_keys",
         "opaque_keys.edx",
