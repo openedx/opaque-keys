@@ -6,13 +6,11 @@ These keys are designed to provide a limited, forward-evolveable interface to
 an application, while concealing the particulars of the serialization
 formats, and allowing new serialization formats to be installed transparently.
 """
-from abc import ABCMeta, abstractmethod, abstractproperty
-from copy import deepcopy
-from collections import namedtuple
+from _collections import defaultdict
+from abc import ABCMeta, abstractmethod
 from functools import total_ordering
 
 from stevedore.enabled import EnabledExtensionManager
-from _collections import defaultdict
 
 
 class InvalidKeyError(Exception):
@@ -364,7 +362,8 @@ class OpaqueKey(object):
     @property
     def _key(self):
         """Returns a tuple of key fields"""
-        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE, self.deprecated)  # pylint: disable=no-member
+        # pylint: disable=no-member
+        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE, self.deprecated)
 
     def __eq__(self, other):
         return isinstance(other, OpaqueKey) and self._key == other._key  # pylint: disable=protected-access
@@ -373,7 +372,8 @@ class OpaqueKey(object):
         return not self == other
 
     def __lt__(self, other):
-        if (self.KEY_FIELDS, self.CANONICAL_NAMESPACE, self.deprecated) != (other.KEY_FIELDS, other.CANONICAL_NAMESPACE, other.deprecated):
+        if (self.KEY_FIELDS, self.CANONICAL_NAMESPACE, self.deprecated) != (other.KEY_FIELDS, other.CANONICAL_NAMESPACE,
+                                                                            other.deprecated):
             raise TypeError("{!r} is incompatible with {!r}".format(self, other))
         return self._key < other._key  # pylint: disable=protected-access
 

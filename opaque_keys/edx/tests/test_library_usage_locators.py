@@ -21,8 +21,10 @@ class TestLibraryUsageLocators(LocatorBaseTest):
     """
     @ddt.data(
         u"lib-block-v1:org+lib+{}@category+{}@name".format(BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
-        u"lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name".format(VERSION_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
-        u"lib-block-v1:org+lib+{}@revision+{}@category+{}@name".format(LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
+        u"lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name".format(VERSION_PREFIX,
+                                                                                       BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
+        u"lib-block-v1:org+lib+{}@revision+{}@category+{}@name".format(LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX,
+                                                                       BLOCK_PREFIX),
     )
     def test_string_roundtrip(self, url):
         self.assertEquals(
@@ -80,6 +82,7 @@ class TestLibraryUsageLocators(LocatorBaseTest):
         self.assertIsInstance(obj, LibraryUsageLocator)
 
     def test_replace(self):
+        # pylint: disable=no-member
         org1, lib1, block_type1, block_id1 = "org1", "lib1", "type1", "id1"
         lib_key1 = LibraryLocator(org=org1, library=lib1)
         usage1 = LibraryUsageLocator(library_key=lib_key1, block_type=block_type1, block_id=block_id1)

@@ -44,7 +44,8 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
     DEFINITION_KEY_FIELDS = ('block_type', )
 
     def __init__(self, definition_key, aside_type, deprecated=False):
-        super(AsideDefinitionKeyV1, self).__init__(definition_key=definition_key, aside_type=aside_type, deprecated=deprecated)
+        super(AsideDefinitionKeyV1, self).__init__(definition_key=definition_key, aside_type=aside_type,
+                                                   deprecated=deprecated)
 
     @property
     def block_type(self):

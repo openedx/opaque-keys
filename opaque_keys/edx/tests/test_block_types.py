@@ -2,12 +2,13 @@
 Tests of BlockTypeKey subclasses.
 """
 
-import ddt
 from unittest import TestCase
 
+import ddt
+
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.keys import BlockTypeKey
 from opaque_keys.edx.block_types import BlockTypeKeyV1
+from opaque_keys.edx.keys import BlockTypeKey
 
 
 @ddt.ddt
