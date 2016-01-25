@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="edx-opaque-keys",
-    version="0.1.2",
+    version="0.2.0",
     author="edX",
     url="https://github.com/edx/opaque-keys",
     packages=[
@@ -42,5 +42,4 @@ setup(
             'block-type-v1 = opaque_keys.edx.block_types:BlockTypeKeyV1',
         ]
     }
-
 )
