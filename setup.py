@@ -1,8 +1,10 @@
 from setuptools import setup
 
 setup(
-    name="opaque_keys",
-    version="0.1.2",
+    name="edx-opaque-keys",
+    version="0.2.0",
+    author="edX",
+    url="https://github.com/edx/opaque-keys",
     packages=[
         "opaque_keys",
         "opaque_keys.edx",
@@ -40,5 +42,4 @@ setup(
             'block-type-v1 = opaque_keys.edx.block_types:BlockTypeKeyV1',
         ]
     }
-
 )
