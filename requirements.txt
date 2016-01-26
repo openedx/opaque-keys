@@ -1,2 +1,2 @@
-stevedore==0.14.1
-pymongo
+-e .
+-r test-requirements.txt

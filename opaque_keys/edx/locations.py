@@ -2,11 +2,13 @@
 Deprecated OpaqueKey implementations used by XML and Mongo modulestores
 """
 from __future__ import absolute_import
+
+import re
 import warnings
 
-from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator, Locator
 from opaque_keys.edx.keys import i4xEncoder as real_i4xEncoder
-import re
+from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator, Locator
+
 
 # This file passes through to protected members of the non-deprecated classes,
 # and that's ok. It also may not implement all of the current UsageKey methods.
@@ -203,17 +205,15 @@ class Location(LocationBase, BlockUsageLocator):
 
 
 class DeprecatedLocation(BlockUsageLocator):
-    '''
+    """
     The short-lived location:org+course+run+block_type+block_id syntax
-    '''
+    """
     CANONICAL_NAMESPACE = 'location'
     URL_RE_SOURCE = r"""
         (?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)\+(?P<run>{ALLOWED_ID_CHARS}+)\+
         (?P<block_type>{ALLOWED_ID_CHARS}+)\+
         (?P<block_id>{ALLOWED_ID_CHARS}+)
-        """.format(
-        ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
-    )
+        """.format(ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS)
 
     URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.IGNORECASE | re.VERBOSE | re.UNICODE)
 

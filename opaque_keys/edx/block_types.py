@@ -50,7 +50,8 @@ class BlockTypeKeyV1(BlockTypeKey):  # pylint: disable=abstract-method
                 understood by `cls`.
         """
         if ':' not in serialized:
-            raise InvalidKeyError("BlockTypeKeyV1 keys must contain ':' separating the block family from the block_type.")
+            raise InvalidKeyError(
+                "BlockTypeKeyV1 keys must contain ':' separating the block family from the block_type.", serialized)
         family, __, block_type = serialized.partition(':')
         return cls(family, block_type)
 

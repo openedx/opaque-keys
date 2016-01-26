@@ -1,15 +1,14 @@
 """
 Thorough tests of BlockUsageLocator, as well as UsageKeys generally
 """
-import ddt
 from itertools import product
 
+import ddt
 from bson.objectid import ObjectId
 
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.keys import UsageKey, CourseKey
+from opaque_keys.edx.keys import UsageKey
 from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator, LocalId
-
 from opaque_keys.edx.tests import LocatorBaseTest
 
 # Pairs for testing the clean* functions.
@@ -31,13 +30,17 @@ class TestBlockUsageLocators(LocatorBaseTest):
     Tests of :class:`.BlockUsageLocator`
     """
     @ddt.data(
-        "block-v1:org+course+run+{}@category+{}@name".format(BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX),
-        "block-v1:org+course+run+{}@revision+{}@category+{}@name".format(CourseLocator.BRANCH_PREFIX, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX),
+        "block-v1:org+course+run+{}@category+{}@name".format(BlockUsageLocator.BLOCK_TYPE_PREFIX,
+                                                             BlockUsageLocator.BLOCK_PREFIX),
+        "block-v1:org+course+run+{}@revision+{}@category+{}@name".format(CourseLocator.BRANCH_PREFIX,
+                                                                         BlockUsageLocator.BLOCK_TYPE_PREFIX,
+                                                                         BlockUsageLocator.BLOCK_PREFIX),
         "i4x://org/course/category/name",
         "i4x://org/course/category/name@revision",
         # now try the extended char sets - we expect that "%" should be OK in deprecated-style ids,
         # but should not be valid in new-style ids
-        "block-v1:org.dept.sub-prof+course.num.section-4+run.hour.min-99+{}@category+{}@name:12.33-44".format(BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX),
+        "block-v1:org.dept.sub-prof+course.num.section-4+run.hour.min-99+{}@category+{}@name:12.33-44".format(
+            BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX),
         "i4x://org.dept%sub-prof/course.num%section-4/category/name:12%33-44",
     )
     def test_string_roundtrip(self, url):
@@ -191,7 +194,8 @@ class TestBlockUsageLocators(LocatorBaseTest):
     def test_to_deprecated_son(self, key_cls, prefix, tag, source):
         source_key = key_cls(*source, deprecated=True)
         son = source_key.to_deprecated_son(prefix=prefix, tag=tag)
-        self.assertEquals(son.keys(), [prefix + key for key in ('tag', 'org', 'course', 'category', 'name', 'revision')])
+        self.assertEquals(son.keys(),
+                          [prefix + key for key in ('tag', 'org', 'course', 'category', 'name', 'revision')])
 
         self.assertEquals(son[prefix + 'tag'], tag)
         self.assertEquals(son[prefix + 'org'], source_key.course_key.org)
@@ -337,7 +341,9 @@ class TestBlockUsageLocators(LocatorBaseTest):
             CourseLocator.BRANCH_PREFIX, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
         )
         testobj = UsageKey.from_string(testurn)
-        self.assertEqual("BlockUsageLocator(CourseLocator(u'mit.eecs', u'6002x', u'2014_T2', u'published', None), u'problem', u'HW3')", repr(testobj))
+        expected = "BlockUsageLocator(CourseLocator(u'mit.eecs', u'6002x', " \
+                   "u'2014_T2', u'published', None), u'problem', u'HW3')"
+        self.assertEqual(expected, repr(testobj))
 
     def test_local_id(self):
         local_id = LocalId()

@@ -78,14 +78,15 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
             CourseLocator(version_guid=None)
 
     def test_course_constructor_version_guid(self):
+        # pylint: disable=no-member,protected-access
+
         # generate a random location
         test_id_1 = ObjectId()
         test_id_1_loc = str(test_id_1)
         testobj_1 = CourseLocator(version_guid=test_id_1)
         self.check_course_locn_fields(testobj_1, version_guid=test_id_1)
         self.assertEqual(str(testobj_1.version_guid), test_id_1_loc)
-        # Allow access to _to_string
-        # pylint: disable=protected-access
+
         testobj_1_string = u'@'.join((testobj_1.VERSION_PREFIX, test_id_1_loc))
         self.assertEqual(testobj_1._to_string(), testobj_1_string)
         self.assertEqual(str(testobj_1), u'course-v1:' + testobj_1_string)
@@ -98,8 +99,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         testobj_2 = CourseLocator(version_guid=test_id_2)
         self.check_course_locn_fields(testobj_2, version_guid=test_id_2)
         self.assertEqual(str(testobj_2.version_guid), test_id_2_loc)
-        # Allow access to _to_string
-        # pylint: disable=protected-access
+
         testobj_2_string = u'@'.join((testobj_2.VERSION_PREFIX, test_id_2_loc))
         self.assertEqual(testobj_2._to_string(), testobj_2_string)
         self.assertEqual(str(testobj_2), u'course-v1:' + testobj_2_string)
@@ -218,9 +218,9 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
             run=run,
             branch=test_branch,
         )
+
+        # pylint: disable=no-member,protected-access
         self.assertEqual(testobj.branch, test_branch)
-        # Allow access to _to_string
-        # pylint: disable=protected-access
         self.assertEqual(testobj._to_string(), expected_urn)
 
     def test_course_constructor_deprecated_offering(self):

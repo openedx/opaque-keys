@@ -1,9 +1,10 @@
 """
 Tests of AssetLocators
 """
+from unittest import TestCase
+
 import ddt
 
-from unittest import TestCase
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey
 from opaque_keys.edx.locator import AssetLocator, CourseLocator

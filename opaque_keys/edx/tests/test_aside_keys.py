@@ -2,20 +2,21 @@
 Tests of AsideUsageKeyV1 and AsideDefinitionKeyV1.
 """
 
-import ddt
 import itertools
-
 from unittest import TestCase
 
-from opaque_keys.edx.keys import AsideUsageKey, AsideDefinitionKey
+import ddt
+
 from opaque_keys.edx.asides import AsideUsageKeyV1, AsideDefinitionKeyV1, _encode, _decode
-from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator, DefinitionLocator
+from opaque_keys.edx.keys import AsideUsageKey, AsideDefinitionKey
 from opaque_keys.edx.locations import Location
+from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator, DefinitionLocator
 
 
 @ddt.ddt
 class TestEncode(TestCase):
-    "Tests of encoding and decoding functions."
+    """Tests of encoding and decoding functions."""
+
     @ddt.data(*(''.join(substrs) for substrs in itertools.product(['$', '$$', '::', ':', 'x'], repeat=3)))
     def test_encode_roundtrip(self, data):
         """
@@ -31,7 +32,7 @@ class TestEncode(TestCase):
 
 @ddt.ddt
 class TestAsideKeys(TestCase):
-    "Test of Aside keys."
+    """Test of Aside keys."""
     @ddt.data(
         (Location.from_string('i4x://org/course/cat/name'), 'aside'),
         (BlockUsageLocator(CourseLocator('org', 'course', 'run'), 'block_type', 'block_id'), 'aside'),
@@ -89,7 +90,8 @@ class TestAsideKeys(TestCase):
     )
     @ddt.unpack
     def test_usage_key_replace(self, attr, value):
-        key = AsideUsageKeyV1(BlockUsageLocator(CourseLocator('org', 'course', 'run'), 'block_type', 'block_id'), 'aside')
+        key = AsideUsageKeyV1(BlockUsageLocator(CourseLocator('org', 'course', 'run'), 'block_type', 'block_id'),
+                              'aside')
         new_key = key.replace(**{attr: value})
         self.assertEquals(getattr(new_key, attr), value)
 

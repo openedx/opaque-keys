@@ -3,18 +3,18 @@ Identifier for course resources.
 """
 
 from __future__ import absolute_import
-import logging
+
 import inspect
+import logging
 import re
 import warnings
-from bson.son import SON
 from abc import abstractproperty
 
-from bson.objectid import ObjectId
 from bson.errors import InvalidId
+from bson.objectid import ObjectId
+from bson.son import SON
 
 from opaque_keys import OpaqueKey, InvalidKeyError
-
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey
 
 log = logging.getLogger(__name__)
@@ -132,8 +132,7 @@ class BlockLocatorBase(Locator):
         return match.groupdict()
 
 
-# pylint: enable=abstract-method
-class CourseLocator(BlockLocatorBase, CourseKey):
+class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-method
     """
     Examples of valid CourseLocator specifications:
      CourseLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))
@@ -149,6 +148,9 @@ class CourseLocator(BlockLocatorBase, CourseKey):
     the persistence layer may raise exceptions if the given version != the current such version
     of the course.
     """
+
+    # pylint: disable=no-member
+
     CANONICAL_NAMESPACE = 'course-v1'
     KEY_FIELDS = ('org', 'course', 'run', 'branch', 'version_guid')
     __slots__ = KEY_FIELDS
@@ -213,11 +215,12 @@ class CourseLocator(BlockLocatorBase, CourseKey):
         if self.deprecated and (self.org is None or self.course is None):
             raise InvalidKeyError(self.__class__, "Deprecated strings must set both org and course.")
 
-        if not self.deprecated and self.version_guid is None and (self.org is None or self.course is None or self.run is None):
+        if not self.deprecated and self.version_guid is None and \
+                (self.org is None or self.course is None or self.run is None):
             raise InvalidKeyError(self.__class__, "Either version_guid or org, course, and run should be set")
 
     @classmethod
-    def _check_location_part(cls, val, regexp):
+    def _check_location_part(cls, val, regexp):  # pylint: disable=missing-docstring
         if val is None:
             return
         if not isinstance(val, basestring):
@@ -656,7 +659,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         if block_id is None and not deprecated:
             raise InvalidKeyError(self.__class__, "Missing block id")
 
-        super(BlockUsageLocator, self).__init__(course_key=course_key, block_type=block_type, block_id=block_id, **kwargs)
+        super(BlockUsageLocator, self).__init__(course_key=course_key, block_type=block_type, block_id=block_id,
+                                                **kwargs)
 
     def replace(self, **kwargs):
         # BlockUsageLocator allows for the replacement of 'KEY_FIELDS' in 'self.course_key'.
@@ -794,7 +798,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         is_valid_deprecated = deprecated and cls.DEPRECATED_ALLOWED_ID_RE.match(block_ref)
         is_valid = cls.ALLOWED_ID_RE.match(block_ref)
 
-        if (is_valid or is_valid_deprecated):
+        if is_valid or is_valid_deprecated:
             return block_ref
         else:
             raise InvalidKeyError(cls, block_ref)
@@ -860,7 +864,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
             stacklevel=2
         )
 
-        """Returns the version guid for this object."""
+        # Returns the version guid for this object.
         return self.course_key.version_guid
 
     @property
@@ -960,6 +964,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Returns an old-style location, represented as:
         i4x://org/course/category/name[@revision]  # Revision is optional
         """
+        # pylint: disable=missing-format-attribute
         url = u"{0.DEPRECATED_TAG}://{0.course_key.org}/{0.course_key.course}/{0.block_type}/{0.block_id}".format(self)
         if self.course_key.branch:
             url += u"@{rev}".format(rev=self.course_key.branch)
@@ -1063,11 +1068,13 @@ class LibraryUsageLocator(BlockUsageLocator):
         block_id = self._parse_block_ref(block_id, False)
 
         if not all(self.ALLOWED_ID_RE.match(val) for val in (block_type, block_id)):
-            raise InvalidKeyError(self.__class__, "Invalid block_type or block_id ('{}', '{}')".format(block_type, block_id))
+            raise InvalidKeyError(self.__class__,
+                                  "Invalid block_type or block_id ('{}', '{}')".format(block_type, block_id))
 
         # We skip the BlockUsageLocator init and go to its superclass:
         # pylint: disable=bad-super-call
-        super(BlockUsageLocator, self).__init__(library_key=library_key, block_type=block_type, block_id=block_id, **kwargs)
+        super(BlockUsageLocator, self).__init__(library_key=library_key, block_type=block_type, block_id=block_id,
+                                                **kwargs)
 
     def replace(self, **kwargs):
         # BlockUsageLocator allows for the replacement of 'KEY_FIELDS' in 'self.library_key'
@@ -1168,7 +1175,7 @@ class DefinitionLocator(Locator, DefinitionKey):
     block_type = None
     definition_id = None
 
-    def __init__(self, block_type, definition_id, deprecated=False):
+    def __init__(self, block_type, definition_id, deprecated=False):    # pylint: disable=unused-argument
         if isinstance(definition_id, basestring):
             try:
                 definition_id = self.as_object_id(definition_id)
@@ -1177,10 +1184,10 @@ class DefinitionLocator(Locator, DefinitionKey):
         super(DefinitionLocator, self).__init__(definition_id=definition_id, block_type=block_type, deprecated=False)
 
     def _to_string(self):
-        '''
+        """
         Return a string representing this location.
         unicode(self) returns something like this: "519665f6223ebd6980884f2b+type+problem"
-        '''
+        """
         return u"{}+{}@{}".format(unicode(self.definition_id), self.BLOCK_TYPE_PREFIX, self.block_type)
 
     URL_RE = re.compile(
@@ -1233,7 +1240,7 @@ class VersionTree(object):
                              for child in tree_dict.get(locator.version, [])]
 
 
-class AssetLocator(BlockUsageLocator, AssetKey):
+class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-method
     """
     An AssetKey implementation class.
     """
@@ -1278,6 +1285,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):
 
         /c4x/org/course/category/name
         """
+        # pylint: disable=missing-format-attribute
         url = u"/{0.DEPRECATED_TAG}/{0.course_key.org}/{0.course_key.course}/{0.block_type}/{0.block_id}".format(self)
         if self.course_key.branch:
             url += '@{}'.format(self.course_key.branch)
