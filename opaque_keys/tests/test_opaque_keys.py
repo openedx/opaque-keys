@@ -161,7 +161,7 @@ class KeyTests(TestCase):
             key.value = 11  # pylint: disable=attribute-defined-outside-init
 
         with self.assertRaises(AttributeError):
-            delattr(key, 'value')
+            del key.value
 
     def test_equality(self):
         self.assertEquals(DummyKey.from_string('hex:0x10'), DummyKey.from_string('hex:0x10'))

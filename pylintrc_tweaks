@@ -1,5 +1,3 @@
 [MASTER]
 load-plugins = edx_lint.pylint
 
-[MESSAGES CONTROL]
-DISABLE+= ,literal-used-as-attribute
