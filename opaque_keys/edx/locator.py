@@ -1024,7 +1024,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         for (dep_field_name, field_name) in [('category', 'block_type'), ('name', 'block_id')]:
             son[prefix + dep_field_name] = getattr(self, field_name)
 
-        son[prefix + 'revision'] = getattr(self.course_key, 'branch')
+        son[prefix + 'revision'] = self.course_key.branch
         return son
 
     @classmethod

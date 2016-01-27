@@ -186,7 +186,7 @@ class OpaqueKey(object):
             return cls.get_namespace_plugin(namespace)._from_string(rest)
         except InvalidKeyError:
             if hasattr(cls, 'deprecated_fallback'):
-                return getattr(cls, 'deprecated_fallback')._from_deprecated_string(serialized)
+                return cls.deprecated_fallback._from_deprecated_string(serialized)
             raise InvalidKeyError(cls, serialized)
 
     @classmethod
@@ -256,7 +256,7 @@ class OpaqueKey(object):
         """
         if hasattr(cls, 'deprecated_fallback'):
             raise AttributeError("Error: cannot register two fallback classes for {!r}.".format(cls))
-        setattr(cls, 'deprecated_fallback', fallback)
+        cls.deprecated_fallback = fallback
 
     # ============= VALUE SEMANTICS ==============
     def __init__(self, *args, **kwargs):
