@@ -8,7 +8,7 @@ import ddt
 from bson.objectid import ObjectId
 
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.keys import UsageKey
+from opaque_keys.edx.keys import CourseKey, UsageKey
 from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator, LocalId
 from opaque_keys.edx.tests import LocatorBaseTest
 
@@ -362,3 +362,51 @@ class TestBlockUsageLocators(LocatorBaseTest):
             ).block_id,
             local_id
         )
+
+    def test_general_cache_pool(self):
+        """Calling from_string with the same string returns the same object."""
+        serialized_key = "i4x://org/course/cache_pool/name"
+        key_1 = UsageKey.from_string(serialized_key)
+        key_2 = UsageKey.from_string(serialized_key)
+        self.assertIs(key_1, key_2)
+
+        # The unicode version of the same string should also work.
+        uni_serialized_key = u"i4x://org/course/cache_pool/name"
+        key_3 = UsageKey.from_string(uni_serialized_key)
+        self.assertIs(key_1, key_3)
+
+        # Sanity check
+        diff_serialized_key = u"i4x://org/course/cache_pool/name2"
+        key_4 = UsageKey.from_string(diff_serialized_key)
+        self.assertIsNot(key_1, key_4)
+
+    def test_course_locator_caching(self):
+        """
+        Test that we cache correctly when mapping a UsageKey into a course.
+
+        This is a little complicated by the fact that CourseLocators can be
+        created implicitly when we create a BlockUsageLocator of a block within
+        that course.
+
+        This caching is currently only done with newer-style locators and not
+        the old org/course/run and i4x:// style keys.
+        """
+        usage_key_1 = UsageKey.from_string('block-v1:edX+CacheX+Demo_Course+type@problem+block@1')
+        usage_key_2 = UsageKey.from_string('block-v1:edX+CacheX+Demo_Course+type@problem+block@2')
+        self.assertIs(usage_key_1.course_key, usage_key_2.course_key)
+
+        # Create a new course key and make sure that it points to the same
+        # object as the derived ones created for the UsageKeys above.
+        course_key = CourseKey.from_string('course-v1:edX+CacheX+Demo_Course')
+        self.assertIs(course_key, usage_key_1.course_key)
+        remapped_usage_key = usage_key_1.map_into_course(course_key)
+        self.assertIs(course_key, remapped_usage_key.course_key)
+
+    def test_stripping_branch_noop_returns_original(self):
+        """Stripping branch from a key with no branch returns the original."""
+        usage_key = UsageKey.from_string('block-v1:edX+CacheX+Branch_Demo+type@problem+block@1')
+        stripped_key = usage_key.for_branch(None)
+        self.assertIs(usage_key, stripped_key)
+
+        new_branch_key = usage_key.for_branch("new_branch")
+        self.assertIsNot(usage_key, new_branch_key)
