@@ -90,7 +90,7 @@ class OpaqueKey(object):
     Deserialization is performed by the :meth:`from_string` method.
     """
     __metaclass__ = OpaqueKeyMetaclass
-    __slots__ = ('_initialized', 'deprecated')
+    __slots__ = ('_initialized', '_cached_key', 'deprecated')
 
     KEY_FIELDS = []
     CANONICAL_NAMESPACE = None
@@ -271,6 +271,7 @@ class OpaqueKey(object):
             self._checked_init(*args, **kwargs)
         else:
             self._unchecked_init(**kwargs)
+        self._cached_key = None
         self._initialized = True
 
     def _checked_init(self, *args, **kwargs):
@@ -323,7 +324,8 @@ class OpaqueKey(object):
 
     def __setattr__(self, name, value):
         if getattr(self, '_initialized', False):
-            raise AttributeError("Can't set {!r}. OpaqueKeys are immutable.".format(name))
+            if name != '_cached_key':
+                raise AttributeError("Can't set {!r}. OpaqueKeys are immutable.".format(name))
 
         super(OpaqueKey, self).__setattr__(name, value)
 
@@ -349,6 +351,7 @@ class OpaqueKey(object):
             if key in self.KEY_FIELDS:  # pylint: disable=no-member
                 setattr(self, key, state_dict[key])
         self.deprecated = state_dict['deprecated']
+        self._cached_key = state_dict['_cached_key']
         self._initialized = True
 
     def __getstate__(self):
@@ -357,13 +360,17 @@ class OpaqueKey(object):
         for key in self.KEY_FIELDS:  # pylint: disable=no-member
             pickleable_dict[key] = getattr(self, key)
         pickleable_dict['deprecated'] = self.deprecated
+        pickleable_dict['_cached_key'] = self._cached_key
         return pickleable_dict
 
     @property
     def _key(self):
         """Returns a tuple of key fields"""
         # pylint: disable=no-member
-        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE, self.deprecated)
+
+        if self._cached_key is None:
+            self._cached_key = tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE, self.deprecated)
+        return self._cached_key
 
     def __eq__(self, other):
         return isinstance(other, OpaqueKey) and self._key == other._key  # pylint: disable=protected-access
