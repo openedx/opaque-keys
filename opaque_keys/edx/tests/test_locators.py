@@ -4,6 +4,8 @@ Tests for opaque_keys.edx.locator.
 from unittest import TestCase
 
 import random
+
+from six import text_type
 from bson.objectid import ObjectId
 
 from opaque_keys.edx.locator import Locator, CourseLocator, DefinitionLocator, VersionTree
@@ -28,8 +30,8 @@ class DefinitionLocatorTests(TestCase):
         object_id = '{:024x}'.format(random.randrange(16 ** 24))
         definition_locator = DefinitionLocator('html', object_id)
         self.assertEqual('def-v1:{}+{}@html'.format(object_id, DefinitionLocator.BLOCK_TYPE_PREFIX),
-                         unicode(definition_locator))
-        self.assertEqual(definition_locator, DefinitionKey.from_string(unicode(definition_locator)))
+                         text_type(definition_locator))
+        self.assertEqual(definition_locator, DefinitionKey.from_string(text_type(definition_locator)))
 
     def test_description_locator_version(self):
         object_id = '{:024x}'.format(random.randrange(16 ** 24))

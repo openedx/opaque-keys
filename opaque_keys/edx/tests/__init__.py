@@ -26,8 +26,8 @@ class TestDeprecated(TestCase):
         """Asserts that the contained code raises `count` deprecation warnings"""
         with warnings.catch_warnings(record=True) as caught:
             yield
-        self.assertEquals(count,
-                          len([warning for warning in caught if issubclass(warning.category, DeprecationWarning)]))
+        self.assertEqual(count,
+                         len([warning for warning in caught if issubclass(warning.category, DeprecationWarning)]))
 
 
 class LocatorBaseTest(TestCase):

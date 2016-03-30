@@ -1,9 +1,9 @@
 """
 Tests of BlockTypeKey subclasses.
 """
-
 from unittest import TestCase
 
+from six import text_type
 import ddt
 
 from opaque_keys import InvalidKeyError
@@ -26,12 +26,12 @@ class TestBlockTypeKeysV1(TestCase):
     @ddt.data('problem', 'html', 'vertical')
     def test_deprecated_roundtrip(self, key):
         block_type = BlockTypeKey.from_string(key)
-        serialized = unicode(block_type)
+        serialized = text_type(block_type)
         self.assertEqual(key, serialized)
 
     def test_deprecated_construction(self):
         block_type = BlockTypeKeyV1('xblock.v1', 'problem')
-        serialized = unicode(block_type)
+        serialized = text_type(block_type)
         self.assertEqual('problem', serialized)
 
     def test_deprecated_equality(self):
@@ -46,7 +46,7 @@ class TestBlockTypeKeysV1(TestCase):
     )
     def test_roundtrip_from_string(self, key):
         block_type = BlockTypeKey.from_string(key)
-        serialized = unicode(block_type)
+        serialized = text_type(block_type)
         self.assertEqual(key, serialized)
 
     @ddt.data(
@@ -57,7 +57,7 @@ class TestBlockTypeKeysV1(TestCase):
     @ddt.unpack
     def test_roundtrip_from_key(self, family, block_type):
         key = BlockTypeKeyV1(family, block_type)
-        serialized = unicode(key)
+        serialized = text_type(key)
         deserialized = BlockTypeKey.from_string(serialized)
         self.assertEqual(key, deserialized)
 

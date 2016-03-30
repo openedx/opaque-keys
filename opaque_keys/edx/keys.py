@@ -4,6 +4,7 @@ OpaqueKey abstract classes for edx-platform object types (courses, definitions, 
 """
 import json
 from abc import abstractmethod, abstractproperty
+from six import text_type
 
 from opaque_keys import OpaqueKey
 
@@ -207,7 +208,7 @@ class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
     """
     def default(self, key):  # pylint: disable=method-hidden
         if isinstance(key, OpaqueKey):
-            return unicode(key)
+            return text_type(key)
         super(i4xEncoder, self).default(key)
 
 

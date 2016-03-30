@@ -2,6 +2,7 @@
 Thorough tests of BlockUsageLocator, as well as UsageKeys generally
 """
 from itertools import product
+from six import text_type
 
 import ddt
 from bson.objectid import ObjectId
@@ -44,9 +45,9 @@ class TestBlockUsageLocators(LocatorBaseTest):
         "i4x://org.dept%sub-prof/course.num%section-4/category/name:12%33-44",
     )
     def test_string_roundtrip(self, url):
-        self.assertEquals(
+        self.assertEqual(
             url,
-            unicode(UsageKey.from_string(url))
+            text_type(UsageKey.from_string(url))
         )
 
     @ddt.data(
@@ -70,12 +71,12 @@ class TestBlockUsageLocators(LocatorBaseTest):
     def test_valid_locations(self, args, kwargs, org, course, run, category, name, revision):  # pylint: disable=unused-argument
         course_key = CourseLocator(org=org, course=course, run=run, branch=revision, deprecated=True)
         locator = BlockUsageLocator(course_key, block_type=category, block_id=name, deprecated=True)
-        self.assertEquals(org, locator.course_key.org)
-        self.assertEquals(course, locator.course_key.course)
-        self.assertEquals(run, locator.course_key.run)
-        self.assertEquals(category, locator.block_type)
-        self.assertEquals(name, locator.block_id)
-        self.assertEquals(revision, locator.course_key.branch)
+        self.assertEqual(org, locator.course_key.org)
+        self.assertEqual(course, locator.course_key.course)
+        self.assertEqual(run, locator.course_key.run)
+        self.assertEqual(category, locator.block_type)
+        self.assertEqual(name, locator.block_id)
+        self.assertEqual(revision, locator.course_key.branch)
 
     @ddt.data(
         (("foo",), {}),
@@ -114,7 +115,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
         *GENERAL_PAIRS
     )
     def test_clean(self, pair):
-        self.assertEquals(BlockUsageLocator.clean(pair[0]), pair[1])
+        self.assertEqual(BlockUsageLocator.clean(pair[0]), pair[1])
 
     @ddt.data(
         ('a:b', 'a:b'),  # colons ok in names
@@ -123,7 +124,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
         *GENERAL_PAIRS
     )
     def test_clean_for_url_name(self, pair):
-        self.assertEquals(BlockUsageLocator.clean_for_url_name(pair[0]), pair[1])
+        self.assertEqual(BlockUsageLocator.clean_for_url_name(pair[0]), pair[1])
 
     @ddt.data(
         ("a:b", "a_b"),   # no colons for html use
@@ -132,17 +133,17 @@ class TestBlockUsageLocators(LocatorBaseTest):
         *GENERAL_PAIRS
     )
     def test_clean_for_html(self, pair):
-        self.assertEquals(BlockUsageLocator.clean_for_html(pair[0]), pair[1])
+        self.assertEqual(BlockUsageLocator.clean_for_html(pair[0]), pair[1])
 
     def test_html_id(self):
         course_key = CourseLocator('org', 'course', 'run')
         locator = BlockUsageLocator(course_key, block_type='cat', block_id='name:more_name')
-        self.assertEquals(locator.html_id(), "name:more_name")
+        self.assertEqual(locator.html_id(), "name:more_name")
 
     def test_deprecated_html_id(self):
         course_key = CourseLocator('org', 'course', 'run', version_guid='rev', deprecated=True)
         locator = BlockUsageLocator(course_key, block_type='cat', block_id='name:more_name', deprecated=True)
-        self.assertEquals(locator.html_id(), "i4x-org-course-cat-name_more_name-rev")
+        self.assertEqual(locator.html_id(), "i4x-org-course-cat-name_more_name-rev")
 
     @ddt.data(
         'course',
@@ -160,7 +161,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
     def test_replacement(self, key):
         course_key = CourseLocator('org', 'course', 'run', 'rev', deprecated=True)
         kwargs = {key: 'newvalue'}
-        self.assertEquals(
+        self.assertEqual(
             getattr(BlockUsageLocator(course_key, 'c', 'n', deprecated=True).replace(**kwargs), key),
             'newvalue'
         )
@@ -184,7 +185,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
         expected = BlockUsageLocator(new_course, 'cat', 'name:more_name', deprecated=deprecated_dest)
         actual = loc.map_into_course(new_course)
 
-        self.assertEquals(expected, actual)
+        self.assertEqual(expected, actual)
 
     @ddt.data(
         (BlockUsageLocator, '_id.', 'i4x', (CourseLocator('org', 'course', 'run', 'rev', deprecated=True), 'ct', 'n')),
@@ -194,15 +195,15 @@ class TestBlockUsageLocators(LocatorBaseTest):
     def test_to_deprecated_son(self, key_cls, prefix, tag, source):
         source_key = key_cls(*source, deprecated=True)
         son = source_key.to_deprecated_son(prefix=prefix, tag=tag)
-        self.assertEquals(son.keys(),
-                          [prefix + key for key in ('tag', 'org', 'course', 'category', 'name', 'revision')])
+        self.assertEqual(son.keys(),
+                         [prefix + key for key in ('tag', 'org', 'course', 'category', 'name', 'revision')])
 
-        self.assertEquals(son[prefix + 'tag'], tag)
-        self.assertEquals(son[prefix + 'org'], source_key.course_key.org)
-        self.assertEquals(son[prefix + 'course'], source_key.course_key.course)
-        self.assertEquals(son[prefix + 'category'], source_key.block_type)
-        self.assertEquals(son[prefix + 'name'], source_key.block_id)
-        self.assertEquals(son[prefix + 'revision'], source_key.course_key.branch)
+        self.assertEqual(son[prefix + 'tag'], tag)
+        self.assertEqual(son[prefix + 'org'], source_key.course_key.org)
+        self.assertEqual(son[prefix + 'course'], source_key.course_key.course)
+        self.assertEqual(son[prefix + 'category'], source_key.block_type)
+        self.assertEqual(son[prefix + 'name'], source_key.block_id)
+        self.assertEqual(son[prefix + 'revision'], source_key.course_key.branch)
 
     @ddt.data(
         (UsageKey.from_string('i4x://org/course/ct/n'), 'run'),
@@ -210,7 +211,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
     )
     @ddt.unpack
     def test_deprecated_son_roundtrip(self, key, run):
-        self.assertEquals(
+        self.assertEqual(
             key.replace(course_key=key.course_key.replace(run=run)),
             key.__class__._from_deprecated_son(key.to_deprecated_son(), run)  # pylint: disable=protected-access
         )
@@ -235,7 +236,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
             block_type='problem',
             block=expected_block_ref
         )
-        self.assertEqual(unicode(testobj), testurn)
+        self.assertEqual(text_type(testobj), testurn)
         testobj = testobj.for_version(ObjectId())
         agnostic = testobj.version_agnostic()
         self.assertIsNone(agnostic.version_guid)
@@ -341,13 +342,19 @@ class TestBlockUsageLocators(LocatorBaseTest):
             CourseLocator.BRANCH_PREFIX, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
         )
         testobj = UsageKey.from_string(testurn)
-        expected = "BlockUsageLocator(CourseLocator(u'mit.eecs', u'6002x', " \
-                   "u'2014_T2', u'published', None), u'problem', u'HW3')"
+        expected = "BlockUsageLocator(CourseLocator({}, {}, {}, {}, None), {}, {})".format(
+            repr(text_type('mit.eecs')),
+            repr(text_type('6002x')),
+            repr(text_type('2014_T2')),
+            repr(text_type('published')),
+            repr(text_type('problem')),
+            repr(text_type('HW3')),
+        )
         self.assertEqual(expected, repr(testobj))
 
     def test_local_id(self):
         local_id = LocalId()
-        self.assertEquals(
+        self.assertEqual(
             BlockUsageLocator(
                 CourseLocator('org', 'course', 'run'),
                 'problem',

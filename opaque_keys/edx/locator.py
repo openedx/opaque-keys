@@ -9,6 +9,7 @@ import logging
 import re
 import warnings
 from abc import abstractproperty
+from six import string_types, text_type
 
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
@@ -44,12 +45,6 @@ class Locator(OpaqueKey):
     VERSION_PREFIX = r"version"
     ALLOWED_ID_CHARS = r'[\w\-~.:]'
     DEPRECATED_ALLOWED_ID_CHARS = r'[\w\-~.:%]'
-
-    def __str__(self):
-        """
-        str(self) returns something like this: "mit.eecs.6002x"
-        """
-        return unicode(self).encode('utf-8')
 
     @abstractproperty
     def version(self):  # pragma: no cover
@@ -159,9 +154,6 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
     # Characters that are forbidden in the deprecated format
     INVALID_CHARS_DEPRECATED = re.compile(r"[^\w.%-]", re.UNICODE)
 
-    # stubs to fake out the abstractproperty class instrospection and allow treatment as attrs in instances
-    org = None
-
     def __init__(self, org=None, course=None, run=None, branch=None, version_guid=None, deprecated=False, **kwargs):
         """
         Construct a CourseLocator
@@ -223,7 +215,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
     def _check_location_part(cls, val, regexp):  # pylint: disable=missing-docstring
         if val is None:
             return
-        if not isinstance(val, basestring):
+        if not isinstance(val, string_types):
             raise InvalidKeyError(cls, "{!r} is not a string".format(val))
         if regexp.search(val) is not None:
             raise InvalidKeyError(cls, "Invalid characters in {!r}.".format(val))
@@ -278,7 +270,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
         place, but I have no way to override. We should clearly define the purpose and restrictions of this
         (e.g., I'm assuming periods are fine).
         """
-        return unicode(self)
+        return text_type(self)
 
     def make_usage_key(self, block_type, block_id):
         return BlockUsageLocator(
@@ -367,7 +359,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
             DeprecationWarning,
             stacklevel=2
         )
-        return unicode(self)
+        return text_type(self)
 
     @classmethod
     def _from_deprecated_string(cls, serialized):
@@ -421,12 +413,6 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
-    # declare our fields explicitly to avoid pylint warnings
-    org = None
-    library = None
-    branch = None
-    version_guid = None
-
     def __init__(self, org=None, library=None, branch=None, version_guid=None, **kwargs):
         """
         Construct a LibraryLocator
@@ -472,7 +458,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
             **kwargs
         )
 
-        if self.version_guid is None and (self.org is None or self.library is None):
+        if self.version_guid is None and (self.org is None or self.library is None):  # pylint: disable=no-member
             raise InvalidKeyError(self.__class__, "Either version_guid or org and library should be set")
 
     @property
@@ -489,7 +475,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         Deprecated. Return a 'course' for compatibility with CourseLocator.
         """
         warnings.warn("Accessing 'course' on a LibraryLocator is deprecated.", DeprecationWarning, stacklevel=2)
-        return self.library
+        return self.library  # pylint: disable=no-member
 
     @property
     def version(self):
@@ -502,7 +488,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
             DeprecationWarning,
             stacklevel=2
         )
-        return self.version_guid
+        return self.version_guid  # pylint: disable=no-member
 
     @classmethod
     def _from_string(cls, serialized):
@@ -526,7 +512,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         """
         Return an id which can be used on an html page as an id attr of an html element.
         """
-        return unicode(self)
+        return text_type(self)
 
     def make_usage_key(self, block_type, block_id):
         return LibraryUsageLocator(
@@ -579,12 +565,12 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         Return a string representing this location.
         """
         parts = []
-        if self.library:
+        if self.library:  # pylint: disable=no-member
             parts.extend([self.org, self.course])
-            if self.branch:
-                parts.append(u"{prefix}@{branch}".format(prefix=self.BRANCH_PREFIX, branch=self.branch))
-        if self.version_guid:
-            parts.append(u"{prefix}@{guid}".format(prefix=self.VERSION_PREFIX, guid=self.version_guid))
+            if self.branch:  # pylint: disable=no-member
+                parts.append(u"{prefix}@{branch}".format(prefix=self.BRANCH_PREFIX, branch=self.branch))  # pylint: disable=no-member
+        if self.version_guid:  # pylint: disable=no-member
+            parts.append(u"{prefix}@{guid}".format(prefix=self.VERSION_PREFIX, guid=self.version_guid))  # pylint: disable=no-member
         return u"+".join(parts)
 
     def _to_deprecated_string(self):
@@ -977,7 +963,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
             DeprecationWarning,
             stacklevel=2
         )
-        return unicode(self)
+        return text_type(self)
 
     @classmethod
     def _from_deprecated_string(cls, serialized):
@@ -1176,7 +1162,7 @@ class DefinitionLocator(Locator, DefinitionKey):
     definition_id = None
 
     def __init__(self, block_type, definition_id, deprecated=False):    # pylint: disable=unused-argument
-        if isinstance(definition_id, basestring):
+        if isinstance(definition_id, string_types):
             try:
                 definition_id = self.as_object_id(definition_id)
             except ValueError:
@@ -1188,7 +1174,7 @@ class DefinitionLocator(Locator, DefinitionKey):
         Return a string representing this location.
         unicode(self) returns something like this: "519665f6223ebd6980884f2b+type+problem"
         """
-        return u"{}+{}@{}".format(unicode(self.definition_id), self.BLOCK_TYPE_PREFIX, self.block_type)
+        return u"{}+{}@{}".format(text_type(self.definition_id), self.BLOCK_TYPE_PREFIX, self.block_type)
 
     URL_RE = re.compile(
         r"^(?P<definition_id>[A-F0-9]+)\+{}@(?P<block_type>{ALLOWED_ID_CHARS}+)$".format(
@@ -1298,7 +1284,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
             DeprecationWarning,
             stacklevel=2
         )
-        return unicode(self)
+        return text_type(self)
 
     @property
     def tag(self):

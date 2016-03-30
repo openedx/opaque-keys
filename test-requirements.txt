@@ -5,3 +5,8 @@ mock
 nose
 pep8
 sphinx
+pytest
+pytest-cov
+pytest-pep8
+pytest-pylint
+tox

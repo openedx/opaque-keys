@@ -13,4 +13,4 @@ requirements:
 	pip install -r requirements.txt
 
 test:
-	coverage run -m nose
+	tox

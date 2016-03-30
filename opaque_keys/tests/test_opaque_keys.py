@@ -7,6 +7,8 @@ import json
 import pickle
 from unittest import TestCase
 
+from six import text_type
+
 from opaque_keys import OpaqueKey, InvalidKeyError
 
 
@@ -69,7 +71,7 @@ class Base10Key(DummyKey):
 
     def _to_string(self):
         # For some reason, pylint doesn't think this key has a `value` attribute
-        return unicode(self.value)  # pylint: disable=no-member
+        return text_type(self.value)  # pylint: disable=no-member
 
     @classmethod
     def _from_string(cls, serialized):
@@ -108,21 +110,21 @@ class KeyTests(TestCase):
     def test_namespace_from_string(self):
         hex_key = DummyKey.from_string('hex:0x10')
         self.assertIsInstance(hex_key, HexKey)
-        self.assertEquals(hex_key.value, 16)
-        self.assertEquals(hex_key._to_string(), '0x10')  # pylint: disable=protected-access
-        self.assertEquals(len(hex_key), len('hex:') + len('0x10'))
+        self.assertEqual(hex_key.value, 16)
+        self.assertEqual(hex_key._to_string(), '0x10')  # pylint: disable=protected-access
+        self.assertEqual(len(hex_key), len('hex:0x10'))
 
         base_key = DummyKey.from_string('base10:15')
         self.assertIsInstance(base_key, Base10Key)
-        self.assertEquals(base_key.value, 15)
-        self.assertEquals(base_key._to_string(), '15')  # pylint: disable=protected-access
-        self.assertEquals(len(base_key), len('base10:') + len('15'))
+        self.assertEqual(base_key.value, 15)
+        self.assertEqual(base_key._to_string(), '15')  # pylint: disable=protected-access
+        self.assertEqual(len(base_key), len('base10:15'))
 
         dict_key = DummyKey.from_string('dict:{"foo": "bar"}')
         self.assertIsInstance(dict_key, DictKey)
-        self.assertEquals(dict_key.value, {"foo": "bar"})
-        self.assertEquals(dict_key._to_string(), '{"foo": "bar"}')  # pylint: disable=protected-access
-        self.assertEquals(len(dict_key), len('dict:') + len('{"foo": "bar"}'))
+        self.assertEqual(dict_key.value, {"foo": "bar"})
+        self.assertEqual(dict_key._to_string(), '{"foo": "bar"}')  # pylint: disable=protected-access
+        self.assertEqual(len(dict_key), len('dict:{"foo": "bar"}'))
 
     def test_bad_keys(self):
         with self.assertRaises(InvalidKeyError):
@@ -164,12 +166,12 @@ class KeyTests(TestCase):
             del key.value
 
     def test_equality(self):
-        self.assertEquals(DummyKey.from_string('hex:0x10'), DummyKey.from_string('hex:0x10'))
-        self.assertNotEquals(DummyKey.from_string('hex:0x10'), DummyKey.from_string('base10:16'))
+        self.assertEqual(DummyKey.from_string('hex:0x10'), DummyKey.from_string('hex:0x10'))
+        self.assertNotEqual(DummyKey.from_string('hex:0x10'), DummyKey.from_string('base10:16'))
 
     def test_hash_equality(self):
-        self.assertEquals(hash(DummyKey.from_string('hex:0x10')), hash(DummyKey.from_string('hex:0x10')))
-        self.assertNotEquals(hash(DummyKey.from_string('hex:0x10')), hash(DummyKey.from_string('base10:16')))
+        self.assertEqual(hash(DummyKey.from_string('hex:0x10')), hash(DummyKey.from_string('hex:0x10')))
+        self.assertNotEqual(hash(DummyKey.from_string('hex:0x10')), hash(DummyKey.from_string('base10:16')))
 
     def test_constructor(self):
         with self.assertRaises(TypeError):
@@ -187,20 +189,20 @@ class KeyTests(TestCase):
         with self.assertRaises(TypeError):
             HexKeyTwoFields(10, value=10)
 
-        self.assertEquals(HexKey(10).value, 10)
-        self.assertEquals(HexKey(value=10).value, 10)
+        self.assertEqual(HexKey(10).value, 10)
+        self.assertEqual(HexKey(value=10).value, 10)
 
     def test_replace(self):
         hex10 = HexKey(10)
         hex11 = hex10.replace(value=11)
         hex_copy = hex10.replace()
 
-        self.assertNotEquals(id(hex10), id(hex11))
-        self.assertEquals(id(hex10), id(hex_copy))
-        self.assertNotEquals(hex10, hex11)
-        self.assertEquals(hex10, hex_copy)
-        self.assertEquals(HexKey(10), hex10)
-        self.assertEquals(HexKey(11), hex11)
+        self.assertNotEqual(id(hex10), id(hex11))
+        self.assertEqual(id(hex10), id(hex_copy))
+        self.assertNotEqual(hex10, hex11)
+        self.assertEqual(hex10, hex_copy)
+        self.assertEqual(HexKey(10), hex10)
+        self.assertEqual(HexKey(11), hex11)
 
     def test_replace_deprecated_property(self):
         deprecated_hex10 = HexKey(10, deprecated=True)
@@ -208,11 +210,11 @@ class KeyTests(TestCase):
         not_deprecated_hex10 = deprecated_hex10.replace(deprecated=False)
         deprecated_hex10_copy = deprecated_hex10.replace()
 
-        self.assertNotEquals(deprecated_hex10, deprecated_hex11)
-        self.assertEquals(deprecated_hex10, deprecated_hex10_copy)
-        self.assertNotEquals(HexKey(10), deprecated_hex10)
-        self.assertNotEquals(HexKey(11), deprecated_hex11)
-        self.assertEquals(HexKey(10, deprecated=False), not_deprecated_hex10)
+        self.assertNotEqual(deprecated_hex10, deprecated_hex11)
+        self.assertEqual(deprecated_hex10, deprecated_hex10_copy)
+        self.assertNotEqual(HexKey(10), deprecated_hex10)
+        self.assertNotEqual(HexKey(11), deprecated_hex11)
+        self.assertEqual(HexKey(10, deprecated=False), not_deprecated_hex10)
 
         self.assertTrue(deprecated_hex11.deprecated)
         self.assertTrue(deprecated_hex10_copy.deprecated)
@@ -223,16 +225,16 @@ class KeyTests(TestCase):
         copied = copy.copy(original)
         deep = copy.deepcopy(original)
 
-        self.assertEquals(original, copied)
-        self.assertEquals(id(original), id(copied))
+        self.assertEqual(original, copied)
+        self.assertEqual(id(original), id(copied))
         # For some reason, pylint doesn't think DictKey has a `value` attribute
-        self.assertEquals(id(original.value), id(copied.value))  # pylint: disable=no-member
+        self.assertEqual(id(original.value), id(copied.value))  # pylint: disable=no-member
 
-        self.assertEquals(original, deep)
-        self.assertEquals(id(original), id(deep))
-        self.assertEquals(id(original.value), id(deep.value))  # pylint: disable=no-member
+        self.assertEqual(original, deep)
+        self.assertEqual(id(original), id(deep))
+        self.assertEqual(id(original.value), id(deep.value))  # pylint: disable=no-member
 
-        self.assertEquals(copy.deepcopy([original]), [original])
+        self.assertEqual(copy.deepcopy([original]), [original])
 
     def test_subclass(self):
         with self.assertRaises(InvalidKeyError):
@@ -282,6 +284,6 @@ class KeyTests(TestCase):
         deprecated_hex10 = ten.replace(deprecated=True)
         dec_ten = Base10Key(value=10)
 
-        self.assertEquals(ten, pickle.loads(pickle.dumps(ten)))
-        self.assertEquals(deprecated_hex10, pickle.loads(pickle.dumps(deprecated_hex10)))
-        self.assertEquals(dec_ten, pickle.loads(pickle.dumps(dec_ten)))
+        self.assertEqual(ten, pickle.loads(pickle.dumps(ten)))
+        self.assertEqual(deprecated_hex10, pickle.loads(pickle.dumps(deprecated_hex10)))
+        self.assertEqual(dec_ten, pickle.loads(pickle.dumps(dec_ten)))

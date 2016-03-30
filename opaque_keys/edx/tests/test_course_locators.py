@@ -1,6 +1,8 @@
 """
 Tests of CourseKeys and CourseLocators
 """
+from six import text_type
+
 import ddt
 
 from bson.objectid import ObjectId
@@ -22,9 +24,9 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         "foo/bar/baz",
     )
     def test_deprecated_roundtrip(self, course_id):
-        self.assertEquals(
+        self.assertEqual(
             course_id,
-            unicode(CourseKey.from_string(course_id))
+            text_type(CourseKey.from_string(course_id))
         )
 
     @ddt.data(
@@ -46,23 +48,23 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
 
     def test_make_usage_key(self):
         depr_course = CourseKey.from_string('org/course/run')
-        self.assertEquals(
-            unicode(BlockUsageLocator(depr_course, 'category', 'name', deprecated=True)),
-            unicode(depr_course.make_usage_key('category', 'name'))
+        self.assertEqual(
+            text_type(BlockUsageLocator(depr_course, 'category', 'name', deprecated=True)),
+            text_type(depr_course.make_usage_key('category', 'name'))
         )
 
         course = CourseKey.from_string('course-v1:org+course+run')
-        self.assertEquals(
-            unicode(BlockUsageLocator(course, 'block_type', 'block_id')),
-            unicode(course.make_usage_key('block_type', 'block_id'))
+        self.assertEqual(
+            text_type(BlockUsageLocator(course, 'block_type', 'block_id')),
+            text_type(course.make_usage_key('block_type', 'block_id'))
         )
 
     def test_convert_deprecation(self):
         depr_course = CourseKey.from_string('org/course/run')
         course = CourseKey.from_string('course-v1:org+course+run')
 
-        self.assertEquals(unicode(depr_course.replace(deprecated=False)), unicode(course))
-        self.assertEquals(unicode(course.replace(deprecated=True)), unicode(depr_course))
+        self.assertEqual(text_type(depr_course.replace(deprecated=False)), text_type(course))
+        self.assertEqual(text_type(course.replace(deprecated=True)), text_type(depr_course))
 
     def test_course_constructor_underspecified(self):
         with self.assertRaises(InvalidKeyError):
@@ -250,7 +252,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
     def test_make_usage_key_from_deprecated_string_roundtrip(self, url):
         course_key = CourseLocator('org', 'course', 'run')
         with self.assertDeprecationWarning(count=2):
-            self.assertEquals(
+            self.assertEqual(
                 url,
                 course_key.make_usage_key_from_deprecated_string(url).to_deprecated_string()
             )
@@ -259,7 +261,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         with self.assertRaises(InvalidKeyError):
             CourseLocator('org', 'course', '')
 
-        self.assertEquals(
+        self.assertEqual(
             'org/course/',
-            unicode(CourseLocator('org', 'course', '', deprecated=True))
+            text_type(CourseLocator('org', 'course', '', deprecated=True))
         )
