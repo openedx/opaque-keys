@@ -2,6 +2,7 @@
 """
 Tests of LibraryUsageLocator
 """
+from six import text_type
 import ddt
 from bson.objectid import ObjectId
 from opaque_keys import InvalidKeyError
@@ -27,9 +28,9 @@ class TestLibraryUsageLocators(LocatorBaseTest):
                                                                        BLOCK_PREFIX),
     )
     def test_string_roundtrip(self, url):
-        self.assertEquals(
+        self.assertEqual(
             url,
-            unicode(UsageKey.from_string(url))
+            text_type(UsageKey.from_string(url))
         )
 
     @ddt.data(
@@ -45,11 +46,11 @@ class TestLibraryUsageLocators(LocatorBaseTest):
             BLOCK_TYPE_PREFIX, block_type,
             BLOCK_PREFIX, block_id
         ))
-        self.assertEquals(lib_usage_key, lib_usage_key2)
-        self.assertEquals(lib_usage_key.library_key, lib_key)
-        self.assertEquals(lib_usage_key.library_key, lib_key)
-        self.assertEquals(lib_usage_key.branch, None)
-        self.assertEquals(lib_usage_key.run, LibraryLocator.RUN)
+        self.assertEqual(lib_usage_key, lib_usage_key2)
+        self.assertEqual(lib_usage_key.library_key, lib_key)
+        self.assertEqual(lib_usage_key.library_key, lib_key)
+        self.assertEqual(lib_usage_key.branch, None)
+        self.assertEqual(lib_usage_key.run, LibraryLocator.RUN)
         self.assertIsInstance(lib_usage_key2, LibraryUsageLocator)
         self.assertIsInstance(lib_usage_key2.library_key, LibraryLocator)
 

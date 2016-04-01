@@ -12,6 +12,7 @@ describe. The `AsideDefinitionKey` and `AsideUsageKey` allow :class:`xblock.core
 store scoped data alongside the definition and usage of the particular XBlock usage that they're
 commenting on.
 """
+from six import text_type
 
 from opaque_keys.edx.keys import AsideDefinitionKey, AsideUsageKey, DefinitionKey, UsageKey
 
@@ -90,7 +91,7 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
 
         This serialization should not include the namespace prefix.
         """
-        return u'{}::{}'.format(_encode(unicode(self.definition_key)), _encode(unicode(self.aside_type)))
+        return u'{}::{}'.format(_encode(text_type(self.definition_key)), _encode(text_type(self.aside_type)))
 
 
 class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
@@ -179,4 +180,4 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
 
         This serialization should not include the namespace prefix.
         """
-        return u'{}::{}'.format(_encode(unicode(self.usage_key)), _encode(unicode(self.aside_type)))
+        return u'{}::{}'.format(_encode(text_type(self.usage_key)), _encode(text_type(self.aside_type)))

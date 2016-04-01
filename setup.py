@@ -7,6 +7,7 @@ setup(
     url="https://github.com/edx/opaque-keys",
     packages=find_packages(),
     install_requires=[
+        "six",
         "stevedore",
         "pymongo"
     ],

@@ -3,6 +3,7 @@ Tests of AssetLocators
 """
 from unittest import TestCase
 
+from six import text_type
 import ddt
 
 from opaque_keys import InvalidKeyError
@@ -20,23 +21,23 @@ class TestAssetLocators(TestCase):
         "/c4x/org/course/asset/path",
     )
     def test_deprecated_round_trip_asset_location(self, path):
-        self.assertEquals(
+        self.assertEqual(
             path,
-            unicode(AssetKey.from_string(path)),
+            text_type(AssetKey.from_string(path)),
         )
 
     def test_map_into_course_asset_location(self):
         original_course = CourseKey.from_string('org/course/run')
         new_course = CourseKey.from_string('edX/toy/2012_Fall')
         loc = AssetLocator(original_course, 'asset', 'foo.bar')
-        self.assertEquals(
+        self.assertEqual(
             AssetLocator(new_course, 'asset', 'foo.bar', deprecated=True),
             loc.map_into_course(new_course)
         )
 
     def test_make_asset_key(self):
         course = CourseKey.from_string('org/course/run')
-        self.assertEquals(
+        self.assertEqual(
             AssetLocator(course, 'asset', 'foo.bar', deprecated=True),
             course.make_asset_key('asset', 'foo.bar')
         )
@@ -49,18 +50,18 @@ class TestAssetLocators(TestCase):
     def test_deprecated_son(self, key_cls, prefix, tag, source):
         source_key = key_cls(*source, deprecated=True)
         son = source_key.to_deprecated_son(prefix=prefix, tag=tag)
-        self.assertEquals(
+        self.assertEqual(
             son.keys(),
             [prefix + key for key in ('tag', 'org', 'course', 'category', 'name', 'revision')]
         )
 
-        self.assertEquals(son[prefix + 'tag'], tag)
-        self.assertEquals(son[prefix + 'category'], source_key.block_type)
-        self.assertEquals(son[prefix + 'name'], source_key.block_id)
+        self.assertEqual(son[prefix + 'tag'], tag)
+        self.assertEqual(son[prefix + 'category'], source_key.block_type)
+        self.assertEqual(son[prefix + 'name'], source_key.block_id)
 
-        self.assertEquals(son[prefix + 'org'], source_key.course_key.org)
-        self.assertEquals(son[prefix + 'course'], source_key.course_key.course)
-        self.assertEquals(son[prefix + 'revision'], source_key.course_key.branch)
+        self.assertEqual(son[prefix + 'org'], source_key.course_key.org)
+        self.assertEqual(son[prefix + 'course'], source_key.course_key.course)
+        self.assertEqual(son[prefix + 'revision'], source_key.course_key.branch)
 
     @ddt.data(
         (AssetKey.from_string('/c4x/o/c/ct/n'), 'run'),
@@ -68,7 +69,7 @@ class TestAssetLocators(TestCase):
     )
     @ddt.unpack
     def test_roundtrip_deprecated_son(self, key, run):
-        self.assertEquals(
+        self.assertEqual(
             key.replace(course_key=key.course_key.replace(run=run)),
             key.__class__._from_deprecated_son(key.to_deprecated_son(), run)  # pylint: disable=protected-access
         )
@@ -80,11 +81,11 @@ class TestAssetLocators(TestCase):
 
     def test_replace(self):
         asset_key = AssetKey.from_string('/c4x/o/c/asset/path')
-        self.assertEquals(
+        self.assertEqual(
             'foo',
             asset_key.replace(path='foo').path
         )
-        self.assertEquals(
+        self.assertEqual(
             'bar',
             asset_key.replace(asset_type='bar').asset_type
         )
@@ -108,7 +109,7 @@ class TestAssetLocators(TestCase):
     def test_asset_with_special_character(self, paths):
         for path in paths:
             asset_locator = AssetKey.from_string(path)
-            self.assertEquals(
+            self.assertEqual(
                 path,
-                unicode(asset_locator),
+                text_type(asset_locator),
             )

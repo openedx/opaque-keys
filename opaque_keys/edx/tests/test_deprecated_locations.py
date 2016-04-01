@@ -29,11 +29,11 @@ class TestLocationDeprecatedBase(TestDeprecated):
             loc_course_key_replaced = loc.replace(course_key=loc.course_key)
         self.assertTrue(isinstance(loc_boo, BlockUsageLocator))
         self.assertTrue(loc_boo.deprecated)
-        self.assertNotEquals(id(loc), id(loc_boo))
-        self.assertNotEquals(id(loc), id(loc_copy))
-        self.assertNotEquals(loc, loc_boo)
-        self.assertEquals(loc, loc_copy)
-        self.assertEquals(loc, loc_course_key_replaced)
+        self.assertNotEqual(id(loc), id(loc_boo))
+        self.assertNotEqual(id(loc), id(loc_copy))
+        self.assertNotEqual(loc, loc_boo)
+        self.assertEqual(loc, loc_copy)
+        self.assertEqual(loc, loc_course_key_replaced)
 
 
 class TestSSCK(TestDeprecated):
@@ -66,10 +66,10 @@ class TestSSCK(TestDeprecated):
             ssck_copy = ssck.replace()
         self.assertTrue(isinstance(ssck_boo, CourseLocator))
         self.assertTrue(ssck_boo.deprecated)
-        self.assertNotEquals(id(ssck), id(ssck_boo))
-        self.assertNotEquals(id(ssck), id(ssck_copy))
-        self.assertNotEquals(ssck, ssck_boo)
-        self.assertEquals(ssck, ssck_copy)
+        self.assertNotEqual(id(ssck), id(ssck_boo))
+        self.assertNotEqual(id(ssck), id(ssck_copy))
+        self.assertNotEqual(ssck, ssck_boo)
+        self.assertEqual(ssck, ssck_copy)
 
 
 class TestV0Strings(TestDeprecated):
@@ -114,11 +114,11 @@ class TestLocation(TestLocationDeprecatedBase):
             with self.assertRaises(InvalidKeyError):
                 Location._check_location_part('abc123', re.compile(r'\d'))
 
-            self.assertEquals('abc_', Location._clean('abc123', re.compile(r'\d')))
-            self.assertEquals('a._%-', Location.clean('a.*:%-'))
-            self.assertEquals('a.__%-', Location.clean_keeping_underscores('a.*:%-'))
-            self.assertEquals('a._:%-', Location.clean_for_url_name('a.*:%-'))
-            self.assertEquals('a_-', Location.clean_for_html('a.*:%-'))
+            self.assertEqual('abc_', Location._clean('abc123', re.compile(r'\d')))
+            self.assertEqual('a._%-', Location.clean('a.*:%-'))
+            self.assertEqual('a.__%-', Location.clean_keeping_underscores('a.*:%-'))
+            self.assertEqual('a._:%-', Location.clean_for_url_name('a.*:%-'))
+            self.assertEqual('a_-', Location.clean_for_html('a.*:%-'))
 
     def test_deprecated_replace(self):
         self.check_deprecated_replace(Location)

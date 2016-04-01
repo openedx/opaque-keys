@@ -10,6 +10,14 @@ from _collections import defaultdict
 from abc import ABCMeta, abstractmethod
 from functools import total_ordering
 
+from six import (
+    iteritems,
+    python_2_unicode_compatible,
+    text_type,
+    viewkeys,
+    viewitems,
+    with_metaclass,
+)
 from stevedore.enabled import EnabledExtensionManager
 
 
@@ -34,8 +42,9 @@ class OpaqueKeyMetaclass(ABCMeta):
         return super(OpaqueKeyMetaclass, mcs).__new__(mcs, name, bases, attrs)
 
 
+@python_2_unicode_compatible
 @total_ordering
-class OpaqueKey(object):
+class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
     """
     A base-class for implementing pluggable opaque keys. Individual key subclasses identify
     particular types of resources, without specifying the actual form of the key (or
@@ -89,7 +98,6 @@ class OpaqueKey(object):
     Serialization of an :class:`OpaqueKey` is performed by using the :func:`unicode` builtin.
     Deserialization is performed by the :meth:`from_string` method.
     """
-    __metaclass__ = OpaqueKeyMetaclass
     __slots__ = ('_initialized', 'deprecated')
 
     KEY_FIELDS = []
@@ -156,7 +164,7 @@ class OpaqueKey(object):
 
     # ============= SERIALIZATION ==============
 
-    def __unicode__(self):
+    def __str__(self):
         """
         Serialize this :class:`OpaqueKey`, in the form ``<CANONICAL_NAMESPACE>:<value of _to_string>``.
         """
@@ -265,13 +273,13 @@ class OpaqueKey(object):
 
         # a flag used to indicate that this instance was deserialized from the
         # deprecated form and should serialize to the deprecated form
-        self.deprecated = kwargs.pop('deprecated', False)
+        self.deprecated = kwargs.pop('deprecated', False)  # pylint: disable=assigning-non-slot
 
         if self.CHECKED_INIT:
             self._checked_init(*args, **kwargs)
         else:
             self._unchecked_init(**kwargs)
-        self._initialized = True
+        self._initialized = True  # pylint: disable=assigning-non-slot
 
     def _checked_init(self, *args, **kwargs):
         """
@@ -285,13 +293,13 @@ class OpaqueKey(object):
             ))
 
         keyed_args = dict(zip(self.KEY_FIELDS, args))
-        overlapping_args = keyed_args.viewkeys() & kwargs.viewkeys()
+        overlapping_args = viewkeys(keyed_args) & viewkeys(kwargs)
         if overlapping_args:
             raise TypeError('__init__() got multiple values for keyword argument {!r}'.format(overlapping_args[0]))
 
         keyed_args.update(kwargs)
 
-        for key in keyed_args.viewkeys():
+        for key in viewkeys(keyed_args):
             if key not in self.KEY_FIELDS:
                 raise TypeError('__init__() got an unexpected argument {!r}'.format(key))
 
@@ -301,7 +309,7 @@ class OpaqueKey(object):
         """
         Set all kwargs as attributes.
         """
-        for key, value in kwargs.viewitems():
+        for key, value in viewitems(kwargs):
             setattr(self, key, value)
 
     def replace(self, **kwargs):
@@ -315,7 +323,7 @@ class OpaqueKey(object):
         existing_values = {key: getattr(self, key) for key in self.KEY_FIELDS}  # pylint: disable=no-member
         existing_values['deprecated'] = self.deprecated
 
-        if all(value == existing_values[key] for (key, value) in kwargs.iteritems()):
+        if all(value == existing_values[key] for (key, value) in iteritems(kwargs)):
             return self
 
         existing_values.update(kwargs)
@@ -325,7 +333,7 @@ class OpaqueKey(object):
         if getattr(self, '_initialized', False):
             raise AttributeError("Can't set {!r}. OpaqueKeys are immutable.".format(name))
 
-        super(OpaqueKey, self).__setattr__(name, value)
+        super(OpaqueKey, self).__setattr__(name, value)  # pylint: disable=no-member
 
     def __delattr__(self, name):
         raise AttributeError("Can't delete {!r}. OpaqueKeys are immutable.".format(name))
@@ -348,8 +356,8 @@ class OpaqueKey(object):
         for key in state_dict:
             if key in self.KEY_FIELDS:  # pylint: disable=no-member
                 setattr(self, key, state_dict[key])
-        self.deprecated = state_dict['deprecated']
-        self._initialized = True
+        self.deprecated = state_dict['deprecated']  # pylint: disable=assigning-non-slot
+        self._initialized = True  # pylint: disable=assigning-non-slot
 
     def __getstate__(self):
         # used by pickle to get fields on an unpickled object
@@ -380,9 +388,6 @@ class OpaqueKey(object):
     def __hash__(self):
         return hash(self._key)
 
-    def __str__(self):
-        return unicode(self).encode('utf-8')
-
     def __repr__(self):
         return '{}({})'.format(
             self.__class__.__name__,
@@ -391,4 +396,4 @@ class OpaqueKey(object):
 
     def __len__(self):
         """Return the number of characters in the serialized OpaqueKey"""
-        return len(unicode(self))
+        return len(text_type(self))
