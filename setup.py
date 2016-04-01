@@ -1,15 +1,15 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="edx-opaque-keys",
-    version="0.2.1",
-    author="edX",
-    url="https://github.com/edx/opaque-keys",
+    name='edx-opaque-keys',
+    version='0.3.0',
+    author='edX',
+    url='https://github.com/edx/opaque-keys',
     packages=find_packages(),
     install_requires=[
-        "six",
-        "stevedore",
-        "pymongo"
+        'six',
+        'stevedore',
+        'pymongo'
     ],
     entry_points={
         'opaque_keys.testing': [

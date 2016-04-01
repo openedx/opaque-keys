@@ -1,8 +1,6 @@
 language: python
 python:
-  - "2.7"
-before_install:
-  - git fetch origin master:refs/remotes/origin/master
+  - "3.5"
 install:
   - make requirements
   - pip install coveralls
