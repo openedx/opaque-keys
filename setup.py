@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='edx-opaque-keys',
-    version='0.3.2',  # Please update CHANGELOG when you bump versions
+    version='0.3.3',  # Please update CHANGELOG when you bump versions
     author='edX',
     url='https://github.com/edx/opaque-keys',
     packages=find_packages(),
