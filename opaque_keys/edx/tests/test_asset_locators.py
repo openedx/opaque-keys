@@ -5,6 +5,7 @@ from unittest import TestCase
 
 from six import text_type
 import ddt
+import itertools
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey
@@ -113,3 +114,14 @@ class TestAssetLocators(TestCase):
                 path,
                 text_type(asset_locator),
             )
+
+    @ddt.data(*itertools.product(
+        (
+            "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction_To_New.srt.sjson{}",
+        ),
+        ('\n', '\n\n', ' ', '   ', '   \n'),
+    ))
+    @ddt.unpack
+    def test_asset_with_trailing_whitespace(self, path_fmt, whitespace):
+        with self.assertRaises(InvalidKeyError):
+            AssetKey.from_string(path_fmt.format(whitespace))

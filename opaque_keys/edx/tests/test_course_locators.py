@@ -4,6 +4,7 @@ Tests of CourseKeys and CourseLocators
 from six import text_type
 
 import ddt
+import itertools
 
 from bson.objectid import ObjectId
 
@@ -152,6 +153,19 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
     def test_course_constructor_bad_url(self, bad_url):
         with self.assertRaises(InvalidKeyError):
             CourseKey.from_string(bad_url)
+
+    @ddt.data(*itertools.product(
+        (
+            'course-v1:mit+course+run{}',
+            'course-v1:mit+course+run+branch@published{}',
+            'course-v1:mit+course+run+branch@published+version@519665f6223ebd6980884f2b{}',
+        ),
+        ('\n', '\n\n', ' ', '   ', '   \n'),
+    ))
+    @ddt.unpack
+    def test_course_constructor_trailing_whitespace(self, url_with_whitespace_fmt, whitespace):
+        with self.assertRaises(InvalidKeyError):
+            CourseKey.from_string(url_with_whitespace_fmt.format(whitespace))
 
     def test_course_constructor_url(self):
         # Test parsing a url when it starts with a version ID and there is also a block ID.

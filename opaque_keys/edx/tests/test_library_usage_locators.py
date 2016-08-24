@@ -4,6 +4,7 @@ Tests of LibraryUsageLocator
 """
 from six import text_type
 import ddt
+import itertools
 from bson.objectid import ObjectId
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import UsageKey
@@ -76,6 +77,23 @@ class TestLibraryUsageLocators(LocatorBaseTest):
     def test_constructor_invalid_from_string(self, url):
         with self.assertRaises(InvalidKeyError):
             UsageKey.from_string(url)
+
+    @ddt.data(*itertools.product(
+        (
+            u"lib-block-v1:org+lib+{}@category+{}@name{}".format(BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'),
+            u"lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name{}".format(
+                VERSION_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'
+            ),
+            u"lib-block-v1:org+lib+{}@revision+{}@category+{}@name{}".format(
+                LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'
+            ),
+        ),
+        ('\n', '\n\n', ' ', '   ', '   \n'),
+    ))
+    @ddt.unpack
+    def test_constructor_invalid_from_string_trailing_whitespace(self, locator_fmt, whitespace):
+        with self.assertRaises(InvalidKeyError):
+            UsageKey.from_string(locator_fmt.format(whitespace))
 
     def test_superclass_make_relative(self):
         lib_key = LibraryLocator(org="TestX", library="problem-bank-15")

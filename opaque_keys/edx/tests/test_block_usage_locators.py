@@ -5,6 +5,7 @@ from itertools import product
 from six import text_type
 
 import ddt
+import itertools
 from bson.objectid import ObjectId
 
 from opaque_keys import InvalidKeyError
@@ -23,6 +24,13 @@ GENERAL_PAIRS = [
     ('ab    fg!@//\\aj', 'ab_fg_aj'),
     (u"ab\xA9", "ab_"),  # no unicode allowed for now
 ]
+
+# Block usage locator to use in tests.
+TEST_ID_LOC = '519665f6223ebd6980884f2b'
+BLOCK_URL = 'block-v1:mit.eecs+6002x+2014_T2+{}@draft+{}@{}+{}@problem+{}@lab2'.format(
+    CourseLocator.BRANCH_PREFIX, CourseLocator.VERSION_PREFIX, TEST_ID_LOC,
+    BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
+)
 
 
 @ddt.ddt
@@ -298,6 +306,17 @@ class TestBlockUsageLocators(LocatorBaseTest):
             block='lab2',
             version_guid=ObjectId(test_id_loc)
         )
+
+    @ddt.data(*itertools.product(
+        (
+            '{}{}'.format(BLOCK_URL, '{}'),
+        ),
+        ('\n', '\n\n', ' ', '   ', '   \n'),
+    ))
+    @ddt.unpack
+    def test_block_constructor_url_trailing_whitespace(self, url_fmt, whitespace):
+        with self.assertRaises(InvalidKeyError):
+            UsageKey.from_string(url_fmt.format(whitespace))
 
     def test_colon_name(self):
         """

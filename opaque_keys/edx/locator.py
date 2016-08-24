@@ -119,8 +119,12 @@ class BlockLocatorBase(Locator):
         with key 'id' and optional keys 'branch' and 'version_guid'.
 
         Raises:
-            InvalidKeyError: if string cannot be parsed.
+            InvalidKeyError: if string cannot be parsed -or- string ends with a newline.
         """
+        # URL_RE above cannot detect a single trailing newline, so guard against them.
+        if string.endswith('\n'):
+            raise InvalidKeyError(cls, string)
+
         match = cls.URL_RE.match(string)
         if not match:
             raise InvalidKeyError(cls, string)
