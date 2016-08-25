@@ -4,7 +4,7 @@ Tests of CourseKeys and CourseLocators
 from six import text_type
 
 import ddt
-import itertools
+import itertools  # pylint: disable=wrong-import-order
 
 from bson.objectid import ObjectId
 

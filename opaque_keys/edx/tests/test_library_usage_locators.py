@@ -4,7 +4,7 @@ Tests of LibraryUsageLocator
 """
 from six import text_type
 import ddt
-import itertools
+import itertools  # pylint: disable=wrong-import-order
 from bson.objectid import ObjectId
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import UsageKey

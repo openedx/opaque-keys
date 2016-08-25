@@ -5,7 +5,7 @@ from itertools import product
 from six import text_type
 
 import ddt
-import itertools
+import itertools  # pylint: disable=wrong-import-order
 from bson.objectid import ObjectId
 
 from opaque_keys import InvalidKeyError

@@ -5,7 +5,7 @@ from unittest import TestCase
 
 from six import text_type
 import ddt
-import itertools
+import itertools  # pylint: disable=wrong-import-order
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey
