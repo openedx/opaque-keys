@@ -121,7 +121,20 @@ class BlockLocatorBase(Locator):
         Raises:
             InvalidKeyError: if string cannot be parsed -or- string ends with a newline.
         """
-        # URL_RE above cannot detect a single trailing newline, so guard against them.
+        # URL_RE above cannot detect a single trailing newline, so guard against them
+        # by detecting them separately. An example to demonstrate:
+        #
+        # >>> import re
+        # >>> x = re.compile('(.+)$')
+        # >>> print x.match('foo')
+        # <_sre.SRE_Match object at 0x107df4510>
+        # >>> print x.match('foo\n')
+        # <_sre.SRE_Match object at 0x107df4510>
+        # >>> print x.match('foo\n\n')
+        # None
+        #
+        # The final regex-captured group will *not* capture a trailing newline.
+        # But parse the string strictly with no trailing newlines allowed.
         if string.endswith('\n'):
             raise InvalidKeyError(cls, string)
 
