@@ -100,20 +100,17 @@ class TestAssetLocators(TestCase):
             CourseKey.from_string('org/course/run').make_asset_key('asset', '')
 
     @ddt.data(
-        [
-            "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction%20To%20New.srt.sjson",
-            "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction~To~New.srt.sjson",
-            "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction:To:New.srt.sjson",
-            "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction-To-New.srt.sjson",
-        ],
+        "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction%20To%20New.srt.sjson",
+        "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction~To~New.srt.sjson",
+        "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction:To:New.srt.sjson",
+        "asset-v1:UOG+cs_34+Cs128+type@asset+block@subs_Introduction-To-New.srt.sjson",
     )
-    def test_asset_with_special_character(self, paths):
-        for path in paths:
-            asset_locator = AssetKey.from_string(path)
-            self.assertEqual(
-                path,
-                text_type(asset_locator),
-            )
+    def test_asset_with_special_character(self, path):
+        asset_locator = AssetKey.from_string(path)
+        self.assertEqual(
+            path,
+            text_type(asset_locator),
+        )
 
     @ddt.data(*itertools.product(
         (
@@ -125,3 +122,11 @@ class TestAssetLocators(TestCase):
     def test_asset_with_trailing_whitespace(self, path_fmt, whitespace):
         with self.assertRaises(InvalidKeyError):
             AssetKey.from_string(path_fmt.format(whitespace))
+
+    @ddt.data(
+        "asset-v1:UOG+cs_34+Cs128+type@asset",
+        "asset-v1:UOG+cs_34+Cs128",
+    )
+    def test_asset_with_missing_parts(self, path):
+        with self.assertRaises(InvalidKeyError):
+            AssetKey.from_string(path)
