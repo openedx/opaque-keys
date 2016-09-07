@@ -96,7 +96,7 @@ class BlockLocatorBase(Locator):
         ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+){SEP})?
         ({VERSION_PREFIX}@(?P<version_guid>[A-F0-9]+){SEP})?
         ({BLOCK_TYPE_PREFIX}@(?P<block_type>{ALLOWED_ID_CHARS}+){SEP})?
-        ({BLOCK_PREFIX}@(?P<block_id>{BLOCK_ALLOWED_ID_CHARS}+))?
+        ({BLOCK_PREFIX}@(?P<block_id>{BLOCK_ALLOWED_ID_CHARS}+))?\Z
         """.format(
         ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
         BLOCK_ALLOWED_ID_CHARS=BLOCK_ALLOWED_ID_CHARS,
@@ -104,7 +104,7 @@ class BlockLocatorBase(Locator):
         VERSION_PREFIX=Locator.VERSION_PREFIX,
         BLOCK_TYPE_PREFIX=Locator.BLOCK_TYPE_PREFIX,
         BLOCK_PREFIX=BLOCK_PREFIX,
-        SEP=r'(\+(?=.)|$)',  # Separator: requires a non-trailing '+' or end of string
+        SEP=r'(\+(?=.)|\Z)',  # Separator: requires a non-trailing '+' or end of string
     )
 
     URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.IGNORECASE | re.VERBOSE | re.UNICODE)
@@ -121,23 +121,6 @@ class BlockLocatorBase(Locator):
         Raises:
             InvalidKeyError: if string cannot be parsed -or- string ends with a newline.
         """
-        # URL_RE above cannot detect a single trailing newline, so guard against them
-        # by detecting them separately. An example to demonstrate:
-        #
-        # >>> import re
-        # >>> x = re.compile('(.+)$')
-        # >>> print x.match('foo')
-        # <_sre.SRE_Match object at 0x107df4510>
-        # >>> print x.match('foo\n')
-        # <_sre.SRE_Match object at 0x107df4510>
-        # >>> print x.match('foo\n\n')
-        # None
-        #
-        # The final regex-captured group will *not* capture a trailing newline.
-        # But parse the string strictly with no trailing newlines allowed.
-        if string.endswith('\n'):
-            raise InvalidKeyError(cls, string)
-
         match = cls.URL_RE.match(string)
         if not match:
             raise InvalidKeyError(cls, string)
