@@ -96,7 +96,7 @@ class BlockLocatorBase(Locator):
         ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+){SEP})?
         ({VERSION_PREFIX}@(?P<version_guid>[A-F0-9]+){SEP})?
         ({BLOCK_TYPE_PREFIX}@(?P<block_type>{ALLOWED_ID_CHARS}+){SEP})?
-        ({BLOCK_PREFIX}@(?P<block_id>{BLOCK_ALLOWED_ID_CHARS}+))?\Z
+        ({BLOCK_PREFIX}@(?P<block_id>{BLOCK_ALLOWED_ID_CHARS}+))?
         """.format(
         ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
         BLOCK_ALLOWED_ID_CHARS=BLOCK_ALLOWED_ID_CHARS,
@@ -107,7 +107,7 @@ class BlockLocatorBase(Locator):
         SEP=r'(\+(?=.)|\Z)',  # Separator: requires a non-trailing '+' or end of string
     )
 
-    URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.IGNORECASE | re.VERBOSE | re.UNICODE)
+    URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.IGNORECASE | re.VERBOSE | re.UNICODE)
 
     @classmethod
     def parse_url(cls, string):
