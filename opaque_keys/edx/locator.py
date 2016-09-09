@@ -104,10 +104,10 @@ class BlockLocatorBase(Locator):
         VERSION_PREFIX=Locator.VERSION_PREFIX,
         BLOCK_TYPE_PREFIX=Locator.BLOCK_TYPE_PREFIX,
         BLOCK_PREFIX=BLOCK_PREFIX,
-        SEP=r'(\+(?=.)|$)',  # Separator: requires a non-trailing '+' or end of string
+        SEP=r'(\+(?=.)|\Z)',  # Separator: requires a non-trailing '+' or end of string
     )
 
-    URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.IGNORECASE | re.VERBOSE | re.UNICODE)
+    URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.IGNORECASE | re.VERBOSE | re.UNICODE)
 
     @classmethod
     def parse_url(cls, string):
@@ -119,7 +119,7 @@ class BlockLocatorBase(Locator):
         with key 'id' and optional keys 'branch' and 'version_guid'.
 
         Raises:
-            InvalidKeyError: if string cannot be parsed.
+            InvalidKeyError: if string cannot be parsed -or- string ends with a newline.
         """
         match = cls.URL_RE.match(string)
         if not match:

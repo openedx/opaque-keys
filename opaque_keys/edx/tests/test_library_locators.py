@@ -3,6 +3,7 @@ Tests of LibraryLocators
 """
 from six import text_type
 import ddt
+import itertools  # pylint: disable=wrong-import-order
 
 from bson.objectid import ObjectId
 
@@ -31,6 +32,17 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
     def test_lib_key_from_invalid_string(self, lib_id_str):
         with self.assertRaises(InvalidKeyError):
             LibraryLocator.from_string(lib_id_str)
+
+    @ddt.data(*itertools.product(
+        (
+            "library-v1:TestX+LibY{}",
+        ),
+        ('\n', '\n\n', ' ', '   ', '   \n'),
+    ))
+    @ddt.unpack
+    def test_lib_key_with_trailing_whitespace(self, lib_id_fmt, whitespace):
+        with self.assertRaises(InvalidKeyError):
+            LibraryLocator.from_string(lib_id_fmt.format(whitespace))
 
     def test_lib_key_constructor(self):
         org = 'TestX'
