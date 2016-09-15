@@ -5,7 +5,7 @@ install:
   - make requirements
   - pip install coveralls
 script:
-  - make test
+  - tox -- py.test --hypothesis-profile=ci
   - make quality
 after_success:
   - coveralls

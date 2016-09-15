@@ -9,12 +9,12 @@ import logging
 import re
 import warnings
 from abc import abstractproperty
-from six import string_types, text_type
 
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from bson.son import SON
 
+from six import string_types, text_type
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey
 
@@ -110,7 +110,7 @@ class BlockLocatorBase(Locator):
     URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.IGNORECASE | re.VERBOSE | re.UNICODE)
 
     @classmethod
-    def parse_url(cls, string):
+    def parse_url(cls, string):  # pylint: disable=redefined-outer-name
         """
         If it can be parsed as a version_guid with no preceding org + offering, returns a dict
         with key 'version_guid' and the value,
@@ -1026,6 +1026,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
             deprecated=True,
         )
         return cls(course_key, id_dict['category'], id_dict['name'], deprecated=True)
+
 
 # register BlockUsageLocator as the deprecated fallback for UsageKey
 UsageKey.set_deprecated_fallback(BlockUsageLocator)
