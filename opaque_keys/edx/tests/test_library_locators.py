@@ -168,7 +168,7 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
             LibraryLocator(org="TestX", library="lib1", branch="!+!")
 
     def test_lib_key_constructor_bad_version_guid(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(InvalidKeyError):
             LibraryLocator(version_guid="012345")
 
         with self.assertRaises(InvalidKeyError):

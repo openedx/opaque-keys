@@ -130,6 +130,11 @@ def perturbed_strings(string_strategy):
     serialized=strategies.shared(valid_key_string(), key="diff_serial_diff_key"),
     perturbed=perturbed_strings(strategies.shared(valid_key_string(), key="diff_serial_diff_key")),
 )
+@example(
+    key_type=DefinitionKey,
+    serialized='def-v1:000000000000000000000000+type@-',
+    perturbed='def-v1:00000000000000000000000+type@-',
+)
 def test_perturbed_serializations(key_type, serialized, perturbed):
     assume(serialized != perturbed)
 

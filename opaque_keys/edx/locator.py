@@ -67,7 +67,7 @@ class Locator(OpaqueKey):
         try:
             return ObjectId(value)
         except InvalidId:
-            raise ValueError('"%s" is not a valid version_guid' % value)
+            raise InvalidKeyError(cls, '"%s" is not a valid version_guid' % value)
 
 
 # `BlockLocatorBase` is another abstract base class, so don't worry that it doesn't
