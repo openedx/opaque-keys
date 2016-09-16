@@ -88,16 +88,13 @@ class BlockLocatorBase(Locator):
     ALLOWED_ID_RE = re.compile(r'^' + Locator.ALLOWED_ID_CHARS + '+$', re.UNICODE)
     DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + '+$', re.UNICODE)
 
-    # pep8 and pylint don't agree on the indentation in this block; let's make
-    # pep8 happy and ignore pylint as that's easier to do.
-    # pylint: disable=bad-continuation
     URL_RE_SOURCE = r"""
         ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)(\+(?P<run>{ALLOWED_ID_CHARS}+))?{SEP})??
         ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+){SEP})?
         ({VERSION_PREFIX}@(?P<version_guid>[a-f0-9]+){SEP})?
         ({BLOCK_TYPE_PREFIX}@(?P<block_type>{ALLOWED_ID_CHARS}+){SEP})?
         ({BLOCK_PREFIX}@(?P<block_id>{BLOCK_ALLOWED_ID_CHARS}+))?
-        """.format(
+    """.format(
         ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
         BLOCK_ALLOWED_ID_CHARS=BLOCK_ALLOWED_ID_CHARS,
         BRANCH_PREFIX=BRANCH_PREFIX,
