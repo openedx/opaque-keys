@@ -135,6 +135,11 @@ def perturbed_strings(string_strategy):
     serialized='def-v1:000000000000000000000000+type@-',
     perturbed='def-v1:00000000000000000000000+type@-',
 )
+@example(
+    key_type=CourseKey,
+    serialized=u'library-v1:-+-+branch@-+version@000000000000000000000000',
+    perturbed=u'library-v1:-+-+branch@-+versIon@000000000000000000000000',
+)
 def test_perturbed_serializations(key_type, serialized, perturbed):
     assume(serialized != perturbed)
 

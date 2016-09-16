@@ -94,7 +94,7 @@ class BlockLocatorBase(Locator):
     URL_RE_SOURCE = r"""
         ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)(\+(?P<run>{ALLOWED_ID_CHARS}+))?{SEP})??
         ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+){SEP})?
-        ({VERSION_PREFIX}@(?P<version_guid>[A-F0-9]+){SEP})?
+        ({VERSION_PREFIX}@(?P<version_guid>[a-f0-9]+){SEP})?
         ({BLOCK_TYPE_PREFIX}@(?P<block_type>{ALLOWED_ID_CHARS}+){SEP})?
         ({BLOCK_PREFIX}@(?P<block_id>{BLOCK_ALLOWED_ID_CHARS}+))?
         """.format(
@@ -107,7 +107,7 @@ class BlockLocatorBase(Locator):
         SEP=r'(\+(?=.)|\Z)',  # Separator: requires a non-trailing '+' or end of string
     )
 
-    URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.IGNORECASE | re.VERBOSE | re.UNICODE)
+    URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.VERBOSE | re.UNICODE)
 
     @classmethod
     def parse_url(cls, string):  # pylint: disable=redefined-outer-name
@@ -1178,10 +1178,10 @@ class DefinitionLocator(Locator, DefinitionKey):
         return u"{}+{}@{}".format(text_type(self.definition_id), self.BLOCK_TYPE_PREFIX, self.block_type)
 
     URL_RE = re.compile(
-        r"^(?P<definition_id>[A-F0-9]+)\+{}@(?P<block_type>{ALLOWED_ID_CHARS}+)$".format(
+        r"^(?P<definition_id>[a-f0-9]+)\+{}@(?P<block_type>{ALLOWED_ID_CHARS}+)$".format(
             Locator.BLOCK_TYPE_PREFIX, ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
         ),
-        re.IGNORECASE | re.VERBOSE | re.UNICODE
+        re.VERBOSE | re.UNICODE
     )
 
     @classmethod
@@ -1242,7 +1242,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
         (?P<category>[^/]+)/
         (?P<name>[^@]+)
         (@(?P<revision>[^/]+))?
-    """, re.VERBOSE | re.IGNORECASE)
+    """, re.VERBOSE)
 
     ALLOWED_ID_RE = BlockUsageLocator.DEPRECATED_ALLOWED_ID_RE
     # Allow empty asset ids. Used to generate a prefix url

@@ -215,7 +215,7 @@ class DeprecatedLocation(BlockUsageLocator):
         (?P<block_id>{ALLOWED_ID_CHARS}+)
         """.format(ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS)
 
-    URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.IGNORECASE | re.VERBOSE | re.UNICODE)
+    URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.VERBOSE | re.UNICODE)
 
     @classmethod
     def _from_string(cls, serialized):
