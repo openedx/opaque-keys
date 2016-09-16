@@ -1178,7 +1178,7 @@ class DefinitionLocator(Locator, DefinitionKey):
         return u"{}+{}@{}".format(text_type(self.definition_id), self.BLOCK_TYPE_PREFIX, self.block_type)
 
     URL_RE = re.compile(
-        r"^(?P<definition_id>[a-f0-9]+)\+{}@(?P<block_type>{ALLOWED_ID_CHARS}+)$".format(
+        r"^(?P<definition_id>[a-f0-9]+)\+{}@(?P<block_type>{ALLOWED_ID_CHARS}+)\Z".format(
             Locator.BLOCK_TYPE_PREFIX, ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
         ),
         re.VERBOSE | re.UNICODE
