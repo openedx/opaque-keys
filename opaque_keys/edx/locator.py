@@ -445,7 +445,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         for name, value in [['org', org], ['library', library], ['branch', branch]]:
             if not (value is None or self.ALLOWED_ID_RE.match(value)):
                 raise InvalidKeyError(self.__class__,
-                                      "Special characters not allowed in field {}: '{}'".format(name, value))
+                                      u"Special characters not allowed in field {}: '{}'".format(name, value))
 
         if kwargs.get('deprecated', False):
             raise InvalidKeyError(self.__class__, 'LibraryLocator cannot have deprecated=True')
@@ -1275,7 +1275,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
         # pylint: disable=missing-format-attribute
         url = u"/{0.DEPRECATED_TAG}/{0.course_key.org}/{0.course_key.course}/{0.block_type}/{0.block_id}".format(self)
         if self.course_key.branch:
-            url += '@{}'.format(self.course_key.branch)
+            url += u'@{}'.format(self.course_key.branch)
         return url
 
     def to_deprecated_string(self):
