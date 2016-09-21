@@ -217,6 +217,15 @@ class DeprecatedLocation(BlockUsageLocator):
 
     URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.VERBOSE | re.UNICODE)
 
+    def __init__(self, course_key, block_type, block_id):
+        if course_key.version_guid is not None:
+            raise ValueError("DeprecatedLocations don't support course versions")
+
+        if course_key.branch is not None:
+            raise ValueError("DeprecatedLocations don't support course branches")
+
+        super(DeprecatedLocation, self).__init__(course_key, block_type, block_id)
+
     @classmethod
     def _from_string(cls, serialized):
         """
