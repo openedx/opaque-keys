@@ -146,6 +146,16 @@ def perturbed_strings(string_strategy):
     perturbed='aside-def-v1:def-v1:000000000000000000000000+type@-\n::00',
 )
 @example(key_type=UsageKey, serialized='i4x://-/-/0/-', perturbed='0i4x://-/-/0/-')
+@example(
+    key_type=AssetKey,
+    serialized='/c4x/-/-/-/-',
+    perturbed='c4x/-/-/-/-',
+)
+@example(
+    key_type=UsageKey,
+    serialized=u'i4x://-/-/-/-@-',
+    perturbed=u'i4x:/-/-/-/-@-',
+)
 def test_perturbed_serializations(key_type, serialized, perturbed):
     assume(serialized != perturbed)
 
