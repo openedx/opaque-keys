@@ -215,7 +215,7 @@ class DeprecatedLocation(BlockUsageLocator):
         (?P<block_id>{ALLOWED_ID_CHARS}+)
         """.format(ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS)
 
-    URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.VERBOSE | re.UNICODE)
+    URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.VERBOSE | re.UNICODE)
 
     def __init__(self, course_key, block_type, block_id):
         if course_key.version_guid is not None:
