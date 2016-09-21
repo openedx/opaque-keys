@@ -240,6 +240,13 @@ class DeprecatedLocation(BlockUsageLocator):
         block_id = parsed_parts.get('block_id')
         return cls(course_key, parsed_parts.get('block_type'), block_id)
 
+    def _to_string(self):
+        """
+        Return a string representing this location.
+        """
+        parts = [self.org, self.course, self.run, self.block_type, self.block_id]
+        return u"+".join(parts)
+
 
 class AssetLocation(LocationBase, AssetLocator):
     """Deprecated. Use :class:`locator.AssetLocator`"""
