@@ -615,7 +615,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
     block_type = None
 
     DEPRECATED_URL_RE = re.compile("""
-        (i4x://?|/i4x/)
+        (i4x://|/i4x/)
         (?P<org>[^/]+)/
         (?P<course>[^/]+)/
         (?P<category>[^/]+)/     # category == block_type
@@ -1233,7 +1233,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
     __slots__ = BlockUsageLocator.KEY_FIELDS
 
     ASSET_URL_RE = re.compile(r"""
-        /?c4x/
+        /c4x/
         (?P<org>[^/]+)/
         (?P<course>[^/]+)/
         (?P<category>[^/]+)/
