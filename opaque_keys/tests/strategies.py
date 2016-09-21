@@ -4,12 +4,15 @@
 
 from functools import update_wrapper
 import string
+from six import text_type
 
-from hypothesis import strategies
+from hypothesis import strategies, assume
 from singledispatch import singledispatch
 
 from opaque_keys.edx.block_types import BlockTypeKeyV1, XBLOCK_V1, XMODULE_V1
-from opaque_keys.edx.asides import AsideDefinitionKeyV1, AsideUsageKeyV1
+from opaque_keys.edx.asides import (
+    AsideDefinitionKeyV2, AsideUsageKeyV2, AsideDefinitionKeyV1, AsideUsageKeyV1
+)
 from opaque_keys.edx.keys import (
     AsideDefinitionKey,
     AsideUsageKey,
@@ -118,26 +121,66 @@ def fields_for_key(cls, field):  # pylint: disable=unused-argument
         return strategies.text(min_size=1)
 
 
+@strategies.composite
+def _aside_v1_exclusions(draw, strategy):
+    """
+    A strategy that can be wrapped around another to exclude
+    strings not allowed by _join_keys_v1, and thus not allowed by
+    AsideDefinitionKeyV1 or AsideUsageKeyV1.
+    """
+    key = draw(strategy)
+    serialized = text_type(key)
+    assume('::' not in serialized)
+    assume(not serialized.endswith(':'))
+    return key
+
+
 @fields_for_key.register(AsideDefinitionKeyV1)
 @strategies.cacheable
-def _fields_for_aside_def_key(cls, field):  # pylint: disable=missing-docstring
+def _fields_for_aside_def_key_v1(cls, field):  # pylint: disable=missing-docstring
     if field == 'deprecated':
         return strategies.just(False)
     elif field == 'definition_key':
-        return keys_of_type(DefinitionKey, blacklist=AsideDefinitionKey)
+        return _aside_v1_exclusions(  # pylint: disable=no-value-for-parameter
+            keys_of_type(DefinitionKey, blacklist=AsideDefinitionKey)
+        )
     else:
         return fields_for_key(super(AsideDefinitionKeyV1, cls).__class__, field)
 
 
 @fields_for_key.register(AsideUsageKeyV1)
 @strategies.cacheable
-def _fields_for_aside_usage_key(cls, field):  # pylint: disable=missing-docstring, function-redefined
+def _fields_for_aside_usage_key_v1(cls, field):  # pylint: disable=missing-docstring, function-redefined
+    if field == 'deprecated':
+        return strategies.just(False)
+    elif field == 'usage_key':
+        return _aside_v1_exclusions(  # pylint: disable=no-value-for-parameter
+            keys_of_type(UsageKey, blacklist=AsideUsageKey)
+        )
+    else:
+        return fields_for_key(super(AsideUsageKeyV1, cls).__class__, field)
+
+
+@fields_for_key.register(AsideDefinitionKeyV2)
+@strategies.cacheable
+def _fields_for_aside_def_key_v2(cls, field):  # pylint: disable=missing-docstring
+    if field == 'deprecated':
+        return strategies.just(False)
+    elif field == 'definition_key':
+        return keys_of_type(DefinitionKey, blacklist=AsideDefinitionKey)
+    else:
+        return fields_for_key(super(AsideDefinitionKeyV2, cls).__class__, field)
+
+
+@fields_for_key.register(AsideUsageKeyV2)
+@strategies.cacheable
+def _fields_for_aside_usage_key_v2(cls, field):  # pylint: disable=missing-docstring, function-redefined
     if field == 'deprecated':
         return strategies.just(False)
     elif field == 'usage_key':
         return keys_of_type(UsageKey, blacklist=AsideUsageKey)
     else:
-        return fields_for_key(super(AsideUsageKeyV1, cls).__class__, field)
+        return fields_for_key(super(AsideUsageKeyV2, cls).__class__, field)
 
 
 @fields_for_key.register(LibraryLocator)

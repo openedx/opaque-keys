@@ -142,8 +142,8 @@ def perturbed_strings(string_strategy):
 )
 @example(
     key_type=DefinitionKey,
-    serialized='aside-def-v1:def-v1$:000000000000000000000000+type@-::00',
-    perturbed='aside-def-v1:def-v1$:000000000000000000000000+type@-\n::00',
+    serialized='aside-def-v1:def-v1:000000000000000000000000+type@-::00',
+    perturbed='aside-def-v1:def-v1:000000000000000000000000+type@-\n::00',
 )
 def test_perturbed_serializations(key_type, serialized, perturbed):
     assume(serialized != perturbed)
