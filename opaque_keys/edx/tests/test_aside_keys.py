@@ -2,11 +2,11 @@
 Tests of AsideUsageKeyV1 and AsideDefinitionKeyV1.
 """
 
-import itertools
 from unittest import TestCase
 
 from six import text_type
 import ddt
+from hypothesis import strategies, given
 
 from opaque_keys.edx.asides import AsideUsageKeyV1, AsideDefinitionKeyV1, _encode, _decode
 from opaque_keys.edx.keys import AsideUsageKey, AsideDefinitionKey
@@ -18,17 +18,30 @@ from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator, Definition
 class TestEncode(TestCase):
     """Tests of encoding and decoding functions."""
 
-    @ddt.data(*(''.join(substrs) for substrs in itertools.product(['$', '$$', '::', ':', 'x'], repeat=3)))
-    def test_encode_roundtrip(self, data):
+    @given(text=strategies.text())
+    def test_encode_roundtrip(self, text):
         """
         Test all combinations that include characters we're trying to encode, or using in the encoding.
 
         Use 7 character permutations so that we can test all surrounding contexts for
         characters/strings used in the encoding scheme.
         """
-        encoded = _encode(data)
+        encoded = _encode(text)
         decoded = _decode(encoded)
-        self.assertEqual(data, decoded)
+        self.assertEqual(text, decoded)
+
+    @ddt.data(
+        ('$$', '$'),
+        ('$$$$', '$$'),
+    )
+    @ddt.unpack
+    def test_valid_decoding(self, string, result):
+        self.assertEqual(_decode(string), result)
+
+    @ddt.data('$', '$$$', ':', ':$:', '1:')
+    def test_invalid_decoding(self, string):
+        with self.assertRaises(ValueError):
+            _decode(string)
 
 
 @ddt.ddt
@@ -50,8 +63,10 @@ class TestAsideKeys(TestCase):
         self.assertEqual(aside_type, deserialized.aside_type)
 
     @ddt.data(
-        'aside-usage-v1:i4x://org/course/cat/name::aside',
-        'aside-usage-v1:block-v1:org+course+cat+type@block_type+block@name::aside',
+        'aside-usage-v1:i4x$://org/course/cat/name::aside',
+        'aside-usage-v1:block-v1$:org+course+cat+type@block_type+block@name::aside',
+        'aside-usage-v1:lib-block-v1$:$:+-+branch@-+version@000000000000000000000000+type@-+block@-::0',
+        'aside-usage-v1:i4x$://-/-/-/$:::0',
     )
     def test_usage_round_trip_serialized(self, aside_key):
         deserialized = AsideUsageKey.from_string(aside_key)
@@ -73,7 +88,7 @@ class TestAsideKeys(TestCase):
         self.assertEqual(aside_type, deserialized.aside_type)
 
     @ddt.data(
-        'aside-def-v1:def-v1:abcd1234abcd1234abcd1234+type@block_type::aside'
+        'aside-def-v1:def-v1$:abcd1234abcd1234abcd1234+type@block_type::aside'
     )
     def test_definition_round_trip_serialized(self, aside_key):
         deserialized = AsideDefinitionKey.from_string(aside_key)

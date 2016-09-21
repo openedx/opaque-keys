@@ -145,6 +145,28 @@ def perturbed_strings(string_strategy):
     serialized='aside-def-v1:def-v1$:000000000000000000000000+type@-::00',
     perturbed='aside-def-v1:def-v1$:000000000000000000000000+type@-\n::00',
 )
+@example(
+    key_type=DefinitionKey,
+    serialized=u'aside-def-v1:def-v1$:000000000000000000000000+type@0::$$$$0',
+    perturbed=u'aside-def-v1:def-v1$:000000000000000000000000+type@0::$$$0',
+)
+@example(
+    key_type=UsageKey,
+    serialized='aside-usage-v1:location$:-+$:+-+-+-::0',
+    perturbed='aside-usage-v1:location$0:-+$:+-+-+-::0',
+)
+@example(
+    key_type=UsageKey,
+    serialized='aside-usage-v1:location$:-+-+-+-+-::0',
+    perturbed='aside-usage-v1:location$:-+-+-+-+-:0:0',
+)
+@example(
+    key_type=UsageKey,
+    serialized='aside-usage-v1:lib-block-v1$:$:$:--$:+-$:$:$:+branch@-$:-'
+               '+version@000000000000000000000000+type@$:+block@$:::0',
+    perturbed='aside-usage-v1:lib-block-v1:$:$:--$:+-$:$:$:+branch@-$:-'
+              '+version@000000000000000000000000+type@$:+block@$:::0',
+)
 def test_perturbed_serializations(key_type, serialized, perturbed):
     assume(serialized != perturbed)
 

@@ -12,9 +12,11 @@ describe. The `AsideDefinitionKey` and `AsideUsageKey` allow :class:`xblock.core
 store scoped data alongside the definition and usage of the particular XBlock usage that they're
 commenting on.
 """
+import re
 from six import text_type
 
 from opaque_keys.edx.keys import AsideDefinitionKey, AsideUsageKey, DefinitionKey, UsageKey
+from opaque_keys import InvalidKeyError
 
 
 def _encode(value):
@@ -23,14 +25,23 @@ def _encode(value):
     be used to mark encoded characters). This way we can use :: to separate
     the two halves of an aside key.
     """
-    return value.replace('$', '$$').replace('::', '$::')
+    return value.replace('$', '$$').replace(':', '$:')
 
 
 def _decode(value):
     """
     Decode '::' and '$' characters encoded by `_encode`.
     """
-    return value.replace('$::', '::').replace('$$', '$')
+    # Find any ':' that isn't preceded by '$'
+    if re.search(r'(?<!\$):', value):
+        raise ValueError("Invalid encoding: bare ':'")
+
+    decode_colons = value.replace('$:', ':')
+
+    if decode_colons.count('$') % 2 == 1:
+        raise ValueError("Invalid encoding: bare '$'")
+
+    return decode_colons.replace('$$', '$')
 
 
 class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-method
@@ -82,8 +93,11 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
             InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
                 understood by `cls`.
         """
-        def_key, __, aside_type = serialized.partition('::')
-        return cls(DefinitionKey.from_string(_decode(def_key)), _decode(aside_type))
+        try:
+            def_key, aside_type = re.split(r'(?<!\$)::', serialized, maxsplit=1)
+            return cls(DefinitionKey.from_string(_decode(def_key)), _decode(aside_type))
+        except ValueError as exc:
+            raise InvalidKeyError(cls, exc.args)
 
     def _to_string(self):
         """
@@ -171,8 +185,11 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
             InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
                 understood by `cls`.
         """
-        usage_key, __, aside_type = serialized.partition('::')
-        return cls(UsageKey.from_string(_decode(usage_key)), _decode(aside_type))
+        try:
+            usage_key, aside_type = re.split(r'(?<!\$)::', serialized, maxsplit=1)
+            return cls(UsageKey.from_string(_decode(usage_key)), _decode(aside_type))
+        except ValueError as exc:
+            raise InvalidKeyError(cls, exc.args)
 
     def _to_string(self):
         """
