@@ -1233,12 +1233,14 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
     __slots__ = BlockUsageLocator.KEY_FIELDS
 
     ASSET_URL_RE = re.compile(r"""
+        ^
         /c4x/
         (?P<org>[^/]+)/
         (?P<course>[^/]+)/
         (?P<category>[^/]+)/
         (?P<name>[^@]+)
         (@(?P<revision>[^/]+))?
+        \Z
     """, re.VERBOSE)
 
     ALLOWED_ID_RE = BlockUsageLocator.DEPRECATED_ALLOWED_ID_RE
