@@ -1051,9 +1051,17 @@ class LibraryUsageLocator(BlockUsageLocator):
 
         block_id = self._parse_block_ref(block_id, False)
 
-        if not all(self.ALLOWED_ID_RE.match(val) for val in (block_type, block_id)):
-            raise InvalidKeyError(self.__class__,
-                                  "Invalid block_type or block_id ('{}', '{}')".format(block_type, block_id))
+        try:
+            if not all(self.ALLOWED_ID_RE.match(val) for val in (block_type, block_id)):
+                raise InvalidKeyError(
+                    self.__class__,
+                    "Invalid block_type or block_id ({!r}, {!r})".format(block_type, block_id)
+                )
+        except TypeError:
+            raise InvalidKeyError(
+                self.__class__,
+                "Invalid block_type or block_id ({!r}, {!r})".format(block_type, block_id)
+            )
 
         # We skip the BlockUsageLocator init and go to its superclass:
         # pylint: disable=bad-super-call
@@ -1082,9 +1090,15 @@ class LibraryUsageLocator(BlockUsageLocator):
         # Allow access to _from_string protected method
         library_key = LibraryLocator._from_string(serialized)  # pylint: disable=protected-access
         parsed_parts = LibraryLocator.parse_url(serialized)
+
         block_id = parsed_parts.get('block_id', None)
         if block_id is None:
             raise InvalidKeyError(cls, serialized)
+
+        block_type = parsed_parts.get('block_type')
+        if block_type is None:
+            raise InvalidKeyError(cls, serialized)
+
         return cls(library_key, parsed_parts.get('block_type'), block_id)
 
     def version_agnostic(self):
