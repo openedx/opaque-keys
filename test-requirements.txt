@@ -10,5 +10,6 @@ pytest
 pytest-cov
 pytest-pep8
 pytest-pylint
+pytest-xdist
 singledispatch
 tox
