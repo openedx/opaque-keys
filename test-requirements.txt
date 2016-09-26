@@ -1,7 +1,7 @@
 coverage
 ddt
 edx-lint==0.4.0
-hypothesis
+git+https://github.com/cpennington/hypothesis-python@fast-integers#egg=hypothesis
 mock
 nose
 pep8
