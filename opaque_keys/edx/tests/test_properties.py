@@ -166,6 +166,11 @@ def perturbed_strings(string_strategy):
     serialized='lib-block-v1:-+-+branch@--+version@000000000000000000000000+type@-+block@-',
     perturbed='lib-block-v1:-+-+block@-',
 )
+@example(
+    key_type=UsageKey,
+    serialized=u'i4x://-/-/-/-@-',
+    perturbed=u'/i4x/-/-/-/-@-',
+)
 def test_perturbed_serializations(key_type, serialized, perturbed):
     assume(serialized != perturbed)
 
