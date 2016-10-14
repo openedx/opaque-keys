@@ -8,6 +8,7 @@ import inspect
 import logging
 import re
 import warnings
+from typing import Text
 from abc import abstractproperty
 
 from bson.errors import InvalidId
@@ -150,6 +151,11 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
 
     # Characters that are forbidden in the deprecated format
     INVALID_CHARS_DEPRECATED = re.compile(r"[^\w.%-]", re.UNICODE)
+
+    # Explicitly specify attributes from KEY_FIELDS to assign them types
+    org = None  # type: Text
+    course = None  # type: Text
+    run = None  # type: Text
 
     def __init__(self, org=None, course=None, run=None, branch=None, version_guid=None, deprecated=False, **kwargs):
         """
@@ -608,11 +614,12 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
     KEY_FIELDS = ('course_key', 'block_type', 'block_id')
     CHECKED_INIT = False
 
-    DEPRECATED_TAG = 'i4x'  # to combine Locations with BlockUsageLocators
+    DEPRECATED_TAG = u'i4x'  # to combine Locations with BlockUsageLocators
 
     # fake out class introspection as this is an attr in this class's instances
-    course_key = None
-    block_type = None
+    course_key = None  # type: CourseKey
+    block_type = None  # type: Text
+    block_id = None  # type: Text
 
     DEPRECATED_URL_RE = re.compile("""
         i4x://
@@ -1038,8 +1045,8 @@ class LibraryUsageLocator(BlockUsageLocator):
     KEY_FIELDS = ('library_key', 'block_type', 'block_id')
 
     # fake out class introspection as this is an attr in this class's instances
-    library_key = None
-    block_type = None
+    library_key = None  # type: CourseKey
+    block_type = None  # type: Text
 
     def __init__(self, library_key, block_type, block_id, **kwargs):
         """
@@ -1170,8 +1177,8 @@ class DefinitionLocator(Locator, DefinitionKey):
     CHECKED_INIT = False
 
     # override the abstractproperty
-    block_type = None
-    definition_id = None
+    block_type = None  # type: Text
+    definition_id = None  # type: Text
 
     def __init__(self, block_type, definition_id, deprecated=False):    # pylint: disable=unused-argument
         if isinstance(definition_id, string_types):
@@ -1243,7 +1250,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
     An AssetKey implementation class.
     """
     CANONICAL_NAMESPACE = 'asset-v1'
-    DEPRECATED_TAG = 'c4x'
+    DEPRECATED_TAG = u'c4x'
     __slots__ = BlockUsageLocator.KEY_FIELDS
 
     ASSET_URL_RE = re.compile(r"""

@@ -4,6 +4,7 @@ Deprecated OpaqueKey implementations used by XML and Mongo modulestores
 from __future__ import absolute_import
 
 import re
+from typing import Text
 import warnings
 
 from opaque_keys.edx.keys import i4xEncoder as real_i4xEncoder
@@ -77,8 +78,8 @@ class SlashSeparatedCourseKey(CourseLocator):
 
 class LocationBase(object):
     """Deprecated. Base class for :class:`Location` and :class:`AssetLocation`"""
-
-    DEPRECATED_TAG = None  # Subclasses should define what DEPRECATED_TAG is
+    # Subclasses should define what DEPRECATED_TAG is
+    DEPRECATED_TAG = None  # type: Text
 
     @classmethod
     def _deprecation_warning(cls):
@@ -182,7 +183,7 @@ class LocationBase(object):
 class Location(LocationBase, BlockUsageLocator):
     """Deprecated. Use :class:`locator.BlockUsageLocator`"""
 
-    DEPRECATED_TAG = 'i4x'
+    DEPRECATED_TAG = u'i4x'
 
     def replace(self, **kwargs):
         """
@@ -251,7 +252,7 @@ class DeprecatedLocation(BlockUsageLocator):
 class AssetLocation(LocationBase, AssetLocator):
     """Deprecated. Use :class:`locator.AssetLocator`"""
 
-    DEPRECATED_TAG = 'c4x'
+    DEPRECATED_TAG = u'c4x'
 
     def replace(self, **kwargs):
         """

@@ -8,11 +8,13 @@ import logging
 from hypothesis import strategies, given, assume, example
 from six import text_type
 from six.moves import range  # pylint: disable=redefined-builtin
+from typing import Sequence, Type
+from opaque_keys import OpaqueKey
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey
 from opaque_keys import InvalidKeyError
 from opaque_keys.tests.strategies import keys_of_type
 
-KEY_TYPES = (CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey)
+KEY_TYPES = (CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey)  # type: Sequence[Type[OpaqueKey]]
 KEY_CLASSES = set(
     extension.plugin
     for key_type in KEY_TYPES

@@ -5,6 +5,7 @@ OpaqueKey abstract classes for edx-platform object types (courses, definitions, 
 import json
 from abc import abstractmethod, abstractproperty
 from six import text_type
+from typing import Sequence, Text
 
 from opaque_keys import OpaqueKey
 
@@ -82,7 +83,7 @@ class CourseObjectMixin(object):
     An abstract :class:`opaque_keys.OpaqueKey` mixin
     for keys that belong to courses.
     """
-    __slots__ = ()
+    __slots__ = ()  # type: Sequence[Text]
 
     @abstractproperty
     def course_key(self):  # pragma: no cover

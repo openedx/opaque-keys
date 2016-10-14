@@ -9,6 +9,7 @@ formats, and allowing new serialization formats to be installed transparently.
 from _collections import defaultdict
 from abc import ABCMeta, abstractmethod
 from functools import total_ordering
+from typing import List, Text, Sequence
 
 from six import (
     iteritems,
@@ -16,7 +17,7 @@ from six import (
     text_type,
     viewkeys,
     viewitems,
-    with_metaclass,
+    add_metaclass,
 )
 from stevedore.enabled import EnabledExtensionManager
 
@@ -44,7 +45,8 @@ class OpaqueKeyMetaclass(ABCMeta):
 
 @python_2_unicode_compatible
 @total_ordering
-class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
+@add_metaclass(OpaqueKeyMetaclass)
+class OpaqueKey(object):
     """
     A base-class for implementing pluggable opaque keys. Individual key subclasses identify
     particular types of resources, without specifying the actual form of the key (or
@@ -98,10 +100,10 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
     Serialization of an :class:`OpaqueKey` is performed by using the :func:`unicode` builtin.
     Deserialization is performed by the :meth:`from_string` method.
     """
-    __slots__ = ('_initialized', 'deprecated')
+    __slots__ = ('_initialized', 'deprecated')  # type: Sequence[Text]
 
-    KEY_FIELDS = []
-    CANONICAL_NAMESPACE = None
+    KEY_FIELDS = []  # type: List[Text]
+    CANONICAL_NAMESPACE = None  # type: Text
     NAMESPACE_SEPARATOR = u':'
     CHECKED_INIT = True
 
