@@ -5,7 +5,8 @@ OpaqueKey abstract classes for edx-platform object types (courses, definitions, 
 import json
 from abc import abstractmethod, abstractproperty
 from six import text_type
-from typing import Sequence, Text
+
+from typing import Sequence, Text  # pylint: disable=unused-import
 
 from opaque_keys import OpaqueKey
 
@@ -113,7 +114,7 @@ class AssetKey(CourseObjectMixin, OpaqueKey):
     An :class:`opaque_keys.OpaqueKey` identifying a course asset.
     """
     KEY_TYPE = 'asset_key'
-    __slots__ = ()
+    __slots__ = ()  # type: Sequence[Text]
 
     @abstractproperty
     def asset_type(self):  # pragma: no cover
@@ -135,7 +136,7 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
     An :class:`opaque_keys.OpaqueKey` identifying an XBlock usage.
     """
     KEY_TYPE = 'usage_key'
-    __slots__ = ()
+    __slots__ = ()  # type: Sequence[Text]
 
     @abstractproperty
     def definition_key(self):  # pragma: no cover

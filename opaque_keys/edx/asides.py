@@ -13,7 +13,11 @@ store scoped data alongside the definition and usage of the particular XBlock us
 commenting on.
 """
 import re
+from operator import attrgetter
+
 from six import text_type
+
+from typing import Text, Any, cast  # pylint: disable=unused-import
 
 from opaque_keys.edx.keys import AsideDefinitionKey, AsideUsageKey, DefinitionKey, UsageKey
 from opaque_keys import InvalidKeyError
@@ -50,14 +54,20 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
     """
     CANONICAL_NAMESPACE = 'aside-def-v1'
     KEY_FIELDS = ('definition_key', 'aside_type')
-    __slots__ = KEY_FIELDS
+    __slots__ = ('_definition_key', '_aside_type')
     CHECKED_INIT = False
 
     DEFINITION_KEY_FIELDS = ('block_type', )
 
-    def __init__(self, definition_key, aside_type, deprecated=False):
-        super(AsideDefinitionKeyV1, self).__init__(definition_key=definition_key, aside_type=aside_type,
-                                                   deprecated=deprecated)
+    definition_key = cast(DefinitionKey, property(attrgetter('_definition_key')))
+    aside_type = cast(Text, property(attrgetter('_aside_type')))
+
+    def __init__(self, definition_key, aside_type, **kwargs):
+        # type: (DefinitionKey, Text, **Any) -> None
+        self._definition_key = definition_key
+        self._aside_type = aside_type
+
+        super(AsideDefinitionKeyV1, self).__init__(**kwargs)
 
     @property
     def block_type(self):
@@ -114,13 +124,19 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
     """
     CANONICAL_NAMESPACE = 'aside-usage-v1'
     KEY_FIELDS = ('usage_key', 'aside_type')
-    __slots__ = KEY_FIELDS
+    __slots__ = ('_usage_key', '_aside_type')
     CHECKED_INIT = False
 
     USAGE_KEY_ATTRS = ('block_id', 'block_type', 'definition_key', 'course_key')
 
-    def __init__(self, usage_key, aside_type, deprecated=False):
-        super(AsideUsageKeyV1, self).__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
+    usage_key = cast(UsageKey, property(attrgetter('_usage_key')))
+    aside_type = cast(Text, property(attrgetter('_aside_type')))
+
+    def __init__(self, usage_key, aside_type, **kwargs):
+        # type: (UsageKey, Text, **Any) -> None
+        self._usage_key = usage_key
+        self._aside_type = aside_type
+        super(AsideUsageKeyV1, self).__init__(**kwargs)
 
     @property
     def block_id(self):

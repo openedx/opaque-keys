@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := test
 
-.PHONY: html_coverage, quality, requirements
+.PHONY: html_coverage quality requirements types
 
 html_coverage:
 	coverage html && open htmlcov/index.html
@@ -14,3 +14,6 @@ requirements:
 
 test:
 	tox
+
+types:
+	tox -e types-2 -e types-3

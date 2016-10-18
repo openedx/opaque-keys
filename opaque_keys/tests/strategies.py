@@ -98,7 +98,7 @@ def classdispatch(func):
     def wrapper(*args, **kw):  # pylint: disable=missing-docstring
         return dispatcher.dispatch(args[0])(*args, **kw)
 
-    wrapper.register = dispatcher.register
+    wrapper.register = dispatcher.register  # type: ignore
     update_wrapper(wrapper, func)
     return wrapper
 
@@ -126,7 +126,10 @@ def _fields_for_aside_def_key(cls, field):  # pylint: disable=missing-docstring
     elif field == 'definition_key':
         return keys_of_type(DefinitionKey, blacklist=AsideDefinitionKey)
     else:
-        return fields_for_key(super(AsideDefinitionKeyV1, cls).__class__, field)
+        return fields_for_key(
+            super(AsideDefinitionKeyV1, cls).__class__,  # type: ignore #https://github.com/python/mypy/issues/526
+            field
+        )
 
 
 @fields_for_key.register(AsideUsageKeyV1)
@@ -137,7 +140,10 @@ def _fields_for_aside_usage_key(cls, field):  # pylint: disable=missing-docstrin
     elif field == 'usage_key':
         return keys_of_type(UsageKey, blacklist=AsideUsageKey)
     else:
-        return fields_for_key(super(AsideUsageKeyV1, cls).__class__, field)
+        return fields_for_key(
+            super(AsideUsageKeyV1, cls).__class__,  # type: ignore #https://github.com/python/mypy/issues/526
+            field
+        )
 
 
 @fields_for_key.register(LibraryLocator)
@@ -150,7 +156,10 @@ def _fields_for_library_locator(cls, field):  # pylint: disable=missing-docstrin
     elif field == 'deprecated':
         return strategies.just(False)
     else:
-        return fields_for_key(super(LibraryLocator, cls).__class__, field)
+        return fields_for_key(
+            super(LibraryLocator, cls).__class__,  # type: ignore #https://github.com/python/mypy/issues/526
+            field
+        )
 
 
 @fields_for_key.register(DefinitionLocator)
@@ -161,7 +170,10 @@ def _fields_for_definition_locator(cls, field):  # pylint: disable=missing-docst
     elif field == 'block_type':
         return allowed_locator_ids()
     else:
-        return fields_for_key(super(DefinitionLocator, cls).__class__, field)
+        return fields_for_key(
+            super(DefinitionLocator, cls).__class__,  # type: ignore #https://github.com/python/mypy/issues/526
+            field
+        )
 
 
 @classdispatch

@@ -6,10 +6,12 @@ from __future__ import absolute_import
 
 import inspect
 import logging
+from operator import attrgetter
 import re
 import warnings
-from typing import Text
 from abc import abstractproperty
+
+from typing import Text, Sequence, Union, Any, cast  # pylint: disable=unused-import
 
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
@@ -27,6 +29,7 @@ class LocalId(object):
     Class for local ids for non-persisted xblocks (which can have hardcoded block_ids if necessary)
     """
     def __init__(self, block_id=None):
+        # type: (Text) -> None
         self.block_id = block_id
         super(LocalId, self).__init__()
 
@@ -84,10 +87,13 @@ class BlockLocatorBase(Locator):
     BRANCH_PREFIX = r"branch"
     # Prefix for the block portion of a locator URL
     BLOCK_PREFIX = r"block"
-    BLOCK_ALLOWED_ID_CHARS = r'[\w\-~.:%]'
+    BLOCK_ALLOWED_ID_CHARS = text_type(r'[\w\-~.:%]')
 
-    ALLOWED_ID_RE = re.compile(r'^' + Locator.ALLOWED_ID_CHARS + r'+\Z', re.UNICODE)
-    DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + r'+\Z', re.UNICODE)
+    ALLOWED_ID_RE = re.compile(text_type(r'^') + Locator.ALLOWED_ID_CHARS + text_type(r'+\Z'), re.UNICODE)
+    DEPRECATED_ALLOWED_ID_RE = re.compile(
+        text_type(r'^') + Locator.DEPRECATED_ALLOWED_ID_CHARS + text_type(r'+\Z'),
+        re.UNICODE
+    )
 
     URL_RE_SOURCE = r"""
         ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)(\+(?P<run>{ALLOWED_ID_CHARS}+))?{SEP})??
@@ -146,18 +152,29 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
 
     CANONICAL_NAMESPACE = 'course-v1'
     KEY_FIELDS = ('org', 'course', 'run', 'branch', 'version_guid')
-    __slots__ = KEY_FIELDS
+    __slots__ = ('_org', '_course', '_run', '_branch', '_version_guid')
     CHECKED_INIT = False
 
     # Characters that are forbidden in the deprecated format
     INVALID_CHARS_DEPRECATED = re.compile(r"[^\w.%-]", re.UNICODE)
 
-    # Explicitly specify attributes from KEY_FIELDS to assign them types
-    org = None  # type: Text
-    course = None  # type: Text
-    run = None  # type: Text
+    org = cast(Text, property(attrgetter('_org')))
+    course = cast(Text, property(attrgetter('_course')))
+    run = cast(Text, property(attrgetter('_run')))
+    branch = cast(Text, property(attrgetter('_branch')))
+    version_guid = cast(Union[ObjectId, Text], property(attrgetter('_version_guid')))
 
-    def __init__(self, org=None, course=None, run=None, branch=None, version_guid=None, deprecated=False, **kwargs):
+    def __init__(
+            self,
+            org=None,  # type: Text
+            course=None,  # type: Text
+            run=None,  # type: Text
+            branch=None,  # type: Text
+            version_guid=None,  # type: Union[ObjectId, Text]
+            deprecated=False,  # type: bool
+            **kwargs
+    ):
+        # type: (...) -> None
         """
         Construct a CourseLocator
 
@@ -166,6 +183,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
             org, course, run (string): the standard definition. Optional only if version_guid given
             branch (string): the branch such as 'draft', 'published', 'staged', 'beta'
         """
+
         offering_arg = kwargs.pop('offering', None)
         if offering_arg:
             warnings.warn(
@@ -197,22 +215,22 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
                     raise InvalidKeyError(self.__class__,
                                           u"Special characters not allowed in field {}: '{}'".format(name, value))
 
-        super(CourseLocator, self).__init__(
-            org=org,
-            course=course,
-            run=run,
-            branch=branch,
-            version_guid=version_guid,
-            deprecated=deprecated,
-            **kwargs
-        )
-
-        if self.deprecated and (self.org is None or self.course is None):
+        if deprecated and (org is None or course is None):
             raise InvalidKeyError(self.__class__, "Deprecated strings must set both org and course.")
 
-        if not self.deprecated and self.version_guid is None and \
-                (self.org is None or self.course is None or self.run is None):
+        if not deprecated and version_guid is None and \
+                (org is None or course is None or run is None):
             raise InvalidKeyError(self.__class__, "Either version_guid or org, course, and run should be set")
+
+        self._org = org
+        self._course = course
+        self._run = run
+        self._branch = branch
+        self._version_guid = version_guid
+
+        super(CourseLocator, self).__init__(
+            deprecated=deprecated,
+        )
 
     @classmethod
     def _check_location_part(cls, val, regexp):  # pylint: disable=missing-docstring
@@ -413,10 +431,16 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
     CANONICAL_NAMESPACE = 'library-v1'
     RUN = 'library'  # For backwards compatibility, LibraryLocators have a read-only 'run' property equal to this
     KEY_FIELDS = ('org', 'library', 'branch', 'version_guid')
-    __slots__ = KEY_FIELDS
+    __slots__ = ('_org', '_library', '_branch', '_version_guid')
     CHECKED_INIT = False
 
+    org = cast(Text, property(attrgetter('_org')))
+    library = cast(Text, property(attrgetter('_library')))
+    branch = cast(Text, property(attrgetter('_branch')))
+    version_guid = cast(Union[ObjectId, Text], property(attrgetter('_version_guid')))
+
     def __init__(self, org=None, library=None, branch=None, version_guid=None, **kwargs):
+        # type: (Text, Text, Text, Union[ObjectId, Text], **Any) -> None
         """
         Construct a LibraryLocator
 
@@ -453,11 +477,12 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         if kwargs.get('deprecated', False):
             raise InvalidKeyError(self.__class__, 'LibraryLocator cannot have deprecated=True')
 
+        self._org = org
+        self._library = library
+        self._branch = branch
+        self._version_guid = version_guid
+
         super(LibraryLocator, self).__init__(
-            org=org,
-            library=library,
-            branch=branch,
-            version_guid=version_guid,
             **kwargs
         )
 
@@ -611,15 +636,11 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
       - block_id = name
     """
     CANONICAL_NAMESPACE = 'block-v1'
-    KEY_FIELDS = ('course_key', 'block_type', 'block_id')
+    KEY_FIELDS = (u'course_key', u'block_type', u'block_id')  # type: Sequence[Text]
+    __slots__ = (u'_course_key', u'_block_type', u'_block_id')  # type: Sequence[Text]
     CHECKED_INIT = False
 
     DEPRECATED_TAG = u'i4x'  # to combine Locations with BlockUsageLocators
-
-    # fake out class introspection as this is an attr in this class's instances
-    course_key = None  # type: CourseKey
-    block_type = None  # type: Text
-    block_id = None  # type: Text
 
     DEPRECATED_URL_RE = re.compile("""
         i4x://
@@ -639,18 +660,27 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
     # html ids can contain word chars and dashes
     DEPRECATED_INVALID_HTML_CHARS = re.compile(r"[^\w-]", re.UNICODE)
 
+    course_key = cast(CourseLocator, property(attrgetter('_course_key')))
+    block_type = cast(Text, property(attrgetter('_block_type')))
+    block_id = cast(Text, property(attrgetter('_block_id')))
+
     def __init__(self, course_key, block_type, block_id, **kwargs):
+        # type: (CourseLocator, Text, Union[LocalId, Text], **Any) -> None
         """
         Construct a BlockUsageLocator
         """
+
+        self._course_key = course_key
+        self._block_type = block_type
+        self._block_id = block_id
+
         # Always use the deprecated status of the course key
         deprecated = kwargs['deprecated'] = course_key.deprecated
         block_id = self._parse_block_ref(block_id, deprecated)
         if block_id is None and not deprecated:
             raise InvalidKeyError(self.__class__, "Missing block id")
 
-        super(BlockUsageLocator, self).__init__(course_key=course_key, block_type=block_type, block_id=block_id,
-                                                **kwargs)
+        super(BlockUsageLocator, self).__init__(**kwargs)
 
     def replace(self, **kwargs):
         # BlockUsageLocator allows for the replacement of 'KEY_FIELDS' in 'self.course_key'.
@@ -1043,10 +1073,9 @@ class LibraryUsageLocator(BlockUsageLocator):
     """
     CANONICAL_NAMESPACE = 'lib-block-v1'
     KEY_FIELDS = ('library_key', 'block_type', 'block_id')
+    __slots__ = ('_library_key',)
 
-    # fake out class introspection as this is an attr in this class's instances
-    library_key = None  # type: CourseKey
-    block_type = None  # type: Text
+    library_key = cast(LibraryLocator, property(attrgetter('_library_key')))
 
     def __init__(self, library_key, block_type, block_id, **kwargs):
         """
@@ -1070,10 +1099,13 @@ class LibraryUsageLocator(BlockUsageLocator):
                 "Invalid block_type or block_id ({!r}, {!r})".format(block_type, block_id)
             )
 
+        self._library_key = library_key
+        self._block_type = block_type
+        self._block_id = block_id
+
         # We skip the BlockUsageLocator init and go to its superclass:
         # pylint: disable=bad-super-call
-        super(BlockUsageLocator, self).__init__(library_key=library_key, block_type=block_type, block_id=block_id,
-                                                **kwargs)
+        super(BlockUsageLocator, self).__init__(**kwargs)
 
     def replace(self, **kwargs):
         # BlockUsageLocator allows for the replacement of 'KEY_FIELDS' in 'self.library_key'
@@ -1174,19 +1206,24 @@ class DefinitionLocator(Locator, DefinitionKey):
     """
     CANONICAL_NAMESPACE = 'def-v1'
     KEY_FIELDS = ('definition_id', 'block_type')
+    __slots__ = (u'_definition_id', u'_block_type')
     CHECKED_INIT = False
 
-    # override the abstractproperty
-    block_type = None  # type: Text
-    definition_id = None  # type: Text
+    definition_id = cast(Union[ObjectId, Text], property(attrgetter('_definition_id')))
+    block_type = cast(Text, property(attrgetter('_block_type')))
 
     def __init__(self, block_type, definition_id, deprecated=False):    # pylint: disable=unused-argument
+        # type: (Union[ObjectId, Text], Text, bool) -> None
         if isinstance(definition_id, string_types):
             try:
                 definition_id = self.as_object_id(definition_id)
             except ValueError:
                 raise InvalidKeyError(DefinitionLocator, definition_id)
-        super(DefinitionLocator, self).__init__(definition_id=definition_id, block_type=block_type, deprecated=False)
+
+        self._definition_id = definition_id
+        self._block_type = block_type
+
+        super(DefinitionLocator, self).__init__(deprecated=False)
 
     def _to_string(self):
         """
@@ -1239,7 +1276,7 @@ class VersionTree(object):
             raise ValueError("locator must be version specific (Course has version_guid or definition had id)")
         self.locator = locator
         if tree_dict is None:
-            self.children = []
+            self.children = []  # type: List[VersionTree]
         else:
             self.children = [VersionTree(child, tree_dict)
                              for child in tree_dict.get(locator.version, [])]
@@ -1251,7 +1288,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
     """
     CANONICAL_NAMESPACE = 'asset-v1'
     DEPRECATED_TAG = u'c4x'
-    __slots__ = BlockUsageLocator.KEY_FIELDS
+    __slots__ = ()
 
     ASSET_URL_RE = re.compile(r"""
         ^

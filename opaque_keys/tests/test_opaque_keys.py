@@ -7,6 +7,7 @@ import json
 import pickle
 from unittest import TestCase
 
+from typing import Any  # pylint: disable=unused-import
 from six import text_type
 
 from opaque_keys import OpaqueKey, InvalidKeyError
@@ -31,6 +32,11 @@ class HexKey(DummyKey):
     KEY_FIELDS = ('value',)
     __slots__ = KEY_FIELDS
     CANONICAL_NAMESPACE = 'hex'
+
+    def __init__(self, value, **kwargs):
+        # type: (int, **Any) -> None
+        self.value = value
+        super(HexKey, self).__init__(**kwargs)
 
     def _to_string(self):
         return hex(self.value)
@@ -69,6 +75,12 @@ class Base10Key(DummyKey):
     # Deliberately not using __slots__, to test both cases
     CANONICAL_NAMESPACE = 'base10'
 
+    def __init__(self, value, **kwargs):
+        # type: (int, **Any) -> None
+        self.value = value
+
+        super(Base10Key, self).__init__(**kwargs)
+
     def _to_string(self):
         # For some reason, pylint doesn't think this key has a `value` attribute
         return text_type(self.value)  # pylint: disable=no-member
@@ -88,6 +100,11 @@ class DictKey(DummyKey):
     KEY_FIELDS = ('value',)
     __slots__ = KEY_FIELDS
     CANONICAL_NAMESPACE = 'dict'
+
+    def __init__(self, value, **kwargs):
+        # type: (dict, **Any) -> None
+        self.value = value
+        super(DictKey, self).__init__(**kwargs)
 
     def _to_string(self):
         # For some reason, pylint doesn't think this key has a `value` attribute
@@ -175,19 +192,19 @@ class KeyTests(TestCase):
 
     def test_constructor(self):
         with self.assertRaises(TypeError):
-            HexKey()
+            HexKey()  # type: ignore  # pylint: disable=no-value-for-parameter
 
         with self.assertRaises(TypeError):
-            HexKey(foo='bar')
+            HexKey(foo='bar')  # type: ignore  # pylint: disable=no-value-for-parameter
 
         with self.assertRaises(TypeError):
-            HexKey(10, 20)
+            HexKey(10, 20)  # type: ignore  # pylint: disable=too-many-function-args
 
         with self.assertRaises(TypeError):
             HexKey(value=10, bar=20)
 
         with self.assertRaises(TypeError):
-            HexKeyTwoFields(10, value=10)
+            HexKeyTwoFields(10, value=10)  # type: ignore  # pylint: disable=unexpected-keyword-arg
 
         self.assertEqual(HexKey(10).value, 10)
         self.assertEqual(HexKey(value=10).value, 10)
@@ -257,7 +274,7 @@ class KeyTests(TestCase):
     def test_non_ordering(self):
         # Verify that different key types aren't comparable
         ten = HexKey(value=10)
-        twelve = Base10Key(value=12)
+        twelve = Base10Key(value=12)  # type: ignore
 
         # pylint: disable=pointless-statement
         with self.assertRaises(TypeError):

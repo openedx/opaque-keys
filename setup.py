@@ -9,7 +9,8 @@ setup(
     install_requires=[
         'six>=1.10.0,<2.0.0',
         'stevedore>=0.14.1,<2.0.0',
-        'pymongo>=2.7.2,<4.0.0'
+        'pymongo>=2.7.2,<4.0.0',
+        'typing>=3.5.2',
     ],
     entry_points={
         'opaque_keys.testing': [

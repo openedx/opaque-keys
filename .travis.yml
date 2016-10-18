@@ -6,6 +6,7 @@ install:
   - pip install coveralls
 script:
   - tox -- py.test --hypothesis-profile=ci
+  - make types
   - make quality
 after_success:
   - coveralls

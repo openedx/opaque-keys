@@ -8,8 +8,7 @@ formats, and allowing new serialization formats to be installed transparently.
 """
 from _collections import defaultdict
 from abc import ABCMeta, abstractmethod
-from functools import total_ordering
-from typing import List, Text, Sequence
+from typing import List, Text, Sequence, KeysView  # pylint: disable=unused-import
 
 from six import (
     iteritems,
@@ -40,11 +39,12 @@ class OpaqueKeyMetaclass(ABCMeta):
         if '__slots__' not in attrs:
             for field in attrs.get('KEY_FIELDS', []):
                 attrs.setdefault(field, None)
-        return super(OpaqueKeyMetaclass, mcs).__new__(mcs, name, bases, attrs)
+        return super(OpaqueKeyMetaclass, mcs).__new__(  # type: ignore  # https://github.com/python/typeshed/pull/613
+            mcs, name, bases, attrs
+        )
 
 
 @python_2_unicode_compatible
-@total_ordering
 @add_metaclass(OpaqueKeyMetaclass)
 class OpaqueKey(object):
     """
@@ -269,50 +269,13 @@ class OpaqueKey(object):
         cls.deprecated_fallback = fallback
 
     # ============= VALUE SEMANTICS ==============
-    def __init__(self, *args, **kwargs):
-        # The __init__ expects child classes to implement KEY_FIELDS
-        # pylint: disable=no-member
-
+    def __init__(self, deprecated=False):
         # a flag used to indicate that this instance was deserialized from the
         # deprecated form and should serialize to the deprecated form
-        self.deprecated = kwargs.pop('deprecated', False)  # pylint: disable=assigning-non-slot
+        self.deprecated = deprecated
 
-        if self.CHECKED_INIT:
-            self._checked_init(*args, **kwargs)
-        else:
-            self._unchecked_init(**kwargs)
-        self._initialized = True  # pylint: disable=assigning-non-slot
-
-    def _checked_init(self, *args, **kwargs):
-        """
-        Set all KEY_FIELDS using the contents of args and kwargs, treating
-        KEY_FIELDS as the arg order, and validating number and order of args.
-        """
-        if len(args) + len(kwargs) != len(self.KEY_FIELDS):
-            raise TypeError('__init__() takes exactly {} arguments ({} given)'.format(
-                len(self.KEY_FIELDS),
-                len(args) + len(kwargs)
-            ))
-
-        keyed_args = dict(zip(self.KEY_FIELDS, args))
-        overlapping_args = viewkeys(keyed_args) & viewkeys(kwargs)
-        if overlapping_args:
-            raise TypeError('__init__() got multiple values for keyword argument {!r}'.format(overlapping_args[0]))
-
-        keyed_args.update(kwargs)
-
-        for key in viewkeys(keyed_args):
-            if key not in self.KEY_FIELDS:
-                raise TypeError('__init__() got an unexpected argument {!r}'.format(key))
-
-        self._unchecked_init(**keyed_args)
-
-    def _unchecked_init(self, **kwargs):
-        """
-        Set all kwargs as attributes.
-        """
-        for key, value in viewitems(kwargs):
-            setattr(self, key, value)
+        # A flag used to indicate that no more attributes should be allowed to change.
+        self._initialized = True
 
     def replace(self, **kwargs):
         """
@@ -386,6 +349,15 @@ class OpaqueKey(object):
                                                                             other.deprecated):
             raise TypeError("{!r} is incompatible with {!r}".format(self, other))
         return self._key < other._key  # pylint: disable=protected-access
+
+    def __le__(self, other):
+        return self < other or self == other
+
+    def __ge__(self, other):
+        return not self < other
+
+    def __gt__(self, other):
+        return not self <= other
 
     def __hash__(self):
         return hash(self._key)

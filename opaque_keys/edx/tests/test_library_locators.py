@@ -208,7 +208,7 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
     def test_changing_course(self):
         lib_key = LibraryLocator(org="TestX", library="test")
         with self.assertRaises(AttributeError):
-            lib_key.course = "PHYS"
+            lib_key.course = "PHYS"  # type: ignore
         with self.assertRaises(KeyError):
             lib_key.replace(course="PHYS")
 

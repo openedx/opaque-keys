@@ -8,8 +8,9 @@ import logging
 from hypothesis import strategies, given, assume, example
 from six import text_type
 from six.moves import range  # pylint: disable=redefined-builtin
-from typing import Sequence, Type
-from opaque_keys import OpaqueKey
+
+from typing import Sequence, Type  # pylint: disable=unused-import
+from opaque_keys import OpaqueKey  # pylint: disable=unused-import
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey
 from opaque_keys import InvalidKeyError
 from opaque_keys.tests.strategies import keys_of_type

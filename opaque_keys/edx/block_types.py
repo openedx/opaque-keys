@@ -6,6 +6,9 @@ that encodes the block_family as well. It isn't intended for use in XBlock
 ScopeIds (that block type should be a simple string, since all uses of
 ScopeIds have a class associated with them).
 """
+from operator import attrgetter
+
+from typing import Text, Any, cast  # pylint: disable=unused-import
 from opaque_keys.edx.keys import BlockTypeKey
 from opaque_keys import InvalidKeyError
 
@@ -20,19 +23,24 @@ class BlockTypeKeyV1(BlockTypeKey):  # pylint: disable=abstract-method
     """
     CANONICAL_NAMESPACE = 'block-type-v1'
     KEY_FIELDS = ('block_family', 'block_type')
-    __slots__ = KEY_FIELDS
+    __slots__ = ('_block_family', '_block_type')
+
+    block_family = cast(Text, property(attrgetter('_block_family')))
+    block_type = cast(Text, property(attrgetter('_block_type')))
 
     CHECKED_INIT = False
 
     def __init__(self, block_family, block_type):
-        # Call super using kwargs, so that we can set CHECKED_INIT to False
+        # type: (Text, Text, **Any) -> None
         if ':' in block_family:
             raise InvalidKeyError(self.__class__, "block_family may not contain ':'.")
         if block_family in (XBLOCK_V1, XMODULE_V1):
             block_family = XBLOCK_V1
+
+        self._block_family = block_family
+        self._block_type = block_type
+
         super(BlockTypeKeyV1, self).__init__(
-            block_family=block_family,
-            block_type=block_type,
             deprecated=block_family == XBLOCK_V1,
         )
 

@@ -4,9 +4,11 @@ Deprecated OpaqueKey implementations used by XML and Mongo modulestores
 from __future__ import absolute_import
 
 import re
-from typing import Text
 import warnings
 
+from typing import Text  # pylint: disable=unused-import
+
+from opaque_keys import OpaqueKey
 from opaque_keys.edx.keys import i4xEncoder as real_i4xEncoder
 from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator, Locator
 
@@ -76,7 +78,7 @@ class SlashSeparatedCourseKey(CourseLocator):
         )
 
 
-class LocationBase(object):
+class LocationBase(OpaqueKey):
     """Deprecated. Base class for :class:`Location` and :class:`AssetLocation`"""
     # Subclasses should define what DEPRECATED_TAG is
     DEPRECATED_TAG = None  # type: Text
@@ -149,18 +151,6 @@ class LocationBase(object):
         cls._deprecation_warning()
         return BlockUsageLocator.clean_for_html(value)
 
-    def __init__(self, org, course, run, category, name, revision=None, **kwargs):
-        self._deprecation_warning()
-
-        course_key = kwargs.pop('course_key', CourseLocator(
-            org=org,
-            course=course,
-            run=run,
-            branch=revision,
-            deprecated=True
-        ))
-        super(LocationBase, self).__init__(course_key, category, name, deprecated=True, **kwargs)
-
     @classmethod
     def from_deprecated_string(cls, serialized):
         """Deprecated. Use :meth:`locator.BlockUsageLocator.from_string`."""
@@ -184,6 +174,18 @@ class Location(LocationBase, BlockUsageLocator):
     """Deprecated. Use :class:`locator.BlockUsageLocator`"""
 
     DEPRECATED_TAG = u'i4x'
+
+    def __init__(self, org, course, run, category, name, revision=None, **kwargs):
+        self._deprecation_warning()
+
+        course_key = kwargs.pop('course_key', CourseLocator(
+            org=org,
+            course=course,
+            run=run,
+            branch=revision,
+            deprecated=True
+        ))
+        super(Location, self).__init__(course_key, category, name, deprecated=True, **kwargs)
 
     def replace(self, **kwargs):
         """
@@ -253,6 +255,18 @@ class AssetLocation(LocationBase, AssetLocator):
     """Deprecated. Use :class:`locator.AssetLocator`"""
 
     DEPRECATED_TAG = u'c4x'
+
+    def __init__(self, org, course, run, category, name, revision=None, **kwargs):
+        self._deprecation_warning()
+
+        course_key = kwargs.pop('course_key', CourseLocator(
+            org=org,
+            course=course,
+            run=run,
+            branch=revision,
+            deprecated=True
+        ))
+        super(AssetLocation, self).__init__(course_key, category, name, deprecated=True, **kwargs)
 
     def replace(self, **kwargs):
         """
