@@ -193,6 +193,11 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
             course, __, run = offering_arg.partition("/")
 
         if deprecated:
+            if org is None:
+                raise InvalidKeyError(self.__class__, "org can't be None in a deprecated CourseLocator")
+            if course is None:
+                raise InvalidKeyError(self.__class__, "course can't be None in a deprecated CourseLocator")
+
             for part in (org, course, run):
                 self._check_location_part(part, self.INVALID_CHARS_DEPRECATED)
 

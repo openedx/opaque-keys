@@ -5,6 +5,8 @@ import warnings
 from contextlib import contextmanager
 from unittest import TestCase
 
+from typing import Generator, Iterable, cast
+
 
 class TestDeprecated(TestCase):
     """Base class (with utility methods) for deprecated Location tests"""
@@ -23,11 +25,21 @@ class TestDeprecated(TestCase):
 
     @contextmanager
     def assertDeprecationWarning(self, count=1):
+        # type: (int) -> Generator
         """Asserts that the contained code raises `count` deprecation warnings"""
         with warnings.catch_warnings(record=True) as caught:
             yield
-        self.assertEqual(count,
-                         len([warning for warning in caught if issubclass(warning.category, DeprecationWarning)]))
+
+        assert caught is not None
+
+        self.assertEqual(
+            caught,
+            len([
+                warning for warning
+                in caught
+                if issubclass(warning.category, DeprecationWarning)
+            ])
+        )
 
 
 class LocatorBaseTest(TestCase):
