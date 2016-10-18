@@ -88,12 +88,9 @@ class OpaqueKey(object):
         Construct an instance of this :class:`OpaqueKey` from a unicode object. The namespace
         will already have been parsed.
 
-    OpaqueKeys will not have optional constructor parameters (due to the implementation of
-    ``KEY_FIELDS``), by default. However, an implementation class can provide a default,
-    as long as it passes that default to a call to ``super().__init__``. If the KeyImplementation
-    sets the class attribute ``CHECKED_INIT`` to ``False``, then the :class:`OpaqueKey` base
-    class constructor will not validate any of the ``KEY_FIELDS`` arguments, and will instead
-    just expect all ``KEY_FIELDS`` to be passed as ``kwargs``.
+    ``__init__``
+        This should take as arguments all of the fields listed in KEY_FIELDS, and optionally
+        the argument ``deprecated``, which should be passed up the constructor chain.
 
     :class:`OpaqueKey` objects are immutable.
 
@@ -105,7 +102,6 @@ class OpaqueKey(object):
     KEY_FIELDS = []  # type: List[Text]
     CANONICAL_NAMESPACE = None  # type: Text
     NAMESPACE_SEPARATOR = u':'
-    CHECKED_INIT = True
 
     # ============= ABSTRACT METHODS ==============
     @classmethod

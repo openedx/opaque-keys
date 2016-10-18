@@ -28,8 +28,6 @@ class BlockTypeKeyV1(BlockTypeKey):  # pylint: disable=abstract-method
     block_family = cast(Text, property(attrgetter('_block_family')))
     block_type = cast(Text, property(attrgetter('_block_type')))
 
-    CHECKED_INIT = False
-
     def __init__(self, block_family, block_type):
         # type: (Text, Text, **Any) -> None
         if ':' in block_family:

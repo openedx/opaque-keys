@@ -153,7 +153,6 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
     CANONICAL_NAMESPACE = 'course-v1'
     KEY_FIELDS = ('org', 'course', 'run', 'branch', 'version_guid')
     __slots__ = ('_org', '_course', '_run', '_branch', '_version_guid')
-    CHECKED_INIT = False
 
     # Characters that are forbidden in the deprecated format
     INVALID_CHARS_DEPRECATED = re.compile(r"[^\w.%-]", re.UNICODE)
@@ -432,7 +431,6 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
     RUN = 'library'  # For backwards compatibility, LibraryLocators have a read-only 'run' property equal to this
     KEY_FIELDS = ('org', 'library', 'branch', 'version_guid')
     __slots__ = ('_org', '_library', '_branch', '_version_guid')
-    CHECKED_INIT = False
 
     org = cast(Text, property(attrgetter('_org')))
     library = cast(Text, property(attrgetter('_library')))
@@ -638,7 +636,6 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
     CANONICAL_NAMESPACE = 'block-v1'
     KEY_FIELDS = (u'course_key', u'block_type', u'block_id')  # type: Sequence[Text]
     __slots__ = (u'_course_key', u'_block_type', u'_block_id')  # type: Sequence[Text]
-    CHECKED_INIT = False
 
     DEPRECATED_TAG = u'i4x'  # to combine Locations with BlockUsageLocators
 
@@ -1207,7 +1204,6 @@ class DefinitionLocator(Locator, DefinitionKey):
     CANONICAL_NAMESPACE = 'def-v1'
     KEY_FIELDS = ('definition_id', 'block_type')
     __slots__ = (u'_definition_id', u'_block_type')
-    CHECKED_INIT = False
 
     definition_id = cast(Union[ObjectId, Text], property(attrgetter('_definition_id')))
     block_type = cast(Text, property(attrgetter('_block_type')))

@@ -55,7 +55,6 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
     CANONICAL_NAMESPACE = 'aside-def-v1'
     KEY_FIELDS = ('definition_key', 'aside_type')
     __slots__ = ('_definition_key', '_aside_type')
-    CHECKED_INIT = False
 
     DEFINITION_KEY_FIELDS = ('block_type', )
 
@@ -125,7 +124,6 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
     CANONICAL_NAMESPACE = 'aside-usage-v1'
     KEY_FIELDS = ('usage_key', 'aside_type')
     __slots__ = ('_usage_key', '_aside_type')
-    CHECKED_INIT = False
 
     USAGE_KEY_ATTRS = ('block_id', 'block_type', 'definition_key', 'course_key')
 
