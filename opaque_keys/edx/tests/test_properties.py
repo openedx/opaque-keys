@@ -5,8 +5,8 @@ installed keys should have.
 
 import logging
 
-from hypothesis import strategies, given, assume, example
 from typing import Sequence, Type  # pylint: disable=unused-import
+from hypothesis import strategies, given, assume, example
 from six import text_type
 from six.moves import range  # pylint: disable=redefined-builtin
 
