@@ -15,9 +15,8 @@ commenting on.
 import re
 from operator import attrgetter
 
-from six import text_type
-
 from typing import Text, Any, cast  # pylint: disable=unused-import
+from six import text_type
 
 from opaque_keys.edx.keys import AsideDefinitionKey, AsideUsageKey, DefinitionKey, UsageKey
 from opaque_keys import InvalidKeyError

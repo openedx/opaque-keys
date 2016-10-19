@@ -4,9 +4,8 @@ OpaqueKey abstract classes for edx-platform object types (courses, definitions, 
 """
 import json
 from abc import abstractmethod, abstractproperty
-from six import text_type
-
 from typing import Sequence, Text  # pylint: disable=unused-import
+from six import text_type
 
 from opaque_keys import OpaqueKey
 
