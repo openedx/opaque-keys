@@ -33,7 +33,7 @@ class TestDeprecated(TestCase):
         assert caught is not None
 
         self.assertEqual(
-            caught,
+            count,
             len([
                 warning for warning
                 in caught
