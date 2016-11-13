@@ -6,6 +6,7 @@ setup(
     author='edX',
     url='https://github.com/edx/opaque-keys',
     packages=find_packages(),
+    license='AGPL-3.0',
     install_requires=[
         'six>=1.10.0,<2.0.0',
         'stevedore>=0.14.1,<2.0.0',
