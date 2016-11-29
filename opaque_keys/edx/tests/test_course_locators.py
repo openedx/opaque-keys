@@ -74,7 +74,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
             CourseLocator(branch='published')
 
     def test_course_constructor_bad_version_guid(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(InvalidKeyError):
             CourseLocator(version_guid="012345")
 
         with self.assertRaises(InvalidKeyError):

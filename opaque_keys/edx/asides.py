@@ -1,43 +1,112 @@
 """
 This file provides implementations of :class:`.AsideDefinitionKey` and :class:`.AsideUsageKey`.
 
-:class:`.AsideUsageKeyV1` stores a :class:`.UsageKey` and an `aside_type`, and serializes as
+:class:`.AsideUsageKeyV2` stores a :class:`.UsageKey` and an `aside_type`, and serializes as
 `<usage_key>::<aside_type>`.
 
-Likewise, :class:`.AsideDefinitionKeyV1` stores a :class:`.DefinitionKey` and an `aside_type',
+Likewise, :class:`.AsideDefinitionKeyV2` stores a :class:`.DefinitionKey` and an `aside_type',
 and serializes as `<definition_key>::<aside_type>`.
+
+:class:`.AsideUsageKeyV1` and :class:`.AsideDefinitionKeyV1` use a similar encoding strategy
+as the V2 versions, but are unable to handle particular edge-cases.
 
 See :class:`xblock.fields.BlockScope` for a description of what data definitions and usages
 describe. The `AsideDefinitionKey` and `AsideUsageKey` allow :class:`xblock.core.XBlockAside`s to
 store scoped data alongside the definition and usage of the particular XBlock usage that they're
 commenting on.
 """
+import re
 from six import text_type
 
 from opaque_keys.edx.keys import AsideDefinitionKey, AsideUsageKey, DefinitionKey, UsageKey
+from opaque_keys import InvalidKeyError
 
 
-def _encode(value):
+def _encode_v1(value):
     """
     Encode all '::' substrings in a string (also encodes '$' so that it can
     be used to mark encoded characters). This way we can use :: to separate
     the two halves of an aside key.
     """
-    return value.replace('$', '$$').replace('::', '$::')
+    simple = value.replace('$', '$$').replace('::', '$::')
+    return simple
 
 
-def _decode(value):
+def _decode_v1(value):
     """
     Decode '::' and '$' characters encoded by `_encode`.
     """
-    return value.replace('$::', '::').replace('$$', '$')
+    decode_colons = value.replace('$::', '::')
+    decode_dollars = decode_colons.replace('$$', '$')
+
+    reencoded = _encode_v1(decode_dollars)
+    if reencoded != value:
+        raise ValueError('Ambiguous encoded value, {!r} could have been encoded as {!r}'.format(value, reencoded))
+
+    return decode_dollars
 
 
-class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-method
+def _join_keys_v1(left, right):
+    """
+    Join two keys into a format separable by using _split_keys_v1.
+    """
+    if left.endswith(':') or '::' in left:
+        raise ValueError("Can't join a left string ending in ':' or containing '::'")
+    return u"{}::{}".format(_encode_v1(left), _encode_v1(right))
+
+
+def _split_keys_v1(joined):
+    """
+    Split two keys out a string created by _join_keys_v1.
+    """
+    left, _, right = joined.partition('::')
+    return _decode_v1(left), _decode_v1(right)
+
+
+def _encode_v2(value):
+    """
+    Encode all ':' substrings in a string (also encodes '$' so that it can
+    be used to mark encoded characters). This way we can use :: to separate
+    the two halves of an aside key.
+    """
+    simple = value.replace('$', '$$').replace(':', '$:')
+    return simple
+
+
+def _decode_v2(value):
+    """
+    Decode ':' and '$' characters encoded by `_encode`.
+    """
+    if re.search(r'(?<!\$):', value):
+        raise ValueError("Unescaped ':' in the encoded string")
+
+    decode_colons = value.replace('$:', ':')
+
+    if re.search(r'(?<!\$)(\$\$)*\$([^$]|\Z)', decode_colons):
+        raise ValueError("Unescaped '$' in encoded string")
+    return decode_colons.replace('$$', '$')
+
+
+def _join_keys_v2(left, right):
+    """
+    Join two keys into a format separable by using _split_keys_v2.
+    """
+    return u"{}::{}".format(_encode_v2(left), _encode_v2(right))
+
+
+def _split_keys_v2(joined):
+    """
+    Split two keys out a string created by _join_keys_v2.
+    """
+    left, _, right = joined.rpartition('::')
+    return _decode_v2(left), _decode_v2(right)
+
+
+class AsideDefinitionKeyV2(AsideDefinitionKey):  # pylint: disable=abstract-method
     """
     A definition key for an aside.
     """
-    CANONICAL_NAMESPACE = 'aside-def-v1'
+    CANONICAL_NAMESPACE = 'aside-def-v2'
     KEY_FIELDS = ('definition_key', 'aside_type')
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
@@ -45,7 +114,7 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
     DEFINITION_KEY_FIELDS = ('block_type', )
 
     def __init__(self, definition_key, aside_type, deprecated=False):
-        super(AsideDefinitionKeyV1, self).__init__(definition_key=definition_key, aside_type=aside_type,
+        super(AsideDefinitionKeyV2, self).__init__(definition_key=definition_key, aside_type=aside_type,
                                                    deprecated=deprecated)
 
     @property
@@ -54,7 +123,7 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
 
     def replace(self, **kwargs):
         """
-        Return: a new :class:`AsideDefinitionKeyV1` with ``KEY_FIELDS`` specified in ``kwargs`` replaced
+        Return: a new :class:`AsideDefinitionKeyV2` with ``KEY_FIELDS`` specified in ``kwargs`` replaced
             with their corresponding values. Deprecation value is also preserved.
         """
         if 'definition_key' in kwargs:
@@ -67,7 +136,7 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
                 in self.DEFINITION_KEY_FIELDS
                 if key in kwargs
             })
-        return super(AsideDefinitionKeyV1, self).replace(**kwargs)
+        return super(AsideDefinitionKeyV2, self).replace(**kwargs)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -82,8 +151,11 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
             InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
                 understood by `cls`.
         """
-        def_key, __, aside_type = serialized.partition('::')
-        return cls(DefinitionKey.from_string(_decode(def_key)), _decode(aside_type))
+        try:
+            def_key, aside_type = _split_keys_v2(serialized)
+            return cls(DefinitionKey.from_string(def_key), aside_type)
+        except ValueError as exc:
+            raise InvalidKeyError(cls, exc.args)
 
     def _to_string(self):
         """
@@ -91,14 +163,55 @@ class AsideDefinitionKeyV1(AsideDefinitionKey):  # pylint: disable=abstract-meth
 
         This serialization should not include the namespace prefix.
         """
-        return u'{}::{}'.format(_encode(text_type(self.definition_key)), _encode(text_type(self.aside_type)))
+        return _join_keys_v2(text_type(self.definition_key), text_type(self.aside_type))
 
 
-class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
+class AsideDefinitionKeyV1(AsideDefinitionKeyV2):  # pylint: disable=abstract-method
+    """
+    A definition key for an aside.
+    """
+    CANONICAL_NAMESPACE = 'aside-def-v1'
+
+    def __init__(self, definition_key, aside_type, deprecated=False):
+        serialized_def_key = text_type(definition_key)
+        if '::' in serialized_def_key or serialized_def_key.endswith(':'):
+            raise ValueError("Definition keys containing '::' or ending with ':' break the v1 parsing code")
+        super(AsideDefinitionKeyV1, self).__init__(definition_key=definition_key, aside_type=aside_type,
+                                                   deprecated=deprecated)
+
+    @classmethod
+    def _from_string(cls, serialized):
+        """
+        Return an instance of `cls` parsed from its `serialized` form.
+
+        Args:
+            cls: The :class:`OpaqueKey` subclass.
+            serialized (unicode): A serialized :class:`OpaqueKey`, with namespace already removed.
+
+        Raises:
+            InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
+                understood by `cls`.
+        """
+        try:
+            def_key, aside_type = _split_keys_v1(serialized)
+            return cls(DefinitionKey.from_string(def_key), aside_type)
+        except ValueError as exc:
+            raise InvalidKeyError(cls, exc.args)
+
+    def _to_string(self):
+        """
+        Return a serialization of `self`.
+
+        This serialization should not include the namespace prefix.
+        """
+        return _join_keys_v1(text_type(self.definition_key), text_type(self.aside_type))
+
+
+class AsideUsageKeyV2(AsideUsageKey):  # pylint: disable=abstract-method
     """
     A usage key for an aside.
     """
-    CANONICAL_NAMESPACE = 'aside-usage-v1'
+    CANONICAL_NAMESPACE = 'aside-usage-v2'
     KEY_FIELDS = ('usage_key', 'aside_type')
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
@@ -106,7 +219,7 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
     USAGE_KEY_ATTRS = ('block_id', 'block_type', 'definition_key', 'course_key')
 
     def __init__(self, usage_key, aside_type, deprecated=False):
-        super(AsideUsageKeyV1, self).__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
+        super(AsideUsageKeyV2, self).__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
 
     @property
     def block_id(self):
@@ -143,7 +256,7 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
 
     def replace(self, **kwargs):
         """
-        Return: a new :class:`AsideUsageKeyV1` with ``KEY_FIELDS`` specified in ``kwargs`` replaced
+        Return: a new :class:`AsideUsageKeyV2` with ``KEY_FIELDS`` specified in ``kwargs`` replaced
             with their corresponding values. Deprecation value is also preserved.
         """
         if 'usage_key' in kwargs:
@@ -156,7 +269,7 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
                 in self.USAGE_KEY_ATTRS
                 if key in kwargs
             })
-        return super(AsideUsageKeyV1, self).replace(**kwargs)
+        return super(AsideUsageKeyV2, self).replace(**kwargs)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -171,8 +284,11 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
             InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
                 understood by `cls`.
         """
-        usage_key, __, aside_type = serialized.partition('::')
-        return cls(UsageKey.from_string(_decode(usage_key)), _decode(aside_type))
+        try:
+            usage_key, aside_type = _split_keys_v2(serialized)
+            return cls(UsageKey.from_string(usage_key), aside_type)
+        except ValueError as exc:
+            raise InvalidKeyError(cls, exc.args)
 
     def _to_string(self):
         """
@@ -180,4 +296,44 @@ class AsideUsageKeyV1(AsideUsageKey):  # pylint: disable=abstract-method
 
         This serialization should not include the namespace prefix.
         """
-        return u'{}::{}'.format(_encode(text_type(self.usage_key)), _encode(text_type(self.aside_type)))
+        return _join_keys_v2(text_type(self.usage_key), text_type(self.aside_type))
+
+
+class AsideUsageKeyV1(AsideUsageKeyV2):  # pylint: disable=abstract-method
+    """
+    A usage key for an aside.
+    """
+    CANONICAL_NAMESPACE = 'aside-usage-v1'
+
+    def __init__(self, usage_key, aside_type, deprecated=False):
+        serialized_usage_key = text_type(usage_key)
+        if '::' in serialized_usage_key or serialized_usage_key.endswith(':'):
+            raise ValueError("Usage keys containing '::' or ending with ':' break the v1 parsing code")
+        super(AsideUsageKeyV1, self).__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
+
+    @classmethod
+    def _from_string(cls, serialized):
+        """
+        Return an instance of `cls` parsed from its `serialized` form.
+
+        Args:
+            cls: The :class:`OpaqueKey` subclass.
+            serialized (unicode): A serialized :class:`OpaqueKey`, with namespace already removed.
+
+        Raises:
+            InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
+                understood by `cls`.
+        """
+        try:
+            usage_key, aside_type = _split_keys_v1(serialized)
+            return cls(UsageKey.from_string(usage_key), aside_type)
+        except ValueError as exc:
+            raise InvalidKeyError(cls, exc.args)
+
+    def _to_string(self):
+        """
+        Return a serialization of `self`.
+
+        This serialization should not include the namespace prefix.
+        """
+        return _join_keys_v1(text_type(self.usage_key), text_type(self.aside_type))

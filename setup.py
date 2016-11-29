@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='edx-opaque-keys',
-    version='0.3.4',
+    version='0.4',
     author='edX',
     url='https://github.com/edx/opaque-keys',
     packages=find_packages(),
@@ -28,6 +28,7 @@ setup(
             'lib-block-v1 = opaque_keys.edx.locator:LibraryUsageLocator',
             'location = opaque_keys.edx.locations:DeprecatedLocation',
             'aside-usage-v1 = opaque_keys.edx.asides:AsideUsageKeyV1',
+            'aside-usage-v2 = opaque_keys.edx.asides:AsideUsageKeyV2',
         ],
         'asset_key': [
             'asset-v1 = opaque_keys.edx.locator:AssetLocator',
@@ -35,6 +36,7 @@ setup(
         'definition_key': [
             'def-v1 = opaque_keys.edx.locator:DefinitionLocator',
             'aside-def-v1 = opaque_keys.edx.asides:AsideDefinitionKeyV1',
+            'aside-def-v2 = opaque_keys.edx.asides:AsideDefinitionKeyV2',
         ],
         'block_type': [
             'block-type-v1 = opaque_keys.edx.block_types:BlockTypeKeyV1',

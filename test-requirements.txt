@@ -1,6 +1,7 @@
 coverage
 ddt
 edx-lint==0.4.0
+hypothesis >= 3.6.0
 mock
 nose
 pep8
@@ -9,4 +10,6 @@ pytest
 pytest-cov
 pytest-pep8
 pytest-pylint
+pytest-xdist
+singledispatch
 tox

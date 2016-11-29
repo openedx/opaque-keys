@@ -215,7 +215,16 @@ class DeprecatedLocation(BlockUsageLocator):
         (?P<block_id>{ALLOWED_ID_CHARS}+)
         """.format(ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS)
 
-    URL_RE = re.compile('^' + URL_RE_SOURCE + '$', re.IGNORECASE | re.VERBOSE | re.UNICODE)
+    URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.VERBOSE | re.UNICODE)
+
+    def __init__(self, course_key, block_type, block_id):
+        if course_key.version_guid is not None:
+            raise ValueError("DeprecatedLocations don't support course versions")
+
+        if course_key.branch is not None:
+            raise ValueError("DeprecatedLocations don't support course branches")
+
+        super(DeprecatedLocation, self).__init__(course_key, block_type, block_id)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -230,6 +239,13 @@ class DeprecatedLocation(BlockUsageLocator):
         )
         block_id = parsed_parts.get('block_id')
         return cls(course_key, parsed_parts.get('block_type'), block_id)
+
+    def _to_string(self):
+        """
+        Return a string representing this location.
+        """
+        parts = [self.org, self.course, self.run, self.block_type, self.block_id]
+        return u"+".join(parts)
 
 
 class AssetLocation(LocationBase, AssetLocator):

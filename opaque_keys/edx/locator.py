@@ -9,12 +9,12 @@ import logging
 import re
 import warnings
 from abc import abstractproperty
-from six import string_types, text_type
 
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from bson.son import SON
 
+from six import string_types, text_type
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey
 
@@ -67,7 +67,7 @@ class Locator(OpaqueKey):
         try:
             return ObjectId(value)
         except InvalidId:
-            raise ValueError('"%s" is not a valid version_guid' % value)
+            raise InvalidKeyError(cls, '"%s" is not a valid version_guid' % value)
 
 
 # `BlockLocatorBase` is another abstract base class, so don't worry that it doesn't
@@ -85,19 +85,16 @@ class BlockLocatorBase(Locator):
     BLOCK_PREFIX = r"block"
     BLOCK_ALLOWED_ID_CHARS = r'[\w\-~.:%]'
 
-    ALLOWED_ID_RE = re.compile(r'^' + Locator.ALLOWED_ID_CHARS + '+$', re.UNICODE)
-    DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + '+$', re.UNICODE)
+    ALLOWED_ID_RE = re.compile(r'^' + Locator.ALLOWED_ID_CHARS + r'+\Z', re.UNICODE)
+    DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + r'+\Z', re.UNICODE)
 
-    # pep8 and pylint don't agree on the indentation in this block; let's make
-    # pep8 happy and ignore pylint as that's easier to do.
-    # pylint: disable=bad-continuation
     URL_RE_SOURCE = r"""
         ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)(\+(?P<run>{ALLOWED_ID_CHARS}+))?{SEP})??
         ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+){SEP})?
-        ({VERSION_PREFIX}@(?P<version_guid>[A-F0-9]+){SEP})?
+        ({VERSION_PREFIX}@(?P<version_guid>[a-f0-9]+){SEP})?
         ({BLOCK_TYPE_PREFIX}@(?P<block_type>{ALLOWED_ID_CHARS}+){SEP})?
         ({BLOCK_PREFIX}@(?P<block_id>{BLOCK_ALLOWED_ID_CHARS}+))?
-        """.format(
+    """.format(
         ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS,
         BLOCK_ALLOWED_ID_CHARS=BLOCK_ALLOWED_ID_CHARS,
         BRANCH_PREFIX=BRANCH_PREFIX,
@@ -107,10 +104,10 @@ class BlockLocatorBase(Locator):
         SEP=r'(\+(?=.)|\Z)',  # Separator: requires a non-trailing '+' or end of string
     )
 
-    URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.IGNORECASE | re.VERBOSE | re.UNICODE)
+    URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.VERBOSE | re.UNICODE)
 
     @classmethod
-    def parse_url(cls, string):
+    def parse_url(cls, string):  # pylint: disable=redefined-outer-name
         """
         If it can be parsed as a version_guid with no preceding org + offering, returns a dict
         with key 'version_guid' and the value,
@@ -445,7 +442,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         for name, value in [['org', org], ['library', library], ['branch', branch]]:
             if not (value is None or self.ALLOWED_ID_RE.match(value)):
                 raise InvalidKeyError(self.__class__,
-                                      "Special characters not allowed in field {}: '{}'".format(name, value))
+                                      u"Special characters not allowed in field {}: '{}'".format(name, value))
 
         if kwargs.get('deprecated', False):
             raise InvalidKeyError(self.__class__, 'LibraryLocator cannot have deprecated=True')
@@ -618,7 +615,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
     block_type = None
 
     DEPRECATED_URL_RE = re.compile("""
-        ([^:/]+://?|/[^/]+)
+        i4x://
         (?P<org>[^/]+)/
         (?P<course>[^/]+)/
         (?P<category>[^/]+)/     # category == block_type
@@ -1027,6 +1024,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         )
         return cls(course_key, id_dict['category'], id_dict['name'], deprecated=True)
 
+
 # register BlockUsageLocator as the deprecated fallback for UsageKey
 UsageKey.set_deprecated_fallback(BlockUsageLocator)
 
@@ -1053,9 +1051,17 @@ class LibraryUsageLocator(BlockUsageLocator):
 
         block_id = self._parse_block_ref(block_id, False)
 
-        if not all(self.ALLOWED_ID_RE.match(val) for val in (block_type, block_id)):
-            raise InvalidKeyError(self.__class__,
-                                  "Invalid block_type or block_id ('{}', '{}')".format(block_type, block_id))
+        try:
+            if not all(self.ALLOWED_ID_RE.match(val) for val in (block_type, block_id)):
+                raise InvalidKeyError(
+                    self.__class__,
+                    "Invalid block_type or block_id ({!r}, {!r})".format(block_type, block_id)
+                )
+        except TypeError:
+            raise InvalidKeyError(
+                self.__class__,
+                "Invalid block_type or block_id ({!r}, {!r})".format(block_type, block_id)
+            )
 
         # We skip the BlockUsageLocator init and go to its superclass:
         # pylint: disable=bad-super-call
@@ -1084,9 +1090,15 @@ class LibraryUsageLocator(BlockUsageLocator):
         # Allow access to _from_string protected method
         library_key = LibraryLocator._from_string(serialized)  # pylint: disable=protected-access
         parsed_parts = LibraryLocator.parse_url(serialized)
+
         block_id = parsed_parts.get('block_id', None)
         if block_id is None:
             raise InvalidKeyError(cls, serialized)
+
+        block_type = parsed_parts.get('block_type')
+        if block_type is None:
+            raise InvalidKeyError(cls, serialized)
+
         return cls(library_key, parsed_parts.get('block_type'), block_id)
 
     def version_agnostic(self):
@@ -1177,10 +1189,10 @@ class DefinitionLocator(Locator, DefinitionKey):
         return u"{}+{}@{}".format(text_type(self.definition_id), self.BLOCK_TYPE_PREFIX, self.block_type)
 
     URL_RE = re.compile(
-        r"^(?P<definition_id>[A-F0-9]+)\+{}@(?P<block_type>{ALLOWED_ID_CHARS}+)$".format(
+        r"^(?P<definition_id>[a-f0-9]+)\+{}@(?P<block_type>{ALLOWED_ID_CHARS}+)\Z".format(
             Locator.BLOCK_TYPE_PREFIX, ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
         ),
-        re.IGNORECASE | re.VERBOSE | re.UNICODE
+        re.VERBOSE | re.UNICODE
     )
 
     @classmethod
@@ -1235,17 +1247,19 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
     __slots__ = BlockUsageLocator.KEY_FIELDS
 
     ASSET_URL_RE = re.compile(r"""
-        /?c4x/
+        ^
+        /c4x/
         (?P<org>[^/]+)/
         (?P<course>[^/]+)/
         (?P<category>[^/]+)/
         (?P<name>[^@]+)
         (@(?P<revision>[^/]+))?
-    """, re.VERBOSE | re.IGNORECASE)
+        \Z
+    """, re.VERBOSE)
 
     ALLOWED_ID_RE = BlockUsageLocator.DEPRECATED_ALLOWED_ID_RE
     # Allow empty asset ids. Used to generate a prefix url
-    DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + '+$', re.UNICODE)
+    DEPRECATED_ALLOWED_ID_RE = re.compile(r'^' + Locator.DEPRECATED_ALLOWED_ID_CHARS + r'+\Z', re.UNICODE)
 
     @property
     def path(self):
@@ -1274,7 +1288,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
         # pylint: disable=missing-format-attribute
         url = u"/{0.DEPRECATED_TAG}/{0.course_key.org}/{0.course_key.course}/{0.block_type}/{0.block_id}".format(self)
         if self.course_key.branch:
-            url += '@{}'.format(self.course_key.branch)
+            url += u'@{}'.format(self.course_key.branch)
         return url
 
     def to_deprecated_string(self):
