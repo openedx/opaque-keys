@@ -5,6 +5,13 @@ setup(
     version='0.4',
     author='edX',
     url='https://github.com/edx/opaque-keys',
+    classifiers=[
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: GNU Affero General Public License v3",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.5",
+    ],
     packages=find_packages(),
     install_requires=[
         'six>=1.10.0,<2.0.0',
