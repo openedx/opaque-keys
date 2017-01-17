@@ -13,6 +13,7 @@ setup(
         "Programming Language :: Python :: 3.5",
     ],
     packages=find_packages(),
+    license='AGPL-3.0',
     install_requires=[
         'six>=1.10.0,<2.0.0',
         'stevedore>=0.14.1,<2.0.0',
