@@ -8,15 +8,13 @@ import inspect
 import logging
 import re
 import warnings
-from weakref import WeakValueDictionary
 from abc import abstractproperty
-from six import string_types, text_type
-from six.moves import zip  # pylint: disable=redefined-builtin
 
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from bson.son import SON
 
+from six import string_types, text_type
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey
 
@@ -150,11 +148,6 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
-    # A mapping of parsed key fields to CourseLocator objects, for caching.
-    # This is shared across all subclasses, so we use the class as part of the
-    # keys.
-    __parsed_fields_to_keys = WeakValueDictionary()
-
     # Characters that are forbidden in the deprecated format
     INVALID_CHARS_DEPRECATED = re.compile(r"[^\w.%-]", re.UNICODE)
 
@@ -264,45 +257,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
         if parse['version_guid']:
             parse['version_guid'] = cls.as_object_id(parse['version_guid'])
 
-        parsed_values = tuple(parse.get(key) for key in cls.KEY_FIELDS)
-
-        # Include the class in the cache key so that we don't have collisions
-        # with sub-classes.
-        cache_key = (cls.__class__, parsed_values)
-
-        # Note that this is very often called from UsageKey._from_string() and
-        # fed the serialized ID without the prefix (so no "course-v1:"), but
-        # with a lot of extra non-course-locator stuff at the end. That's why we
-        # can't just use cls._cache_pool directly with "serialized" and instead
-        # have to use parsed_values as a lookup key. The regex parsing of values
-        # is only about 1/4th as expensive as CourseLocator construction, and
-        # that doesn't count the much higher cost of hash and eq calculations
-        # that are avoided by using a shared CourseLocator object.
-        if cache_key in cls.__parsed_fields_to_keys:
-            return cls.__parsed_fields_to_keys[cache_key]
-
-        # So you would *think* that because we're pulling all the fields in
-        # KEY_FIELDS order, it's safe to say::
-        #
-        #   course_locator = cls(*parsed_values)
-        #
-        # However, some subclasses override __init__ to take a **kwargs only,
-        # and this would break compatibility. Which is a pity, because that
-        # would have been faster. :-(
-        course_locator = cls(**dict(zip(cls.KEY_FIELDS, parsed_values)))
-
-        # Serialization is safe because this method is not invoked for
-        # deprecated keys, and so they're always safe to serialize (deprecated
-        # keys can explode because the run is None).
-        full_serialized_key = text_type(course_locator)
-
-        # Write to both our parsed fields cache (needed for when we're called
-        # directly), as well as the OpaqueKey general _cache_pool (for when
-        # we're invoked from OpaqueKey.from_string()).
-        cls.__parsed_fields_to_keys[cache_key] = course_locator
-        cls._cache_pool[full_serialized_key] = course_locator
-
-        return course_locator
+        return cls(**{key: parse.get(key) for key in cls.KEY_FIELDS})
 
     def html_id(self):
         """
@@ -350,9 +305,6 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
         Raises:
             ValueError: if the block locator has no org & course, run
         """
-        # Short circuit what is by far the most common case.
-        if self.version_guid is None:
-            return self
         return self.replace(version_guid=None)
 
     def course_agnostic(self):
@@ -371,10 +323,6 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
         """
         if self.org is None:
             raise InvalidKeyError(self.__class__, "Branches must have full course ids not just versions")
-
-        # Short circuit what is by far the most common case.
-        if branch == self.branch and self.version_guid is None:
-            return self
         return self.replace(branch=branch, version_guid=None)
 
     def for_version(self, version_guid):
@@ -963,10 +911,6 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Return a new instance which has the this block_id in the given course
         :param course_key: a CourseKey object representing the new course to map into
         """
-        # This is usually the case, especially in Split courses, where the key
-        # already exists on the usage key by default.
-        if course_key == self.course_key:
-            return self
         return self.replace(course_key=course_key)
 
     def _to_string(self):
