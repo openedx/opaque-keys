@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='edx-opaque-keys',
-    version='0.4',
+    version='0.5',
     author='edX',
     url='https://github.com/edx/opaque-keys',
     classifiers=[
@@ -30,6 +30,9 @@ setup(
             'library-v1 = opaque_keys.edx.locator:LibraryLocator',
             # don't use slashes in any new code
             'slashes = opaque_keys.edx.locator:CourseLocator',
+        ],
+        'aggregate_course_key': [
+            'aggregate-course = opaque_keys.edx.locator:AggregateCourseLocator',
         ],
         'usage_key': [
             'block-v1 = opaque_keys.edx.locator:BlockUsageLocator',

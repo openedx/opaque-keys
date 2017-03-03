@@ -77,6 +77,22 @@ class DefinitionKey(OpaqueKey):
         raise NotImplementedError()
 
 
+class AggregateCourseKey(OpaqueKey):
+    """
+    An :class:`opaque_keys.OpaqueKey` identifying a
+    serialized Course Key object.
+    """
+    KEY_TYPE = 'aggregate_course_key'
+    __slots__ = ()
+
+    @abstractproperty
+    def serialize(self):  # pragma: no cover
+        """
+        The serialized course key without run information.
+        """
+        raise NotImplementedError()
+
+
 class CourseObjectMixin(object):
     """
     An abstract :class:`opaque_keys.OpaqueKey` mixin

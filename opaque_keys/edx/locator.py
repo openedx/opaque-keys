@@ -16,7 +16,7 @@ from bson.son import SON
 
 from six import string_types, text_type
 from opaque_keys import OpaqueKey, InvalidKeyError
-from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey
+from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey, AggregateCourseKey
 
 log = logging.getLogger(__name__)
 
@@ -1330,3 +1330,69 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
 
 # Register AssetLocator as the deprecated fallback for AssetKey
 AssetKey.set_deprecated_fallback(AssetLocator)
+
+
+class AggregateCourseLocator(BlockUsageLocator, AggregateCourseKey):    # pylint: disable=abstract-method
+    """
+    An AggregateCourseKey implementation class.
+    """
+    CANONICAL_NAMESPACE = 'aggregate-course'
+    KEY_FIELDS = ('org', 'course')
+    __slots__ = KEY_FIELDS
+
+    URL_RE_SOURCE = r"""
+        ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+))?
+    """.format(
+        ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
+    )
+
+    URL_RE = re.compile('^' + URL_RE_SOURCE)
+
+    def __init__(self, org=None, course=None, **kwargs):
+        """
+        Construct a AggregateCourseLocator.
+
+        Arguments:
+            org (string): Organization identifier for the course
+            course (string): Course name
+
+        """
+        super(AggregateCourseLocator, self).__init__(
+            org=org,
+            course=course,
+            **kwargs
+        )
+
+        if self.org is None or self.course is None:
+            raise InvalidKeyError(self.__class__, 'Both org and course should be set.')
+
+    @classmethod
+    def _from_string(cls, serialized):
+        """
+        Return a AggregateCourseLocator parsing the given serialized string.
+
+        Arguments:
+            serialized: string for matching
+
+        """
+        parse = cls.URL_RE.match(serialized)
+        if not parse:
+            raise InvalidKeyError(cls, serialized)
+
+        parse = parse.groupdict()
+        return cls(**{key: parse.get(key) for key in cls.KEY_FIELDS})
+
+    def _to_string(self):
+        """
+        Return a string representing this location.
+        """
+        return u"{org}+{course}".format(
+            org=self.org,
+            course=self.course
+        )
+
+    def serialize(self):
+        """
+        The serialized course key without run information.
+        """
+        return '{org}+{course}'.format(org=self.org, course=self.course)
