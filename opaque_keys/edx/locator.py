@@ -1332,7 +1332,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
 AssetKey.set_deprecated_fallback(AssetLocator)
 
 
-class AggregateCourseLocator(BlockUsageLocator, AggregateCourseKey):    # pylint: disable=abstract-method
+class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-method
     """
     An AggregateCourseKey implementation class.
     """
@@ -1340,13 +1340,11 @@ class AggregateCourseLocator(BlockUsageLocator, AggregateCourseKey):    # pylint
     KEY_FIELDS = ('org', 'course')
     __slots__ = KEY_FIELDS
 
-    URL_RE_SOURCE = r"""
-        ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+))?
-    """.format(
+    URL_RE_SOURCE = r'^(?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)$'.format(
         ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
     )
 
-    URL_RE = re.compile('^' + URL_RE_SOURCE)
+    URL_RE = re.compile(URL_RE_SOURCE)
 
     def __init__(self, org=None, course=None, **kwargs):
         """
@@ -1386,7 +1384,7 @@ class AggregateCourseLocator(BlockUsageLocator, AggregateCourseKey):    # pylint
         """
         Return a string representing this location.
         """
-        return u"{org}+{course}".format(
+        return u'{org}+{course}'.format(
             org=self.org,
             course=self.course
         )
