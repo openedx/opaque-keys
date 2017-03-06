@@ -5,11 +5,13 @@ from unittest import TestCase
 
 import random
 
+import ddt
 from six import text_type
 from bson.objectid import ObjectId
 
-from opaque_keys.edx.locator import Locator, CourseLocator, DefinitionLocator, VersionTree
-from opaque_keys.edx.keys import DefinitionKey
+from opaque_keys import InvalidKeyError
+from opaque_keys.edx.keys import DefinitionKey, AggregateCourseKey
+from opaque_keys.edx.locator import Locator, CourseLocator, DefinitionLocator, VersionTree, AggregateCourseLocator
 
 
 class LocatorTests(TestCase):
@@ -59,3 +61,31 @@ class VersionTreeTests(TestCase):
         test_id = ObjectId(test_id_loc)
         valid_locator = CourseLocator(version_guid=test_id)
         self.assertEqual(VersionTree(valid_locator).children, [])
+
+
+@ddt.ddt
+class AggregateCourseLocatorTests(TestCase):
+    """
+    Tests for :class:`.AggregateCourseLocator`
+    """
+
+    def test_aggregate_course_locator(self):
+        aggregate_course_key = 'aggregate-course:org+course'
+        aggregate_course_locator = AggregateCourseLocator(org='org', course='course')
+        self.assertEqual(aggregate_course_locator, AggregateCourseKey.from_string(aggregate_course_key))
+
+    def test_aggregate_course_locator_serialize(self):
+        aggregate_course_key = 'aggregate-course:org+course'
+        aggregate_course_locator = AggregateCourseKey.from_string(aggregate_course_key)
+        serialized_aggregate_course_key = 'org+course'
+        self.assertEqual(serialized_aggregate_course_key, aggregate_course_locator.serialize())
+
+    @ddt.data(
+        "org/course/run",
+        "org+course+run",
+        "org+course+run+foo",
+        "aggregate-course:org+course+run",
+    )
+    def test_invalid_format_course_key(self, course_key):
+        with self.assertRaises(InvalidKeyError):
+            AggregateCourseKey.from_string(course_key)
