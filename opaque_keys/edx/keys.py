@@ -86,9 +86,13 @@ class AggregateCourseKey(OpaqueKey):
     __slots__ = ()
 
     @abstractproperty
-    def serialize(self):  # pragma: no cover
+    def from_course_key(self, course_key):  # pragma: no cover
         """
-        The serialized course key without run information.
+        Get aggregate course key from the course run key.
+
+        Arguments:
+            course_key (:class:`CourseKey`): The course identifier.
+
         """
         raise NotImplementedError()
 

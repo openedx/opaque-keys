@@ -1365,6 +1365,17 @@ class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-
             raise InvalidKeyError(self.__class__, 'Both org and course should be set.')
 
     @classmethod
+    def from_course_key(cls, course_key):
+        """
+        Get aggregate course key from the course run key object.
+
+        Arguments:
+            course_key (:class:`CourseKey`): The course identifier.
+
+        """
+        return cls(**{key: getattr(course_key, key) for key in cls.KEY_FIELDS})
+
+    @classmethod
     def _from_string(cls, serialized):
         """
         Return a AggregateCourseLocator parsing the given serialized string.
@@ -1388,9 +1399,3 @@ class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-
             org=self.org,
             course=self.course
         )
-
-    def serialize(self):
-        """
-        The serialized course key without run information.
-        """
-        return '{org}+{course}'.format(org=self.org, course=self.course)

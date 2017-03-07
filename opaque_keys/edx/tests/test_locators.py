@@ -10,7 +10,7 @@ from six import text_type
 from bson.objectid import ObjectId
 
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.keys import DefinitionKey, AggregateCourseKey
+from opaque_keys.edx.keys import DefinitionKey, CourseKey, AggregateCourseKey
 from opaque_keys.edx.locator import Locator, CourseLocator, DefinitionLocator, VersionTree, AggregateCourseLocator
 
 
@@ -74,17 +74,30 @@ class AggregateCourseLocatorTests(TestCase):
         aggregate_course_locator = AggregateCourseLocator(org='org', course='course')
         self.assertEqual(aggregate_course_locator, AggregateCourseKey.from_string(aggregate_course_key))
 
+    @ddt.data(
+        'org/course/run',
+        'course-v1:org+course+run',
+    )
+    def test_aggregate_course_locator_from_course_key(self, course_id):
+        course = CourseKey.from_string(course_id)
+        aggregate_course_locator = AggregateCourseLocator.from_course_key(course)
+
+        aggregate_course_key = 'aggregate-course:{}+{}'.format(course.org, course.course)
+        self.assertEqual(aggregate_course_locator, AggregateCourseKey.from_string(aggregate_course_key))
+
     def test_aggregate_course_locator_serialize(self):
         aggregate_course_key = 'aggregate-course:org+course'
         aggregate_course_locator = AggregateCourseKey.from_string(aggregate_course_key)
         serialized_aggregate_course_key = 'org+course'
-        self.assertEqual(serialized_aggregate_course_key, aggregate_course_locator.serialize())
+        # Allow access to _to_string
+        # pylint: disable=protected-access
+        self.assertEqual(serialized_aggregate_course_key, aggregate_course_locator._to_string())
 
     @ddt.data(
-        "org/course/run",
-        "org+course+run",
-        "org+course+run+foo",
-        "aggregate-course:org+course+run",
+        'org/course/run',
+        'org+course+run',
+        'org+course+run+foo',
+        'aggregate-course:org+course+run',
     )
     def test_invalid_format_course_key(self, course_key):
         with self.assertRaises(InvalidKeyError):
