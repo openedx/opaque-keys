@@ -1336,15 +1336,15 @@ class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-
     """
     An AggregateCourseKey implementation class.
     """
-    CANONICAL_NAMESPACE = 'aggregate-course'
+    CANONICAL_NAMESPACE = 'course-v2'
     KEY_FIELDS = ('org', 'course')
     __slots__ = KEY_FIELDS
 
-    URL_RE_SOURCE = r'^(?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)$'.format(
-        ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
+    KEY_REGEX = re.compile(
+        r'^(?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)$'.format(
+            ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
+        )
     )
-
-    URL_RE = re.compile(URL_RE_SOURCE)
 
     def __init__(self, org=None, course=None, **kwargs):
         """
@@ -1352,17 +1352,13 @@ class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-
 
         Arguments:
             org (string): Organization identifier for the course
-            course (string): Course name
+            course (string): Course number
 
         """
-        super(AggregateCourseLocator, self).__init__(
-            org=org,
-            course=course,
-            **kwargs
-        )
+        super(AggregateCourseLocator, self).__init__(org=org, course=course, **kwargs)
 
-        if self.org is None or self.course is None:
-            raise InvalidKeyError(self.__class__, 'Both org and course should be set.')
+        if not (self.org and self.course):
+            raise InvalidKeyError(self.__class__, 'Both org and course must be set.')
 
     @classmethod
     def from_course_key(cls, course_key):
@@ -1384,7 +1380,7 @@ class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-
             serialized: string for matching
 
         """
-        parse = cls.URL_RE.match(serialized)
+        parse = cls.KEY_REGEX.match(serialized)
         if not parse:
             raise InvalidKeyError(cls, serialized)
 
@@ -1395,7 +1391,7 @@ class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-
         """
         Return a string representing this location.
         """
-        return u'{org}+{course}'.format(
+        return '{org}+{course}'.format(
             org=self.org,
             course=self.course
         )

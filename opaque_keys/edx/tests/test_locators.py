@@ -70,35 +70,50 @@ class AggregateCourseLocatorTests(TestCase):
     """
 
     def test_aggregate_course_locator(self):
-        aggregate_course_key = 'aggregate-course:org+course'
-        aggregate_course_locator = AggregateCourseLocator(org='org', course='course')
-        self.assertEqual(aggregate_course_locator, AggregateCourseKey.from_string(aggregate_course_key))
+        """
+        Verify that the method "from_string" of class "AggregateCourseKey"
+        returns an object of "AggregateCourseLocator" for a valid course key.
+        """
+        aggregate_course_key = 'course-v2:org+course'
+        aggregate_course_locator = AggregateCourseKey.from_string(aggregate_course_key)
+        expected_course_locator = AggregateCourseLocator(org='org', course='course')
+        self.assertEqual(expected_course_locator, aggregate_course_locator)
 
     @ddt.data(
         'org/course/run',
         'course-v1:org+course+run',
     )
     def test_aggregate_course_locator_from_course_key(self, course_id):
-        course = CourseKey.from_string(course_id)
-        aggregate_course_locator = AggregateCourseLocator.from_course_key(course)
+        """
+        Verify that the method "from_course_key" of class "AggregateCourseLocator"
+        coverts a valid course run key to an aggregate course key.
+        """
+        course_key = CourseKey.from_string(course_id)
+        expected_course_key = AggregateCourseLocator(org=course_key.org, course=course_key.course)
+        actual_course_key = AggregateCourseLocator.from_course_key(course_key)
+        self.assertEqual(expected_course_key, actual_course_key)
 
-        aggregate_course_key = 'aggregate-course:{}+{}'.format(course.org, course.course)
-        self.assertEqual(aggregate_course_locator, AggregateCourseKey.from_string(aggregate_course_key))
-
-    def test_aggregate_course_locator_serialize(self):
-        aggregate_course_key = 'aggregate-course:org+course'
-        aggregate_course_locator = AggregateCourseKey.from_string(aggregate_course_key)
-        serialized_aggregate_course_key = 'org+course'
-        # Allow access to _to_string
+    def test_serialize_to_string(self):
+        """
+        Verify that the method "from_course_key" of class "AggregateCourseLocator"
+        coverts a valid course run key to an aggregate course key.
+        """
+        course_key = CourseKey.from_string('course-v1:org+course+run')
+        aggregate_course_locator = AggregateCourseLocator(org=course_key.org, course=course_key.course)
+        expected_serialized_key = '{org}+{course}'.format(org=course_key.org, course=course_key.course)
         # pylint: disable=protected-access
-        self.assertEqual(serialized_aggregate_course_key, aggregate_course_locator._to_string())
+        self.assertEqual(expected_serialized_key, aggregate_course_locator._to_string())
 
     @ddt.data(
         'org/course/run',
         'org+course+run',
         'org+course+run+foo',
-        'aggregate-course:org+course+run',
+        'course-v2:org+course+run',
     )
     def test_invalid_format_course_key(self, course_key):
+        """
+        Verify that the method "from_string" of class "AggregateCourseKey"
+        raises exception "InvalidKeyError" for unsupported key formats.
+        """
         with self.assertRaises(InvalidKeyError):
             AggregateCourseKey.from_string(course_key)
