@@ -16,7 +16,7 @@ from bson.son import SON
 
 from six import string_types, text_type
 from opaque_keys import OpaqueKey, InvalidKeyError
-from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey, AggregateCourseKey
+from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey, CourseKeyV2
 
 log = logging.getLogger(__name__)
 
@@ -1332,9 +1332,9 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
 AssetKey.set_deprecated_fallback(AssetLocator)
 
 
-class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-method
+class CourseLocatorV2(CourseKeyV2):    # pylint: disable=abstract-method
     """
-    An AggregateCourseKey implementation class.
+    An CourseKeyV2 implementation class.
     """
     CANONICAL_NAMESPACE = 'course-v2'
     KEY_FIELDS = ('org', 'course')
@@ -1348,14 +1348,14 @@ class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-
 
     def __init__(self, org=None, course=None, **kwargs):
         """
-        Construct a AggregateCourseLocator.
+        Construct a CourseLocatorV2.
 
         Arguments:
             org (string): Organization identifier for the course
             course (string): Course number
 
         """
-        super(AggregateCourseLocator, self).__init__(org=org, course=course, **kwargs)
+        super(CourseLocatorV2, self).__init__(org=org, course=course, **kwargs)
 
         if not (self.org and self.course):
             raise InvalidKeyError(self.__class__, 'Both org and course must be set.')
@@ -1363,7 +1363,7 @@ class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-
     @classmethod
     def from_course_key(cls, course_key):
         """
-        Get aggregate course key from the course run key object.
+        Get course key v2 from the course run key object.
 
         Arguments:
             course_key (:class:`CourseKey`): The course identifier.
@@ -1374,7 +1374,7 @@ class AggregateCourseLocator(AggregateCourseKey):    # pylint: disable=abstract-
     @classmethod
     def _from_string(cls, serialized):
         """
-        Return a AggregateCourseLocator parsing the given serialized string.
+        Return a CourseLocatorV2 parsing the given serialized string.
 
         Arguments:
             serialized: string for matching

@@ -77,18 +77,18 @@ class DefinitionKey(OpaqueKey):
         raise NotImplementedError()
 
 
-class AggregateCourseKey(OpaqueKey):
+class CourseKeyV2(OpaqueKey):
     """
     An :class:`opaque_keys.OpaqueKey` identifying a
     serialized Course Key object.
     """
-    KEY_TYPE = 'aggregate_course_key'
+    KEY_TYPE = 'course_key_v2'
     __slots__ = ()
 
     @abstractproperty
     def from_course_key(self, course_key):  # pragma: no cover
         """
-        Get aggregate course key from the course run key.
+        Get course key v2 from the course run key.
 
         Arguments:
             course_key (:class:`CourseKey`): The course identifier.

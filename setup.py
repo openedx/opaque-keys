@@ -31,8 +31,8 @@ setup(
             # don't use slashes in any new code
             'slashes = opaque_keys.edx.locator:CourseLocator',
         ],
-        'aggregate_course_key': [
-            'course-v2 = opaque_keys.edx.locator:AggregateCourseLocator',
+        'course_key_v2': [
+            'course-v2 = opaque_keys.edx.locator:CourseLocatorV2',
         ],
         'usage_key': [
             'block-v1 = opaque_keys.edx.locator:BlockUsageLocator',
