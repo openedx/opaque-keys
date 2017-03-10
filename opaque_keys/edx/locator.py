@@ -580,10 +580,11 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         """ LibraryLocators are never deprecated. """
         raise NotImplementedError
 
-    @classmethod
-    def _from_deprecated_string(cls, serialized):
-        """ LibraryLocators are never deprecated. """
-        raise NotImplementedError
+    def make_course_key_v2(self):  # pragma: no cover
+        """
+        Returns a course key v2 object without run information.
+        """
+        raise NotImplementedError()
 
 
 class BlockUsageLocator(BlockLocatorBase, UsageKey):

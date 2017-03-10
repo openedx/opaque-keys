@@ -237,3 +237,12 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         self.assertEqual(lib_key2, lib_key3)
         self.assertEqual(lib_key3.org, None)
         self.assertEqual(lib_key3.library, None)
+
+    def test_make_course_key_v2(self):
+        """
+        Verify that the method `make_course_key_v2` of class `LibraryLocator`
+        raises exception `NotImplementedError`.
+        """
+        lib_key = CourseKey.from_string('library-v1:TestX+lib1')
+        with self.assertRaises(NotImplementedError):
+            lib_key.make_course_key_v2()  # pylint: disable=protected-access
