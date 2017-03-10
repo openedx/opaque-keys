@@ -380,6 +380,12 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
 
         return cls(*serialized.split('/'), deprecated=True)
 
+    def make_course_key_v2(self):
+        """
+        Returns a course key v2 object without run information.
+        """
+        return CourseLocatorV2(org=self.org, course=self.course)
+
 CourseKey.set_deprecated_fallback(CourseLocator)
 
 
@@ -1370,6 +1376,16 @@ class CourseLocatorV2(CourseKeyV2):    # pylint: disable=abstract-method
 
         """
         return cls(**{key: getattr(course_key, key) for key in cls.KEY_FIELDS})
+
+    def make_course_run_key(self, course_run):
+        """
+        Get course run key (course_key) from the course key v2.
+
+        Arguments:
+            course_run (str): The course run for course run identifier.
+
+        """
+        return CourseLocator(org=self.org, course=self.course, run=course_run)
 
     @classmethod
     def _from_string(cls, serialized):

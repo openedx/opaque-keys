@@ -93,6 +93,18 @@ class CourseLocatorV2Tests(TestCase):
         actual_course_key = CourseLocatorV2.from_course_run_key(course_key)
         self.assertEqual(expected_course_key, actual_course_key)
 
+    def test_make_course_run_key(self):
+        """
+        Verify that the method `make_course_run_key` of class `CourseLocatorV2`
+        returns a course run key with provided run.
+        """
+        organization = 'org'
+        course_number = 'course'
+        course_run = 'run'
+        course_key_v2 = CourseLocatorV2(org=organization, course=course_number)
+        expected_course_run_key = CourseLocator(org=organization, course=course_number, run=course_run)
+        self.assertEqual(expected_course_run_key, course_key_v2.make_course_run_key(course_run))
+
     def test_serialize_to_string(self):
         """
         Verify that the method `_to_string` of class `CourseLocatorV2`

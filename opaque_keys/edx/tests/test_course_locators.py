@@ -11,7 +11,7 @@ from bson.objectid import ObjectId
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 
-from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator
+from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator, CourseLocatorV2
 
 from opaque_keys.edx.tests import LocatorBaseTest, TestDeprecated
 
@@ -279,3 +279,15 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
             'org/course/',
             text_type(CourseLocator('org', 'course', '', deprecated=True))
         )
+
+    def test_make_course_key_v2(self):
+        """
+        Verify that the method `make_course_key_v2` of class `CourseLocator`
+        returns a course key v2 object without course run information.
+        """
+        organization = 'org'
+        course_number = 'course'
+        course_run = 'run'
+        course_run_key = CourseLocator(org=organization, course=course_number, run=course_run)
+        expected_course_key_v2 = CourseLocatorV2(org=organization, course=course_number)
+        self.assertEqual(expected_course_key_v2, course_run_key.make_course_key_v2())
