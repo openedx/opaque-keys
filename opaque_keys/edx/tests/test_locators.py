@@ -69,10 +69,10 @@ class CourseLocatorV2Tests(TestCase):
     Tests for :class:`.CourseLocatorV2`
     """
 
-    def test_course_locator_v2(self):
+    def test_from_string(self):
         """
-        Verify that the method "from_string" of class "CourseKeyV2"
-        returns an object of "CourseLocatorV2" for a valid course key.
+        Verify that the method `from_string` of class `CourseKeyV2`
+        returns an object of `CourseLocatorV2` for a valid course key.
         """
         course_key_v2 = 'course-v2:org+course'
         course_locator_v2 = CourseKeyV2.from_string(course_key_v2)
@@ -83,26 +83,26 @@ class CourseLocatorV2Tests(TestCase):
         'org/course/run',
         'course-v1:org+course+run',
     )
-    def test_course_locator_v2_from_course_key(self, course_id):
+    def test_from_course_run_key(self, course_id):
         """
-        Verify that the method "from_course_key" of class "CourseLocatorV2"
+        Verify that the method `from_course_run_key` of class `CourseLocatorV2`
         coverts a valid course run key to a course key v2.
         """
         course_key = CourseKey.from_string(course_id)
         expected_course_key = CourseLocatorV2(org=course_key.org, course=course_key.course)
-        actual_course_key = CourseLocatorV2.from_course_key(course_key)
+        actual_course_key = CourseLocatorV2.from_course_run_key(course_key)
         self.assertEqual(expected_course_key, actual_course_key)
 
     def test_serialize_to_string(self):
         """
-        Verify that the method "_to_string" of class "CourseLocatorV2"
+        Verify that the method `_to_string` of class `CourseLocatorV2`
         serializes a course key v2 to a string with expected format.
         """
-        course_key = CourseKey.from_string('course-v1:org+course+run')
-        course_locator_v2 = CourseLocatorV2(org=course_key.org, course=course_key.course)
-        expected_serialized_key = '{org}+{course}'.format(org=course_key.org, course=course_key.course)
-        # pylint: disable=protected-access
-        self.assertEqual(expected_serialized_key, course_locator_v2._to_string())
+        organization = 'org'
+        course_number = 'course'
+        course_locator_v2 = CourseLocatorV2(org=organization, course=course_number)
+        expected_serialized_key = 'course-v2:{org}+{course}'.format(org=organization, course=course_number)
+        self.assertEqual(expected_serialized_key, str(course_locator_v2))
 
     @ddt.data(
         'org/course/run',
@@ -110,10 +110,10 @@ class CourseLocatorV2Tests(TestCase):
         'org+course+run+foo',
         'course-v2:org+course+run',
     )
-    def test_invalid_format_course_key(self, course_key):
+    def test_from_string_with_invalid_input(self, course_key):
         """
-        Verify that the method "from_string" of class "CourseKeyV2"
-        raises exception "InvalidKeyError" for unsupported key formats.
+        Verify that the method `from_string` of class `CourseKeyV2`
+        raises exception `InvalidKeyError` for unsupported key formats.
         """
         with self.assertRaises(InvalidKeyError):
             CourseKeyV2.from_string(course_key)

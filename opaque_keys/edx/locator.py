@@ -1361,7 +1361,7 @@ class CourseLocatorV2(CourseKeyV2):    # pylint: disable=abstract-method
             raise InvalidKeyError(self.__class__, 'Both org and course must be set.')
 
     @classmethod
-    def from_course_key(cls, course_key):
+    def from_course_run_key(cls, course_key):
         """
         Get course key v2 from the course run key object.
 

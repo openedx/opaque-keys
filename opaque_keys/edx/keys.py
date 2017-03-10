@@ -86,7 +86,7 @@ class CourseKeyV2(OpaqueKey):
     __slots__ = ()
 
     @abstractproperty
-    def from_course_key(self, course_key):  # pragma: no cover
+    def from_course_run_key(self, course_key):  # pragma: no cover
         """
         Get course key v2 from the course run key.
 
