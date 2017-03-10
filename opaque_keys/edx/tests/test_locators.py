@@ -79,16 +79,12 @@ class CourseLocatorV2Tests(TestCase):
         expected_course_locator = CourseLocatorV2(org='org', course='course')
         self.assertEqual(expected_course_locator, course_locator_v2)
 
-    @ddt.data(
-        'org/course/run',
-        'course-v1:org+course+run',
-    )
-    def test_from_course_run_key(self, course_id):
+    def test_from_course_run_key(self):
         """
         Verify that the method `from_course_run_key` of class `CourseLocatorV2`
         coverts a valid course run key to a course key v2.
         """
-        course_key = CourseKey.from_string(course_id)
+        course_key = CourseKey.from_string('course-v1:org+course+run')
         expected_course_key = CourseLocatorV2(org=course_key.org, course=course_key.course)
         actual_course_key = CourseLocatorV2.from_course_run_key(course_key)
         self.assertEqual(expected_course_key, actual_course_key)
