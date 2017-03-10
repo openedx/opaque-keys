@@ -61,6 +61,13 @@ class CourseKey(OpaqueKey):
         """
         raise NotImplementedError()
 
+    @abstractmethod
+    def make_course_key_v2(self):  # pragma: no cover
+        """
+        Returns a course key v2 object without run information.
+        """
+        raise NotImplementedError()
+
 
 class DefinitionKey(OpaqueKey):
     """
@@ -73,6 +80,37 @@ class DefinitionKey(OpaqueKey):
     def block_type(self):  # pragma: no cover
         """
         The XBlock type of this definition.
+        """
+        raise NotImplementedError()
+
+
+class CourseKeyV2(OpaqueKey):
+    """
+    An :class:`opaque_keys.OpaqueKey` identifying a
+    serialized Course Key object.
+    """
+    KEY_TYPE = 'course_key_v2'
+    __slots__ = ()
+
+    @abstractproperty
+    def from_course_run_key(self, course_key):  # pragma: no cover
+        """
+        Get course key v2 from the course run key.
+
+        Arguments:
+            course_key (:class:`CourseKey`): The course identifier.
+
+        """
+        raise NotImplementedError()
+
+    @abstractproperty
+    def make_course_run_key(self, course_run):  # pragma: no cover
+        """
+        Get course run key (course_key) from the course key v2.
+
+        Arguments:
+            course_run (str): The course run for course run identifier.
+
         """
         raise NotImplementedError()
 

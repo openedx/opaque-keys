@@ -16,7 +16,7 @@ from bson.son import SON
 
 from six import string_types, text_type
 from opaque_keys import OpaqueKey, InvalidKeyError
-from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey
+from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey, CourseKeyV2
 
 log = logging.getLogger(__name__)
 
@@ -380,6 +380,12 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
 
         return cls(*serialized.split('/'), deprecated=True)
 
+    def make_course_key_v2(self):
+        """
+        Returns a course key v2 object without run information.
+        """
+        return CourseLocatorV2(org=self.org, course=self.course)
+
 CourseKey.set_deprecated_fallback(CourseLocator)
 
 
@@ -574,10 +580,11 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         """ LibraryLocators are never deprecated. """
         raise NotImplementedError
 
-    @classmethod
-    def _from_deprecated_string(cls, serialized):
-        """ LibraryLocators are never deprecated. """
-        raise NotImplementedError
+    def make_course_key_v2(self):  # pragma: no cover
+        """
+        Returns a course key v2 object without run information.
+        """
+        raise NotImplementedError()
 
 
 class BlockUsageLocator(BlockLocatorBase, UsageKey):
@@ -1330,3 +1337,78 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
 
 # Register AssetLocator as the deprecated fallback for AssetKey
 AssetKey.set_deprecated_fallback(AssetLocator)
+
+
+class CourseLocatorV2(CourseKeyV2):    # pylint: disable=abstract-method
+    """
+    An CourseKeyV2 implementation class.
+    """
+    CANONICAL_NAMESPACE = 'course-v2'
+    KEY_FIELDS = ('org', 'course')
+    __slots__ = KEY_FIELDS
+
+    KEY_REGEX = re.compile(
+        r'^(?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)$'.format(
+            ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
+        )
+    )
+
+    def __init__(self, org=None, course=None, **kwargs):
+        """
+        Construct a CourseLocatorV2.
+
+        Arguments:
+            org (string): Organization identifier for the course
+            course (string): Course number
+
+        """
+        super(CourseLocatorV2, self).__init__(org=org, course=course, **kwargs)
+
+        if not (self.org and self.course):
+            raise InvalidKeyError(self.__class__, 'Both org and course must be set.')
+
+    @classmethod
+    def from_course_run_key(cls, course_key):
+        """
+        Get course key v2 from the course run key object.
+
+        Arguments:
+            course_key (:class:`CourseKey`): The course identifier.
+
+        """
+        return cls(**{key: getattr(course_key, key) for key in cls.KEY_FIELDS})
+
+    def make_course_run_key(self, course_run):
+        """
+        Get course run key (course_key) from the course key v2.
+
+        Arguments:
+            course_run (str): The course run for course run identifier.
+
+        """
+        return CourseLocator(org=self.org, course=self.course, run=course_run)
+
+    @classmethod
+    def _from_string(cls, serialized):
+        """
+        Return a CourseLocatorV2 parsing the given serialized string.
+
+        Arguments:
+            serialized: string for matching
+
+        """
+        parse = cls.KEY_REGEX.match(serialized)
+        if not parse:
+            raise InvalidKeyError(cls, serialized)
+
+        parse = parse.groupdict()
+        return cls(**{key: parse.get(key) for key in cls.KEY_FIELDS})
+
+    def _to_string(self):
+        """
+        Return a string representing this location.
+        """
+        return '{org}+{course}'.format(
+            org=self.org,
+            course=self.course
+        )
