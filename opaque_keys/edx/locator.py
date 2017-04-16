@@ -347,7 +347,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
 
     def _to_deprecated_string(self):
         """Returns an 'old-style' course id, represented as 'org/course/run'"""
-        return u'/'.join([self.org, self.course, self.run])
+        return u'/'.join([self.org, self.course, self.run or ''])
 
     def to_deprecated_string(self):
         """Deprecated. Use unicode(key) instead."""
