@@ -9,6 +9,7 @@ formats, and allowing new serialization formats to be installed transparently.
 from _collections import defaultdict
 from abc import ABCMeta, abstractmethod
 from functools import total_ordering
+from weakref import WeakValueDictionary
 
 from six import (
     iteritems,
@@ -98,7 +99,17 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
     Serialization of an :class:`OpaqueKey` is performed by using the :func:`unicode` builtin.
     Deserialization is performed by the :meth:`from_string` method.
     """
-    __slots__ = ('_initialized', 'deprecated')
+    __slots__ = (
+        '_initialized',
+        'deprecated',
+
+        # Performance related
+        '_unicode',  # Cached Unicode representation
+        '_hash',  # Cache of the hash() so we don't have to recompute it so often.
+        '_cached_key',  # Cache _key representation, useful for repeated equality checks.
+        '__weakref__'  # To allow us to use the _cache_pool
+    )
+    _cache_pool = WeakValueDictionary()
 
     KEY_FIELDS = []
     CANONICAL_NAMESPACE = None
@@ -168,10 +179,19 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         """
         Serialize this :class:`OpaqueKey`, in the form ``<CANONICAL_NAMESPACE>:<value of _to_string>``.
         """
+        # OpaqueKeys are often repeatedly serialized, so we cache this value.
+        if self._unicode is not None:
+            return self._unicode
+
+        # TODO Revisit assigning-non-slot comments on pylint upgrade
         if self.deprecated:
             # no namespace on deprecated
-            return self._to_deprecated_string()
-        return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])  # pylint: disable=no-member
+            self._unicode = self._to_deprecated_string()  # pylint: disable=assigning-non-slot
+        else:
+            self._unicode = self.NAMESPACE_SEPARATOR.join(  # pylint: disable=assigning-non-slot
+                [self.CANONICAL_NAMESPACE, self._to_string()]  # pylint: disable=no-member
+            )
+        return self._unicode
 
     @classmethod
     def from_string(cls, serialized):
@@ -183,6 +203,17 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         Args:
             serialized: A stringified form of a :class:`OpaqueKey`
         """
+        # OpaqueKeys are immutable, so we can share them. Sharing the keys gives
+        # three benefits:
+        #    1. It reduces parsing/construction costs for duplicate OpaqueKeys.
+        #    2. It allows us to reduce the number of times we do the computation
+        #       for unicode() and hash() -- these are cached on the individual
+        #       OpaqueKey.
+        #    3. Equality checks between two OpaqueKeys are very cheap if they're
+        #       pointing at the same object (which is a frequent occurrence).
+        if serialized in cls._cache_pool:
+            return cls._cache_pool[serialized]
+
         if serialized is None:
             raise InvalidKeyError(cls, serialized)
 
@@ -191,10 +222,14 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         cls._drivers()
         try:
             namespace, rest = cls._separate_namespace(serialized)
-            return cls.get_namespace_plugin(namespace)._from_string(rest)
+            key = cls.get_namespace_plugin(namespace)._from_string(rest)
+            cls._cache_pool[serialized] = key
+            return key
         except InvalidKeyError:
             if hasattr(cls, 'deprecated_fallback'):
-                return cls.deprecated_fallback._from_deprecated_string(serialized)
+                key = cls.deprecated_fallback._from_deprecated_string(serialized)
+                cls._cache_pool[serialized] = key
+                return key
             raise InvalidKeyError(cls, serialized)
 
     @classmethod
@@ -271,6 +306,10 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         # The __init__ expects child classes to implement KEY_FIELDS
         # pylint: disable=no-member
 
+        # TODO Revisit assigning-non-slot comments on pylint upgrade
+        self._unicode = None  # pylint: disable=assigning-non-slot
+        self._cached_key = None  # pylint: disable=assigning-non-slot
+
         # a flag used to indicate that this instance was deserialized from the
         # deprecated form and should serialize to the deprecated form
         self.deprecated = kwargs.pop('deprecated', False)  # pylint: disable=assigning-non-slot
@@ -279,6 +318,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
             self._checked_init(*args, **kwargs)
         else:
             self._unchecked_init(**kwargs)
+
         self._initialized = True  # pylint: disable=assigning-non-slot
 
     def _checked_init(self, *args, **kwargs):
@@ -327,10 +367,11 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
             return self
 
         existing_values.update(kwargs)
+
         return type(self)(**existing_values)
 
     def __setattr__(self, name, value):
-        if getattr(self, '_initialized', False):
+        if name != '_unicode' and name != '_hash' and name != '_cached_key' and getattr(self, '_initialized', False):
             raise AttributeError("Can't set {!r}. OpaqueKeys are immutable.".format(name))
 
         super(OpaqueKey, self).__setattr__(name, value)  # pylint: disable=no-member
@@ -357,6 +398,8 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
             if key in self.KEY_FIELDS:  # pylint: disable=no-member
                 setattr(self, key, state_dict[key])
         self.deprecated = state_dict['deprecated']  # pylint: disable=assigning-non-slot
+        self._unicode = None  # pylint: disable=assigning-non-slot
+        self._cached_key = None  # pylint: disable=assigning-non-slot
         self._initialized = True  # pylint: disable=assigning-non-slot
 
     def __getstate__(self):
@@ -370,11 +413,20 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
     @property
     def _key(self):
         """Returns a tuple of key fields"""
-        # pylint: disable=no-member
-        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE, self.deprecated)
+        if self._cached_key is not None:
+            return self._cached_key
+        self._cached_key = (  # pylint: disable=assigning-non-slot
+            tuple(getattr(self, field) for field in self.KEY_FIELDS) +
+            (self.CANONICAL_NAMESPACE, self.deprecated)
+        )
+        return self._cached_key
 
     def __eq__(self, other):
-        return isinstance(other, OpaqueKey) and self._key == other._key  # pylint: disable=protected-access
+        if self is other:
+            return True
+        if not isinstance(other, OpaqueKey) or hash(self) != hash(other):
+            return False
+        return self._key == other._key  # pylint: disable=protected-access
 
     def __ne__(self, other):
         return not self == other
@@ -386,7 +438,31 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         return self._key < other._key  # pylint: disable=protected-access
 
     def __hash__(self):
-        return hash(self._key)
+        """
+        Return a hash of the OpaqueKey.
+
+        This method looks a little goofy for performance reasons. OpaqueKeys are
+        everywhere in the system. Grading can result in hundreds of thousands of
+        calls to __hash__ OpaqueKeys for various dict lookups. A single
+        OpaqueKey might be asked for its hash 10-100X during a request.
+
+        To make it as fast as possible, we:
+
+        1. Optimistically return self._hash, so we can avoid the extra dict
+           lookup that comes from checking hasattr.
+        2. Explicitly store ._hash as an integer so that we're not recomputing
+           anything complicated.
+
+        Please be careful when touching this method, since small changes could
+        introduce serious performance regressions. ALWAYS PROFILE on something
+        like the progress or courseware pages when modifying.
+        """
+        try:
+            return self._hash
+        except AttributeError:
+            self._hash = hash(self._key)  # pylint: disable=assigning-non-slot, attribute-defined-outside-init
+
+        return self._hash
 
     def __repr__(self):
         return '{}({})'.format(
