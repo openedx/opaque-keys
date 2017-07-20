@@ -207,7 +207,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         # such a value to pollute the cache.
         reserialized = text_type(key)
         if serialized != reserialized:
-            raise InvalidKeyError(cls, "{} -> {}".format(serialized, reserialized))
+            raise InvalidKeyError(cls, u"{} -> {}".format(serialized, reserialized))
 
         cls._cache_pool[serialized] = key
         return key
