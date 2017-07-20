@@ -1,4 +1,10 @@
-# Unreleased
+# 0.4.1
+
+* Re-introduce the caching optimizations of 0.3.2, but this time don't blindly
+  assign the argument to OpaqueKey.from_string() to be the key's serialized
+  representation. The OpaqueKey always serializes itself out to whatever its
+  canonical form is. This should be redundant given the other precautions added
+  since 0.3.2, but it's an extra layer of security.
 
 # 0.4
 
