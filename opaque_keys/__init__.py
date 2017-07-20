@@ -220,17 +220,29 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         # pylint: disable=protected-access
         # load drivers before checking for attr
         cls._drivers()
-        try:
-            namespace, rest = cls._separate_namespace(serialized)
-            key = cls.get_namespace_plugin(namespace)._from_string(rest)
-            cls._cache_pool[serialized] = key
-            return key
-        except InvalidKeyError:
-            if hasattr(cls, 'deprecated_fallback'):
-                key = cls.deprecated_fallback._from_deprecated_string(serialized)
-                cls._cache_pool[serialized] = key
-                return key
-            raise InvalidKeyError(cls, serialized)
+
+        def _parse_with_fallback():
+            """Try to parse as new style key, then fall back to old style."""
+            try:
+                namespace, rest = cls._separate_namespace(serialized)
+                return cls.get_namespace_plugin(namespace)._from_string(rest)
+            except InvalidKeyError:
+                if hasattr(cls, 'deprecated_fallback'):
+                    return cls.deprecated_fallback._from_deprecated_string(serialized)
+                raise InvalidKeyError(cls, serialized)
+
+        key = _parse_with_fallback()
+
+        # We've been bitten by keys that do not re-serialize to the same value
+        # they were parsed from. This is a guard to make sure we never allow
+        # such a value to pollute the cache.
+        reserialized = text_type(key)
+        if serialized != reserialized:
+            raise InvalidKeyError(cls, "{} -> {}".format(serialized, reserialized))
+
+        cls._cache_pool[serialized] = key
+        return key
+
 
     @classmethod
     def _separate_namespace(cls, serialized):
