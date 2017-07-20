@@ -209,7 +209,6 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         if serialized != reserialized:
             raise InvalidKeyError(cls, u"{} -> {}".format(serialized, reserialized))
 
-        cls._cache_pool[serialized] = key
         return key
 
     @classmethod
