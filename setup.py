@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='edx-opaque-keys',
-    version='0.4.1',
+    version='0.4.2',
     author='edX',
     url='https://github.com/edx/opaque-keys',
     classifiers=[
@@ -19,6 +19,9 @@ setup(
         'stevedore>=0.14.1,<2.0.0',
         'pymongo>=2.7.2,<4.0.0'
     ],
+    extras_require={
+        'django': ['Django>=1.8,<2.0', 'pytest-django==3.1.2']
+    },
     entry_points={
         'opaque_keys.testing': [
             'base10 = opaque_keys.tests.test_opaque_keys:Base10Key',
