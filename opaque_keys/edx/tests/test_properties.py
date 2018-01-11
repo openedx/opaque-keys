@@ -171,6 +171,11 @@ def perturbed_strings(string_strategy):
     serialized=u'i4x://-/-/-/-@-',
     perturbed=u'/i4x/-/-/-/-@-',
 )
+@example(
+    key_type=UsageKey,
+    serialized=u'i4x://-/-/-/-@-',
+    perturbed=u'i4x://-/-/-/-@-/',
+)
 def test_perturbed_serializations(key_type, serialized, perturbed):
     assume(serialized != perturbed)
 

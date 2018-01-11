@@ -7,7 +7,7 @@ from unittest import TestCase
 
 from six import text_type
 import ddt
-from hypothesis import strategies, given, assume
+from hypothesis import HealthCheck, assume, given, settings, strategies
 
 from opaque_keys.edx.asides import (
     AsideUsageKeyV1, AsideDefinitionKeyV1,
@@ -50,6 +50,7 @@ class TestEncode(TestCase):
         self.assertEqual((left, right), (_left, _right))
 
     @given(text=ENCODING_TEXT)
+    @settings(suppress_health_check=[HealthCheck.too_slow])
     def test_decode_v1_roundtrip(self, text):
         """
         Test all combinations that include characters we're trying to encode, or using in the encoding.
@@ -72,6 +73,7 @@ class TestEncode(TestCase):
         self.assertEqual(text, decoded)
 
     @given(text=ENCODING_TEXT)
+    @settings(suppress_health_check=[HealthCheck.too_slow])
     def test_decode_v2_roundtrip(self, text):
         """
         Test all combinations that include characters we're trying to encode, or using in the encoding.

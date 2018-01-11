@@ -1,5 +1,11 @@
 # Unreleased
 
+# 0.4.1
+
+* Stop an assortment of deprecation warnings by replacing internal usage of
+  deprecated properties.
+* Trailing '/' characters are no longer valid in serialized usage keys.
+
 # 0.4
 
 * Enforce the property that serialized keys are equal if and only if the parsed
