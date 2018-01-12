@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='edx-opaque-keys',
-    version='0.4',
+    version='0.4.1',
     author='edX',
     url='https://github.com/edx/opaque-keys',
     classifiers=[

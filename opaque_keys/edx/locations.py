@@ -197,9 +197,9 @@ class Location(LocationBase, BlockUsageLocator):
             kwargs.pop('org', self.course_key.org),
             kwargs.pop('course', self.course_key.course),
             kwargs.pop('run', self.course_key.run),
-            kwargs.pop('category', self.category),
-            kwargs.pop('name', self.name),
-            revision=kwargs.pop('revision', self.revision),
+            kwargs.pop('category', self.block_type),
+            kwargs.pop('name', self.block_id),
+            revision=kwargs.pop('revision', self.branch),
             **kwargs
         )
 
@@ -266,9 +266,9 @@ class AssetLocation(LocationBase, AssetLocator):
             kwargs.pop('org', self.org),
             kwargs.pop('course', self.course),
             kwargs.pop('run', self.run),
-            kwargs.pop('category', self.category),
-            kwargs.pop('name', self.name),
-            revision=kwargs.pop('revision', self.revision),
+            kwargs.pop('category', self.block_type),
+            kwargs.pop('name', self.block_id),
+            revision=kwargs.pop('revision', self.branch),
             **kwargs
         )
 

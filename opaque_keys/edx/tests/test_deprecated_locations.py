@@ -22,7 +22,7 @@ class TestLocationDeprecatedBase(TestDeprecated):
 
         NOTE: This replace function accesses deprecated variables and therefore throws multiple deprecation warnings.
         """
-        with self.assertDeprecationWarning(count=13):
+        with self.assertDeprecationWarning(count=4):
             loc = cls("foo", "bar", "baz", "cat", "name")
             loc_boo = loc.replace(org='boo')
             loc_copy = loc.replace()

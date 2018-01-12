@@ -563,7 +563,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         """
         parts = []
         if self.library:  # pylint: disable=no-member
-            parts.extend([self.org, self.course])
+            parts.extend([self.org, self.library])  # pylint: disable=no-member
             if self.branch:  # pylint: disable=no-member
                 parts.append(u"{prefix}@{branch}".format(prefix=self.BRANCH_PREFIX, branch=self.branch))  # pylint: disable=no-member
         if self.version_guid:  # pylint: disable=no-member
@@ -621,6 +621,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         (?P<category>[^/]+)/     # category == block_type
         (?P<name>[^@]+)          # name == block_id
         (@(?P<revision>[^/]+))?  # branch == revision
+        \\Z
     """, re.VERBOSE)
 
     # TODO (cpennington): We should decide whether we want to expand the
@@ -1140,7 +1141,7 @@ class LibraryUsageLocator(BlockUsageLocator):
             DeprecationWarning,
             stacklevel=2
         )
-        return self.library_key.run
+        return self.library_key.RUN
 
     def _to_deprecated_string(self):
         """ Disable some deprecated methods of our parent class. """
@@ -1228,14 +1229,15 @@ class VersionTree(object):
         """
         if not isinstance(locator, Locator) and not inspect.isabstract(locator):
             raise TypeError("locator {} must be a concrete subclass of Locator".format(locator))
-        if not locator.version:
+        version = ((hasattr(locator, 'version_guid') and locator.version_guid) or
+                   (hasattr(locator, 'definition_id') and locator.definition_id))
+        if not version:
             raise ValueError("locator must be version specific (Course has version_guid or definition had id)")
         self.locator = locator
         if tree_dict is None:
             self.children = []
         else:
-            self.children = [VersionTree(child, tree_dict)
-                             for child in tree_dict.get(locator.version, [])]
+            self.children = [VersionTree(child, tree_dict) for child in tree_dict.get(version, [])]
 
 
 class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-method
@@ -1263,7 +1265,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
 
     @property
     def path(self):
-        return self.name
+        return self.block_id
 
     @property
     def asset_type(self):
@@ -1326,7 +1328,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
         That should be the only use of this method, but the method is general enough to provide the pre-opaque
         Location fields as an array in the old order with the tag.
         """
-        return ['c4x', self.org, self.course, self.block_type, self.name, None]
+        return ['c4x', self.org, self.course, self.block_type, self.block_id, None]
 
 # Register AssetLocator as the deprecated fallback for AssetKey
 AssetKey.set_deprecated_fallback(AssetLocator)
