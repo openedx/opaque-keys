@@ -1,0 +1,2 @@
+-e .[django]
+-r test-requirements.txt
