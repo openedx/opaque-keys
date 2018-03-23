@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='edx-opaque-keys',
-    version='0.4.2',
+    version='0.4.3',
     author='edX',
     url='https://github.com/edx/opaque-keys',
     classifiers=[
@@ -12,7 +12,7 @@ setup(
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.5",
     ],
-    packages=find_packages(),
+    packages=find_packages(include=['opaque_keys*'], exclude=['*tests']),
     license='AGPL-3.0',
     install_requires=[
         'six>=1.10.0,<2.0.0',
