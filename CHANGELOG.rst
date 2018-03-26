@@ -1,5 +1,20 @@
 # Unreleased
 
+# 0.4.4
+
+* Remove pytest-django as a dependency of the optional Django support; it's
+  only needed for testing, not normal usage
+
+# 0.4.3
+
+* Remove the accidentally included "settings" package from the distribution
+
+# 0.4.2
+
+* Added OpaqueKeyField and its subclasses, extracted from edx-platform
+* Added the "django" installation option to indicate the optional dependency
+  on the Django package
+
 # 0.4.1
 
 * Stop an assortment of deprecation warnings by replacing internal usage of
