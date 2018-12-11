@@ -8,7 +8,7 @@ import warnings
 try:
     from django.core.exceptions import ValidationError
     from django.db.models import CharField
-    from django.db.models.lookups import IsNull
+    from django.db.models.lookups import IsNull, StartsWith
 except ImportError:  # pragma: no cover
     # Django is unavailable, none of the classes below will work,
     # but we don't want the class definition to fail when interpreted.
@@ -93,10 +93,13 @@ class OpaqueKeyField(CreatorMixin, CharField):
 
     Empty = object()
     KEY_CLASS = None
+    DEFAULT_MAX_LENGTH = None
 
     def __init__(self, *args, **kwargs):
         if self.KEY_CLASS is None:
             raise ValueError('Must specify KEY_CLASS in OpaqueKeyField subclasses')
+        if self.DEFAULT_MAX_LENGTH is not None:
+            kwargs.setdefault('max_length', self.DEFAULT_MAX_LENGTH)
 
         super(OpaqueKeyField, self).__init__(*args, **kwargs)
 
@@ -182,6 +185,11 @@ class CourseKeyField(OpaqueKeyField):
     """
     description = "A CourseKey object, saved to the DB in the form of a string"
     KEY_CLASS = CourseKey
+    # Default to 191 characters as the maximum length of this field type,
+    # because we want to support the MySQL "utf8mb4" character set (real UTF-8)
+    # and the InnoDB index limit on common MySQL versions is 767 bytes
+    # (191 characters * 4 bytes/character = 764 bytes)
+    DEFAULT_MAX_LENGTH = 191
 
 
 class UsageKeyField(OpaqueKeyField):
@@ -190,6 +198,53 @@ class UsageKeyField(OpaqueKeyField):
     """
     description = "A Location object, saved to the DB in the form of a string"
     KEY_CLASS = UsageKey
+    # Default to 191 characters as the maximum length of this field type,
+    # because we want to support the MySQL "utf8mb4" character set (real UTF-8)
+    # and the InnoDB index limit on common MySQL configurations is 767 bytes
+    # (191 characters * 4 bytes/character = 764 bytes)
+    DEFAULT_MAX_LENGTH = 191
+
+
+class UsageKeyCourseLookup(StartsWith):
+    """
+    Allows efficiently querying the course that a UsageKey belongs to,
+    without requiring that the CourseKey is stored in a separate column.
+
+    This only works with UsageKeys that contain the full CourseKey in
+    their serialized form, preceding any usage-specific identifiers.
+
+    Usage: my_model.objects.filter(usage_key__course=course_key)
+    """
+    lookup_name = 'course'
+
+    def get_prep_lookup(self):
+        """
+        Prepare the right-hand-side value of the 'field__course = RHS' expression
+
+        Convert from a CourseKey objects to a string like
+        'block-v1:the+course_here+type@' which will be converted to SQL like:
+            WHERE usage_id LIKE 'block-v1:the+course_here+type@%'
+        """
+        course_key = self.rhs
+        if not isinstance(course_key, CourseKey):
+            raise TypeError("The __course lookup requires a CourseKey value.")
+        marker_str = 'MaRkErZZZ'  # a short sequence that is allowed in a key but unlikely to occur in the course ID
+        example_usage_key = course_key.make_usage_key(marker_str, marker_str)
+        usage_key_prefix = six.text_type(example_usage_key).partition(marker_str)[0]
+        if course_key._to_string() not in usage_key_prefix:  # pylint: disable=protected-access
+            raise TypeError("The CourseKey provided does not support __course lookups.")
+        return usage_key_prefix
+
+    def get_rhs_op(self, connection, rhs):
+        return connection.operators['startswith'] % rhs
+
+
+try:
+    #  pylint: disable=no-member
+    UsageKeyField.register_lookup(UsageKeyCourseLookup)
+except AttributeError:
+    #  Django was not imported
+    pass
 
 
 class LocationKeyField(UsageKeyField):
@@ -207,3 +262,4 @@ class BlockTypeKeyField(OpaqueKeyField):
     """
     description = "A BlockTypeKey object, saved to the DB in the form of a string."
     KEY_CLASS = BlockTypeKey
+    DEFAULT_MAX_LENGTH = 128

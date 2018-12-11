@@ -90,6 +90,15 @@ class TestKeyFieldImplementation(TestCase):
         fetched = ComplexModel.objects.filter(course_key=self.course_key).first()
         self.assertEqual(fetched, self.model)
 
+    def test_fetch_from_usage_key_course_lookup(self):
+        # Expect a match:
+        fetched = ComplexModel.objects.filter(usage_key__course=self.course_key).first()
+        self.assertEqual(fetched, self.model)
+        # Expect no match:
+        other_course_key = CourseKey.from_string('course-v1:NOTedX+FUN101x+3T2017')
+        other_fetched = ComplexModel.objects.filter(usage_key__course=other_course_key).first()
+        self.assertIsNone(other_fetched)
+
     def test_validation_no_errors(self):
         self.model.clean_fields()
 
