@@ -129,6 +129,9 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if value is self.Empty or value is None:
             return ''  # CharFields should use '' as their empty value, rather than None
 
+        if isinstance(value, six.string_types):
+            value = self.KEY_CLASS.from_string(value)
+
         assert isinstance(value, self.KEY_CLASS), "%s is not an instance of %s" % (value, self.KEY_CLASS)
         serialized_key = six.text_type(_strip_value(value))
         if serialized_key.endswith('\n'):
