@@ -6,7 +6,7 @@ from functools import update_wrapper
 import string
 from six import text_type
 
-from hypothesis import strategies, assume
+from hypothesis import strategies, _strategies, assume
 from singledispatch import singledispatch
 
 from opaque_keys.edx.block_types import BlockTypeKeyV1, XBLOCK_V1, XMODULE_V1
@@ -29,7 +29,7 @@ from opaque_keys.edx.locator import (
 )
 
 
-@strategies.cacheable
+@_strategies.cacheable
 def unicode_letters_and_digits():
     """
     Strategy to return unicode characters and numbers.
@@ -47,7 +47,7 @@ def unicode_letters_and_digits():
     )
 
 
-@strategies.cacheable
+@_strategies.cacheable
 def allowed_locator_ids():
     """
     Strategy to generate valid ids for Locator fields.
@@ -58,7 +58,7 @@ def allowed_locator_ids():
     )
 
 
-@strategies.cacheable
+@_strategies.cacheable
 def deprecated_locator_ids():
     """
     Strategy to generate valid ids for deprecated Locator fields.
@@ -69,7 +69,7 @@ def deprecated_locator_ids():
     )
 
 
-@strategies.cacheable
+@_strategies.cacheable
 def deprecated_course_ids():
     """
     Strategy to generate valid ids for deprecated CourseLocator fields.
@@ -80,7 +80,7 @@ def deprecated_course_ids():
     )
 
 
-@strategies.cacheable
+@_strategies.cacheable
 def version_guids():
     """
     Strategy to generate valid ObjectIds.
@@ -107,7 +107,7 @@ def classdispatch(func):
 
 
 @classdispatch
-@strategies.cacheable
+@_strategies.cacheable
 def fields_for_key(cls, field):  # pylint: disable=unused-argument
     """
     A ``hypothesis`` strategy to generate data of the right type for the fields of this OpaqueKey.
@@ -136,7 +136,7 @@ def _aside_v1_exclusions(draw, strategy):
 
 
 @fields_for_key.register(AsideDefinitionKeyV1)
-@strategies.cacheable
+@_strategies.cacheable
 def _fields_for_aside_def_key_v1(cls, field):  # pylint: disable=missing-docstring
     if field == 'deprecated':
         return strategies.just(False)
@@ -149,7 +149,7 @@ def _fields_for_aside_def_key_v1(cls, field):  # pylint: disable=missing-docstri
 
 
 @fields_for_key.register(AsideUsageKeyV1)
-@strategies.cacheable
+@_strategies.cacheable
 def _fields_for_aside_usage_key_v1(cls, field):  # pylint: disable=missing-docstring, function-redefined
     if field == 'deprecated':
         return strategies.just(False)
@@ -162,7 +162,7 @@ def _fields_for_aside_usage_key_v1(cls, field):  # pylint: disable=missing-docst
 
 
 @fields_for_key.register(AsideDefinitionKeyV2)
-@strategies.cacheable
+@_strategies.cacheable
 def _fields_for_aside_def_key_v2(cls, field):  # pylint: disable=missing-docstring
     if field == 'deprecated':
         return strategies.just(False)
@@ -173,7 +173,7 @@ def _fields_for_aside_def_key_v2(cls, field):  # pylint: disable=missing-docstri
 
 
 @fields_for_key.register(AsideUsageKeyV2)
-@strategies.cacheable
+@_strategies.cacheable
 def _fields_for_aside_usage_key_v2(cls, field):  # pylint: disable=missing-docstring, function-redefined
     if field == 'deprecated':
         return strategies.just(False)
@@ -184,7 +184,7 @@ def _fields_for_aside_usage_key_v2(cls, field):  # pylint: disable=missing-docst
 
 
 @fields_for_key.register(LibraryLocator)
-@strategies.cacheable
+@_strategies.cacheable
 def _fields_for_library_locator(cls, field):  # pylint: disable=missing-docstring, function-redefined
     if field == 'version_guid':
         return version_guids()
@@ -197,7 +197,7 @@ def _fields_for_library_locator(cls, field):  # pylint: disable=missing-docstrin
 
 
 @fields_for_key.register(DefinitionLocator)
-@strategies.cacheable
+@_strategies.cacheable
 def _fields_for_definition_locator(cls, field):  # pylint: disable=missing-docstring, function-redefined
     if field == 'definition_id':
         return version_guids()
@@ -208,7 +208,7 @@ def _fields_for_definition_locator(cls, field):  # pylint: disable=missing-docst
 
 
 @classdispatch
-@strategies.cacheable
+@_strategies.cacheable
 def instances_of_key(cls, **kwargs):
     """
     A ``hypothesis`` strategy to generate instances of this OpaqueKey class.
@@ -228,7 +228,7 @@ def instances_of_key(cls, **kwargs):
 
 
 @instances_of_key.register(BlockTypeKeyV1)
-@strategies.cacheable
+@_strategies.cacheable
 def _instances_of_block_type_key(cls, **kwargs):  # pylint: disable=missing-docstring, function-redefined
 
     return strategies.builds(
@@ -244,7 +244,7 @@ def _instances_of_block_type_key(cls, **kwargs):  # pylint: disable=missing-docs
 
 
 @instances_of_key.register(CourseLocator)
-@strategies.cacheable
+@_strategies.cacheable
 def _instances_of_course_locator(cls, **kwargs):  # pylint: disable=missing-docstring, function-redefined
 
     return strategies.builds(
@@ -266,7 +266,7 @@ def _instances_of_course_locator(cls, **kwargs):  # pylint: disable=missing-docs
 
 
 @instances_of_key.register(BlockUsageLocator)
-@strategies.cacheable
+@_strategies.cacheable
 def _instances_of_block_usage(cls, **kwargs):  # pylint: disable=missing-docstring, function-redefined
 
     def locator_for_course(course_key):
@@ -295,7 +295,7 @@ def _instances_of_block_usage(cls, **kwargs):  # pylint: disable=missing-docstri
 
 
 @instances_of_key.register(LibraryUsageLocator)
-@strategies.cacheable
+@_strategies.cacheable
 def _instances_of_library_usage(cls, **kwargs):  # pylint: disable=missing-docstring, function-redefined
 
     return strategies.builds(
@@ -307,7 +307,7 @@ def _instances_of_library_usage(cls, **kwargs):  # pylint: disable=missing-docst
 
 
 @instances_of_key.register(DeprecatedLocation)
-@strategies.cacheable
+@_strategies.cacheable
 def _instances_of_deprecated_loc(cls, **kwargs):  # pylint: disable=missing-docstring, function-redefined
 
     return strategies.builds(
@@ -323,7 +323,7 @@ def _instances_of_deprecated_loc(cls, **kwargs):  # pylint: disable=missing-docs
 
 
 @classdispatch
-@strategies.cacheable
+@_strategies.cacheable
 def keys_of_type(cls, blacklist=None):
     """
     A ``hypothesis`` strategy to generate instances of this OpaqueKey KeyType.
