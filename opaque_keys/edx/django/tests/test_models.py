@@ -90,6 +90,10 @@ class TestKeyFieldImplementation(TestCase):
         fetched = ComplexModel.objects.filter(course_key=self.course_key).first()
         self.assertEqual(fetched, self.model)
 
+    def test_fetch_from_db_with_str(self):
+        fetched = ComplexModel.objects.filter(course_key=six.text_type(self.course_key)).first()
+        self.assertEqual(fetched, self.model)
+
     def test_validation_no_errors(self):
         self.model.clean_fields()
 
