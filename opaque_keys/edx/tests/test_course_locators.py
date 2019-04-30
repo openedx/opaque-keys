@@ -265,10 +265,10 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
     )
     def test_make_usage_key_from_deprecated_string_roundtrip(self, url):
         course_key = CourseLocator('org', 'course', 'run')
-        with self.assertDeprecationWarning(count=2):
+        with self.assertDeprecationWarning(count=1):
             self.assertEqual(
                 url,
-                course_key.make_usage_key_from_deprecated_string(url).to_deprecated_string()
+                text_type(course_key.make_usage_key_from_deprecated_string(url))
             )
 
     def test_empty_run(self):

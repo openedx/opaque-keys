@@ -349,15 +349,6 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
         """Returns an 'old-style' course id, represented as 'org/course/run'"""
         return u'/'.join([self.org, self.course, self.run])
 
-    def to_deprecated_string(self):
-        """Deprecated. Use unicode(key) instead."""
-        warnings.warn(
-            "to_deprecated_string is deprecated! Use unicode(key) instead.",
-            DeprecationWarning,
-            stacklevel=2
-        )
-        return text_type(self)
-
     @classmethod
     def _from_deprecated_string(cls, serialized):
         """
@@ -954,15 +945,6 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
             url += u"@{rev}".format(rev=self.course_key.branch)
         return url
 
-    def to_deprecated_string(self):
-        """Deprecated. Use unicode(key) instead."""
-        warnings.warn(
-            "to_deprecated_string is deprecated! Use unicode(key) instead.",
-            DeprecationWarning,
-            stacklevel=2
-        )
-        return text_type(self)
-
     @classmethod
     def _from_deprecated_string(cls, serialized):
         """
@@ -1292,15 +1274,6 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
         if self.course_key.branch:
             url += u'@{}'.format(self.course_key.branch)
         return url
-
-    def to_deprecated_string(self):
-        """Deprecated. Use unicode(key) instead."""
-        warnings.warn(
-            "to_deprecated_string is deprecated! Use unicode(key) instead.",
-            DeprecationWarning,
-            stacklevel=2
-        )
-        return text_type(self)
 
     @property
     def tag(self):

@@ -51,7 +51,7 @@ class TestSSCK(TestDeprecated):
 
     def test_deprecated_from_dep_string(self):
         with self.assertDeprecationWarning():
-            ssck = SlashSeparatedCourseKey.from_deprecated_string("foo/bar/baz")
+            ssck = SlashSeparatedCourseKey.from_string("foo/bar/baz")
         self.assertTrue(isinstance(ssck, CourseLocator))
 
     def test_deprecated_from_dep_string_bad(self):
