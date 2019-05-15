@@ -124,7 +124,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@this+' + CourseLocator.BRANCH_PREFIX + '@that',
         'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@this+' + CourseLocator.BRANCH_PREFIX,
         'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@this ',
-        'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@th%is ',
+        'mit.eecs+' + CourseLocator.BRANCH_PREFIX + '@th%is ',  # pylint: disable=unicode-format-string
         u'\ufffd',
     )
     def test_course_constructor_bad_package_id(self, bad_id):

@@ -1,0 +1,6 @@
+# Requirements for test runs utilizing Django support
+-c constraints.txt
+
+-r test.txt               # Non-Django testing dependencies
+
+pytest-django

@@ -94,4 +94,5 @@ class BlockTypeKeyV1(BlockTypeKey):  # pylint: disable=abstract-method
         """
         return self.block_type
 
+
 BlockTypeKey.set_deprecated_fallback(BlockTypeKeyV1)

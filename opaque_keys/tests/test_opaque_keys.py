@@ -120,11 +120,11 @@ class KeyTests(TestCase):
         self.assertEqual(base_key._to_string(), '15')  # pylint: disable=protected-access
         self.assertEqual(len(base_key), len('base10:15'))
 
-        dict_key = DummyKey.from_string('dict:{"foo": "bar"}')
+        dict_key = DummyKey.from_string('dict:{"foo": "bar"}')  # pylint: disable=unicode-format-string
         self.assertIsInstance(dict_key, DictKey)
         self.assertEqual(dict_key.value, {"foo": "bar"})
         self.assertEqual(dict_key._to_string(), '{"foo": "bar"}')  # pylint: disable=protected-access
-        self.assertEqual(len(dict_key), len('dict:{"foo": "bar"}'))
+        self.assertEqual(len(dict_key), len('dict:{"foo": "bar"}'))  # pylint: disable=unicode-format-string
 
     def test_bad_keys(self):
         with self.assertRaises(InvalidKeyError):

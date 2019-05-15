@@ -2,6 +2,9 @@
 # http://open-edx-proposals.readthedocs.io/en/latest/oeps/oep-0002.html#specification
 
 nick: opky
-oeps: {}
-owner: edx/platform-team
+oeps:
+    oep-7: true
+owner: cpennington
+supporting_teams:
+    - platform-core
 track-pulls: true

@@ -97,7 +97,7 @@ class LocationBase(object):
             )
         else:
             warnings.warn(
-                "{} is deprecated!".format(cls),
+                u"{} is deprecated!".format(cls),
                 DeprecationWarning,
                 stacklevel=3
             )
@@ -209,9 +209,9 @@ class DeprecatedLocation(BlockUsageLocator):
     The short-lived location:org+course+run+block_type+block_id syntax
     """
     CANONICAL_NAMESPACE = 'location'
-    URL_RE_SOURCE = r"""
-        (?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)\+(?P<run>{ALLOWED_ID_CHARS}+)\+
-        (?P<block_type>{ALLOWED_ID_CHARS}+)\+
+    URL_RE_SOURCE = u"""
+        (?P<org>{ALLOWED_ID_CHARS}+)\\+(?P<course>{ALLOWED_ID_CHARS}+)\\+(?P<run>{ALLOWED_ID_CHARS}+)\\+
+        (?P<block_type>{ALLOWED_ID_CHARS}+)\\+
         (?P<block_id>{ALLOWED_ID_CHARS}+)
         """.format(ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS)
 
