@@ -3,8 +3,9 @@
 
 nick: opky
 oeps:
+    oep-2: true
     oep-7: true
+    oep-18: true
 owner: cpennington
 supporting_teams:
     - platform-core
-track-pulls: true
