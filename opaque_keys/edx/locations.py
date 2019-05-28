@@ -39,16 +39,6 @@ class SlashSeparatedCourseKey(CourseLocator):
         super(SlashSeparatedCourseKey, self).__init__(org, course, run, deprecated=True, **kwargs)
 
     @classmethod
-    def from_deprecated_string(cls, serialized):
-        """Deprecated. Use :class:`locator.CourseLocator.from_string`"""
-        warnings.warn(
-            "SlashSeparatedCourseKey is deprecated! Please use locator.CourseLocator",
-            DeprecationWarning,
-            stacklevel=2
-        )
-        return CourseLocator.from_string(serialized)
-
-    @classmethod
     def from_string(cls, serialized):
         """Deprecated. Use :meth:`locator.CourseLocator.from_string`."""
         warnings.warn(
@@ -159,12 +149,6 @@ class LocationBase(object):
             deprecated=True
         ))
         super(LocationBase, self).__init__(course_key, category, name, deprecated=True, **kwargs)
-
-    @classmethod
-    def from_deprecated_string(cls, serialized):
-        """Deprecated. Use :meth:`locator.BlockUsageLocator.from_string`."""
-        cls._deprecation_warning()
-        return BlockUsageLocator.from_string(serialized)
 
     @classmethod
     def from_string(cls, serialized):
@@ -283,7 +267,3 @@ class AssetLocation(LocationBase, AssetLocator):
         """Deprecated. See BlockUsageLocator._from_deprecated_son"""
         cls._deprecation_warning()
         return AssetLocator._from_deprecated_son(id_dict, run)
-
-    @classmethod
-    def from_deprecated_string(cls, serialized):
-        return cls._from_deprecated_string(serialized)
