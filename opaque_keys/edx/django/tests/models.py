@@ -57,7 +57,7 @@ class ExampleModel(Model):
 
 def is_edx(value):
     if value.org.lower() != 'edx':
-        raise ValidationError('{} is not edx'.format(value))
+        raise ValidationError(u'{} is not edx'.format(value))
 
 
 class ComplexModel(Model):

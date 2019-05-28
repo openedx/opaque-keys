@@ -1,0 +1,17 @@
+# Requirements for test runs.
+-c constraints.txt
+
+-r base.txt               # Core dependencies for this package
+
+coverage
+ddt
+edx-lint
+hypothesis>=3.84.5
+mock
+pycodestyle
+pytest
+pytest-cov
+pytest-pep8
+pytest-pylint
+pytest-xdist
+singledispatch

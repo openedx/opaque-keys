@@ -117,8 +117,7 @@ def fields_for_key(cls, field):  # pylint: disable=unused-argument
     """
     if field == 'deprecated':
         return strategies.booleans()
-    else:
-        return strategies.text(min_size=1)
+    return strategies.text(min_size=1)
 
 
 @strategies.composite
@@ -140,12 +139,11 @@ def _aside_v1_exclusions(draw, strategy):
 def _fields_for_aside_def_key_v1(cls, field):  # pylint: disable=missing-docstring
     if field == 'deprecated':
         return strategies.just(False)
-    elif field == 'definition_key':
+    if field == 'definition_key':
         return _aside_v1_exclusions(  # pylint: disable=no-value-for-parameter
             keys_of_type(DefinitionKey, blacklist=AsideDefinitionKey)
         )
-    else:
-        return fields_for_key(super(AsideDefinitionKeyV1, cls).__class__, field)
+    return fields_for_key(super(AsideDefinitionKeyV1, cls).__class__, field)
 
 
 @fields_for_key.register(AsideUsageKeyV1)
@@ -153,12 +151,11 @@ def _fields_for_aside_def_key_v1(cls, field):  # pylint: disable=missing-docstri
 def _fields_for_aside_usage_key_v1(cls, field):  # pylint: disable=missing-docstring, function-redefined
     if field == 'deprecated':
         return strategies.just(False)
-    elif field == 'usage_key':
+    if field == 'usage_key':
         return _aside_v1_exclusions(  # pylint: disable=no-value-for-parameter
             keys_of_type(UsageKey, blacklist=AsideUsageKey)
         )
-    else:
-        return fields_for_key(super(AsideUsageKeyV1, cls).__class__, field)
+    return fields_for_key(super(AsideUsageKeyV1, cls).__class__, field)
 
 
 @fields_for_key.register(AsideDefinitionKeyV2)
@@ -166,10 +163,9 @@ def _fields_for_aside_usage_key_v1(cls, field):  # pylint: disable=missing-docst
 def _fields_for_aside_def_key_v2(cls, field):  # pylint: disable=missing-docstring
     if field == 'deprecated':
         return strategies.just(False)
-    elif field == 'definition_key':
+    if field == 'definition_key':
         return keys_of_type(DefinitionKey, blacklist=AsideDefinitionKey)
-    else:
-        return fields_for_key(super(AsideDefinitionKeyV2, cls).__class__, field)
+    return fields_for_key(super(AsideDefinitionKeyV2, cls).__class__, field)
 
 
 @fields_for_key.register(AsideUsageKeyV2)
@@ -177,10 +173,9 @@ def _fields_for_aside_def_key_v2(cls, field):  # pylint: disable=missing-docstri
 def _fields_for_aside_usage_key_v2(cls, field):  # pylint: disable=missing-docstring, function-redefined
     if field == 'deprecated':
         return strategies.just(False)
-    elif field == 'usage_key':
+    if field == 'usage_key':
         return keys_of_type(UsageKey, blacklist=AsideUsageKey)
-    else:
-        return fields_for_key(super(AsideUsageKeyV2, cls).__class__, field)
+    return fields_for_key(super(AsideUsageKeyV2, cls).__class__, field)
 
 
 @fields_for_key.register(LibraryLocator)
@@ -188,12 +183,11 @@ def _fields_for_aside_usage_key_v2(cls, field):  # pylint: disable=missing-docst
 def _fields_for_library_locator(cls, field):  # pylint: disable=missing-docstring, function-redefined
     if field == 'version_guid':
         return version_guids()
-    elif field in ('org', 'library', 'branch'):
+    if field in ('org', 'library', 'branch'):
         return allowed_locator_ids()
-    elif field == 'deprecated':
+    if field == 'deprecated':
         return strategies.just(False)
-    else:
-        return fields_for_key(super(LibraryLocator, cls).__class__, field)
+    return fields_for_key(super(LibraryLocator, cls).__class__, field)
 
 
 @fields_for_key.register(DefinitionLocator)
@@ -201,10 +195,9 @@ def _fields_for_library_locator(cls, field):  # pylint: disable=missing-docstrin
 def _fields_for_definition_locator(cls, field):  # pylint: disable=missing-docstring, function-redefined
     if field == 'definition_id':
         return version_guids()
-    elif field == 'block_type':
+    if field == 'block_type':
         return allowed_locator_ids()
-    else:
-        return fields_for_key(super(DefinitionLocator, cls).__class__, field)
+    return fields_for_key(super(DefinitionLocator, cls).__class__, field)
 
 
 @classdispatch
@@ -282,14 +275,13 @@ def _instances_of_block_usage(cls, **kwargs):  # pylint: disable=missing-docstri
                 block_type=kwargs.get('block_type', deprecated_course_ids()),
                 deprecated=kwargs.get('deprecated', strategies.booleans()),
             )
-        else:
-            return strategies.builds(
-                cls,
-                course_key=strategies.just(course_key),
-                block_id=kwargs.get('block_id', allowed_locator_ids()),
-                block_type=kwargs.get('block_type', allowed_locator_ids()),
-                deprecated=kwargs.get('deprecated', strategies.booleans()),
-            )
+        return strategies.builds(
+            cls,
+            course_key=strategies.just(course_key),
+            block_id=kwargs.get('block_id', allowed_locator_ids()),
+            block_type=kwargs.get('block_type', allowed_locator_ids()),
+            deprecated=kwargs.get('deprecated', strategies.booleans()),
+        )
 
     return kwargs.get('course_key', instances_of_key(CourseLocator)).flatmap(locator_for_course)
 

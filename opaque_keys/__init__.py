@@ -6,10 +6,10 @@ These keys are designed to provide a limited, forward-evolveable interface to
 an application, while concealing the particulars of the serialization
 formats, and allowing new serialization formats to be installed transparently.
 """
-from _collections import defaultdict
 from abc import ABCMeta, abstractmethod
 from functools import total_ordering
 
+from _collections import defaultdict
 from six import (
     iteritems,
     python_2_unicode_compatible,
@@ -35,7 +35,7 @@ class OpaqueKeyMetaclass(ABCMeta):
     Metaclass for :class:`OpaqueKey`. Sets the default value for the values in ``KEY_FIELDS`` to
     ``None``.
     """
-    def __new__(mcs, name, bases, attrs):
+    def __new__(mcs, name, bases, attrs):  # pylint: disable=arguments-differ
         if '__slots__' not in attrs:
             for field in attrs.get('KEY_FIELDS', []):
                 attrs.setdefault(field, None)
@@ -263,7 +263,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         Register a deprecated fallback class for this class to revert to.
         """
         if hasattr(cls, 'deprecated_fallback'):
-            raise AttributeError("Error: cannot register two fallback classes for {!r}.".format(cls))
+            raise AttributeError(u"Error: cannot register two fallback classes for {!r}.".format(cls))
         cls.deprecated_fallback = fallback
 
     # ============= VALUE SEMANTICS ==============
@@ -287,7 +287,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         KEY_FIELDS as the arg order, and validating number and order of args.
         """
         if len(args) + len(kwargs) != len(self.KEY_FIELDS):
-            raise TypeError('__init__() takes exactly {} arguments ({} given)'.format(
+            raise TypeError(u'__init__() takes exactly {} arguments ({} given)'.format(
                 len(self.KEY_FIELDS),
                 len(args) + len(kwargs)
             ))
@@ -295,13 +295,13 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         keyed_args = dict(zip(self.KEY_FIELDS, args))
         overlapping_args = viewkeys(keyed_args) & viewkeys(kwargs)
         if overlapping_args:
-            raise TypeError('__init__() got multiple values for keyword argument {!r}'.format(overlapping_args[0]))
+            raise TypeError(u'__init__() got multiple values for keyword argument {!r}'.format(overlapping_args[0]))
 
         keyed_args.update(kwargs)
 
         for key in viewkeys(keyed_args):
             if key not in self.KEY_FIELDS:
-                raise TypeError('__init__() got an unexpected argument {!r}'.format(key))
+                raise TypeError(u'__init__() got an unexpected argument {!r}'.format(key))
 
         self._unchecked_init(**keyed_args)
 
@@ -331,12 +331,12 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
 
     def __setattr__(self, name, value):
         if getattr(self, '_initialized', False):
-            raise AttributeError("Can't set {!r}. OpaqueKeys are immutable.".format(name))
+            raise AttributeError(u"Can't set {!r}. OpaqueKeys are immutable.".format(name))
 
         super(OpaqueKey, self).__setattr__(name, value)  # pylint: disable=no-member
 
     def __delattr__(self, name):
-        raise AttributeError("Can't delete {!r}. OpaqueKeys are immutable.".format(name))
+        raise AttributeError(u"Can't delete {!r}. OpaqueKeys are immutable.".format(name))
 
     def __copy__(self):
         """
@@ -382,7 +382,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
     def __lt__(self, other):
         if (self.KEY_FIELDS, self.CANONICAL_NAMESPACE, self.deprecated) != (other.KEY_FIELDS, other.CANONICAL_NAMESPACE,
                                                                             other.deprecated):
-            raise TypeError("{!r} is incompatible with {!r}".format(self, other))
+            raise TypeError(u"{!r} is incompatible with {!r}".format(self, other))
         return self._key < other._key  # pylint: disable=protected-access
 
     def __hash__(self):

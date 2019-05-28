@@ -206,7 +206,7 @@ class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
     If provided as the cls to json.dumps, will serialize and Locations as i4x strings and other
     keys using the unicode strings.
     """
-    def default(self, key):  # pylint: disable=method-hidden
+    def default(self, key):  # pylint: disable=arguments-differ, method-hidden
         if isinstance(key, OpaqueKey):
             return text_type(key)
         super(i4xEncoder, self).default(key)

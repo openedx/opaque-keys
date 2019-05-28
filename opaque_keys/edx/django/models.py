@@ -61,8 +61,7 @@ def _strip_object(key):
     """
     if hasattr(key, 'version_agnostic') and hasattr(key, 'for_branch'):
         return key.for_branch(None).version_agnostic()
-    else:
-        return key
+    return key
 
 
 def _strip_value(value, lookup='exact'):
@@ -104,7 +103,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if value is self.Empty or value is None:
             return None
 
-        error_message = "%s is not an instance of six.string_types or %s" % (value, self.KEY_CLASS)
+        error_message = u"%s is not an instance of six.string_types or %s" % (value, self.KEY_CLASS)
         assert isinstance(value, six.string_types + (self.KEY_CLASS,)), error_message
         if value == '':
             # handle empty string for models being created w/o fields populated
@@ -132,7 +131,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if isinstance(value, six.string_types):
             value = self.KEY_CLASS.from_string(value)
 
-        assert isinstance(value, self.KEY_CLASS), "%s is not an instance of %s" % (value, self.KEY_CLASS)
+        assert isinstance(value, self.KEY_CLASS), u"%s is not an instance of %s" % (value, self.KEY_CLASS)
         serialized_key = six.text_type(_strip_value(value))
         if serialized_key.endswith('\n'):
             # An opaque key object serialized to a string with a trailing newline.

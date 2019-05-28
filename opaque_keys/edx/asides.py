@@ -41,7 +41,7 @@ def _decode_v1(value):
 
     reencoded = _encode_v1(decode_dollars)
     if reencoded != value:
-        raise ValueError('Ambiguous encoded value, {!r} could have been encoded as {!r}'.format(value, reencoded))
+        raise ValueError(u'Ambiguous encoded value, {!r} could have been encoded as {!r}'.format(value, reencoded))
 
     return decode_dollars
 

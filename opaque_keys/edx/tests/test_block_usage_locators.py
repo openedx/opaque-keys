@@ -361,7 +361,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
             CourseLocator.BRANCH_PREFIX, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
         )
         testobj = UsageKey.from_string(testurn)
-        expected = "BlockUsageLocator(CourseLocator({}, {}, {}, {}, None), {}, {})".format(
+        expected = u"BlockUsageLocator(CourseLocator({}, {}, {}, {}, None), {}, {})".format(
             repr(text_type('mit.eecs')),
             repr(text_type('6002x')),
             repr(text_type('2014_T2')),
@@ -369,7 +369,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
             repr(text_type('problem')),
             repr(text_type('HW3')),
         )
-        self.assertEqual(expected, repr(testobj))
+        self.assertEqual(expected, text_type(repr(testobj)))
 
     def test_local_id(self):
         local_id = LocalId()

@@ -1,0 +1,6 @@
+# Additional requirements for development of this application
+-c constraints.txt
+
+-r pip-tools.txt          # Contains pip-compile, used to generate pip requirements files
+-r doc.txt                # Core, testing, and doc generation dependencies
+-r travis.txt             # tox and related dependencies
