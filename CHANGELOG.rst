@@ -1,5 +1,12 @@
 # Unreleased
 
+# 1.0.0
+
+* Remove to_deprecated_string and from_deprecated_string API methods
+* Support OpaqueKeyField lookups by string
+* Support more recent versions of the hypothesis Python module
+* Support Python 3.6 instead of 3.5
+
 # 0.4.4
 
 * Remove pytest-django as a dependency of the optional Django support; it's
