@@ -2,13 +2,22 @@
 """
 Tests of LibraryUsageLocator
 """
-from six import text_type
-import ddt
+from __future__ import absolute_import, division, print_function, unicode_literals
 import itertools  # pylint: disable=wrong-import-order
+from unittest import TestCase
+
+import ddt
+from six import text_type
 from bson.objectid import ObjectId
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import UsageKey
-from opaque_keys.edx.locator import LibraryUsageLocator, BlockUsageLocator, LibraryLocator
+from opaque_keys.edx.locator import (
+    BlockUsageLocator,
+    LibraryLocator,
+    LibraryLocatorV2,
+    LibraryUsageLocator,
+    LibraryUsageLocatorV2,
+)
 from opaque_keys.edx.tests import LocatorBaseTest
 
 BLOCK_PREFIX = BlockUsageLocator.BLOCK_PREFIX
@@ -165,3 +174,67 @@ class TestLibraryUsageLocators(LocatorBaseTest):
 
         with self.assertRaises(NotImplementedError):
             usage.to_deprecated_son()
+
+
+@ddt.ddt
+class LibraryUsageLocatorV2Tests(TestCase):
+    """
+    Tests for :class:`.LibraryUsageLocatorV2`
+    """
+    VALID_LIB_KEY = LibraryLocatorV2("SchoolX", "lib-slug")
+
+    def test_inheritance(self):
+        """
+        A LibraryUsageLocatorV2 is a usage key
+        """
+        usage_key = LibraryUsageLocatorV2(self.VALID_LIB_KEY, "problem", "p1")
+        self.assertIsInstance(usage_key, UsageKey)
+
+    @ddt.data(
+        'lb:MITx:reallyhardproblems:problem:problem1',
+        'lb:edX:demo-lib.2019:html:introduction',
+        'lb:UnicodeX:i18n-lib:html:έψιλον',
+    )
+    def test_roundtrip_from_string(self, key):
+        usage_key = UsageKey.from_string(key)
+        serialized = text_type(usage_key)
+        self.assertEqual(key, serialized)
+
+    @ddt.data(
+        {"lib_key": VALID_LIB_KEY, "block_type": "video", "usage_id": "vid-a4"},
+        {"lib_key": VALID_LIB_KEY, "block_type": "problem", "usage_id": "p1"},
+        {"lib_key": VALID_LIB_KEY, "block_type": "problem", "usage_id": "1"},
+    )
+    def test_roundtrip_from_key(self, key_args):
+        key = LibraryUsageLocatorV2(**key_args)
+        serialized = text_type(key)
+        deserialized = UsageKey.from_string(serialized)
+        self.assertEqual(key, deserialized)
+
+    @ddt.data(
+        # Keys with invalid lib_key:
+        {"lib_key": "lib:SchoolX:this-is-a-string", "block_type": "problem", "usage_id": "p1"},
+        {"lib_key": "foobar", "block_type": "problem", "usage_id": "p1"},
+        {"lib_key": None, "block_type": "problem", "usage_id": "p1"},
+        # Keys with invalid block_type:
+        {"lib_key": VALID_LIB_KEY, "block_type": None, "usage_id": "vid-a4"},
+        {"lib_key": VALID_LIB_KEY, "block_type": "a b", "usage_id": "vid-a4"},
+        # Keys with invalid usage_id:
+        {"lib_key": VALID_LIB_KEY, "block_type": "video", "usage_id": None},
+        {"lib_key": VALID_LIB_KEY, "block_type": "video", "usage_id": ""},
+        {"lib_key": VALID_LIB_KEY, "block_type": "video", "usage_id": "a b c"},
+        {"lib_key": VALID_LIB_KEY, "block_type": "video", "usage_id": "$!%^"},
+        {"lib_key": VALID_LIB_KEY, "block_type": "video", "usage_id": 1},
+    )
+    def test_invalid_args(self, key_args):
+        with self.assertRaises((InvalidKeyError, TypeError, ValueError)):
+            LibraryUsageLocatorV2(**key_args)
+
+    def test_map_into_course(self):
+        """
+        Test that key.map_into_course(key.course_key) won't raise an error as
+        this pattern is used in several places in the LMS that still support
+        old mongo.
+        """
+        key = LibraryUsageLocatorV2(self.VALID_LIB_KEY, block_type="problem", usage_id="p1")
+        self.assertEqual(key.map_into_course(key.course_key), key)

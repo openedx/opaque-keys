@@ -1,5 +1,17 @@
 # Unreleased
 
+
+# 2.0
+
+* Added LibraryLocatorV2 and LibraryUsageLocatorV2
+* Added LearningContextKey, UsageKeyV2, and BundleDefinitionLocator
+* Added the .is_course helper method
+
+# 1.0.1
+
+* Included test code in the PyPI package so its mixins can be imported into
+  other code
+
 # 1.0.0
 
 * Remove to_deprecated_string and from_deprecated_string API methods

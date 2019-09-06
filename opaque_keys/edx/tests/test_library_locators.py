@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
 """
 Tests of LibraryLocators
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
+from unittest import TestCase
+
 from six import text_type
 import ddt
 import itertools  # pylint: disable=wrong-import-order
@@ -8,9 +12,9 @@ import itertools  # pylint: disable=wrong-import-order
 from bson.objectid import ObjectId
 
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.keys import CourseKey
+from opaque_keys.edx.keys import CourseKey, LearningContextKey
 
-from opaque_keys.edx.locator import LibraryUsageLocator, LibraryLocator, CourseLocator, AssetLocator
+from opaque_keys.edx.locator import LibraryUsageLocator, LibraryLocator, LibraryLocatorV2, CourseLocator, AssetLocator
 
 from opaque_keys.edx.tests import LocatorBaseTest, TestDeprecated
 
@@ -237,3 +241,74 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         self.assertEqual(lib_key2, lib_key3)
         self.assertEqual(lib_key3.org, None)
         self.assertEqual(lib_key3.library, None)
+
+
+@ddt.ddt
+class LibraryLocatorV2Tests(TestCase):
+    """
+    Tests for :class:`.LibraryLocatorV2`
+    """
+
+    def test_inheritance(self):
+        """
+        A LibraryLocatorV2 is a context key but not a coursekey
+        """
+        lib_key = LibraryLocatorV2("SchoolX", "lib-slug")
+        self.assertIsInstance(lib_key, LearningContextKey)
+        self.assertNotIsInstance(lib_key, CourseKey)
+        self.assertFalse(lib_key.is_course)
+
+    def test_from_string_inheritance(self):
+        """
+        Test that CourseKey.from_string(...) will never give you a library key
+        unexpectedly, but LearningContextKey.from_string(...) will give you
+        either.
+        """
+        lib_string = 'lib:MITx:reallyhardproblems'
+        course_string = 'course-v1:org+course+run'
+        # This should not work because lib_string is not a course key:
+        with self.assertRaises(InvalidKeyError):
+            CourseKey.from_string(lib_string)
+        # But this should work:
+        self.assertIsInstance(
+            LearningContextKey.from_string(lib_string),
+            LibraryLocatorV2,
+        )
+        # And this should work:
+        self.assertIsInstance(
+            LearningContextKey.from_string(course_string),
+            CourseLocator,
+        )
+
+    @ddt.data(
+        'lib:MITx:reallyhardproblems',
+        'lib:edX:demo-lib.2019',
+    )
+    def test_roundtrip_from_string(self, key):
+        lib_key = LearningContextKey.from_string(key)
+        serialized = text_type(lib_key)
+        self.assertEqual(key, serialized)
+
+    @ddt.data(
+        {"org": "edX", "slug": "platform-intro-videos"},
+        {"org": "LunaX", "slug": "phys870-tachyon-problems"},
+        {"org": "EpsilonX", "slug": "έψιλον"},  # Unicode slugs are allowed
+    )
+    def test_roundtrip_from_key(self, key_args):
+        key = LibraryLocatorV2(**key_args)
+        serialized = text_type(key)
+        deserialized = LearningContextKey.from_string(serialized)
+        self.assertEqual(key, deserialized)
+
+    @ddt.data(
+        {"org": "not a valid org", "slug": "foobar"},
+        {"org": "", "slug": "foobar"},
+        {"org": 123, "slug": "foobar"},
+        {"org": "έψιλον", "slug": "foobar"},  # The organizations app does not allow unicode org IDs.
+        {"org": "org", "slug": "not a valid slug"},
+        {"org": "org", "slug": ""},
+        {"org": "org", "slug": 27823478900457890},
+    )
+    def test_invalid_args(self, key_args):
+        with self.assertRaises((InvalidKeyError, TypeError, ValueError)):
+            LibraryLocatorV2(**key_args)

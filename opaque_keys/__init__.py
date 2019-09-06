@@ -191,9 +191,14 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         cls._drivers()
         try:
             namespace, rest = cls._separate_namespace(serialized)
-            return cls.get_namespace_plugin(namespace)._from_string(rest)
+            key_class = cls.get_namespace_plugin(namespace)
+            if not issubclass(key_class, cls):
+                # CourseKey.from_string() should never return a non-course LearningContextKey,
+                # but they share the same namespace.
+                raise InvalidKeyError(cls, serialized)
+            return key_class._from_string(rest)
         except InvalidKeyError:
-            if hasattr(cls, 'deprecated_fallback'):
+            if hasattr(cls, 'deprecated_fallback') and issubclass(cls.deprecated_fallback, cls):
                 return cls.deprecated_fallback._from_deprecated_string(serialized)
             raise InvalidKeyError(cls, serialized)
 
