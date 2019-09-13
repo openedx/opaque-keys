@@ -17,7 +17,7 @@ except ImportError:  # pragma: no cover
 
 import six
 
-from opaque_keys.edx.keys import BlockTypeKey, CourseKey, UsageKey
+from opaque_keys.edx.keys import BlockTypeKey, CourseKey, LearningContextKey, UsageKey
 
 
 log = logging.getLogger(__name__)
@@ -176,6 +176,19 @@ try:
 except AttributeError:
     #  Django was not imported
     pass
+
+
+class LearningContextKeyField(OpaqueKeyField):
+    """
+    A django Field that stores a LearningContextKey object as a string.
+
+    If you know for certain that your code will only deal with courses, use
+    CourseKeyField instead, but if you are writing something more generic that
+    could apply to any learning context (libraries, etc.), use this instead of
+    CourseKeyField.
+    """
+    description = "A LearningContextKey object, saved to the DB in the form of a string"
+    KEY_CLASS = LearningContextKey
 
 
 class CourseKeyField(OpaqueKeyField):

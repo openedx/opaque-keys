@@ -22,10 +22,13 @@ from opaque_keys.edx.keys import (
 from opaque_keys.edx.locations import DeprecatedLocation
 from opaque_keys.edx.locator import (
     BlockUsageLocator,
+    BundleDefinitionLocator,
     CourseLocator,
     DefinitionLocator,
     LibraryLocator,
+    LibraryLocatorV2,
     LibraryUsageLocator,
+    LibraryUsageLocatorV2,
 )
 
 
@@ -44,6 +47,18 @@ def unicode_letters_and_digits():
             'Nd',  # Decimal digit numbers
             'No',  # Other number
         ]
+    )
+
+
+@_strategies.cacheable
+def ascii_identifier():
+    """
+    Strategy to generate a slug with no unicode
+    """
+    return strategies.text(
+        alphabet=strategies.sampled_from("-._abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"),
+        min_size=1,
+        max_size=20,
     )
 
 
@@ -190,6 +205,16 @@ def _fields_for_library_locator(cls, field):  # pylint: disable=missing-docstrin
     return fields_for_key(super(LibraryLocator, cls).__class__, field)
 
 
+@fields_for_key.register(LibraryLocatorV2)
+@_strategies.cacheable
+def _fields_for_library_locator_v2(cls, field):  # pylint: disable=missing-docstring, function-redefined
+    if field == 'org':
+        return ascii_identifier()
+    if field == 'slug':
+        return strategies.text(alphabet=unicode_letters_and_digits(), min_size=1)
+    return fields_for_key(super(LibraryLocatorV2, cls).__class__, field)
+
+
 @fields_for_key.register(DefinitionLocator)
 @_strategies.cacheable
 def _fields_for_definition_locator(cls, field):  # pylint: disable=missing-docstring, function-redefined
@@ -198,6 +223,32 @@ def _fields_for_definition_locator(cls, field):  # pylint: disable=missing-docst
     if field == 'block_type':
         return allowed_locator_ids()
     return fields_for_key(super(DefinitionLocator, cls).__class__, field)
+
+
+@fields_for_key.register(BundleDefinitionLocator)
+@_strategies.cacheable
+def _fields_for_bundle_def_locator(cls, field):  # pylint: disable=missing-docstring, function-redefined
+    if field == 'bundle_uuid':
+        return strategies.uuids()
+    if field == 'block_type':
+        return ascii_identifier()
+    if field == 'olx_path':
+        return strategies.just("some/path/to/definition.xml")
+    if field == '_version_or_draft':
+        return strategies.sampled_from((1, 2, 3, "studio_draft", "draft1", "d1", "1d"))
+    return fields_for_key(super(DefinitionLocator, cls).__class__, field)
+
+
+@fields_for_key.register(LibraryUsageLocatorV2)
+@_strategies.cacheable
+def _fields_for_library_locator_v2(cls, field):  # pylint: disable=missing-docstring, function-redefined
+    if field == 'lib_key':
+        return instances_of_key(LibraryLocatorV2)
+    if field == 'block_type':
+        return ascii_identifier()
+    if field == 'usage_id':
+        return strategies.text(alphabet=unicode_letters_and_digits(), min_size=1)
+    return fields_for_key(super(LibraryUsageLocatorV2, cls).__class__, field)
 
 
 @classdispatch
@@ -210,9 +261,14 @@ def instances_of_key(cls, **kwargs):
         **kwargs: Use this to override the strategy used for any of the
             KEY_FIELDS when building this class.
     """
+    field_names = cls.KEY_FIELDS
+    # add deprecated=False for classes that accept that argument:
+    no_deprecated_field = (BundleDefinitionLocator, LibraryLocatorV2, LibraryUsageLocatorV2)
+    if cls not in no_deprecated_field:
+        field_names = field_names + ('deprecated', )
     key_fields = {
         field: kwargs.get(field, fields_for_key(cls, field))
-        for field in cls.KEY_FIELDS + ('deprecated',)
+        for field in field_names
     }
     return strategies.builds(
         cls,

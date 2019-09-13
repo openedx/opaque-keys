@@ -2,7 +2,7 @@
 Test that old keys deserialize just by importing opaque keys
 """
 from unittest import TestCase
-from opaque_keys.edx.keys import CourseKey, UsageKey
+from opaque_keys.edx.keys import CourseKey, LearningContextKey, UsageKey
 
 
 class TestDefault(TestCase):
@@ -18,6 +18,18 @@ class TestDefault(TestCase):
 
         key = CourseKey.from_string('course-v1:org.id+course_id+run')
         self.assertEqual(key.org, 'org.id')
+
+    def test_learning_context_key(self):
+        """
+        Test CourseKey
+        """
+        key = LearningContextKey.from_string('org.id/course_id/run')
+        self.assertEqual(key.org, 'org.id')
+        self.assertIsInstance(key, CourseKey)
+
+        key = LearningContextKey.from_string('course-v1:org.id+course_id+run')
+        self.assertEqual(key.org, 'org.id')
+        self.assertIsInstance(key, CourseKey)
 
     def test_usage_key(self):
         """

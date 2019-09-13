@@ -1,14 +1,18 @@
+# -*- coding: utf-8 -*-
 """
 Tests for opaque_keys.edx.locator.
 """
-from unittest import TestCase
-
+from __future__ import absolute_import, division, print_function, unicode_literals
 import random
+from unittest import TestCase
+from uuid import UUID
 
+import ddt
 from six import text_type
 from bson.objectid import ObjectId
 
-from opaque_keys.edx.locator import Locator, CourseLocator, DefinitionLocator, VersionTree
+from opaque_keys import InvalidKeyError
+from opaque_keys.edx.locator import Locator, BundleDefinitionLocator, CourseLocator, DefinitionLocator, VersionTree
 from opaque_keys.edx.keys import DefinitionKey
 
 
@@ -37,6 +41,85 @@ class DefinitionLocatorTests(TestCase):
         object_id = '{:024x}'.format(random.randrange(16 ** 24))
         definition_locator = DefinitionLocator('html', object_id)
         self.assertEqual(object_id, str(definition_locator.version()))
+
+
+@ddt.ddt
+class BundleDefinitionLocatorTests(TestCase):
+    """
+    Tests for :class:`.BundleDefinitionLocator`
+    """
+    @ddt.data(
+        'bundle-olx:4b33677f-7eb7-4376-8752-024ce057d7e8:5:html:html/introduction/definition.xml',
+        'bundle-olx:22825172-cde7-4fbd-ac03-a45b631e8e65:studio_draft:video:video/v1/definition.xml',
+    )
+    def test_roundtrip_from_string(self, key):
+        def_key = DefinitionKey.from_string(key)
+        serialized = text_type(def_key)
+        self.assertEqual(key, serialized)
+
+    @ddt.data(
+        {
+            "bundle_uuid": "4b33677f-7eb7-4376-8752-024ce057d7e8",  # string but will be converted to UUID automatically
+            "block_type": "video",
+            "olx_path": "video/vid_001/definition.xml",
+            "bundle_version": 15,
+        },
+        {
+            "bundle_uuid": UUID("4b33677f-7eb7-4376-8752-024ce057d7e8"),
+            "block_type": "video",
+            "olx_path": "video/vid_001/definition.xml",
+            "draft_name": "studio_draft",
+        },
+        {
+            "bundle_uuid": UUID("4b33677f-7eb7-4376-8752-024ce057d7e8"),
+            "block_type": "video",
+            "olx_path": "video/θήτα/definition.xml",
+            "draft_name": "studio_draft",
+        },
+    )
+    def test_roundtrip_from_key(self, key_args):
+        key = BundleDefinitionLocator(**key_args)
+        serialized = text_type(key)
+        deserialized = DefinitionKey.from_string(serialized)
+        self.assertEqual(key, deserialized)
+
+    @ddt.data(
+        {
+            "bundle_uuid": "not-a-valid-uuid",
+            "block_type": "video",
+            "olx_path": "video/vid_001/definition.xml",
+            "bundle_version": 15,
+        },
+        {
+            "bundle_uuid": UUID("4b33677f-7eb7-4376-8752-024ce057d7e8"),
+            "block_type": "video",
+            "olx_path": "video/vid_001/definition.xml",
+            # Missing bundle_version or draft_name
+        },
+        {
+            "bundle_uuid": UUID("4b33677f-7eb7-4376-8752-024ce057d7e8"),
+            "block_type": "video",
+            "olx_path": "video/vid_001/definition.xml",
+            # Both bundle_version and draft_name:
+            "bundle_version": 15,
+            "draft_name": "studio_draft",
+        },
+        {
+            "bundle_uuid": UUID("4b33677f-7eb7-4376-8752-024ce057d7e8"),
+            "block_type": "colon:in:type",
+            "olx_path": "video/vid_001/definition.xml",
+            "draft_name": "studio_draft",
+        },
+        {
+            "bundle_uuid": UUID("4b33677f-7eb7-4376-8752-024ce057d7e8"),
+            "block_type": "video",
+            "olx_path": "https://www.example.com",  # not a valid OLX path
+            "draft_name": "studio_draft",
+        },
+    )
+    def test_invalid_args(self, key_args):
+        with self.assertRaises((InvalidKeyError, TypeError, ValueError)):
+            BundleDefinitionLocator(**key_args)
 
 
 class VersionTreeTests(TestCase):

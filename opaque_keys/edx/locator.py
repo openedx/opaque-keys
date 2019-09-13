@@ -7,6 +7,7 @@ from __future__ import absolute_import
 import inspect
 import logging
 import re
+from uuid import UUID
 import warnings
 from abc import abstractproperty
 
@@ -14,9 +15,10 @@ from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from bson.son import SON
 
+import six
 from six import string_types, text_type
 from opaque_keys import OpaqueKey, InvalidKeyError
-from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, AssetKey
+from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, LearningContextKey, UsageKey, UsageKeyV2
 
 log = logging.getLogger(__name__)
 
@@ -68,6 +70,24 @@ class Locator(OpaqueKey):
             return ObjectId(value)
         except InvalidId:
             raise InvalidKeyError(cls, u'"%s" is not a valid version_guid' % value)
+
+
+class CheckFieldMixin(object):
+    """
+    Mixin that provides handy methods for checking field types/values.
+    """
+    @classmethod
+    def _check_key_string_field(cls, field_name, value, regexp=re.compile(r'^[a-zA-Z0-9_\-.]+$')):
+        """
+        Helper method to verify that a key's string field(s) meet certain
+        requirements:
+            Are a non-empty string
+            Match the specified regular expression
+        """
+        if not isinstance(value, six.string_types):
+            raise TypeError(u"Expected a string, got {}={}".format(field_name, repr(value)))
+        if not value or not re.match(regexp, value):
+            raise ValueError(u"{} is not a valid {}.{} field value.".format(repr(value), cls.__name__, field_name))
 
 
 # `BlockLocatorBase` is another abstract base class, so don't worry that it doesn't
@@ -373,6 +393,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
 
 
 CourseKey.set_deprecated_fallback(CourseLocator)
+LearningContextKey.set_deprecated_fallback(CourseLocator)
 
 
 class LibraryLocator(BlockLocatorBase, CourseKey):
@@ -401,6 +422,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
     KEY_FIELDS = ('org', 'library', 'branch', 'version_guid')
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
+    is_course = False  # These keys inherit from CourseKey for historical reasons but are not courses
 
     def __init__(self, org=None, library=None, branch=None, version_guid=None, **kwargs):
         """
@@ -1306,3 +1328,296 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
 
 # Register AssetLocator as the deprecated fallback for AssetKey
 AssetKey.set_deprecated_fallback(AssetLocator)
+
+
+class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
+    """
+    Implementation of the DefinitionKey type, for XBlock content stored in
+    Blockstore bundles. This is a low-level identifier used within the Open edX
+    system for identifying and retrieving OLX.
+
+    A "Definition" is a specific OLX file in a specific BundleVersion
+    (or sometimes rather than a BundleVersion, it may point to a named draft.)
+    The OLX file, and thus the definition key, defines Scope.content fields as
+    well as defaults for Scope.settings and Scope.children fields. However the
+    definition has no parent and no position in any particular course or other
+    context - both of which require a *usage key* and not just a definition key.
+    The same block definition (.olx file) can be used in multiple places in a
+    course, each with a different usage key.
+
+    Example serialized definition keys follow.
+
+    The 'html' type OLX file "html/introduction/definition.xml" in bundle
+    11111111-1111-1111-1111-111111111111, bundle version 5:
+
+        bundle-olx:11111111-1111-1111-1111-111111111111:5:html:html/introduction/definition.xml
+
+    The 'problem' type OLX file "problem324234.xml" in bundle
+    22222222-2222-2222-2222-222222222222, draft 'studio-draft':
+
+        bundle-olx:22222222-2222-2222-2222-222222222222:studio-draft:problem:problem/324234.xml
+
+    (The serialized version is somewhat long and verbose because it should
+    rarely be used except for debugging - the in-memory python key instance will
+    be used most of the time, and users will rarely/never see definition keys.)
+
+    User state should never be stored using a BundleDefinitionLocator as the
+    key. State should always be stored against a usage locator, which refers to
+    a particular definition being used in a particular context.
+
+    Each BundleDefinitionLocator holds the following data
+        1. Bundle UUID and [bundle version OR draft name]
+        2. Block type (e.g. 'html', 'problem', etc.)
+        3. Path to OLX file
+
+    Note that since the data in an .olx file can only ever change in a bundle
+    draft (not in a specific bundle version), an XBlock that is actively making
+    changes to its Scope.content/Scope.settings field values must have a
+    BundleDefinitionLocator with a draft name (not a bundle version).
+    """
+    CANONICAL_NAMESPACE = 'bundle-olx'
+    KEY_FIELDS = ('bundle_uuid', 'block_type', 'olx_path', '_version_or_draft')
+    __slots__ = KEY_FIELDS
+    CHECKED_INIT = False
+    OLX_PATH_REGEXP = re.compile(r'^[\w\-./]+$', flags=re.UNICODE)
+
+    # pylint: disable=no-member
+
+    def __init__(self, bundle_uuid, block_type, olx_path, bundle_version=None, draft_name=None, _version_or_draft=None):
+        """
+        Instantiate a new BundleDefinitionLocator
+        """
+        if not isinstance(bundle_uuid, UUID):
+            bundle_uuid_str = bundle_uuid
+            bundle_uuid = UUID(bundle_uuid_str)
+            # Raise an error if this UUID is not in standard form, to prevent inconsistent UUID serialization
+            # (Otherwise this class can fail the test_perturbed_serializations test when a UUID hyphen gets deleted)
+            if bundle_uuid_str != text_type(bundle_uuid):
+                raise InvalidKeyError(self.__class__, u"bundle_uuid field got UUID string that's not in standard form")
+        self._check_key_string_field("block_type", block_type)
+        self._check_key_string_field("olx_path", olx_path, regexp=self.OLX_PATH_REGEXP)
+
+        if (bundle_version is not None) + (draft_name is not None) + (_version_or_draft is not None) != 1:
+            raise ValueError(u"Exactly one of [bundle_version, draft_name, _version_or_draft] must be specified")
+        if _version_or_draft is not None:
+            if isinstance(_version_or_draft, int):
+                pass  # This is a bundle version number.
+            else:
+                # This is a draft name, not a bundle version:
+                self._check_draft_name(_version_or_draft)
+        elif draft_name is not None:
+            self._check_draft_name(draft_name)
+            _version_or_draft = draft_name
+        else:
+            assert isinstance(bundle_version, int)
+            _version_or_draft = bundle_version
+
+        super(BundleDefinitionLocator, self).__init__(
+            bundle_uuid=bundle_uuid,
+            block_type=block_type,
+            olx_path=olx_path,
+            _version_or_draft=_version_or_draft,
+        )
+
+    @property
+    def bundle_version(self):
+        """
+        Get the Blockstore bundle version number, or None if a Blockstore draft
+        name has been specified instead.
+        """
+        return self._version_or_draft if isinstance(self._version_or_draft, int) else None
+
+    @property
+    def draft_name(self):
+        """
+        Get the Blockstore draft name, or None if a Blockstore bundle version
+        number has been specified instead.
+        """
+        return self._version_or_draft if not isinstance(self._version_or_draft, int) else None
+
+    def _to_string(self):
+        """
+        Return a string representing this BundleDefinitionLocator
+        """
+        return ":".join((
+            text_type(self.bundle_uuid), text_type(self._version_or_draft), self.block_type, self.olx_path,
+        ))
+
+    @classmethod
+    def _from_string(cls, serialized):
+        """
+        Return a BundleDefinitionLocator by parsing the given serialized string
+        """
+        try:
+            (bundle_uuid_str, _version_or_draft, block_type, olx_path) = serialized.split(':', 3)
+        except ValueError:
+            raise InvalidKeyError(cls, serialized)
+
+        if _version_or_draft.isdigit():
+            version_string = _version_or_draft
+            _version_or_draft = int(version_string)
+            if text_type(_version_or_draft) != version_string:
+                # This inconsistent encoding can happen if the version number is prefixed with a zero e.g. ("05")
+                raise InvalidKeyError(cls, serialized)
+
+        try:
+            return cls(
+                bundle_uuid=bundle_uuid_str,
+                block_type=block_type,
+                olx_path=olx_path,
+                _version_or_draft=_version_or_draft,
+            )
+        except (ValueError, TypeError):
+            raise InvalidKeyError(cls, serialized)
+
+    @staticmethod
+    def _check_draft_name(value):
+        """
+        Check that the draft name is valid (unambiguously not a bundle version
+        number).
+
+        Valid: studio_draft, foo-bar, import348975938
+        Invalid: 1, 15, 873452847357834
+        """
+        if not isinstance(value, six.string_types) or not value:
+            raise ValueError(u"Expected a non-empty string for draft name")
+        if value.isdigit():
+            raise ValueError(u"Cannot use an integer draft name as it conflicts with bundle version numbers")
+
+
+class LibraryLocatorV2(CheckFieldMixin, LearningContextKey):
+    """
+    A key that represents a Blockstore-based content library.
+
+    When serialized, these keys look like:
+        lib:MITx:reallyhardproblems
+        lib:hogwarts:p300-potions-exercises
+    """
+    CANONICAL_NAMESPACE = 'lib'
+    KEY_FIELDS = ('org', 'slug')
+    __slots__ = KEY_FIELDS
+    CHECKED_INIT = False
+
+    # Allow library slugs to contain unicode characters
+    SLUG_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
+
+    # pylint: disable=no-member
+
+    def __init__(self, org, slug):
+        """
+        Construct a LibraryLocatorV2
+        """
+        self._check_key_string_field("org", org)
+        self._check_key_string_field("slug", slug, regexp=self.SLUG_REGEXP)
+        super(LibraryLocatorV2, self).__init__(org=org, slug=slug)
+
+    def _to_string(self):
+        """
+        Serialize this key as a string
+        """
+        return ":".join((self.org, self.slug))
+
+    @classmethod
+    def _from_string(cls, serialized):
+        """
+        Instantiate this key from a serialized string
+        """
+        try:
+            (org, slug) = serialized.split(':')
+            return cls(org=org, slug=slug)
+        except (ValueError, TypeError):
+            raise InvalidKeyError(cls, serialized)
+
+    def make_definition_usage(self, definition_key, usage_id=None):
+        """
+        Return a usage key, given the given the specified definition key and
+        usage_id.
+        """
+        return LibraryUsageLocatorV2(
+            lib_key=self,
+            block_type=definition_key.block_type,
+            usage_id=usage_id,
+        )
+
+    def for_branch(self, branch):
+        """
+        Compatibility helper.
+        Some code calls .for_branch(None) on course keys. By implementing this,
+        it improves backwards compatibility between library keys and course
+        keys.
+        """
+        if branch is not None:
+            raise ValueError("Cannot call for_branch on a content library key, except for_branch(None).")
+        return self
+
+
+class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
+    """
+    An XBlock in a Blockstore-based content library.
+
+    When serialized, these keys look like:
+        lb:MITx:reallyhardproblems:problem:problem1
+    """
+    CANONICAL_NAMESPACE = 'lb'  # "Library Block"
+    KEY_FIELDS = ('lib_key', 'block_type', 'usage_id')
+    __slots__ = KEY_FIELDS
+    CHECKED_INIT = False
+
+    # Allow usage IDs to contian unicode characters
+    USAGE_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
+
+    # pylint: disable=no-member
+
+    def __init__(self, lib_key, block_type, usage_id):
+        """
+        Construct a LibraryUsageLocatorV2
+        """
+        if not isinstance(lib_key, LibraryLocatorV2):
+            raise TypeError("lib_key must be a LibraryLocatorV2")
+        self._check_key_string_field("block_type", block_type)
+        self._check_key_string_field("usage_id", usage_id, regexp=self.USAGE_ID_REGEXP)
+        super(LibraryUsageLocatorV2, self).__init__(
+            lib_key=lib_key,
+            block_type=block_type,
+            usage_id=usage_id,
+        )
+
+    @property
+    def context_key(self):
+        return self.lib_key
+
+    @property
+    def block_id(self):
+        """
+        Get the 'block ID' which is another name for the usage ID.
+        """
+        return self.usage_id
+
+    def _to_string(self):
+        """
+        Serialize this key as a string
+        """
+        return ":".join((self.lib_key.org, self.lib_key.slug, self.block_type, self.usage_id))
+
+    @classmethod
+    def _from_string(cls, serialized):
+        """
+        Instantiate this key from a serialized string
+        """
+        try:
+            (library_org, library_slug, block_type, usage_id) = serialized.split(':')
+            lib_key = LibraryLocatorV2(library_org, library_slug)
+            return cls(lib_key, block_type=block_type, usage_id=usage_id)
+        except (ValueError, TypeError):
+            raise InvalidKeyError(cls, serialized)
+
+    def html_id(self):
+        """
+        Return an id which can be used on an html page as an id attr of an html
+        element. This is only in here for backwards-compatibility with XModules;
+        don't use in new code.
+        """
+        warnings.warn(".html_id is deprecated", DeprecationWarning, stacklevel=2)
+        # HTML5 allows ID values to contain any characters at all other than spaces.
+        # These key types don't allow spaces either, so no transform is needed.
+        return six.text_type(self)
