@@ -23,7 +23,7 @@ setup(
         'pymongo>=2.7.2,<4.0.0'
     ],
     extras_require={
-        'django': ['Django>=1.8,<2.3']
+        'django': ['Django>=1.8,<2.0']
     },
     entry_points={
         'opaque_keys.testing': [
