@@ -242,10 +242,10 @@ class UsageKeyV2(UsageKey):
         Implement map_into_course for API compatibility. Shouldn't be used in
         new code.
         """
+
         if course_key == self.context_key:
             return self
-        else:
-            raise ValueError("Cannot use map_into_course like that with this key type.")
+        raise ValueError("Cannot use map_into_course like that with this key type.")
 
 
 class AsideDefinitionKey(DefinitionKey):
@@ -300,6 +300,7 @@ class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
         if isinstance(key, OpaqueKey):
             return text_type(key)
         super(i4xEncoder, self).default(key)
+        return None
 
 
 class BlockTypeKey(OpaqueKey):

@@ -22,7 +22,6 @@ from .models import ComplexModel, Container, ExampleModel
 @pytest.fixture(autouse=True)
 def enable_db_access_for_all_tests(db):
     """Enable DB access for all tests."""
-    pass
 
 
 #  pylint: disable=no-member
@@ -44,7 +43,6 @@ class TestCreatorMixin(TestCase):
 
 class EmptyKeyClassField(OpaqueKeyField):
     """An invalid class."""
-    pass
 
 
 # pylint: disable=protected-access

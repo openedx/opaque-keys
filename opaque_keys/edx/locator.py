@@ -260,9 +260,10 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
             DeprecationWarning,
             stacklevel=2
         )
+
         if not self.course and not self.run:
             return None
-        elif not self.run and self.course:
+        if not self.run and self.course:
             return self.course
         return "/".join([self.course, self.run])
 
@@ -796,6 +797,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         is_valid_deprecated = deprecated and cls.DEPRECATED_ALLOWED_ID_RE.match(block_ref)
         is_valid = cls.ALLOWED_ID_RE.match(block_ref)
 
+        # pylint: disable=no-else-return
         if is_valid or is_valid_deprecated:
             return block_ref
         else:
@@ -834,6 +836,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
             DeprecationWarning,
             stacklevel=2
         )
+
+        # pylint: disable=no-else-return
         if not self.course and not self.run:
             return None
         elif not self.run and self.course:
