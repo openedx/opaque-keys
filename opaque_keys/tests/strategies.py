@@ -1,5 +1,5 @@
 """
-``hypothesis`` strategies for generating OpaqueKey objects.
+``hypothesis`` strategies for generating OpaqueKey objects..
 """
 
 from functools import update_wrapper
