@@ -237,4 +237,4 @@ class LibraryUsageLocatorV2Tests(TestCase):
         old mongo.
         """
         key = LibraryUsageLocatorV2(self.VALID_LIB_KEY, block_type="problem", usage_id="p1")
-        self.assertEqual(key.map_into_course(key.course_key), key)
+        self.assertEqual(key.map_into_course(key.context_key), key)

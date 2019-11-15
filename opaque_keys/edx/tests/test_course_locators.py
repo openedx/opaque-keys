@@ -94,7 +94,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         self.assertEqual(testobj_1._to_string(), testobj_1_string)
         self.assertEqual(str(testobj_1), u'course-v1:' + testobj_1_string)
         self.assertEqual(testobj_1.html_id(), u'course-v1:' + testobj_1_string)
-        self.assertEqual(testobj_1.version, test_id_1)
+        self.assertEqual(testobj_1.version_guid, test_id_1)
 
         # Test using a given string
         test_id_2_loc = '519665f6223ebd6980884f2b'
@@ -107,7 +107,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         self.assertEqual(testobj_2._to_string(), testobj_2_string)
         self.assertEqual(str(testobj_2), u'course-v1:' + testobj_2_string)
         self.assertEqual(testobj_2.html_id(), u'course-v1:' + testobj_2_string)
-        self.assertEqual(testobj_2.version, test_id_2)
+        self.assertEqual(testobj_2.version_guid, test_id_2)
 
     @ddt.data(
         ' mit.eecs',

@@ -159,12 +159,12 @@ class TestBlockUsageLocators(LocatorBaseTest):
         'run',
         'branch',
         'version_guid',
-        'revision',
-        'version',
+        'branch',
+        'version_guid',
         'block_id',
         'block_type',
-        'name',
-        'category'
+        'block_id',
+        'block_type'
     )
     def test_replacement(self, key):
         course_key = CourseLocator('org', 'course', 'run', 'rev', deprecated=True)
