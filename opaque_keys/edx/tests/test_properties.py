@@ -5,7 +5,7 @@ installed keys should have.
 
 import logging
 
-from hypothesis import strategies, _strategies, given, assume, example
+from hypothesis import strategies, _strategies, given, assume, example, HealthCheck, settings
 from six import text_type
 from six.moves import range  # pylint: disable=redefined-builtin
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey
@@ -130,6 +130,7 @@ def perturbed_strings(string_strategy):
     serialized=strategies.shared(valid_key_string(), key="diff_serial_diff_key"),
     perturbed=perturbed_strings(strategies.shared(valid_key_string(), key="diff_serial_diff_key")),
 )
+@settings(suppress_health_check=[HealthCheck.too_slow])
 @example(
     key_type=DefinitionKey,
     serialized='def-v1:000000000000000000000000+type@-',
@@ -195,6 +196,7 @@ def test_perturbed_serializations(key_type, serialized, perturbed):
     serialized=valid_key_string(),
     perturbed=valid_key_string(),
 )
+@settings(suppress_health_check=[HealthCheck.too_slow])
 def test_unique_deserialization(key_type, serialized, perturbed):
     assume(serialized != perturbed)
 

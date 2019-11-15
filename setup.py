@@ -12,6 +12,7 @@ setup(
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
     ],
     # We are including the tests because other libraries do use mixins from them.
@@ -23,7 +24,7 @@ setup(
         'pymongo>=2.7.2,<4.0.0'
     ],
     extras_require={
-        'django': ['Django>=1.8,<2.0']
+        'django': ['Django>=1.11,<2.0;python_version<"3"', 'Django>=1.11;python_version>"3"']
     },
     entry_points={
         'opaque_keys.testing': [

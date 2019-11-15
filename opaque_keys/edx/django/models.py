@@ -121,8 +121,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
                 ))
                 value = value.rstrip()
             return self.KEY_CLASS.from_string(value)
-        else:
-            return value
+        return value
 
     def get_prep_value(self, value):
         if value is self.Empty or value is None:
@@ -147,15 +146,14 @@ class OpaqueKeyField(CreatorMixin, CharField):
     def validate(self, value, model_instance):
         """Validate Empty values, otherwise defer to the parent"""
         # raise validation error if the use of this field says it can't be blank but it is
-        if not self.blank and value is self.Empty:
-            raise ValidationError(self.error_messages['blank'])
-        else:
+        if self.blank or value is not self.Empty:
             return super(OpaqueKeyField, self).validate(value, model_instance)
+        raise ValidationError(self.error_messages['blank'])
 
     def run_validators(self, value):
         """Validate Empty values, otherwise defer to the parent"""
         if value is self.Empty:
-            return
+            return None
 
         return super(OpaqueKeyField, self).run_validators(value)
 

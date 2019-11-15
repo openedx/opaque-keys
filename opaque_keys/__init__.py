@@ -8,8 +8,6 @@ formats, and allowing new serialization formats to be installed transparently.
 """
 from abc import ABCMeta, abstractmethod
 from functools import total_ordering
-
-from _collections import defaultdict
 from six import (
     iteritems,
     python_2_unicode_compatible,
@@ -19,6 +17,9 @@ from six import (
     with_metaclass,
 )
 from stevedore.enabled import EnabledExtensionManager
+
+# pylint: disable=wrong-import-order
+from _collections import defaultdict
 
 
 class InvalidKeyError(Exception):

@@ -33,6 +33,7 @@ class TestEncode(TestCase):
     """Tests of encoding and decoding functions."""
 
     @given(text=ENCODING_TEXT)
+    @settings(suppress_health_check=[HealthCheck.too_slow])
     def test_encode_v1_roundtrip(self, text):
         """
         Test all combinations that include characters we're trying to encode, or using in the encoding.
@@ -42,6 +43,7 @@ class TestEncode(TestCase):
         self.assertEqual(text, decoded)
 
     @given(left=ENCODING_TEXT, right=ENCODING_TEXT)
+    @settings(suppress_health_check=[HealthCheck.too_slow])
     def test_join_v1_roundtrip(self, left, right):
         assume(not left.endswith(':'))
         assume('::' not in left)
@@ -64,6 +66,7 @@ class TestEncode(TestCase):
             self.assertEqual(text, encoded)
 
     @given(text=ENCODING_TEXT)
+    @settings(suppress_health_check=[HealthCheck.too_slow])
     def test_encode_v2_roundtrip(self, text):
         """
         Test all combinations that include characters we're trying to encode, or using in the encoding.
@@ -87,6 +90,7 @@ class TestEncode(TestCase):
             self.assertEqual(text, encoded)
 
     @given(left=ENCODING_TEXT, right=ENCODING_TEXT)
+    @settings(suppress_health_check=[HealthCheck.too_slow])
     def test_join_v2_roundtrip(self, left, right):
         joined = _join_keys_v2(left, right)
         (_left, _right) = _split_keys_v2(joined)
