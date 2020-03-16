@@ -5,7 +5,8 @@ installed keys should have.
 
 import logging
 
-from hypothesis import strategies, _strategies, given, assume, example, HealthCheck, settings
+from hypothesis import strategies, given, assume, example, HealthCheck, settings
+from hypothesis.strategies._internal.core import cacheable
 from six import text_type
 from six.moves import range  # pylint: disable=redefined-builtin
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey
@@ -116,7 +117,7 @@ def perturbed_by_subsection(draw, string_strategy):
     return output_string
 
 
-@_strategies.cacheable
+@cacheable
 def perturbed_strings(string_strategy):
     """
     A strategy that constructs a string using the supplied ``string_strategy``,
