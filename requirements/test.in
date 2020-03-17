@@ -6,7 +6,7 @@
 coverage
 ddt
 edx-lint
-hypothesis>=3.84.5
+hypothesis
 mock
 pycodestyle
 pytest
