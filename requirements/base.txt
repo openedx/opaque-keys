@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-pbr==5.4.3                # via stevedore
-pymongo==3.9.0
-six==1.13.0
-stevedore==1.31.0
+pbr==5.4.4                # via stevedore
+pymongo==3.10.1           # via -r requirements/base.in
+six==1.14.0               # via -r requirements/base.in, stevedore
+stevedore==1.32.0         # via -r requirements/base.in
