@@ -107,7 +107,7 @@ class DefinitionKey(OpaqueKey):
         raise NotImplementedError()
 
 
-class CourseObjectMixin(object):
+class CourseObjectMixin:
     """
     An abstract :class:`opaque_keys.OpaqueKey` mixin
     for keys that belong to courses.

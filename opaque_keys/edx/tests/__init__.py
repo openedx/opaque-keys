@@ -15,7 +15,8 @@ class TestDeprecated(TestCase):
         # during this test run
         self.cws = warnings.catch_warnings()
         self.cws.__enter__()
-        # Python 2.7 by default suppresses DeprecationWarnings. Make sure we show these, always, during tests.
+        # Python from 3.2 until 3.7 by default suppresses DeprecationWarnings.
+        # Make sure we show these, always, during tests.
         warnings.simplefilter('always', DeprecationWarning)
 
         # Manually exit the catch_warnings context manager when the test is done

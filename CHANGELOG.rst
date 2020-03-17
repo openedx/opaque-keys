@@ -1,5 +1,14 @@
 # Unreleased
 
+# 3.0
+
+* Drop support for Python 2.7
+* Change `DefinitionLocator.version` from method to property
+* Bugix: setup.py now properly uses requirements files
+
+# 2.1
+
+* Declare support for Python 3.5 and Django 2.2
 
 # 2.0
 

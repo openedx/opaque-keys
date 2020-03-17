@@ -23,7 +23,7 @@ from opaque_keys.edx.keys import BlockTypeKey, CourseKey, LearningContextKey, Us
 log = logging.getLogger(__name__)
 
 
-class _Creator(object):
+class _Creator:
     """
     DO NOT REUSE THIS CLASS. Provided for backwards compatibility only!
 
@@ -42,7 +42,7 @@ class _Creator(object):
 
 
 # pylint: disable=missing-docstring,unused-argument
-class CreatorMixin(object):
+class CreatorMixin:
     """
     Mixin class to provide SubfieldBase functionality to django fields.
     See: https://docs.djangoproject.com/en/1.11/releases/1.8/#subfieldbase

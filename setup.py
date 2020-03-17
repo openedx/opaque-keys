@@ -35,15 +35,13 @@ def is_requirement(line):
 
 setup(
     name='edx-opaque-keys',
-    version='2.0.1',
+    version='3.0.0',
     author='edX',
     url='https://github.com/edx/opaque-keys',
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU Affero General Public License v3",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",

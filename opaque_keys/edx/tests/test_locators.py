@@ -40,7 +40,7 @@ class DefinitionLocatorTests(TestCase):
     def test_description_locator_version(self):
         object_id = '{:024x}'.format(random.randrange(16 ** 24))
         definition_locator = DefinitionLocator('html', object_id)
-        self.assertEqual(object_id, str(definition_locator.version()))
+        self.assertEqual(object_id, str(definition_locator.version))
 
 
 @ddt.ddt

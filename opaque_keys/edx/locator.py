@@ -23,7 +23,7 @@ from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, LearningCon
 log = logging.getLogger(__name__)
 
 
-class LocalId(object):
+class LocalId:
     """
     Class for local ids for non-persisted xblocks (which can have hardcoded block_ids if necessary)
     """
@@ -72,7 +72,7 @@ class Locator(OpaqueKey):
             raise InvalidKeyError(cls, u'"%s" is not a valid version_guid' % value)
 
 
-class CheckFieldMixin(object):
+class CheckFieldMixin:
     """
     Mixin that provides handy methods for checking field types/values.
     """
@@ -1220,6 +1220,7 @@ class DefinitionLocator(Locator, DefinitionKey):
 
         return cls(**{key: parse.get(key) for key in cls.KEY_FIELDS})
 
+    @property
     def version(self):
         """
         Returns the ObjectId referencing this specific location.
@@ -1227,7 +1228,7 @@ class DefinitionLocator(Locator, DefinitionKey):
         return self.definition_id
 
 
-class VersionTree(object):
+class VersionTree:
     """
     Holds trees of Locators to represent version histories.
     """
