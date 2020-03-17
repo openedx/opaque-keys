@@ -1,4 +1,37 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Package metadata for edx-opaque-keys.
+"""
+from io import open
+
 from setuptools import setup, find_packages
+
+def load_requirements(*requirements_paths):
+    """
+    Load all requirements from the specified requirements files.
+
+    Returns:
+        list: Requirements file relative path strings
+    """
+    requirements = set()
+    for path in requirements_paths:
+        with open(path) as reqs:
+            requirements.update(
+                line.split('#')[0].strip() for line in reqs
+                if is_requirement(line.strip())
+            )
+    return list(requirements)
+
+
+def is_requirement(line):
+    """
+    Return True if the requirement line is a package requirement.
+
+    Returns:
+        bool: True if the line is not blank, a comment, a URL, or an included file
+    """
+    return line and not line.startswith(('-r', '#', '-e', 'git+', '-c'))
 
 setup(
     name='edx-opaque-keys',
@@ -18,14 +51,7 @@ setup(
     # We are including the tests because other libraries do use mixins from them.
     packages=find_packages(),
     license='AGPL-3.0',
-    install_requires=[
-        'six>=1.10.0,<2.0.0',
-        'stevedore>=0.14.1,<2.0.0',
-        'pymongo>=2.7.2,<4.0.0'
-    ],
-    extras_require={
-        'django': ['Django>=1.11,<2.0;python_version<"3"', 'Django>=1.11;python_version>"3"']
-    },
+    install_requires=load_requirements('requirements/base.in'),
     entry_points={
         'opaque_keys.testing': [
             'base10 = opaque_keys.tests.test_opaque_keys:Base10Key',
