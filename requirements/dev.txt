@@ -12,7 +12,7 @@ atomicwrites==1.3.0       # via -r requirements/doc.txt, pytest
 attrs==19.3.0             # via -r requirements/doc.txt, hypothesis, pytest
 babel==2.8.0              # via -r requirements/doc.txt, sphinx
 backports.functools-lru-cache==1.6.1  # via -r requirements/doc.txt, astroid, isort, pylint
-bleach==3.1.1             # via -r requirements/doc.txt, readme-renderer
+bleach==3.1.3             # via -r requirements/doc.txt, readme-renderer
 certifi==2019.11.28       # via -r requirements/doc.txt, -r requirements/travis.txt, requests, urllib3
 cffi==1.14.0              # via -r requirements/travis.txt, cryptography
 chardet==3.0.4            # via -r requirements/doc.txt, -r requirements/travis.txt, requests
@@ -23,7 +23,7 @@ contextlib2==0.6.0.post1  # via -r requirements/doc.txt, -r requirements/travis.
 coverage==5.0.4           # via -r requirements/doc.txt, -r requirements/travis.txt, coveralls, pytest-cov
 coveralls==1.11.1         # via -r requirements/travis.txt
 cryptography==2.8         # via -r requirements/travis.txt, pyopenssl, urllib3
-ddt==1.3.0                # via -r requirements/doc.txt
+ddt==1.3.1                # via -r requirements/doc.txt
 distlib==0.3.0            # via -r requirements/travis.txt, virtualenv
 docopt==0.6.2             # via -r requirements/travis.txt, coveralls
 docutils==0.16            # via -r requirements/doc.txt, readme-renderer, sphinx
