@@ -2,9 +2,15 @@
 
 # 3.0
 
+Breaking changes:
+
 * Drop support for Python 2.7
-* Change `DefinitionLocator.version` from method to property
-* Bugix: setup.py now properly uses requirements files
+* Change ``DefinitionLocator.version`` from method to property to match
+  parent class
+
+Bugfixes:
+
+* setup.py now properly uses requirements files
 
 # 2.1
 
