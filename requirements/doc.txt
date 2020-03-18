@@ -11,7 +11,7 @@ atomicwrites==1.3.0       # via -r requirements/django.txt, pytest
 attrs==19.3.0             # via -r requirements/django.txt, hypothesis, pytest
 babel==2.8.0              # via sphinx
 backports.functools-lru-cache==1.6.1  # via -r requirements/django.txt, astroid, isort, pylint
-bleach==3.1.1             # via readme-renderer
+bleach==3.1.3             # via readme-renderer
 certifi==2019.11.28       # via requests
 chardet==3.0.4            # via requests
 click-log==0.3.2          # via -r requirements/django.txt, edx-lint
@@ -19,7 +19,7 @@ click==7.1.1              # via -r requirements/django.txt, click-log, edx-lint
 configparser==4.0.2       # via -r requirements/django.txt, importlib-metadata, pylint
 contextlib2==0.6.0.post1  # via -r requirements/django.txt, importlib-metadata, zipp
 coverage==5.0.4           # via -r requirements/django.txt, pytest-cov
-ddt==1.3.0                # via -r requirements/django.txt
+ddt==1.3.1                # via -r requirements/django.txt
 docutils==0.16            # via readme-renderer, sphinx
 edx-lint==1.4.1           # via -r requirements/django.txt
 edx-sphinx-theme==1.5.0   # via -r requirements/doc.in
