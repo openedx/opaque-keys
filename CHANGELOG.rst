@@ -1,5 +1,10 @@
-# Unreleased
+# 2.0.2
 
+* setup.py now properly uses requirements files
+
+# 2.0.1
+
+* Declare support for Python 3.5 and Django 2.2
 
 # 2.0
 
