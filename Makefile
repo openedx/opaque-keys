@@ -28,9 +28,10 @@ upgrade: ## update the requirements/*.txt files with the latest packages satisfy
 	pip-compile --rebuild --upgrade -o requirements/base.txt requirements/base.in
 	pip-compile --rebuild --upgrade -o requirements/django.txt requirements/django.in
 	pip-compile --rebuild --upgrade -o requirements/test.txt requirements/test.in
+	pip-compile --rebuild --upgrade -o requirements/django-test.txt requirements/django-test.in
 	pip-compile --rebuild --upgrade -o requirements/doc.txt requirements/doc.in
 	pip-compile --rebuild --upgrade -o requirements/travis.txt requirements/travis.in
 	pip-compile --rebuild --upgrade -o requirements/dev.txt requirements/dev.in
 	# Let tox control the Django version for tests
-	sed '/^[dD]jango==/d' requirements/test.txt > requirements/test.tmp
-	mv requirements/test.tmp requirements/test.txt
+	sed '/^[dD]jango==/d' requirements/django-test.txt > requirements/django-test.tmp
+	mv requirements/django-test.tmp requirements/django-test.txt

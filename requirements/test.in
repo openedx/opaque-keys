@@ -1,8 +1,7 @@
-# Requirements for test runs.
+# Requirements for test runs, just testing the base functionality.
 -c constraints.txt
 
 -r base.txt                # Core dependencies
--r django.txt              # Dependencies for [django] extra
 
 coverage
 ddt
@@ -16,5 +15,3 @@ pytest-pep8
 pytest-pylint
 pytest-xdist
 singledispatch
-
-pytest-django              # For testing with the [django] extra
