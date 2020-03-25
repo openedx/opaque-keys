@@ -1,0 +1,7 @@
+# Requirements for test runs, including the django aspects.
+-c constraints.txt
+
+-r test.txt                # Core dependencies
+-r django.txt              # Dependencies for [django] extra
+
+pytest-django              # For testing with the [django] extra

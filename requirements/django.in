@@ -1,6 +1,8 @@
-# Requirements for test runs utilizing Django support
+# Requirements for [django] extra, not including base deps
 -c constraints.txt
 
--r test.txt               # Non-Django testing dependencies
+# Match resolved versions of core dependencies (doesn't actually pull them in)
+-c base.txt
 
-pytest-django
+
+Django>=1.11

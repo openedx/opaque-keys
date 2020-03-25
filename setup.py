@@ -52,6 +52,9 @@ setup(
     packages=find_packages(),
     license='AGPL-3.0',
     install_requires=load_requirements('requirements/base.in'),
+    extras_require={
+        'django': load_requirements('requirements/django.in')
+    },
     entry_points={
         'opaque_keys.testing': [
             'base10 = opaque_keys.tests.test_opaque_keys:Base10Key',

@@ -1,7 +1,7 @@
-# Requirements for test runs.
+# Requirements for test runs, just testing the base functionality.
 -c constraints.txt
 
--r base.txt               # Core dependencies for this package
+-r base.txt                # Core dependencies
 
 coverage
 ddt

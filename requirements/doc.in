@@ -1,7 +1,7 @@
 # Requirements for documentation generation and validation
 -c constraints.txt
 
--r django.txt             # Core and testing dependencies for this package
+-r test.txt               # Core and testing dependencies for this package
 
 edx_sphinx_theme          # edX theme for Sphinx output
 readme_renderer           # Validates README.rst for usage on PyPI
