@@ -21,7 +21,7 @@ execnet==1.7.1            # via pytest-cache, pytest-xdist
 funcsigs==1.0.2           # via mock, pytest
 futures==3.3.0 ; python_version == "2.7"  # via -c requirements/constraints.txt, isort
 hypothesis==4.57.1        # via -r requirements/test.in
-importlib-metadata==1.5.0  # via pluggy, pytest
+importlib-metadata==1.6.0  # via pluggy, pytest
 isort==4.3.21             # via pylint
 lazy-object-proxy==1.4.3  # via astroid
 mccabe==0.6.1             # via pylint
