@@ -11,7 +11,7 @@ atomicwrites==1.3.0       # via -r requirements/test.txt, pytest
 attrs==19.3.0             # via -r requirements/test.txt, hypothesis, pytest
 babel==2.8.0              # via sphinx
 backports.functools-lru-cache==1.6.1  # via -r requirements/test.txt, astroid, isort, pylint
-bleach==3.1.3             # via readme-renderer
+bleach==3.1.4             # via readme-renderer
 certifi==2019.11.28       # via requests
 chardet==3.0.4            # via requests
 click-log==0.3.2          # via -r requirements/test.txt, edx-lint
@@ -30,7 +30,7 @@ futures==3.3.0 ; python_version == "2.7"  # via -c requirements/constraints.txt,
 hypothesis==4.57.1        # via -r requirements/test.txt
 idna==2.9                 # via requests
 imagesize==1.2.0          # via sphinx
-importlib-metadata==1.5.0  # via -r requirements/test.txt, pluggy, pytest
+importlib-metadata==1.6.0  # via -r requirements/test.txt, pluggy, pytest
 isort==4.3.21             # via -r requirements/test.txt, pylint
 jinja2==2.11.1            # via sphinx
 lazy-object-proxy==1.4.3  # via -r requirements/test.txt, astroid
