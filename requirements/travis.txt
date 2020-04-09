@@ -5,14 +5,14 @@
 #    make upgrade
 #
 appdirs==1.4.3            # via virtualenv
-certifi==2019.11.28       # via requests, urllib3
+certifi==2020.4.5.1       # via requests, urllib3
 cffi==1.14.0              # via cryptography
 chardet==3.0.4            # via requests
 configparser==4.0.2       # via importlib-metadata
 contextlib2==0.6.0.post1  # via importlib-metadata, importlib-resources, virtualenv, zipp
 coverage==5.0.4           # via coveralls
 coveralls==1.11.1         # via -r requirements/travis.in
-cryptography==2.8         # via pyopenssl, urllib3
+cryptography==2.9         # via pyopenssl, urllib3
 distlib==0.3.0            # via virtualenv
 docopt==0.6.2             # via coveralls
 enum34==1.1.10            # via cryptography
@@ -27,7 +27,7 @@ pluggy==0.13.1            # via tox
 py==1.8.1                 # via tox
 pycparser==2.20           # via cffi
 pyopenssl==19.1.0         # via urllib3
-pyparsing==2.4.6          # via packaging
+pyparsing==2.4.7          # via packaging
 requests==2.23.0          # via coveralls
 scandir==1.10.0           # via pathlib2
 singledispatch==3.4.0.3   # via importlib-resources
@@ -37,5 +37,5 @@ tox-battery==0.5.2        # via -r requirements/travis.in
 tox==3.14.6               # via -r requirements/travis.in, tox-battery
 typing==3.7.4.1           # via importlib-resources
 urllib3[secure]==1.25.8   # via coveralls, requests
-virtualenv==20.0.15       # via tox
+virtualenv==20.0.16       # via tox
 zipp==1.2.0               # via importlib-metadata, importlib-resources
