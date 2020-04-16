@@ -10,7 +10,7 @@ cffi==1.14.0              # via cryptography
 chardet==3.0.4            # via requests
 configparser==4.0.2       # via importlib-metadata
 contextlib2==0.6.0.post1  # via importlib-metadata, importlib-resources, virtualenv, zipp
-coverage==5.0.4           # via coveralls
+coverage==5.1             # via coveralls
 coveralls==1.11.1         # via -r requirements/travis.in
 cryptography==2.9         # via pyopenssl, urllib3
 distlib==0.3.0            # via virtualenv
@@ -37,5 +37,5 @@ tox-battery==0.5.2        # via -r requirements/travis.in
 tox==3.14.6               # via -r requirements/travis.in, tox-battery
 typing==3.7.4.1           # via importlib-resources
 urllib3[secure]==1.25.8   # via coveralls, requests
-virtualenv==20.0.16       # via tox
+virtualenv==20.0.17       # via tox
 zipp==1.2.0               # via importlib-metadata, importlib-resources
