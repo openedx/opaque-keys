@@ -16,7 +16,7 @@ from opaque_keys.edx.django.models import (
 )
 
 
-class Container(object):
+class Container:
     """A simple wrapper class for string-like objects."""
 
     def __init__(self, text):

@@ -5,37 +5,25 @@
 #    make upgrade
 #
 appdirs==1.4.3            # via virtualenv
-certifi==2020.4.5.1       # via requests, urllib3
-cffi==1.14.0              # via cryptography
+certifi==2020.4.5.1       # via requests
 chardet==3.0.4            # via requests
-configparser==4.0.2       # via importlib-metadata
-contextlib2==0.6.0.post1  # via importlib-metadata, importlib-resources, virtualenv, zipp
 coverage==5.1             # via coveralls
-coveralls==1.11.1         # via -r requirements/travis.in
-cryptography==2.9.2       # via pyopenssl, urllib3
+coveralls==2.0.0          # via -r requirements/travis.in
 distlib==0.3.0            # via virtualenv
 docopt==0.6.2             # via coveralls
-enum34==1.1.10            # via cryptography
 filelock==3.0.12          # via tox, virtualenv
-idna==2.9                 # via requests, urllib3
+idna==2.9                 # via requests
 importlib-metadata==1.6.0  # via importlib-resources, pluggy, tox, virtualenv
 importlib-resources==1.4.0  # via virtualenv
-ipaddress==1.0.23         # via cryptography, urllib3
 packaging==20.3           # via tox
-pathlib2==2.3.5           # via importlib-metadata, importlib-resources, virtualenv
 pluggy==0.13.1            # via tox
 py==1.8.1                 # via tox
-pycparser==2.20           # via cffi
-pyopenssl==19.1.0         # via urllib3
 pyparsing==2.4.7          # via packaging
 requests==2.23.0          # via coveralls
-scandir==1.10.0           # via pathlib2
-singledispatch==3.4.0.3   # via importlib-resources
-six==1.14.0               # via cryptography, packaging, pathlib2, pyopenssl, singledispatch, tox, virtualenv
+six==1.14.0               # via packaging, tox, virtualenv
 toml==0.10.0              # via tox
 tox-battery==0.5.2        # via -r requirements/travis.in
 tox==3.14.6               # via -r requirements/travis.in, tox-battery
-typing==3.7.4.1           # via importlib-resources
-urllib3[secure]==1.25.9   # via coveralls, requests
+urllib3==1.25.9           # via requests
 virtualenv==20.0.18       # via tox
 zipp==1.2.0               # via importlib-metadata, importlib-resources
