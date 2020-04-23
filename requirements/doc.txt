@@ -60,7 +60,7 @@ pytest-pylint==0.14.1     # via -r requirements/test.txt
 pytest-xdist==1.31.0      # via -r requirements/test.txt
 pytest==4.6.9             # via -r requirements/test.txt, pytest-cache, pytest-cov, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
 pytz==2019.3              # via babel
-readme-renderer==25.0     # via -r requirements/doc.in
+readme-renderer==26.0     # via -r requirements/doc.in
 requests==2.23.0          # via sphinx
 scandir==1.10.0           # via -r requirements/test.txt, pathlib2
 singledispatch==3.4.0.3   # via -r requirements/test.txt, astroid, pylint
@@ -71,7 +71,7 @@ sphinx==1.8.5             # via -r requirements/doc.in, edx-sphinx-theme
 sphinxcontrib-websupport==1.1.2  # via sphinx
 stevedore==1.32.0         # via -r requirements/test.txt
 typing==3.7.4.1           # via sphinx
-urllib3==1.25.8           # via requests
+urllib3==1.25.9           # via requests
 wcwidth==0.1.9            # via -r requirements/test.txt, pytest
 webencodings==0.5.1       # via bleach
 wrapt==1.12.1             # via -r requirements/test.txt, astroid
