@@ -8,10 +8,6 @@ env:
   - TOXENV=quality
   - TOXENV=without-django
 
-matrix:
-  allow_failures:
-    - python: 3.8
-
 install:
   - pip install pip==20.0.2
   - make requirements

@@ -40,8 +40,7 @@ pytest-pep8==1.0.6        # via -r requirements/test.in
 pytest-pylint==0.15.1     # via -c requirements/constraints.txt, -r requirements/test.in
 pytest-xdist==1.31.0      # via -r requirements/test.in
 pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements/test.in, pytest-cache, pytest-cov, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
-singledispatch==3.4.0.3   # via -r requirements/test.in
-six==1.14.0               # via -r requirements/base.txt, astroid, edx-lint, mock, packaging, pathlib2, pytest-xdist, singledispatch, stevedore
+six==1.14.0               # via -r requirements/base.txt, astroid, edx-lint, mock, packaging, pathlib2, pytest-xdist, stevedore
 sortedcontainers==2.1.0   # via hypothesis
 stevedore==1.32.0         # via -r requirements/base.txt
 typed-ast==1.4.1          # via astroid

@@ -42,8 +42,7 @@ pytest-pylint==0.15.1     # via -c requirements/constraints.txt, -r requirements
 pytest-xdist==1.31.0      # via -r requirements/test.txt
 pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements/test.txt, pytest-cache, pytest-cov, pytest-django, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
 pytz==2020.1              # via -r requirements/django.txt, django
-singledispatch==3.4.0.3   # via -r requirements/test.txt
-six==1.14.0               # via -r requirements/test.txt, astroid, edx-lint, mock, packaging, pathlib2, pytest-xdist, singledispatch, stevedore
+six==1.14.0               # via -r requirements/test.txt, astroid, edx-lint, mock, packaging, pathlib2, pytest-xdist, stevedore
 sortedcontainers==2.1.0   # via -r requirements/test.txt, hypothesis
 sqlparse==0.3.1           # via -r requirements/django.txt, django
 stevedore==1.32.0         # via -r requirements/test.txt

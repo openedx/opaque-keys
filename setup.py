@@ -35,7 +35,7 @@ def is_requirement(line):
 
 setup(
     name='edx-opaque-keys',
-    version='2.0.2',
+    version='2.1.0',
     author='edX',
     url='https://github.com/edx/opaque-keys',
     classifiers=[
@@ -45,6 +45,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.8",
     ],
     # We are including the tests because other libraries do use mixins from them.
     packages=find_packages(),
