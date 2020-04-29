@@ -13,6 +13,7 @@ matrix:
     - python: 3.8
 
 install:
+  - pip install pip==20.0.2
   - make requirements
   - pip install coveralls
 script:
