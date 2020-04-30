@@ -8,6 +8,9 @@
 # pin when possible.  Writing an issue against the offending project and
 # linking to it here is good.
 
-# These packages are backports which can only be installed on Python 2.7
-functools32 ; python_version == "2.7"
-futures ; python_version == "2.7"
+# pytest command fails if pytest > 5.3 is used
+# Look into https://github.com/pytest-dev/pytest/issues/6925
+pytest<=5.3
+
+# version >= 0.16 requires pytest >= 5.4
+pytest-pylint<0.16

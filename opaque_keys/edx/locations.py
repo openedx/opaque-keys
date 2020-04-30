@@ -65,7 +65,7 @@ class SlashSeparatedCourseKey(CourseLocator):
         )
 
 
-class LocationBase(object):
+class LocationBase:
     """Deprecated. Base class for :class:`Location` and :class:`AssetLocation`"""
 
     DEPRECATED_TAG = None  # Subclasses should define what DEPRECATED_TAG is

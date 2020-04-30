@@ -4,5 +4,6 @@
 #
 #    make upgrade
 #
-django==1.11.29           # via -r requirements/django.in
-pytz==2019.3              # via django
+django==2.2.12            # via -r requirements/django.in
+pytz==2020.1              # via django
+sqlparse==0.3.1           # via django

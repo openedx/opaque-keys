@@ -1,29 +1,15 @@
 language: python
 python:
-  - "2.7"
   - "3.5"
+  - "3.8"
 
 env:
-  - TOXENV=django111
-  - TOXENV=django20
-  - TOXENV=django21
   - TOXENV=django22
-
-matrix:
-  exclude:
-    - python: "2.7"
-      env: TOXENV=django20
-    - python: "2.7"
-      env: TOXENV=django21
-    - python: "2.7"
-      env: TOXENV=django22
-  include:
-    - python: "3.5"
-      env: TOXENV=quality
-    - python: "3.5"
-      env: TOXENV=without-django
+  - TOXENV=quality
+  - TOXENV=without-django
 
 install:
+  - pip install pip==20.0.2
   - make requirements
   - pip install coveralls
 script:
@@ -38,6 +24,6 @@ deploy:
   on:
     tags: true
     python: "3.5"
-    condition: "$TOXENV = django111"
+    condition: "$TOXENV = django22"
     distributions: sdist bdist_wheel
     repo: edx/opaque-keys

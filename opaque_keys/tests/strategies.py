@@ -2,13 +2,12 @@
 ``hypothesis`` strategies for generating OpaqueKey objects.
 """
 
-from functools import update_wrapper
+from functools import singledispatch, update_wrapper
 import string
 from six import text_type
 
 from hypothesis import strategies, assume
 from hypothesis.strategies._internal.core import cacheable
-from singledispatch import singledispatch
 
 from opaque_keys.edx.block_types import BlockTypeKeyV1, XBLOCK_V1, XMODULE_V1
 from opaque_keys.edx.asides import (

@@ -5,4 +5,4 @@
 -c base.txt
 
 
-Django>=1.11
+Django>=2.2,<3.0
