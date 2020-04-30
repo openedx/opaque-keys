@@ -9,7 +9,7 @@ apipkg==1.5               # via -r requirements/test.txt, execnet
 astroid==2.3.3            # via -r requirements/test.txt, pylint, pylint-celery
 attrs==19.3.0             # via -r requirements/test.txt, hypothesis, pytest
 babel==2.8.0              # via sphinx
-bleach==3.1.4             # via readme-renderer
+bleach==3.1.5             # via readme-renderer
 certifi==2020.4.5.1       # via requests
 chardet==3.0.4            # via requests
 click-log==0.3.2          # via -r requirements/test.txt, edx-lint
@@ -31,7 +31,7 @@ markupsafe==1.1.1         # via jinja2
 mccabe==0.6.1             # via -r requirements/test.txt, pylint
 mock==3.0.5               # via -r requirements/test.txt
 more-itertools==8.2.0     # via -r requirements/test.txt, pytest
-packaging==20.3           # via -r requirements/test.txt, pytest, sphinx
+packaging==20.3           # via -r requirements/test.txt, bleach, pytest, sphinx
 pathlib2==2.3.5           # via -r requirements/test.txt, pytest
 pbr==5.4.5                # via -r requirements/test.txt, stevedore
 pep8==1.7.1               # via -r requirements/test.txt, pytest-pep8
