@@ -10,7 +10,7 @@ appdirs==1.4.3            # via -r requirements/travis.txt, virtualenv
 astroid==2.3.3            # via -r requirements/doc.txt, pylint, pylint-celery
 attrs==19.3.0             # via -r requirements/doc.txt, hypothesis, pytest
 babel==2.8.0              # via -r requirements/doc.txt, sphinx
-bleach==3.1.4             # via -r requirements/doc.txt, readme-renderer
+bleach==3.1.5             # via -r requirements/doc.txt, readme-renderer
 certifi==2020.4.5.1       # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 chardet==3.0.4            # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 click-log==0.3.2          # via -r requirements/doc.txt, edx-lint
@@ -37,7 +37,7 @@ markupsafe==1.1.1         # via -r requirements/doc.txt, jinja2
 mccabe==0.6.1             # via -r requirements/doc.txt, pylint
 mock==3.0.5               # via -r requirements/doc.txt
 more-itertools==8.2.0     # via -r requirements/doc.txt, pytest
-packaging==20.3           # via -r requirements/doc.txt, -r requirements/travis.txt, pytest, sphinx, tox
+packaging==20.3           # via -r requirements/doc.txt, -r requirements/travis.txt, bleach, pytest, sphinx, tox
 pathlib2==2.3.5           # via -r requirements/doc.txt, pytest
 pbr==5.4.5                # via -r requirements/doc.txt, stevedore
 pep8==1.7.1               # via -r requirements/doc.txt, pytest-pep8
