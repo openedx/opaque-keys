@@ -15,12 +15,12 @@ chardet==3.0.4            # via requests
 click-log==0.3.2          # via -r requirements/test.txt, edx-lint
 click==7.1.2              # via -r requirements/test.txt, click-log, edx-lint
 coverage==5.1             # via -r requirements/test.txt, pytest-cov
-ddt==1.3.1                # via -r requirements/test.txt
+ddt==1.3.1                # via -c requirements/constraints.txt, -r requirements/test.txt
 docutils==0.16            # via readme-renderer, sphinx
 edx-lint==1.4.1           # via -r requirements/test.txt
 edx-sphinx-theme==1.5.0   # via -r requirements/doc.in
 execnet==1.7.1            # via -r requirements/test.txt, pytest-cache, pytest-xdist
-hypothesis==5.10.4        # via -r requirements/test.txt
+hypothesis==5.14.0        # via -r requirements/test.txt
 idna==2.9                 # via requests
 imagesize==1.2.0          # via sphinx
 importlib-metadata==1.6.0  # via -r requirements/test.txt, pluggy, pytest
@@ -37,7 +37,7 @@ pbr==5.4.5                # via -r requirements/test.txt, stevedore
 pep8==1.7.1               # via -r requirements/test.txt, pytest-pep8
 pluggy==0.13.1            # via -r requirements/test.txt, pytest
 py==1.8.1                 # via -r requirements/test.txt, pytest
-pycodestyle==2.5.0        # via -r requirements/test.txt
+pycodestyle==2.6.0        # via -r requirements/test.txt
 pygments==2.6.1           # via readme-renderer, sphinx
 pylint-celery==0.3        # via -r requirements/test.txt, edx-lint
 pylint-django==2.0.11     # via -r requirements/test.txt, edx-lint
@@ -50,7 +50,7 @@ pytest-cov==2.8.1         # via -r requirements/test.txt
 pytest-forked==1.1.3      # via -r requirements/test.txt, pytest-xdist
 pytest-pep8==1.0.6        # via -r requirements/test.txt
 pytest-pylint==0.15.1     # via -c requirements/constraints.txt, -r requirements/test.txt
-pytest-xdist==1.31.0      # via -r requirements/test.txt
+pytest-xdist==1.32.0      # via -r requirements/test.txt
 pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements/test.txt, pytest-cache, pytest-cov, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
 pytz==2020.1              # via babel
 readme-renderer==26.0     # via -r requirements/doc.in
