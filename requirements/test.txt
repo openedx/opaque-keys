@@ -13,14 +13,14 @@ coverage==5.1             # via -r requirements/test.in, pytest-cov
 ddt==1.3.1                # via -c requirements/constraints.txt, -r requirements/test.in
 edx-lint==1.4.1           # via -r requirements/test.in
 execnet==1.7.1            # via pytest-cache, pytest-xdist
-hypothesis==5.14.0        # via -r requirements/test.in
+hypothesis==5.15.0        # via -r requirements/test.in
 importlib-metadata==1.6.0  # via pluggy, pytest
 isort==4.3.21             # via pylint
 lazy-object-proxy==1.4.3  # via astroid
 mccabe==0.6.1             # via pylint
 mock==3.0.5               # via -r requirements/test.in
-more-itertools==8.2.0     # via pytest
-packaging==20.3           # via pytest
+more-itertools==8.3.0     # via pytest
+packaging==20.4           # via pytest
 pathlib2==2.3.5           # via pytest
 pbr==5.4.5                # via -r requirements/base.txt, stevedore
 pep8==1.7.1               # via pytest-pep8

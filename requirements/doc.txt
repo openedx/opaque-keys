@@ -20,7 +20,7 @@ docutils==0.16            # via readme-renderer, sphinx
 edx-lint==1.4.1           # via -r requirements/test.txt
 edx-sphinx-theme==1.5.0   # via -r requirements/doc.in
 execnet==1.7.1            # via -r requirements/test.txt, pytest-cache, pytest-xdist
-hypothesis==5.14.0        # via -r requirements/test.txt
+hypothesis==5.15.0        # via -r requirements/test.txt
 idna==2.9                 # via requests
 imagesize==1.2.0          # via sphinx
 importlib-metadata==1.6.0  # via -r requirements/test.txt, pluggy, pytest
@@ -30,8 +30,8 @@ lazy-object-proxy==1.4.3  # via -r requirements/test.txt, astroid
 markupsafe==1.1.1         # via jinja2
 mccabe==0.6.1             # via -r requirements/test.txt, pylint
 mock==3.0.5               # via -r requirements/test.txt
-more-itertools==8.2.0     # via -r requirements/test.txt, pytest
-packaging==20.3           # via -r requirements/test.txt, bleach, pytest, sphinx
+more-itertools==8.3.0     # via -r requirements/test.txt, pytest
+packaging==20.4           # via -r requirements/test.txt, bleach, pytest, sphinx
 pathlib2==2.3.5           # via -r requirements/test.txt, pytest
 pbr==5.4.5                # via -r requirements/test.txt, stevedore
 pep8==1.7.1               # via -r requirements/test.txt, pytest-pep8
