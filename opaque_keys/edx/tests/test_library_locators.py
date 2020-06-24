@@ -2,20 +2,17 @@
 """
 Tests of LibraryLocators
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+
+import itertools  # pylint: disable=wrong-import-order
 from unittest import TestCase
 
-from six import text_type
 import ddt
-import itertools  # pylint: disable=wrong-import-order
-
 from bson.objectid import ObjectId
+from six import text_type
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey, LearningContextKey
-
 from opaque_keys.edx.locator import LibraryUsageLocator, LibraryLocator, LibraryLocatorV2, CourseLocator, AssetLocator
-
 from opaque_keys.edx.tests import LocatorBaseTest, TestDeprecated
 
 

@@ -2,13 +2,14 @@
 """
 Tests of LibraryUsageLocator
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+
 import itertools  # pylint: disable=wrong-import-order
 from unittest import TestCase
 
 import ddt
-from six import text_type
 from bson.objectid import ObjectId
+from six import text_type
+
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import UsageKey
 from opaque_keys.edx.locator import (

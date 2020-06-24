@@ -1,7 +1,7 @@
 """
 Test that the .is_course helper property does what it's supposed to
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+
 from unittest import TestCase
 
 from opaque_keys.edx.locator import CourseLocator, LibraryLocator, LibraryLocatorV2
