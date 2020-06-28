@@ -2,18 +2,18 @@
 """
 Tests for opaque_keys.edx.locator.
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+
 import random
 from unittest import TestCase
 from uuid import UUID
 
 import ddt
-from six import text_type
 from bson.objectid import ObjectId
+from six import text_type
 
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.locator import Locator, BundleDefinitionLocator, CourseLocator, DefinitionLocator, VersionTree
 from opaque_keys.edx.keys import DefinitionKey
+from opaque_keys.edx.locator import Locator, BundleDefinitionLocator, CourseLocator, DefinitionLocator, VersionTree
 
 
 class LocatorTests(TestCase):

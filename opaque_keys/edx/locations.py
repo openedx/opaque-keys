@@ -1,7 +1,6 @@
 """
 Deprecated OpaqueKey implementations used by XML and Mongo modulestores
 """
-from __future__ import absolute_import
 
 import re
 import warnings

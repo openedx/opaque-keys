@@ -2,20 +2,18 @@
 Identifier for course resources.
 """
 
-from __future__ import absolute_import
-
 import inspect
 import logging
 import re
-from uuid import UUID
 import warnings
+from uuid import UUID
 
+import six
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from bson.son import SON
-
-import six
 from six import string_types, text_type
+
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, LearningContextKey, UsageKey, UsageKeyV2
 
