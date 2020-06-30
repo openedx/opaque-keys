@@ -8,9 +8,6 @@
 # pin when possible.  Writing an issue against the offending project and
 # linking to it here is good.
 
-# Constrain until https://github.com/datadriventests/ddt/issues/83 is fixed.
-ddt<1.4.0
-
 # pytest command fails if pytest > 5.3 is used
 # Look into https://github.com/pytest-dev/pytest/issues/6925
 pytest<=5.3
