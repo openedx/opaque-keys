@@ -14,7 +14,7 @@ certifi==2020.6.20        # via requests
 chardet==3.0.4            # via requests
 click-log==0.3.2          # via -r requirements/test.txt, edx-lint
 click==7.1.2              # via -r requirements/test.txt, click-log, edx-lint
-coverage==5.1             # via -r requirements/test.txt, pytest-cov
+coverage==5.2             # via -r requirements/test.txt, pytest-cov
 ddt==1.4.1                # via -r requirements/test.txt
 docutils==0.16            # via readme-renderer, sphinx
 edx-lint==1.5.0           # via -r requirements/test.txt
@@ -58,7 +58,7 @@ requests==2.24.0          # via sphinx
 six==1.15.0               # via -r requirements/test.txt, astroid, bleach, edx-lint, edx-sphinx-theme, mock, packaging, pathlib2, pytest-xdist, readme-renderer, stevedore
 snowballstemmer==2.0.0    # via sphinx
 sortedcontainers==2.2.2   # via -r requirements/test.txt, hypothesis
-sphinx==3.1.1             # via -r requirements/doc.in, edx-sphinx-theme
+sphinx==3.1.2             # via -r requirements/doc.in, edx-sphinx-theme
 sphinxcontrib-applehelp==1.0.2  # via sphinx
 sphinxcontrib-devhelp==1.0.2  # via sphinx
 sphinxcontrib-htmlhelp==1.0.3  # via sphinx
