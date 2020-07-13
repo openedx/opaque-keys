@@ -35,7 +35,7 @@ def is_requirement(line):
 
 setup(
     name='edx-opaque-keys',
-    version='2.1.0',
+    version='2.1.1',
     author='edX',
     url='https://github.com/edx/opaque-keys',
     classifiers=[
