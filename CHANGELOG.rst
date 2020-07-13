@@ -1,5 +1,9 @@
 # 2.0.2
 
+* Fixed django warnings
+
+# 2.0.2
+
 * setup.py now properly uses requirements files
 
 # 2.0.1
