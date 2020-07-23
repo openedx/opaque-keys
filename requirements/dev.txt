@@ -25,7 +25,7 @@ edx-lint==1.5.0           # via -r requirements/doc.txt
 edx-sphinx-theme==1.5.0   # via -r requirements/doc.txt
 execnet==1.7.1            # via -r requirements/doc.txt, pytest-cache, pytest-xdist
 filelock==3.0.12          # via -r requirements/travis.txt, tox, virtualenv
-hypothesis==5.19.3        # via -r requirements/doc.txt
+hypothesis==5.20.3        # via -r requirements/doc.txt
 idna==2.10                # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 imagesize==1.2.0          # via -r requirements/doc.txt, sphinx
 importlib-metadata==1.7.0  # via -r requirements/doc.txt, -r requirements/travis.txt, pluggy, pytest, tox, virtualenv
@@ -77,7 +77,7 @@ toml==0.10.1              # via -r requirements/travis.txt, tox
 tox-battery==0.6.1        # via -r requirements/travis.txt
 tox==3.17.1               # via -r requirements/travis.txt, tox-battery
 typed-ast==1.4.1          # via -r requirements/doc.txt, astroid
-urllib3==1.25.9           # via -r requirements/doc.txt, -r requirements/travis.txt, requests
+urllib3==1.25.10          # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 virtualenv==20.0.27       # via -r requirements/travis.txt, tox
 wcwidth==0.2.5            # via -r requirements/doc.txt, pytest
 webencodings==0.5.1       # via -r requirements/doc.txt, bleach
