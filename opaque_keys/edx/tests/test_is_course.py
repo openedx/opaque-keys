@@ -14,6 +14,7 @@ class IsCourseTests(TestCase):
     This is because for historical reasons, isinstance(key, CourseKey) will
     sometimes return a library key (modulestore split mongo content libraries).
     """
+
     def test_is_course(self):
         course_key = CourseLocator("SchoolX", "course1", "2020")
         self.assertEqual(course_key.is_course, True)

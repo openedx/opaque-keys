@@ -20,7 +20,8 @@ class DummyKey(OpaqueKey):
     """
     Key type for testing
     """
-    KEY_TYPE = 'opaque_keys.testing'
+
+    KEY_TYPE = "opaque_keys.testing"
     __slots__ = ()
 
 
@@ -28,16 +29,17 @@ class HexKey(DummyKey):
     """
     Key type for testing; _from_string takes hex values
     """
-    KEY_FIELDS = ('value',)
+
+    KEY_FIELDS = ("value",)
     __slots__ = KEY_FIELDS
-    CANONICAL_NAMESPACE = 'hex'
+    CANONICAL_NAMESPACE = "hex"
 
     def _to_string(self):
         return hex(self.value)
 
     @classmethod
     def _from_string(cls, serialized):
-        if not serialized.startswith('0x'):
+        if not serialized.startswith("0x"):
             raise InvalidKeyError(cls, serialized)
         try:
             return cls(int(serialized, 16))
@@ -49,7 +51,8 @@ class HexKeyTwoFields(DummyKey):
     """
     Key type for testing; _from_string takes hex values
     """
-    KEY_FIELDS = ('value', 'new_value')
+
+    KEY_FIELDS = ("value", "new_value")
     __slots__ = KEY_FIELDS
 
     def _to_string(self):
@@ -65,9 +68,10 @@ class Base10Key(DummyKey):
     """
     Key type for testing; _from_string takes base 10 values
     """
-    KEY_FIELDS = ('value',)
+
+    KEY_FIELDS = ("value",)
     # Deliberately not using __slots__, to test both cases
-    CANONICAL_NAMESPACE = 'base10'
+    CANONICAL_NAMESPACE = "base10"
 
     def _to_string(self):
         # For some reason, pylint doesn't think this key has a `value` attribute
@@ -85,9 +89,10 @@ class DictKey(DummyKey):
     """
     Key type for testing; _from_string takes dictionary values
     """
-    KEY_FIELDS = ('value',)
+
+    KEY_FIELDS = ("value",)
     __slots__ = KEY_FIELDS
-    CANONICAL_NAMESPACE = 'dict'
+    CANONICAL_NAMESPACE = "dict"
 
     def _to_string(self):
         # For some reason, pylint doesn't think this key has a `value` attribute
@@ -101,57 +106,72 @@ class DictKey(DummyKey):
             raise InvalidKeyError(cls, serialized)
 
     def __hash__(self):
-        return hash(type(self)) + sum([hash(elt) for elt in self.value.keys()])  # pylint: disable=no-member
+        return hash(type(self)) + sum(
+            [hash(elt) for elt in self.value.keys()]
+        )  # pylint: disable=no-member
+
+
 # pylint: enable=abstract-method
 
 
 class KeyTests(TestCase):
     """Basic namespace, from_string, and to_string tests."""
+
     def test_namespace_from_string(self):
-        hex_key = DummyKey.from_string('hex:0x10')
+        hex_key = DummyKey.from_string("hex:0x10")
         self.assertIsInstance(hex_key, HexKey)
         self.assertEqual(hex_key.value, 16)
-        self.assertEqual(hex_key._to_string(), '0x10')  # pylint: disable=protected-access
-        self.assertEqual(len(hex_key), len('hex:0x10'))
+        self.assertEqual(
+            hex_key._to_string(), "0x10"
+        )  # pylint: disable=protected-access
+        self.assertEqual(len(hex_key), len("hex:0x10"))
 
-        base_key = DummyKey.from_string('base10:15')
+        base_key = DummyKey.from_string("base10:15")
         self.assertIsInstance(base_key, Base10Key)
         self.assertEqual(base_key.value, 15)
-        self.assertEqual(base_key._to_string(), '15')  # pylint: disable=protected-access
-        self.assertEqual(len(base_key), len('base10:15'))
+        self.assertEqual(
+            base_key._to_string(), "15"
+        )  # pylint: disable=protected-access
+        self.assertEqual(len(base_key), len("base10:15"))
 
-        dict_key = DummyKey.from_string('dict:{"foo": "bar"}')  # pylint: disable=unicode-format-string
+        dict_key = DummyKey.from_string(
+            'dict:{"foo": "bar"}'
+        )  # pylint: disable=unicode-format-string
         self.assertIsInstance(dict_key, DictKey)
         self.assertEqual(dict_key.value, {"foo": "bar"})
-        self.assertEqual(dict_key._to_string(), '{"foo": "bar"}')  # pylint: disable=protected-access
-        self.assertEqual(len(dict_key), len('dict:{"foo": "bar"}'))  # pylint: disable=unicode-format-string
+        self.assertEqual(
+            dict_key._to_string(), '{"foo": "bar"}'
+        )  # pylint: disable=protected-access
+        self.assertEqual(
+            len(dict_key), len('dict:{"foo": "bar"}')
+        )  # pylint: disable=unicode-format-string
 
     def test_bad_keys(self):
         with self.assertRaises(InvalidKeyError):
-            DummyKey.from_string('hex:10')
+            DummyKey.from_string("hex:10")
 
         with self.assertRaises(InvalidKeyError):
-            DummyKey.from_string('hex:0xZZ')
+            DummyKey.from_string("hex:0xZZ")
 
         with self.assertRaises(InvalidKeyError):
-            DummyKey.from_string('base10:0x10')
+            DummyKey.from_string("base10:0x10")
 
         with self.assertRaises(InvalidKeyError):
-            DummyKey.from_string('dict:abcd')
+            DummyKey.from_string("dict:abcd")
 
         with self.assertRaises(InvalidKeyError):
-            DummyKey.from_string(u'\xfb:abcd')
+            DummyKey.from_string("\xfb:abcd")
 
     def test_unknown_namespace(self):
         with self.assertRaises(InvalidKeyError):
-            DummyKey.from_string('no_namespace:0x10')
+            DummyKey.from_string("no_namespace:0x10")
 
     def test_no_namespace_from_string(self):
         with self.assertRaises(InvalidKeyError):
-            DummyKey.from_string('0x10')
+            DummyKey.from_string("0x10")
 
         with self.assertRaises(InvalidKeyError):
-            DummyKey.from_string('15')
+            DummyKey.from_string("15")
 
         with self.assertRaises(InvalidKeyError):
             DummyKey.from_string(None)
@@ -166,19 +186,29 @@ class KeyTests(TestCase):
             del key.value
 
     def test_equality(self):
-        self.assertEqual(DummyKey.from_string('hex:0x10'), DummyKey.from_string('hex:0x10'))
-        self.assertNotEqual(DummyKey.from_string('hex:0x10'), DummyKey.from_string('base10:16'))
+        self.assertEqual(
+            DummyKey.from_string("hex:0x10"), DummyKey.from_string("hex:0x10")
+        )
+        self.assertNotEqual(
+            DummyKey.from_string("hex:0x10"), DummyKey.from_string("base10:16")
+        )
 
     def test_hash_equality(self):
-        self.assertEqual(hash(DummyKey.from_string('hex:0x10')), hash(DummyKey.from_string('hex:0x10')))
-        self.assertNotEqual(hash(DummyKey.from_string('hex:0x10')), hash(DummyKey.from_string('base10:16')))
+        self.assertEqual(
+            hash(DummyKey.from_string("hex:0x10")),
+            hash(DummyKey.from_string("hex:0x10")),
+        )
+        self.assertNotEqual(
+            hash(DummyKey.from_string("hex:0x10")),
+            hash(DummyKey.from_string("base10:16")),
+        )
 
     def test_constructor(self):
         with self.assertRaises(TypeError):
             HexKey()
 
         with self.assertRaises(TypeError):
-            HexKey(foo='bar')
+            HexKey(foo="bar")
 
         with self.assertRaises(TypeError):
             HexKey(10, 20)
@@ -221,27 +251,31 @@ class KeyTests(TestCase):
         self.assertFalse(not_deprecated_hex10.deprecated)
 
     def test_copy(self):
-        original = DictKey({'foo': 'bar'})
+        original = DictKey({"foo": "bar"})
         copied = copy.copy(original)
         deep = copy.deepcopy(original)
 
         self.assertEqual(original, copied)
         self.assertEqual(id(original), id(copied))
         # For some reason, pylint doesn't think DictKey has a `value` attribute
-        self.assertEqual(id(original.value), id(copied.value))  # pylint: disable=no-member
+        self.assertEqual(
+            id(original.value), id(copied.value)
+        )  # pylint: disable=no-member
 
         self.assertEqual(original, deep)
         self.assertEqual(id(original), id(deep))
-        self.assertEqual(id(original.value), id(deep.value))  # pylint: disable=no-member
+        self.assertEqual(
+            id(original.value), id(deep.value)
+        )  # pylint: disable=no-member
 
         self.assertEqual(copy.deepcopy([original]), [original])
 
     def test_subclass(self):
         with self.assertRaises(InvalidKeyError):
-            HexKey.from_string('base10:15')
+            HexKey.from_string("base10:15")
 
         with self.assertRaises(InvalidKeyError):
-            Base10Key.from_string('hex:0x10')
+            Base10Key.from_string("hex:0x10")
 
     def test_ordering(self):
         ten = HexKey(value=10)

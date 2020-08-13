@@ -9,8 +9,8 @@ ScopeIds have a class associated with them).
 from opaque_keys.edx.keys import BlockTypeKey
 from opaque_keys import InvalidKeyError
 
-XBLOCK_V1 = 'xblock.v1'
-XMODULE_V1 = 'xmodule.v1'
+XBLOCK_V1 = "xblock.v1"
+XMODULE_V1 = "xmodule.v1"
 
 
 class BlockTypeKeyV1(BlockTypeKey):  # pylint: disable=abstract-method
@@ -18,15 +18,16 @@ class BlockTypeKeyV1(BlockTypeKey):  # pylint: disable=abstract-method
     A :class:`BlockTypeKey` subclass that simply stores the block_family and block_type as strings,
     and serializes them separated by a ':'.
     """
-    CANONICAL_NAMESPACE = 'block-type-v1'
-    KEY_FIELDS = ('block_family', 'block_type')
+
+    CANONICAL_NAMESPACE = "block-type-v1"
+    KEY_FIELDS = ("block_family", "block_type")
     __slots__ = KEY_FIELDS
 
     CHECKED_INIT = False
 
     def __init__(self, block_family, block_type):
         # Call super using kwargs, so that we can set CHECKED_INIT to False
-        if ':' in block_family:
+        if ":" in block_family:
             raise InvalidKeyError(self.__class__, "block_family may not contain ':'.")
         if block_family in (XBLOCK_V1, XMODULE_V1):
             block_family = XBLOCK_V1
@@ -49,10 +50,12 @@ class BlockTypeKeyV1(BlockTypeKey):  # pylint: disable=abstract-method
             InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
                 understood by `cls`.
         """
-        if ':' not in serialized:
+        if ":" not in serialized:
             raise InvalidKeyError(
-                "BlockTypeKeyV1 keys must contain ':' separating the block family from the block_type.", serialized)
-        family, __, block_type = serialized.partition(':')
+                "BlockTypeKeyV1 keys must contain ':' separating the block family from the block_type.",
+                serialized,
+            )
+        family, __, block_type = serialized.partition(":")
         return cls(family, block_type)
 
     def _to_string(self):
@@ -61,7 +64,7 @@ class BlockTypeKeyV1(BlockTypeKey):  # pylint: disable=abstract-method
 
         This serialization should not include the namespace prefix.
         """
-        return u"{}:{}".format(self.block_family, self.block_type)
+        return "{}:{}".format(self.block_family, self.block_type)
 
     @classmethod
     def _from_deprecated_string(cls, serialized):

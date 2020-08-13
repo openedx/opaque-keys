@@ -20,7 +20,8 @@ class LearningContextKey(OpaqueKey):
 
     A learning context does not necessarily have an org, course, or, run.
     """
-    KEY_TYPE = 'context_key'
+
+    KEY_TYPE = "context_key"
     __slots__ = ()
 
     # is_course: subclasses should override this to indicate whether or not this
@@ -43,6 +44,7 @@ class CourseKey(LearningContextKey):
     """
     An :class:`opaque_keys.OpaqueKey` identifying a particular Course object.
     """
+
     __slots__ = ()
     is_course = True
 
@@ -96,7 +98,8 @@ class DefinitionKey(OpaqueKey):
     """
     An :class:`opaque_keys.OpaqueKey` identifying an XBlock definition.
     """
-    KEY_TYPE = 'definition_key'
+
+    KEY_TYPE = "definition_key"
     __slots__ = ()
 
     @abstractproperty
@@ -112,6 +115,7 @@ class CourseObjectMixin:
     An abstract :class:`opaque_keys.OpaqueKey` mixin
     for keys that belong to courses.
     """
+
     __slots__ = ()
 
     @abstractproperty
@@ -141,7 +145,8 @@ class AssetKey(CourseObjectMixin, OpaqueKey):
     """
     An :class:`opaque_keys.OpaqueKey` identifying a course asset.
     """
-    KEY_TYPE = 'asset_key'
+
+    KEY_TYPE = "asset_key"
     __slots__ = ()
 
     @abstractproperty
@@ -163,7 +168,8 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
     """
     An :class:`opaque_keys.OpaqueKey` identifying an XBlock usage.
     """
-    KEY_TYPE = 'usage_key'
+
+    KEY_TYPE = "usage_key"
     __slots__ = ()
 
     @abstractproperty
@@ -209,6 +215,7 @@ class UsageKeyV2(UsageKey):
           types, and they should implement .context_key instead.
         * the .definition_key property is explicitly disabled for V2 usage keys
     """
+
     __slots__ = ()
 
     @abstractproperty
@@ -234,7 +241,9 @@ class UsageKeyV2(UsageKey):
 
     @property
     def course_key(self):
-        warnings.warn("Use .context_key instead of .course_key", DeprecationWarning, stacklevel=2)
+        warnings.warn(
+            "Use .context_key instead of .course_key", DeprecationWarning, stacklevel=2
+        )
         return self.context_key
 
     def map_into_course(self, course_key):
@@ -252,6 +261,7 @@ class AsideDefinitionKey(DefinitionKey):
     """
     A definition key for an aside.
     """
+
     __slots__ = ()
 
     @abstractproperty
@@ -273,6 +283,7 @@ class AsideUsageKey(UsageKey):
     """
     A usage key for an aside.
     """
+
     __slots__ = ()
 
     @abstractproperty
@@ -296,6 +307,7 @@ class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
     If provided as the cls to json.dumps, will serialize and Locations as i4x strings and other
     keys using the unicode strings.
     """
+
     def default(self, key):  # pylint: disable=arguments-differ, method-hidden
         if isinstance(key, OpaqueKey):
             return text_type(key)
@@ -308,7 +320,8 @@ class BlockTypeKey(OpaqueKey):
     A key class that encodes XBlock-family block types, including which family the block
     was loaded from.
     """
-    KEY_TYPE = 'block_type'
+
+    KEY_TYPE = "block_type"
     __slots__ = ()
 
     @abstractproperty

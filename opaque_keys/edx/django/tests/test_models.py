@@ -27,17 +27,18 @@ def enable_db_access_for_all_tests(db):
 #  pylint: disable=no-member
 class TestCreatorMixin(TestCase):
     """Tests of the CreatorMixin class."""
+
     def setUp(self):
         super(TestCreatorMixin, self).setUp()
-        self.model = ExampleModel(key='key-1')
+        self.model = ExampleModel(key="key-1")
         self.model.save()
 
     def test_char_field_is_converted_to_container(self):
-        expected = Container('key-1').transform()
+        expected = Container("key-1").transform()
         self.assertEqual(expected, self.model.key.transform())
 
     def test_load_model_from_db(self):
-        fetched_model = ExampleModel.objects.get(key='key-1')
+        fetched_model = ExampleModel.objects.get(key="key-1")
         self.assertEqual(fetched_model, self.model)
 
 
@@ -48,35 +49,39 @@ class EmptyKeyClassField(OpaqueKeyField):
 # pylint: disable=protected-access
 class TestOpaqueKeyField(TestCase):
     """Tests the implementation of OpaqueKeyField methods."""
+
     def test_null_key_class_raises_value_error(self):
         with self.assertRaises(ValueError):
             EmptyKeyClassField()
 
     def test_to_python_trailing_newline_stripped(self):
-        field = ComplexModel()._meta.get_field('course_key')
-        expected = CourseKey.from_string('course-v1:edX+FUN101x+3T2017')
-        self.assertEqual(expected, field.to_python('course-v1:edX+FUN101x+3T2017\n'))
+        field = ComplexModel()._meta.get_field("course_key")
+        expected = CourseKey.from_string("course-v1:edX+FUN101x+3T2017")
+        self.assertEqual(expected, field.to_python("course-v1:edX+FUN101x+3T2017\n"))
 
     def test_get_prep_value_newline_not_modified(self):
-        field = ComplexModel()._meta.get_field('course_key')
+        field = ComplexModel()._meta.get_field("course_key")
         course_key = mock.MagicMock(spec=CourseKey)
         if six.PY2:
-            course_key.__unicode__.return_value = 'course-v1:edX+FUN101x+3T2017\n'
+            course_key.__unicode__.return_value = "course-v1:edX+FUN101x+3T2017\n"
         else:
-            course_key.__str__.return_value = 'course-v1:edX+FUN101x+3T2017\n'
-        self.assertEqual('course-v1:edX+FUN101x+3T2017\n', field.get_prep_value(course_key))
+            course_key.__str__.return_value = "course-v1:edX+FUN101x+3T2017\n"
+        self.assertEqual(
+            "course-v1:edX+FUN101x+3T2017\n", field.get_prep_value(course_key)
+        )
 
 
 class TestKeyFieldImplementation(TestCase):
     """Tests for all of the subclasses of OpaqueKeyField."""
+
     def setUp(self):
         super(TestKeyFieldImplementation, self).setUp()
-        self.course_key = CourseKey.from_string('course-v1:edX+FUN101x+3T2017')
-        self.usage_key = UsageKey.from_string('block-v1:edX+FUN101x+3T2017+type@html+block@12345678')
+        self.course_key = CourseKey.from_string("course-v1:edX+FUN101x+3T2017")
+        self.usage_key = UsageKey.from_string(
+            "block-v1:edX+FUN101x+3T2017+type@html+block@12345678"
+        )
         self.model = ComplexModel(
-            id='foobar',
-            course_key=self.course_key,
-            usage_key=self.usage_key
+            id="foobar", course_key=self.course_key, usage_key=self.usage_key
         )
         self.model.save()
 
@@ -89,7 +94,9 @@ class TestKeyFieldImplementation(TestCase):
         self.assertEqual(fetched, self.model)
 
     def test_fetch_from_db_with_str(self):
-        fetched = ComplexModel.objects.filter(course_key=six.text_type(self.course_key)).first()
+        fetched = ComplexModel.objects.filter(
+            course_key=six.text_type(self.course_key)
+        ).first()
         self.assertEqual(fetched, self.model)
 
     def test_validation_no_errors(self):
@@ -97,7 +104,9 @@ class TestKeyFieldImplementation(TestCase):
 
     def test_validation_custom_validator_raises_error(self):
         with self.assertRaises(ValidationError):
-            self.model.course_key = CourseKey.from_string('course-v1:NOTedX+FUN101x+3T2017')
+            self.model.course_key = CourseKey.from_string(
+                "course-v1:NOTedX+FUN101x+3T2017"
+            )
             self.model.clean_fields()
 
     def test_validation_blank_usage_key_raises_error(self):

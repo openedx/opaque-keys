@@ -27,8 +27,9 @@ class InvalidKeyError(Exception):
     Raised to indicated that a serialized key isn't valid (wasn't able to be parsed
     by any available providers).
     """
+
     def __init__(self, key_class, serialized):
-        super(InvalidKeyError, self).__init__(u'{}: {}'.format(key_class, serialized))
+        super(InvalidKeyError, self).__init__("{}: {}".format(key_class, serialized))
 
 
 class OpaqueKeyMetaclass(ABCMeta):
@@ -36,9 +37,10 @@ class OpaqueKeyMetaclass(ABCMeta):
     Metaclass for :class:`OpaqueKey`. Sets the default value for the values in ``KEY_FIELDS`` to
     ``None``.
     """
+
     def __new__(mcs, name, bases, attrs):  # pylint: disable=arguments-differ
-        if '__slots__' not in attrs:
-            for field in attrs.get('KEY_FIELDS', []):
+        if "__slots__" not in attrs:
+            for field in attrs.get("KEY_FIELDS", []):
                 attrs.setdefault(field, None)
         return super(OpaqueKeyMetaclass, mcs).__new__(mcs, name, bases, attrs)
 
@@ -99,11 +101,12 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
     Serialization of an :class:`OpaqueKey` is performed by using the :func:`unicode` builtin.
     Deserialization is performed by the :meth:`from_string` method.
     """
-    __slots__ = ('_initialized', 'deprecated')
+
+    __slots__ = ("_initialized", "deprecated")
 
     KEY_FIELDS = []
     CANONICAL_NAMESPACE = None
-    NAMESPACE_SEPARATOR = u':'
+    NAMESPACE_SEPARATOR = ":"
     CHECKED_INIT = True
 
     # ============= ABSTRACT METHODS ==============
@@ -172,7 +175,9 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         if self.deprecated:
             # no namespace on deprecated
             return self._to_deprecated_string()
-        return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])  # pylint: disable=no-member
+        return self.NAMESPACE_SEPARATOR.join(
+            [self.CANONICAL_NAMESPACE, self._to_string()]
+        )  # pylint: disable=no-member
 
     @classmethod
     def from_string(cls, serialized):
@@ -199,7 +204,9 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
                 raise InvalidKeyError(cls, serialized)
             return key_class._from_string(rest)
         except InvalidKeyError:
-            if hasattr(cls, 'deprecated_fallback') and issubclass(cls.deprecated_fallback, cls):
+            if hasattr(cls, "deprecated_fallback") and issubclass(
+                cls.deprecated_fallback, cls
+            ):
                 return cls.deprecated_fallback._from_deprecated_string(serialized)
             raise InvalidKeyError(cls, serialized)
 
@@ -245,9 +252,11 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
             # Cache that the namespace doesn't correspond to a known plugin,
             # so that we don't waste time checking every time we hit
             # a particular unknown namespace (like i4x)
-            raise InvalidKeyError(cls, u'{}:*'.format(namespace))
+            raise InvalidKeyError(cls, "{}:*".format(namespace))
 
-    LOADED_DRIVERS = defaultdict()  # If you change default, change test_default_deprecated
+    LOADED_DRIVERS = (
+        defaultdict()
+    )  # If you change default, change test_default_deprecated
 
     @classmethod
     def _drivers(cls):
@@ -268,8 +277,10 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         """
         Register a deprecated fallback class for this class to revert to.
         """
-        if hasattr(cls, 'deprecated_fallback'):
-            raise AttributeError(u"Error: cannot register two fallback classes for {!r}.".format(cls))
+        if hasattr(cls, "deprecated_fallback"):
+            raise AttributeError(
+                "Error: cannot register two fallback classes for {!r}.".format(cls)
+            )
         cls.deprecated_fallback = fallback
 
     # ============= VALUE SEMANTICS ==============
@@ -279,7 +290,9 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
 
         # a flag used to indicate that this instance was deserialized from the
         # deprecated form and should serialize to the deprecated form
-        self.deprecated = kwargs.pop('deprecated', False)  # pylint: disable=assigning-non-slot
+        self.deprecated = kwargs.pop(
+            "deprecated", False
+        )  # pylint: disable=assigning-non-slot
 
         if self.CHECKED_INIT:
             self._checked_init(*args, **kwargs)
@@ -293,21 +306,28 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         KEY_FIELDS as the arg order, and validating number and order of args.
         """
         if len(args) + len(kwargs) != len(self.KEY_FIELDS):
-            raise TypeError(u'__init__() takes exactly {} arguments ({} given)'.format(
-                len(self.KEY_FIELDS),
-                len(args) + len(kwargs)
-            ))
+            raise TypeError(
+                "__init__() takes exactly {} arguments ({} given)".format(
+                    len(self.KEY_FIELDS), len(args) + len(kwargs)
+                )
+            )
 
         keyed_args = dict(zip(self.KEY_FIELDS, args))
         overlapping_args = viewkeys(keyed_args) & viewkeys(kwargs)
         if overlapping_args:
-            raise TypeError(u'__init__() got multiple values for keyword argument {!r}'.format(overlapping_args[0]))
+            raise TypeError(
+                "__init__() got multiple values for keyword argument {!r}".format(
+                    overlapping_args[0]
+                )
+            )
 
         keyed_args.update(kwargs)
 
         for key in viewkeys(keyed_args):
             if key not in self.KEY_FIELDS:
-                raise TypeError(u'__init__() got an unexpected argument {!r}'.format(key))
+                raise TypeError(
+                    "__init__() got an unexpected argument {!r}".format(key)
+                )
 
         self._unchecked_init(**keyed_args)
 
@@ -326,8 +346,10 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         Subclasses should override this if they have required properties that aren't included in their
         ``KEY_FIELDS``.
         """
-        existing_values = {key: getattr(self, key) for key in self.KEY_FIELDS}  # pylint: disable=no-member
-        existing_values['deprecated'] = self.deprecated
+        existing_values = {
+            key: getattr(self, key) for key in self.KEY_FIELDS
+        }  # pylint: disable=no-member
+        existing_values["deprecated"] = self.deprecated
 
         if all(value == existing_values[key] for (key, value) in iteritems(kwargs)):
             return self
@@ -336,13 +358,17 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         return type(self)(**existing_values)
 
     def __setattr__(self, name, value):
-        if getattr(self, '_initialized', False):
-            raise AttributeError(u"Can't set {!r}. OpaqueKeys are immutable.".format(name))
+        if getattr(self, "_initialized", False):
+            raise AttributeError(
+                "Can't set {!r}. OpaqueKeys are immutable.".format(name)
+            )
 
         super(OpaqueKey, self).__setattr__(name, value)  # pylint: disable=no-member
 
     def __delattr__(self, name):
-        raise AttributeError(u"Can't delete {!r}. OpaqueKeys are immutable.".format(name))
+        raise AttributeError(
+            "Can't delete {!r}. OpaqueKeys are immutable.".format(name)
+        )
 
     def __copy__(self):
         """
@@ -362,7 +388,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         for key in state_dict:
             if key in self.KEY_FIELDS:  # pylint: disable=no-member
                 setattr(self, key, state_dict[key])
-        self.deprecated = state_dict['deprecated']  # pylint: disable=assigning-non-slot
+        self.deprecated = state_dict["deprecated"]  # pylint: disable=assigning-non-slot
         self._initialized = True  # pylint: disable=assigning-non-slot
 
     def __getstate__(self):
@@ -370,34 +396,44 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         pickleable_dict = {}
         for key in self.KEY_FIELDS:  # pylint: disable=no-member
             pickleable_dict[key] = getattr(self, key)
-        pickleable_dict['deprecated'] = self.deprecated
+        pickleable_dict["deprecated"] = self.deprecated
         return pickleable_dict
 
     @property
     def _key(self):
         """Returns a tuple of key fields"""
         # pylint: disable=no-member
-        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE, self.deprecated)
+        return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (
+            self.CANONICAL_NAMESPACE,
+            self.deprecated,
+        )
 
     def __eq__(self, other):
-        return isinstance(other, OpaqueKey) and self._key == other._key  # pylint: disable=protected-access
+        return (
+            isinstance(other, OpaqueKey) and self._key == other._key
+        )  # pylint: disable=protected-access
 
     def __ne__(self, other):
         return not self == other
 
     def __lt__(self, other):
-        if (self.KEY_FIELDS, self.CANONICAL_NAMESPACE, self.deprecated) != (other.KEY_FIELDS, other.CANONICAL_NAMESPACE,
-                                                                            other.deprecated):
-            raise TypeError(u"{!r} is incompatible with {!r}".format(self, other))
+        if (self.KEY_FIELDS, self.CANONICAL_NAMESPACE, self.deprecated) != (
+            other.KEY_FIELDS,
+            other.CANONICAL_NAMESPACE,
+            other.deprecated,
+        ):
+            raise TypeError("{!r} is incompatible with {!r}".format(self, other))
         return self._key < other._key  # pylint: disable=protected-access
 
     def __hash__(self):
         return hash(self._key)
 
     def __repr__(self):
-        return '{}({})'.format(
+        return "{}({})".format(
             self.__class__.__name__,
-            ', '.join(repr(getattr(self, key)) for key in self.KEY_FIELDS)  # pylint: disable=no-member
+            ", ".join(
+                repr(getattr(self, key)) for key in self.KEY_FIELDS
+            ),  # pylint: disable=no-member
         )
 
     def __len__(self):

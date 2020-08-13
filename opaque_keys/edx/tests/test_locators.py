@@ -13,7 +13,13 @@ from six import text_type
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import DefinitionKey
-from opaque_keys.edx.locator import Locator, BundleDefinitionLocator, CourseLocator, DefinitionLocator, VersionTree
+from opaque_keys.edx.locator import (
+    Locator,
+    BundleDefinitionLocator,
+    CourseLocator,
+    DefinitionLocator,
+    VersionTree,
+)
 
 
 class LocatorTests(TestCase):
@@ -31,15 +37,19 @@ class DefinitionLocatorTests(TestCase):
     """
 
     def test_description_locator_url(self):
-        object_id = '{:024x}'.format(random.randrange(16 ** 24))
-        definition_locator = DefinitionLocator('html', object_id)
-        self.assertEqual('def-v1:{}+{}@html'.format(object_id, DefinitionLocator.BLOCK_TYPE_PREFIX),
-                         text_type(definition_locator))
-        self.assertEqual(definition_locator, DefinitionKey.from_string(text_type(definition_locator)))
+        object_id = "{:024x}".format(random.randrange(16 ** 24))
+        definition_locator = DefinitionLocator("html", object_id)
+        self.assertEqual(
+            "def-v1:{}+{}@html".format(object_id, DefinitionLocator.BLOCK_TYPE_PREFIX),
+            text_type(definition_locator),
+        )
+        self.assertEqual(
+            definition_locator, DefinitionKey.from_string(text_type(definition_locator))
+        )
 
     def test_description_locator_version(self):
-        object_id = '{:024x}'.format(random.randrange(16 ** 24))
-        definition_locator = DefinitionLocator('html', object_id)
+        object_id = "{:024x}".format(random.randrange(16 ** 24))
+        definition_locator = DefinitionLocator("html", object_id)
         self.assertEqual(object_id, str(definition_locator.version))
 
 
@@ -48,9 +58,10 @@ class BundleDefinitionLocatorTests(TestCase):
     """
     Tests for :class:`.BundleDefinitionLocator`
     """
+
     @ddt.data(
-        'bundle-olx:4b33677f-7eb7-4376-8752-024ce057d7e8:5:html:html/introduction/definition.xml',
-        'bundle-olx:22825172-cde7-4fbd-ac03-a45b631e8e65:studio_draft:video:video/v1/definition.xml',
+        "bundle-olx:4b33677f-7eb7-4376-8752-024ce057d7e8:5:html:html/introduction/definition.xml",
+        "bundle-olx:22825172-cde7-4fbd-ac03-a45b631e8e65:studio_draft:video:video/v1/definition.xml",
     )
     def test_roundtrip_from_string(self, key):
         def_key = DefinitionKey.from_string(key)
@@ -138,7 +149,7 @@ class VersionTreeTests(TestCase):
         with self.assertRaises(ValueError):
             VersionTree(versionless_locator)
 
-        test_id_loc = '519665f6223ebd6980884f2b'
+        test_id_loc = "519665f6223ebd6980884f2b"
         test_id = ObjectId(test_id_loc)
         valid_locator = CourseLocator(version_guid=test_id)
         self.assertEqual(VersionTree(valid_locator).children, [])

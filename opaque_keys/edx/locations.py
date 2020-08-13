@@ -6,7 +6,12 @@ import re
 import warnings
 
 from opaque_keys.edx.keys import i4xEncoder as real_i4xEncoder
-from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator, Locator
+from opaque_keys.edx.locator import (
+    AssetLocator,
+    BlockUsageLocator,
+    CourseLocator,
+    Locator,
+)
 
 
 # This file passes through to protected members of the non-deprecated classes,
@@ -22,20 +27,23 @@ class i4xEncoder(real_i4xEncoder):  # pylint: disable=invalid-name
         warnings.warn(
             "locations.i4xEncoder.default is deprecated! Please use keys.i4xEncoder.default",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
         super(i4xEncoder, self).__init__(*args, **kwargs)
 
 
 class SlashSeparatedCourseKey(CourseLocator):
     """Deprecated. Use :class:`locator.CourseLocator`"""
+
     def __init__(self, org, course, run, **kwargs):
         warnings.warn(
             "SlashSeparatedCourseKey is deprecated! Please use locator.CourseLocator",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
-        super(SlashSeparatedCourseKey, self).__init__(org, course, run, deprecated=True, **kwargs)
+        super(SlashSeparatedCourseKey, self).__init__(
+            org, course, run, deprecated=True, **kwargs
+        )
 
     @classmethod
     def from_string(cls, serialized):
@@ -43,7 +51,7 @@ class SlashSeparatedCourseKey(CourseLocator):
         warnings.warn(
             "SlashSeparatedCourseKey is deprecated! Please use locator.CourseLocator",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
         return CourseLocator.from_string(serialized)
 
@@ -57,10 +65,10 @@ class SlashSeparatedCourseKey(CourseLocator):
         """
         # Deprecation value is hard coded as True in __init__ and therefore does not need to be passed through.
         return SlashSeparatedCourseKey(
-            kwargs.pop('org', self.org),
-            kwargs.pop('course', self.course),
-            kwargs.pop('run', self.run),
-            **kwargs
+            kwargs.pop("org", self.org),
+            kwargs.pop("course", self.course),
+            kwargs.pop("run", self.run),
+            **kwargs,
         )
 
 
@@ -76,19 +84,17 @@ class LocationBase:
             warnings.warn(
                 "Location is deprecated! Please use locator.BlockUsageLocator",
                 DeprecationWarning,
-                stacklevel=3
+                stacklevel=3,
             )
         elif issubclass(cls, AssetLocation):
             warnings.warn(
                 "AssetLocation is deprecated! Please use locator.AssetLocator",
                 DeprecationWarning,
-                stacklevel=3
+                stacklevel=3,
             )
         else:
             warnings.warn(
-                u"{} is deprecated!".format(cls),
-                DeprecationWarning,
-                stacklevel=3
+                "{} is deprecated!".format(cls), DeprecationWarning, stacklevel=3
             )
 
     @property
@@ -97,7 +103,7 @@ class LocationBase:
         warnings.warn(
             "Tag is no longer supported as a property of Locators.",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
         return self.DEPRECATED_TAG
 
@@ -140,14 +146,15 @@ class LocationBase:
     def __init__(self, org, course, run, category, name, revision=None, **kwargs):
         self._deprecation_warning()
 
-        course_key = kwargs.pop('course_key', CourseLocator(
-            org=org,
-            course=course,
-            run=run,
-            branch=revision,
-            deprecated=True
-        ))
-        super(LocationBase, self).__init__(course_key, category, name, deprecated=True, **kwargs)
+        course_key = kwargs.pop(
+            "course_key",
+            CourseLocator(
+                org=org, course=course, run=run, branch=revision, deprecated=True
+            ),
+        )
+        super(LocationBase, self).__init__(
+            course_key, category, name, deprecated=True, **kwargs
+        )
 
     @classmethod
     def from_string(cls, serialized):
@@ -165,7 +172,7 @@ class LocationBase:
 class Location(LocationBase, BlockUsageLocator):
     """Deprecated. Use :class:`locator.BlockUsageLocator`"""
 
-    DEPRECATED_TAG = 'i4x'
+    DEPRECATED_TAG = "i4x"
 
     def replace(self, **kwargs):
         """
@@ -177,13 +184,13 @@ class Location(LocationBase, BlockUsageLocator):
         """
         #  NOTE: Deprecation value is hard coded as True in __init__ and therefore does not need to be passed through.
         return Location(
-            kwargs.pop('org', self.course_key.org),
-            kwargs.pop('course', self.course_key.course),
-            kwargs.pop('run', self.course_key.run),
-            kwargs.pop('category', self.block_type),
-            kwargs.pop('name', self.block_id),
-            revision=kwargs.pop('revision', self.branch),
-            **kwargs
+            kwargs.pop("org", self.course_key.org),
+            kwargs.pop("course", self.course_key.course),
+            kwargs.pop("run", self.course_key.run),
+            kwargs.pop("category", self.block_type),
+            kwargs.pop("name", self.block_id),
+            revision=kwargs.pop("revision", self.branch),
+            **kwargs,
         )
 
 
@@ -191,14 +198,17 @@ class DeprecatedLocation(BlockUsageLocator):
     """
     The short-lived location:org+course+run+block_type+block_id syntax
     """
-    CANONICAL_NAMESPACE = 'location'
-    URL_RE_SOURCE = u"""
+
+    CANONICAL_NAMESPACE = "location"
+    URL_RE_SOURCE = """
         (?P<org>{ALLOWED_ID_CHARS}+)\\+(?P<course>{ALLOWED_ID_CHARS}+)\\+(?P<run>{ALLOWED_ID_CHARS}+)\\+
         (?P<block_type>{ALLOWED_ID_CHARS}+)\\+
         (?P<block_id>{ALLOWED_ID_CHARS}+)
-        """.format(ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS)
+        """.format(
+        ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
+    )
 
-    URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.VERBOSE | re.UNICODE)
+    URL_RE = re.compile("^" + URL_RE_SOURCE + r"\Z", re.VERBOSE | re.UNICODE)
 
     def __init__(self, course_key, block_type, block_id):
         if course_key.version_guid is not None:
@@ -217,24 +227,26 @@ class DeprecatedLocation(BlockUsageLocator):
         # Allow access to _from_string protected method
         parsed_parts = cls.parse_url(serialized)
         course_key = CourseLocator(
-            parsed_parts.get('org'), parsed_parts.get('course'), parsed_parts.get('run'),
+            parsed_parts.get("org"),
+            parsed_parts.get("course"),
+            parsed_parts.get("run"),
             # specifically not saying deprecated=True b/c that would lose the run on serialization
         )
-        block_id = parsed_parts.get('block_id')
-        return cls(course_key, parsed_parts.get('block_type'), block_id)
+        block_id = parsed_parts.get("block_id")
+        return cls(course_key, parsed_parts.get("block_type"), block_id)
 
     def _to_string(self):
         """
         Return a string representing this location.
         """
         parts = [self.org, self.course, self.run, self.block_type, self.block_id]
-        return u"+".join(parts)
+        return "+".join(parts)
 
 
 class AssetLocation(LocationBase, AssetLocator):
     """Deprecated. Use :class:`locator.AssetLocator`"""
 
-    DEPRECATED_TAG = 'c4x'
+    DEPRECATED_TAG = "c4x"
 
     def replace(self, **kwargs):
         """
@@ -246,13 +258,13 @@ class AssetLocation(LocationBase, AssetLocator):
         """
         # NOTE: Deprecation value is hard coded as True in __init__ and therefore does not need to be passed through.
         return AssetLocation(
-            kwargs.pop('org', self.org),
-            kwargs.pop('course', self.course),
-            kwargs.pop('run', self.run),
-            kwargs.pop('category', self.block_type),
-            kwargs.pop('name', self.block_id),
-            revision=kwargs.pop('revision', self.branch),
-            **kwargs
+            kwargs.pop("org", self.org),
+            kwargs.pop("course", self.course),
+            kwargs.pop("run", self.run),
+            kwargs.pop("category", self.block_type),
+            kwargs.pop("name", self.block_id),
+            revision=kwargs.pop("revision", self.branch),
+            **kwargs,
         )
 
     @classmethod

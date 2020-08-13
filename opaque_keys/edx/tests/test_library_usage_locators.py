@@ -31,32 +31,35 @@ class TestLibraryUsageLocators(LocatorBaseTest):
     """
     Tests of :class:`.LibraryUsageLocator`
     """
-    @ddt.data(
-        u"lib-block-v1:org+lib+{}@category+{}@name".format(BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
-        u"lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name".format(VERSION_PREFIX,
-                                                                                       BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
-        u"lib-block-v1:org+lib+{}@revision+{}@category+{}@name".format(LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX,
-                                                                       BLOCK_PREFIX),
-    )
-    def test_string_roundtrip(self, url):
-        self.assertEqual(
-            url,
-            text_type(UsageKey.from_string(url))
-        )
 
     @ddt.data(
-        ("TestX", "lib3", "html", "html17"),
-        (u"ΩmegaX", u"Ωμέγα", u"html", u"html15"),
+        "lib-block-v1:org+lib+{}@category+{}@name".format(
+            BLOCK_TYPE_PREFIX, BLOCK_PREFIX
+        ),
+        "lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name".format(
+            VERSION_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX
+        ),
+        "lib-block-v1:org+lib+{}@revision+{}@category+{}@name".format(
+            LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX
+        ),
+    )
+    def test_string_roundtrip(self, url):
+        self.assertEqual(url, text_type(UsageKey.from_string(url)))
+
+    @ddt.data(
+        ("TestX", "lib3", "html", "html17"), ("ΩmegaX", "Ωμέγα", "html", "html15"),
     )
     @ddt.unpack
     def test_constructor(self, org, lib, block_type, block_id):
         lib_key = LibraryLocator(org=org, library=lib)
-        lib_usage_key = LibraryUsageLocator(library_key=lib_key, block_type=block_type, block_id=block_id)
-        lib_usage_key2 = UsageKey.from_string(u"lib-block-v1:{}+{}+{}@{}+{}@{}".format(
-            org, lib,
-            BLOCK_TYPE_PREFIX, block_type,
-            BLOCK_PREFIX, block_id
-        ))
+        lib_usage_key = LibraryUsageLocator(
+            library_key=lib_key, block_type=block_type, block_id=block_id
+        )
+        lib_usage_key2 = UsageKey.from_string(
+            "lib-block-v1:{}+{}+{}@{}+{}@{}".format(
+                org, lib, BLOCK_TYPE_PREFIX, block_type, BLOCK_PREFIX, block_id
+            )
+        )
         self.assertEqual(lib_usage_key, lib_usage_key2)
         self.assertEqual(lib_usage_key.library_key, lib_key)
         self.assertEqual(lib_usage_key.library_key, lib_key)
@@ -68,40 +71,49 @@ class TestLibraryUsageLocators(LocatorBaseTest):
     def test_no_deprecated_support(self):
         lib_key = LibraryLocator(org="TestX", library="problem-bank-15")
         with self.assertRaises(InvalidKeyError):
-            LibraryUsageLocator(library_key=lib_key, block_type="html", block_id="html1", deprecated=True)
+            LibraryUsageLocator(
+                library_key=lib_key,
+                block_type="html",
+                block_id="html1",
+                deprecated=True,
+            )
 
     @ddt.data(
-        {'block_type': 'html', 'block_id': ''},
-        {'block_type': '', 'block_id': 'html15'},
-        {'block_type': '+$%@', 'block_id': 'html15'},
-        {'block_type': 'html', 'block_id': '+$%@'},
+        {"block_type": "html", "block_id": ""},
+        {"block_type": "", "block_id": "html15"},
+        {"block_type": "+$%@", "block_id": "html15"},
+        {"block_type": "html", "block_id": "+$%@"},
     )
     def test_constructor_invalid(self, kwargs):
         lib_key = LibraryLocator(org="TestX", library="problem-bank-15")
         with self.assertRaises(InvalidKeyError):
             LibraryUsageLocator(library_key=lib_key, **kwargs)
 
-    @ddt.data(
-        "lib-block-v1:org+lib+{}@category".format(BLOCK_TYPE_PREFIX),
-    )
+    @ddt.data("lib-block-v1:org+lib+{}@category".format(BLOCK_TYPE_PREFIX),)
     def test_constructor_invalid_from_string(self, url):
         with self.assertRaises(InvalidKeyError):
             UsageKey.from_string(url)
 
-    @ddt.data(*itertools.product(
-        (
-            u"lib-block-v1:org+lib+{}@category+{}@name{}".format(BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'),
-            u"lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name{}".format(
-                VERSION_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'
+    @ddt.data(
+        *itertools.product(
+            (
+                "lib-block-v1:org+lib+{}@category+{}@name{}".format(
+                    BLOCK_TYPE_PREFIX, BLOCK_PREFIX, "{}"
+                ),
+                "lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name{}".format(
+                    VERSION_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX, "{}"
+                ),
+                "lib-block-v1:org+lib+{}@revision+{}@category+{}@name{}".format(
+                    LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX, "{}"
+                ),
             ),
-            u"lib-block-v1:org+lib+{}@revision+{}@category+{}@name{}".format(
-                LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'
-            ),
-        ),
-        ('\n', '\n\n', ' ', '   ', '   \n'),
-    ))
+            ("\n", "\n\n", " ", "   ", "   \n"),
+        )
+    )
     @ddt.unpack
-    def test_constructor_invalid_from_string_trailing_whitespace(self, locator_fmt, whitespace):
+    def test_constructor_invalid_from_string_trailing_whitespace(
+        self, locator_fmt, whitespace
+    ):
         with self.assertRaises(InvalidKeyError):
             UsageKey.from_string(locator_fmt.format(whitespace))
 
@@ -114,7 +126,9 @@ class TestLibraryUsageLocators(LocatorBaseTest):
         # pylint: disable=no-member
         org1, lib1, block_type1, block_id1 = "org1", "lib1", "type1", "id1"
         lib_key1 = LibraryLocator(org=org1, library=lib1)
-        usage1 = LibraryUsageLocator(library_key=lib_key1, block_type=block_type1, block_id=block_id1)
+        usage1 = LibraryUsageLocator(
+            library_key=lib_key1, block_type=block_type1, block_id=block_id1
+        )
         self.assertEqual(usage1.org, org1)
         self.assertEqual(usage1.library_key, lib_key1)
 
@@ -141,12 +155,16 @@ class TestLibraryUsageLocators(LocatorBaseTest):
         self.assertEqual(usage4.block_type, block_type1)  # Unchanged
         self.assertEqual(usage4.block_id, block_id1)  # Unchanged
 
-        usage5a = usage1.replace(version='aaaaaaaaaaaaaaaaaaaaaaaa')
-        usage5b = usage1.replace(version_guid=ObjectId('bbbbbbbbbbbbbbbbbbbbbbbb'))
-        usage5c = usage1.for_version(ObjectId('cccccccccccccccccccccccc'))
-        self.assertEqual(usage5a.library_key.version_guid, ObjectId('aaaaaaaaaaaaaaaaaaaaaaaa'))
-        self.assertEqual(usage5b.course_key.version_guid, ObjectId('bbbbbbbbbbbbbbbbbbbbbbbb'))
-        self.assertEqual(usage5c.version_guid, ObjectId('cccccccccccccccccccccccc'))
+        usage5a = usage1.replace(version="aaaaaaaaaaaaaaaaaaaaaaaa")
+        usage5b = usage1.replace(version_guid=ObjectId("bbbbbbbbbbbbbbbbbbbbbbbb"))
+        usage5c = usage1.for_version(ObjectId("cccccccccccccccccccccccc"))
+        self.assertEqual(
+            usage5a.library_key.version_guid, ObjectId("aaaaaaaaaaaaaaaaaaaaaaaa")
+        )
+        self.assertEqual(
+            usage5b.course_key.version_guid, ObjectId("bbbbbbbbbbbbbbbbbbbbbbbb")
+        )
+        self.assertEqual(usage5c.version_guid, ObjectId("cccccccccccccccccccccccc"))
         self.assertEqual(usage5a.block_type, block_type1)  # Unchanged
         self.assertEqual(usage5a.block_id, block_id1)  # Unchanged
         self.assertEqual(usage5b.block_type, block_type1)  # Unchanged
@@ -157,21 +175,27 @@ class TestLibraryUsageLocators(LocatorBaseTest):
         usage6 = usage5a.version_agnostic()
         self.assertEqual(usage6, usage1)
 
-        usage7 = usage1.for_branch('tribble')
-        self.assertEqual(usage7.branch, 'tribble')
-        self.assertEqual(usage7.library_key.branch, 'tribble')
+        usage7 = usage1.for_branch("tribble")
+        self.assertEqual(usage7.branch, "tribble")
+        self.assertEqual(usage7.library_key.branch, "tribble")
 
     def test_lib_usage_locator_no_deprecated_support(self):
         with self.assertRaises(NotImplementedError):
-            LibraryUsageLocator._from_deprecated_string("1/2/3")  # pylint: disable=protected-access
+            LibraryUsageLocator._from_deprecated_string(
+                "1/2/3"
+            )  # pylint: disable=protected-access
 
         lib_key = LibraryLocator(org="TestX", library="lib")
-        usage = LibraryUsageLocator(library_key=lib_key, block_type="html", block_id="123")
+        usage = LibraryUsageLocator(
+            library_key=lib_key, block_type="html", block_id="123"
+        )
         with self.assertRaises(NotImplementedError):
             usage._to_deprecated_string()  # pylint: disable=protected-access
 
         with self.assertRaises(NotImplementedError):
-            LibraryUsageLocator._from_deprecated_son("", "")  # pylint: disable=protected-access
+            LibraryUsageLocator._from_deprecated_son(
+                "", ""
+            )  # pylint: disable=protected-access
 
         with self.assertRaises(NotImplementedError):
             usage.to_deprecated_son()
@@ -182,6 +206,7 @@ class LibraryUsageLocatorV2Tests(TestCase):
     """
     Tests for :class:`.LibraryUsageLocatorV2`
     """
+
     VALID_LIB_KEY = LibraryLocatorV2("SchoolX", "lib-slug")
 
     def test_inheritance(self):
@@ -192,9 +217,9 @@ class LibraryUsageLocatorV2Tests(TestCase):
         self.assertIsInstance(usage_key, UsageKey)
 
     @ddt.data(
-        'lb:MITx:reallyhardproblems:problem:problem1',
-        'lb:edX:demo-lib.2019:html:introduction',
-        'lb:UnicodeX:i18n-lib:html:έψιλον',
+        "lb:MITx:reallyhardproblems:problem:problem1",
+        "lb:edX:demo-lib.2019:html:introduction",
+        "lb:UnicodeX:i18n-lib:html:έψιλον",
     )
     def test_roundtrip_from_string(self, key):
         usage_key = UsageKey.from_string(key)
@@ -214,7 +239,11 @@ class LibraryUsageLocatorV2Tests(TestCase):
 
     @ddt.data(
         # Keys with invalid lib_key:
-        {"lib_key": "lib:SchoolX:this-is-a-string", "block_type": "problem", "usage_id": "p1"},
+        {
+            "lib_key": "lib:SchoolX:this-is-a-string",
+            "block_type": "problem",
+            "usage_id": "p1",
+        },
         {"lib_key": "foobar", "block_type": "problem", "usage_id": "p1"},
         {"lib_key": None, "block_type": "problem", "usage_id": "p1"},
         # Keys with invalid block_type:
@@ -237,5 +266,7 @@ class LibraryUsageLocatorV2Tests(TestCase):
         this pattern is used in several places in the LMS that still support
         old mongo.
         """
-        key = LibraryUsageLocatorV2(self.VALID_LIB_KEY, block_type="problem", usage_id="p1")
+        key = LibraryUsageLocatorV2(
+            self.VALID_LIB_KEY, block_type="problem", usage_id="p1"
+        )
         self.assertEqual(key.map_into_course(key.course_key), key)
