@@ -20,7 +20,7 @@ docutils==0.16            # via readme-renderer, sphinx
 edx-lint==1.5.0           # via -r requirements/test.txt
 edx-sphinx-theme==1.5.0   # via -r requirements/doc.in
 execnet==1.7.1            # via -r requirements/test.txt, pytest-cache, pytest-xdist
-hypothesis==5.23.11       # via -r requirements/test.txt
+hypothesis==5.24.2        # via -r requirements/test.txt
 idna==2.10                # via requests
 imagesize==1.2.0          # via sphinx
 importlib-metadata==1.7.0  # via -r requirements/test.txt, pluggy, pytest
@@ -58,7 +58,7 @@ requests==2.24.0          # via sphinx
 six==1.15.0               # via -r requirements/test.txt, astroid, bleach, edx-lint, edx-sphinx-theme, mock, packaging, pathlib2, pytest-xdist, readme-renderer, stevedore
 snowballstemmer==2.0.0    # via sphinx
 sortedcontainers==2.2.2   # via -r requirements/test.txt, hypothesis
-sphinx==3.1.2             # via -r requirements/doc.in, edx-sphinx-theme
+sphinx==3.2.0             # via -r requirements/doc.in, edx-sphinx-theme
 sphinxcontrib-applehelp==1.0.2  # via sphinx
 sphinxcontrib-devhelp==1.0.2  # via sphinx
 sphinxcontrib-htmlhelp==1.0.3  # via sphinx
