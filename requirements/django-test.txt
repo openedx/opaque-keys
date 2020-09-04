@@ -6,23 +6,24 @@
 #
 apipkg==1.5               # via -r requirements/test.txt, execnet
 astroid==2.3.3            # via -r requirements/test.txt, pylint, pylint-celery
-attrs==19.3.0             # via -r requirements/test.txt, hypothesis, pytest
+attrs==20.1.0             # via -r requirements/test.txt, hypothesis, pytest
 click-log==0.3.2          # via -r requirements/test.txt, edx-lint
 click==7.1.2              # via -r requirements/test.txt, click-log, edx-lint
 coverage==5.2.1           # via -r requirements/test.txt, pytest-cov
 ddt==1.4.1                # via -r requirements/test.txt
-edx-lint==1.5.0           # via -r requirements/test.txt
+edx-lint==1.5.2           # via -r requirements/test.txt
 execnet==1.7.1            # via -r requirements/test.txt, pytest-cache, pytest-xdist
-hypothesis==5.24.2        # via -r requirements/test.txt
+hypothesis==5.3.1         # via -r requirements/test.txt
 importlib-metadata==1.7.0  # via -r requirements/test.txt, pluggy, pytest
+iniconfig==1.0.1          # via -r requirements/test.txt, pytest
 isort==4.3.21             # via -r requirements/test.txt, pylint
 lazy-object-proxy==1.4.3  # via -r requirements/test.txt, astroid
 mccabe==0.6.1             # via -r requirements/test.txt, pylint
 mock==3.0.5               # via -r requirements/test.txt
-more-itertools==8.4.0     # via -r requirements/test.txt, pytest
+more-itertools==8.5.0     # via -r requirements/test.txt, pytest
 packaging==20.4           # via -r requirements/test.txt, pytest
 pathlib2==2.3.5           # via -r requirements/test.txt, pytest
-pbr==5.4.5                # via -r requirements/test.txt, stevedore
+pbr==5.5.0                # via -r requirements/test.txt, stevedore
 pep8==1.7.1               # via -r requirements/test.txt, pytest-pep8
 pluggy==0.13.1            # via -r requirements/test.txt, pytest
 py==1.9.0                 # via -r requirements/test.txt, pytest, pytest-forked
@@ -34,19 +35,19 @@ pylint==2.4.4             # via -r requirements/test.txt, edx-lint, pylint-celer
 pymongo==3.11.0           # via -r requirements/test.txt
 pyparsing==2.4.7          # via -r requirements/test.txt, packaging
 pytest-cache==1.0         # via -r requirements/test.txt, pytest-pep8
-pytest-cov==2.10.0        # via -r requirements/test.txt
+pytest-cov==2.10.1        # via -r requirements/test.txt
 pytest-django==3.9.0      # via -r requirements/django-test.in
 pytest-forked==1.3.0      # via -r requirements/test.txt, pytest-xdist
 pytest-pep8==1.0.6        # via -r requirements/test.txt
-pytest-pylint==0.15.1     # via -c requirements/constraints.txt, -r requirements/test.txt
-pytest-xdist==1.34.0      # via -r requirements/test.txt
-pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements/test.txt, pytest-cache, pytest-cov, pytest-django, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
+pytest-pylint==0.17.0     # via -r requirements/test.txt
+pytest-xdist==2.1.0       # via -r requirements/test.txt
+pytest==6.0.1             # via -r requirements/test.txt, pytest-cache, pytest-cov, pytest-django, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
 pytz==2020.1              # via -r requirements/django.txt, django
-six==1.15.0               # via -r requirements/test.txt, astroid, edx-lint, mock, packaging, pathlib2, pytest-xdist, stevedore
+six==1.15.0               # via -r requirements/test.txt, astroid, edx-lint, mock, packaging, pathlib2, stevedore
 sortedcontainers==2.2.2   # via -r requirements/test.txt, hypothesis
 sqlparse==0.3.1           # via -r requirements/django.txt, django
 stevedore==1.32.0         # via -r requirements/test.txt
+toml==0.10.1              # via -r requirements/test.txt, pytest, pytest-pylint
 typed-ast==1.4.1          # via -r requirements/test.txt, astroid
-wcwidth==0.2.5            # via -r requirements/test.txt, pytest
 wrapt==1.11.2             # via -r requirements/test.txt, astroid
 zipp==1.2.0               # via -r requirements/test.txt, importlib-metadata
