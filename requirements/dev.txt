@@ -10,12 +10,12 @@ appdirs==1.4.4            # via -r requirements/travis.txt, virtualenv
 astroid==2.3.3            # via -r requirements/doc.txt, pylint, pylint-celery
 attrs==20.2.0             # via -r requirements/doc.txt, hypothesis, pytest
 babel==2.8.0              # via -r requirements/doc.txt, sphinx
-bleach==3.1.5             # via -r requirements/doc.txt, readme-renderer
+bleach==3.2.0             # via -r requirements/doc.txt, readme-renderer
 certifi==2020.6.20        # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 chardet==3.0.4            # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 click-log==0.3.2          # via -r requirements/doc.txt, edx-lint
 click==7.1.2              # via -r requirements/doc.txt, -r requirements/pip-tools.txt, click-log, edx-lint, pip-tools
-coverage==5.2.1           # via -r requirements/doc.txt, -r requirements/travis.txt, coveralls, pytest-cov
+coverage==5.3             # via -r requirements/doc.txt, -r requirements/travis.txt, coveralls, pytest-cov
 coveralls==2.1.2          # via -r requirements/travis.txt
 ddt==1.4.1                # via -r requirements/doc.txt
 distlib==0.3.1            # via -r requirements/travis.txt, virtualenv
@@ -45,7 +45,7 @@ pip-tools==5.3.1          # via -r requirements/pip-tools.txt
 pluggy==0.13.1            # via -r requirements/doc.txt, -r requirements/travis.txt, pytest, tox
 py==1.9.0                 # via -r requirements/doc.txt, -r requirements/travis.txt, pytest, pytest-forked, tox
 pycodestyle==2.6.0        # via -r requirements/doc.txt
-pygments==2.6.1           # via -r requirements/doc.txt, readme-renderer, sphinx
+pygments==2.7.0           # via -r requirements/doc.txt, readme-renderer, sphinx
 pylint-celery==0.3        # via -r requirements/doc.txt, edx-lint
 pylint-django==2.0.11     # via -r requirements/doc.txt, edx-lint
 pylint-plugin-utils==0.6  # via -r requirements/doc.txt, pylint-celery, pylint-django
