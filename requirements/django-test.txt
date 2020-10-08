@@ -44,7 +44,7 @@ pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements
 pytz==2020.1              # via -r requirements/django.txt, django
 six==1.15.0               # via -r requirements/test.txt, astroid, edx-lint, mock, packaging, pathlib2, pytest-xdist, stevedore
 sortedcontainers==2.2.2   # via -r requirements/test.txt, hypothesis
-sqlparse==0.3.1           # via -r requirements/django.txt, django
+sqlparse==0.4.0           # via -r requirements/django.txt, django
 stevedore==1.32.0         # via -r requirements/test.txt
 typed-ast==1.4.1          # via -r requirements/test.txt, astroid
 wcwidth==0.2.5            # via -r requirements/test.txt, pytest
