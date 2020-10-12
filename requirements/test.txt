@@ -14,7 +14,7 @@ ddt==1.4.1                # via -r requirements/test.in
 edx-lint==1.5.2           # via -r requirements/test.in
 execnet==1.7.1            # via pytest-cache, pytest-xdist
 hypothesis==5.33.2        # via -r requirements/test.in
-importlib-metadata==1.7.0  # via -c requirements/constraints.txt, pluggy, pytest
+importlib-metadata==2.0.0  # via pluggy, pytest
 isort==4.3.21             # via pylint
 lazy-object-proxy==1.4.3  # via astroid
 mccabe==0.6.1             # via pylint
