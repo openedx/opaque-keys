@@ -28,7 +28,7 @@ filelock==3.0.12          # via -r requirements/travis.txt, tox, virtualenv
 hypothesis==5.33.2        # via -r requirements/doc.txt
 idna==2.10                # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 imagesize==1.2.0          # via -r requirements/doc.txt, sphinx
-importlib-metadata==1.7.0  # via -c requirements/constraints.txt, -r requirements/doc.txt, -r requirements/travis.txt, pluggy, pytest, tox, virtualenv
+importlib-metadata==2.0.0  # via -r requirements/doc.txt, -r requirements/travis.txt, pluggy, pytest, tox, virtualenv
 importlib-resources==3.0.0  # via -r requirements/travis.txt, virtualenv
 isort==4.3.21             # via -r requirements/doc.txt, pylint
 jinja2==2.11.2            # via -r requirements/doc.txt, sphinx
@@ -60,7 +60,7 @@ pytest-pylint==0.15.1     # via -c requirements/constraints.txt, -r requirements
 pytest-xdist==1.34.0      # via -c requirements/constraints.txt, -r requirements/doc.txt
 pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements/doc.txt, pytest-cache, pytest-cov, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
 pytz==2020.1              # via -r requirements/doc.txt, babel
-readme-renderer==26.0     # via -r requirements/doc.txt
+readme-renderer==27.0     # via -r requirements/doc.txt
 requests==2.24.0          # via -r requirements/doc.txt, -r requirements/travis.txt, coveralls, sphinx
 six==1.15.0               # via -r requirements/doc.txt, -r requirements/pip-tools.txt, -r requirements/travis.txt, astroid, bleach, edx-lint, edx-sphinx-theme, mock, packaging, pathlib2, pip-tools, pytest-xdist, readme-renderer, stevedore, tox, virtualenv
 snowballstemmer==2.0.0    # via -r requirements/doc.txt, sphinx
@@ -75,7 +75,7 @@ sphinxcontrib-serializinghtml==1.1.4  # via -r requirements/doc.txt, sphinx
 stevedore==1.32.0         # via -r requirements/doc.txt
 toml==0.10.1              # via -r requirements/travis.txt, tox
 tox-battery==0.6.1        # via -r requirements/travis.txt
-tox==3.20.0               # via -r requirements/travis.txt, tox-battery
+tox==3.20.1               # via -r requirements/travis.txt, tox-battery
 typed-ast==1.4.1          # via -r requirements/doc.txt, astroid
 urllib3==1.25.10          # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 virtualenv==20.0.33       # via -r requirements/travis.txt, tox
