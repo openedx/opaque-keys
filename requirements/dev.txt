@@ -78,7 +78,7 @@ tox-battery==0.6.1        # via -r requirements/travis.txt
 tox==3.20.1               # via -r requirements/travis.txt, tox-battery
 typed-ast==1.4.1          # via -r requirements/doc.txt, astroid
 urllib3==1.25.10          # via -r requirements/doc.txt, -r requirements/travis.txt, requests
-virtualenv==20.0.33       # via -r requirements/travis.txt, tox
+virtualenv==20.0.34       # via -r requirements/travis.txt, tox
 wcwidth==0.2.5            # via -r requirements/doc.txt, pytest
 webencodings==0.5.1       # via -r requirements/doc.txt, bleach
 wrapt==1.11.2             # via -r requirements/doc.txt, astroid
