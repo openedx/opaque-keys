@@ -23,7 +23,7 @@ execnet==1.7.1            # via -r requirements/test.txt, pytest-cache, pytest-x
 hypothesis==5.33.2        # via -r requirements/test.txt
 idna==2.10                # via requests
 imagesize==1.2.0          # via sphinx
-importlib-metadata==2.0.0  # via -r requirements/test.txt, pluggy, pytest
+importlib-metadata==2.1.0  # via -r requirements/test.txt, pluggy, pytest
 isort==4.3.21             # via -r requirements/test.txt, pylint
 jinja2==2.11.2            # via sphinx
 lazy-object-proxy==1.4.3  # via -r requirements/test.txt, astroid
