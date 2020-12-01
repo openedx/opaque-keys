@@ -20,7 +20,7 @@ lazy-object-proxy==1.4.3  # via astroid
 mccabe==0.6.1             # via pylint
 mock==3.0.5               # via -r requirements/test.in
 more-itertools==8.6.0     # via pytest
-packaging==20.4           # via pytest
+packaging==20.7           # via pytest
 pathlib2==2.3.5           # via pytest
 pbr==5.5.1                # via -r requirements/base.txt, stevedore
 pep8==1.7.1               # via pytest-pep8
@@ -40,7 +40,7 @@ pytest-pep8==1.0.6        # via -r requirements/test.in
 pytest-pylint==0.15.1     # via -c requirements/constraints.txt, -r requirements/test.in
 pytest-xdist==1.34.0      # via -c requirements/constraints.txt, -r requirements/test.in
 pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements/test.in, pytest-cache, pytest-cov, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
-six==1.15.0               # via -r requirements/base.txt, astroid, edx-lint, mock, packaging, pathlib2, pytest-xdist, stevedore
+six==1.15.0               # via -r requirements/base.txt, astroid, edx-lint, mock, pathlib2, pytest-xdist, stevedore
 sortedcontainers==2.3.0   # via hypothesis
 stevedore==1.32.0         # via -r requirements/base.txt
 typed-ast==1.4.1          # via astroid
