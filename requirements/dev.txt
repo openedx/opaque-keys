@@ -11,7 +11,7 @@ astroid==2.3.3            # via -r requirements/doc.txt, pylint, pylint-celery
 attrs==20.3.0             # via -r requirements/doc.txt, hypothesis, pytest
 babel==2.9.0              # via -r requirements/doc.txt, sphinx
 bleach==3.2.1             # via -r requirements/doc.txt, readme-renderer
-certifi==2020.11.8        # via -r requirements/doc.txt, -r requirements/travis.txt, requests
+certifi==2020.12.5        # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 chardet==3.0.4            # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 click-log==0.3.2          # via -r requirements/doc.txt, edx-lint
 click==7.1.2              # via -r requirements/doc.txt, -r requirements/pip-tools.txt, click-log, edx-lint, pip-tools
@@ -45,7 +45,7 @@ pip-tools==5.4.0          # via -r requirements/pip-tools.txt
 pluggy==0.13.1            # via -r requirements/doc.txt, -r requirements/travis.txt, pytest, tox
 py==1.9.0                 # via -r requirements/doc.txt, -r requirements/travis.txt, pytest, pytest-forked, tox
 pycodestyle==2.6.0        # via -r requirements/doc.txt
-pygments==2.7.2           # via -r requirements/doc.txt, readme-renderer, sphinx
+pygments==2.7.3           # via -r requirements/doc.txt, readme-renderer, sphinx
 pylint-celery==0.3        # via -r requirements/doc.txt, edx-lint
 pylint-django==2.0.11     # via -r requirements/doc.txt, edx-lint
 pylint-plugin-utils==0.6  # via -r requirements/doc.txt, pylint-celery, pylint-django
@@ -78,7 +78,7 @@ tox-battery==0.6.1        # via -r requirements/travis.txt
 tox==3.20.1               # via -r requirements/travis.txt, tox-battery
 typed-ast==1.4.1          # via -r requirements/doc.txt, astroid
 urllib3==1.26.2           # via -r requirements/doc.txt, -r requirements/travis.txt, requests
-virtualenv==20.2.1        # via -r requirements/travis.txt, tox
+virtualenv==20.2.2        # via -r requirements/travis.txt, tox
 wcwidth==0.2.5            # via -r requirements/doc.txt, pytest
 webencodings==0.5.1       # via -r requirements/doc.txt, bleach
 wrapt==1.11.2             # via -r requirements/doc.txt, astroid

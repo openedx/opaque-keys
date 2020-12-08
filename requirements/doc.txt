@@ -10,7 +10,7 @@ astroid==2.3.3            # via -r requirements/test.txt, pylint, pylint-celery
 attrs==20.3.0             # via -r requirements/test.txt, hypothesis, pytest
 babel==2.9.0              # via sphinx
 bleach==3.2.1             # via readme-renderer
-certifi==2020.11.8        # via requests
+certifi==2020.12.5        # via requests
 chardet==3.0.4            # via requests
 click-log==0.3.2          # via -r requirements/test.txt, edx-lint
 click==7.1.2              # via -r requirements/test.txt, click-log, edx-lint
@@ -38,7 +38,7 @@ pep8==1.7.1               # via -r requirements/test.txt, pytest-pep8
 pluggy==0.13.1            # via -r requirements/test.txt, pytest
 py==1.9.0                 # via -r requirements/test.txt, pytest, pytest-forked
 pycodestyle==2.6.0        # via -r requirements/test.txt
-pygments==2.7.2           # via readme-renderer, sphinx
+pygments==2.7.3           # via readme-renderer, sphinx
 pylint-celery==0.3        # via -r requirements/test.txt, edx-lint
 pylint-django==2.0.11     # via -r requirements/test.txt, edx-lint
 pylint-plugin-utils==0.6  # via -r requirements/test.txt, pylint-celery, pylint-django
