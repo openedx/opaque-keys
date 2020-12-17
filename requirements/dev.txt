@@ -12,7 +12,7 @@ attrs==20.3.0             # via -r requirements/doc.txt, hypothesis, pytest
 babel==2.9.0              # via -r requirements/doc.txt, sphinx
 bleach==3.2.1             # via -r requirements/doc.txt, readme-renderer
 certifi==2020.12.5        # via -r requirements/doc.txt, -r requirements/travis.txt, requests
-chardet==3.0.4            # via -r requirements/doc.txt, -r requirements/travis.txt, requests
+chardet==4.0.0            # via -r requirements/doc.txt, -r requirements/travis.txt, requests
 click-log==0.3.2          # via -r requirements/doc.txt, edx-lint
 click==7.1.2              # via -r requirements/doc.txt, -r requirements/pip-tools.txt, click-log, edx-lint, pip-tools
 coverage==5.3             # via -r requirements/doc.txt, -r requirements/travis.txt, coveralls, pytest-cov
@@ -37,13 +37,13 @@ markupsafe==1.1.1         # via -r requirements/doc.txt, jinja2
 mccabe==0.6.1             # via -r requirements/doc.txt, pylint
 mock==3.0.5               # via -r requirements/doc.txt
 more-itertools==8.6.0     # via -r requirements/doc.txt, pytest
-packaging==20.7           # via -r requirements/doc.txt, -r requirements/travis.txt, bleach, pytest, sphinx, tox
+packaging==20.8           # via -r requirements/doc.txt, -r requirements/travis.txt, bleach, pytest, sphinx, tox
 pathlib2==2.3.5           # via -r requirements/doc.txt, pytest
 pbr==5.5.1                # via -r requirements/doc.txt, stevedore
 pep8==1.7.1               # via -r requirements/doc.txt, pytest-pep8
 pip-tools==5.4.0          # via -r requirements/pip-tools.txt
 pluggy==0.13.1            # via -r requirements/doc.txt, -r requirements/travis.txt, pytest, tox
-py==1.9.0                 # via -r requirements/doc.txt, -r requirements/travis.txt, pytest, pytest-forked, tox
+py==1.10.0                # via -r requirements/doc.txt, -r requirements/travis.txt, pytest, pytest-forked, tox
 pycodestyle==2.6.0        # via -r requirements/doc.txt
 pygments==2.7.3           # via -r requirements/doc.txt, readme-renderer, sphinx
 pylint-celery==0.3        # via -r requirements/doc.txt, edx-lint
@@ -61,7 +61,7 @@ pytest-xdist==1.34.0      # via -c requirements/constraints.txt, -r requirements
 pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements/doc.txt, pytest-cache, pytest-cov, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
 pytz==2020.4              # via -r requirements/doc.txt, babel
 readme-renderer==28.0     # via -r requirements/doc.txt
-requests==2.25.0          # via -r requirements/doc.txt, -r requirements/travis.txt, coveralls, sphinx
+requests==2.25.1          # via -r requirements/doc.txt, -r requirements/travis.txt, coveralls, sphinx
 six==1.15.0               # via -r requirements/doc.txt, -r requirements/pip-tools.txt, -r requirements/travis.txt, astroid, bleach, edx-lint, edx-sphinx-theme, mock, pathlib2, pip-tools, pytest-xdist, readme-renderer, stevedore, tox, virtualenv
 snowballstemmer==2.0.0    # via -r requirements/doc.txt, sphinx
 sortedcontainers==2.3.0   # via -r requirements/doc.txt, hypothesis
