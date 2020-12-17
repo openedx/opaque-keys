@@ -20,12 +20,12 @@ lazy-object-proxy==1.4.3  # via -r requirements/test.txt, astroid
 mccabe==0.6.1             # via -r requirements/test.txt, pylint
 mock==3.0.5               # via -r requirements/test.txt
 more-itertools==8.6.0     # via -r requirements/test.txt, pytest
-packaging==20.7           # via -r requirements/test.txt, pytest
+packaging==20.8           # via -r requirements/test.txt, pytest
 pathlib2==2.3.5           # via -r requirements/test.txt, pytest
 pbr==5.5.1                # via -r requirements/test.txt, stevedore
 pep8==1.7.1               # via -r requirements/test.txt, pytest-pep8
 pluggy==0.13.1            # via -r requirements/test.txt, pytest
-py==1.9.0                 # via -r requirements/test.txt, pytest, pytest-forked
+py==1.10.0                # via -r requirements/test.txt, pytest, pytest-forked
 pycodestyle==2.6.0        # via -r requirements/test.txt
 pylint-celery==0.3        # via -r requirements/test.txt, edx-lint
 pylint-django==2.0.11     # via -r requirements/test.txt, edx-lint
