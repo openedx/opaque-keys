@@ -71,7 +71,7 @@ class Base10Key(DummyKey):
 
     def _to_string(self):
         # For some reason, pylint doesn't think this key has a `value` attribute
-        return text_type(self.value)  # pylint: disable=no-member
+        return str(self.value)  # pylint: disable=no-member
 
     @classmethod
     def _from_string(cls, serialized):
@@ -140,7 +140,7 @@ class KeyTests(TestCase):
             DummyKey.from_string('dict:abcd')
 
         with self.assertRaises(InvalidKeyError):
-            DummyKey.from_string(u'\xfb:abcd')
+            DummyKey.from_string('\xfb:abcd')
 
     def test_unknown_namespace(self):
         with self.assertRaises(InvalidKeyError):

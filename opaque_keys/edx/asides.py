@@ -41,7 +41,7 @@ def _decode_v1(value):
 
     reencoded = _encode_v1(decode_dollars)
     if reencoded != value:
-        raise ValueError(u'Ambiguous encoded value, {!r} could have been encoded as {!r}'.format(value, reencoded))
+        raise ValueError(f'Ambiguous encoded value, {value!r} could have been encoded as {reencoded!r}')
 
     return decode_dollars
 
@@ -52,7 +52,7 @@ def _join_keys_v1(left, right):
     """
     if left.endswith(':') or '::' in left:
         raise ValueError("Can't join a left string ending in ':' or containing '::'")
-    return u"{}::{}".format(_encode_v1(left), _encode_v1(right))
+    return "{}::{}".format(_encode_v1(left), _encode_v1(right))
 
 
 def _split_keys_v1(joined):
@@ -91,7 +91,7 @@ def _join_keys_v2(left, right):
     """
     Join two keys into a format separable by using _split_keys_v2.
     """
-    return u"{}::{}".format(_encode_v2(left), _encode_v2(right))
+    return "{}::{}".format(_encode_v2(left), _encode_v2(right))
 
 
 def _split_keys_v2(joined):
@@ -114,7 +114,7 @@ class AsideDefinitionKeyV2(AsideDefinitionKey):  # pylint: disable=abstract-meth
     DEFINITION_KEY_FIELDS = ('block_type', )
 
     def __init__(self, definition_key, aside_type, deprecated=False):
-        super(AsideDefinitionKeyV2, self).__init__(definition_key=definition_key, aside_type=aside_type,
+        super().__init__(definition_key=definition_key, aside_type=aside_type,
                                                    deprecated=deprecated)
 
     @property
@@ -136,7 +136,7 @@ class AsideDefinitionKeyV2(AsideDefinitionKey):  # pylint: disable=abstract-meth
                 in self.DEFINITION_KEY_FIELDS
                 if key in kwargs
             })
-        return super(AsideDefinitionKeyV2, self).replace(**kwargs)
+        return super().replace(**kwargs)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -163,7 +163,7 @@ class AsideDefinitionKeyV2(AsideDefinitionKey):  # pylint: disable=abstract-meth
 
         This serialization should not include the namespace prefix.
         """
-        return _join_keys_v2(text_type(self.definition_key), text_type(self.aside_type))
+        return _join_keys_v2(str(self.definition_key), str(self.aside_type))
 
 
 class AsideDefinitionKeyV1(AsideDefinitionKeyV2):  # pylint: disable=abstract-method
@@ -173,10 +173,10 @@ class AsideDefinitionKeyV1(AsideDefinitionKeyV2):  # pylint: disable=abstract-me
     CANONICAL_NAMESPACE = 'aside-def-v1'
 
     def __init__(self, definition_key, aside_type, deprecated=False):
-        serialized_def_key = text_type(definition_key)
+        serialized_def_key = str(definition_key)
         if '::' in serialized_def_key or serialized_def_key.endswith(':'):
             raise ValueError("Definition keys containing '::' or ending with ':' break the v1 parsing code")
-        super(AsideDefinitionKeyV1, self).__init__(definition_key=definition_key, aside_type=aside_type,
+        super().__init__(definition_key=definition_key, aside_type=aside_type,
                                                    deprecated=deprecated)
 
     @classmethod
@@ -204,7 +204,7 @@ class AsideDefinitionKeyV1(AsideDefinitionKeyV2):  # pylint: disable=abstract-me
 
         This serialization should not include the namespace prefix.
         """
-        return _join_keys_v1(text_type(self.definition_key), text_type(self.aside_type))
+        return _join_keys_v1(str(self.definition_key), str(self.aside_type))
 
 
 class AsideUsageKeyV2(AsideUsageKey):  # pylint: disable=abstract-method
@@ -219,7 +219,7 @@ class AsideUsageKeyV2(AsideUsageKey):  # pylint: disable=abstract-method
     USAGE_KEY_ATTRS = ('block_id', 'block_type', 'definition_key', 'course_key')
 
     def __init__(self, usage_key, aside_type, deprecated=False):
-        super(AsideUsageKeyV2, self).__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
+        super().__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
 
     @property
     def block_id(self):
@@ -269,7 +269,7 @@ class AsideUsageKeyV2(AsideUsageKey):  # pylint: disable=abstract-method
                 in self.USAGE_KEY_ATTRS
                 if key in kwargs
             })
-        return super(AsideUsageKeyV2, self).replace(**kwargs)
+        return super().replace(**kwargs)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -296,7 +296,7 @@ class AsideUsageKeyV2(AsideUsageKey):  # pylint: disable=abstract-method
 
         This serialization should not include the namespace prefix.
         """
-        return _join_keys_v2(text_type(self.usage_key), text_type(self.aside_type))
+        return _join_keys_v2(str(self.usage_key), str(self.aside_type))
 
 
 class AsideUsageKeyV1(AsideUsageKeyV2):  # pylint: disable=abstract-method
@@ -306,10 +306,10 @@ class AsideUsageKeyV1(AsideUsageKeyV2):  # pylint: disable=abstract-method
     CANONICAL_NAMESPACE = 'aside-usage-v1'
 
     def __init__(self, usage_key, aside_type, deprecated=False):
-        serialized_usage_key = text_type(usage_key)
+        serialized_usage_key = str(usage_key)
         if '::' in serialized_usage_key or serialized_usage_key.endswith(':'):
             raise ValueError("Usage keys containing '::' or ending with ':' break the v1 parsing code")
-        super(AsideUsageKeyV1, self).__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
+        super().__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -336,4 +336,4 @@ class AsideUsageKeyV1(AsideUsageKeyV2):  # pylint: disable=abstract-method
 
         This serialization should not include the namespace prefix.
         """
-        return _join_keys_v1(text_type(self.usage_key), text_type(self.aside_type))
+        return _join_keys_v1(str(self.usage_key), str(self.aside_type))

@@ -8,7 +8,7 @@ try:
 except ImportError:  # pragma: no cover
     TestCase = object
 
-import mock
+from unittest import mock
 import pytest
 import six
 
@@ -28,7 +28,7 @@ def enable_db_access_for_all_tests(db):
 class TestCreatorMixin(TestCase):
     """Tests of the CreatorMixin class."""
     def setUp(self):
-        super(TestCreatorMixin, self).setUp()
+        super().setUp()
         self.model = ExampleModel(key='key-1')
         self.model.save()
 
@@ -60,17 +60,14 @@ class TestOpaqueKeyField(TestCase):
     def test_get_prep_value_newline_not_modified(self):
         field = ComplexModel()._meta.get_field('course_key')
         course_key = mock.MagicMock(spec=CourseKey)
-        if six.PY2:
-            course_key.__unicode__.return_value = 'course-v1:edX+FUN101x+3T2017\n'
-        else:
-            course_key.__str__.return_value = 'course-v1:edX+FUN101x+3T2017\n'
+        course_key.__str__.return_value = 'course-v1:edX+FUN101x+3T2017\n'
         self.assertEqual('course-v1:edX+FUN101x+3T2017\n', field.get_prep_value(course_key))
 
 
 class TestKeyFieldImplementation(TestCase):
     """Tests for all of the subclasses of OpaqueKeyField."""
     def setUp(self):
-        super(TestKeyFieldImplementation, self).setUp()
+        super().setUp()
         self.course_key = CourseKey.from_string('course-v1:edX+FUN101x+3T2017')
         self.usage_key = UsageKey.from_string('block-v1:edX+FUN101x+3T2017+type@html+block@12345678')
         self.model = ComplexModel(
@@ -81,7 +78,7 @@ class TestKeyFieldImplementation(TestCase):
         self.model.save()
 
     def tearDown(self):
-        super(TestKeyFieldImplementation, self).tearDown()
+        super().tearDown()
         self.model.delete()
 
     def test_fetch_from_db(self):
@@ -89,7 +86,7 @@ class TestKeyFieldImplementation(TestCase):
         self.assertEqual(fetched, self.model)
 
     def test_fetch_from_db_with_str(self):
-        fetched = ComplexModel.objects.filter(course_key=six.text_type(self.course_key)).first()
+        fetched = ComplexModel.objects.filter(course_key=str(self.course_key)).first()
         self.assertEqual(fetched, self.model)
 
     def test_validation_no_errors(self):

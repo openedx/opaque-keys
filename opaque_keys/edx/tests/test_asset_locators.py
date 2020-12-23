@@ -24,7 +24,7 @@ class TestAssetLocators(TestCase):
     def test_deprecated_round_trip_asset_location(self, path):
         self.assertEqual(
             path,
-            text_type(AssetKey.from_string(path)),
+            str(AssetKey.from_string(path)),
         )
 
     def test_map_into_course_asset_location(self):
@@ -109,7 +109,7 @@ class TestAssetLocators(TestCase):
         asset_locator = AssetKey.from_string(path)
         self.assertEqual(
             path,
-            text_type(asset_locator),
+            str(asset_locator),
         )
 
     @ddt.data(*itertools.product(

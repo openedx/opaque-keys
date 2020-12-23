@@ -24,13 +24,13 @@ class Container:
 
     def transform(self):
         """A toy function that does something interesting with this object's data."""
-        return 'TEST_{}_TEST'.format(self.text)
+        return f'TEST_{self.text}_TEST'
 
     def __str__(self):
         return self.text
 
     def __repr__(self):
-        return '<Container key={}>'.format(self.text)
+        return f'<Container key={self.text}>'
 
     def __eq__(self, obj):
         return self.text == obj.text
@@ -41,7 +41,7 @@ class ExampleField(CreatorMixin, CharField):
     """A simple Django Field to assist in testing the CreatorMixin class."""
 
     def to_python(self, value):
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             return Container(value)
         return value
 
@@ -57,7 +57,7 @@ class ExampleModel(Model):
 
 def is_edx(value):
     if value.org.lower() != 'edx':
-        raise ValidationError(u'{} is not edx'.format(value))
+        raise ValidationError(f'{value} is not edx')
 
 
 class ComplexModel(Model):

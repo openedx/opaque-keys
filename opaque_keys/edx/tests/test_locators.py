@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Tests for opaque_keys.edx.locator.
 """
@@ -33,9 +32,9 @@ class DefinitionLocatorTests(TestCase):
     def test_description_locator_url(self):
         object_id = '{:024x}'.format(random.randrange(16 ** 24))
         definition_locator = DefinitionLocator('html', object_id)
-        self.assertEqual('def-v1:{}+{}@html'.format(object_id, DefinitionLocator.BLOCK_TYPE_PREFIX),
-                         text_type(definition_locator))
-        self.assertEqual(definition_locator, DefinitionKey.from_string(text_type(definition_locator)))
+        self.assertEqual(f'def-v1:{object_id}+{DefinitionLocator.BLOCK_TYPE_PREFIX}@html',
+                         str(definition_locator))
+        self.assertEqual(definition_locator, DefinitionKey.from_string(str(definition_locator)))
 
     def test_description_locator_version(self):
         object_id = '{:024x}'.format(random.randrange(16 ** 24))
@@ -54,7 +53,7 @@ class BundleDefinitionLocatorTests(TestCase):
     )
     def test_roundtrip_from_string(self, key):
         def_key = DefinitionKey.from_string(key)
-        serialized = text_type(def_key)
+        serialized = str(def_key)
         self.assertEqual(key, serialized)
 
     @ddt.data(
@@ -79,7 +78,7 @@ class BundleDefinitionLocatorTests(TestCase):
     )
     def test_roundtrip_from_key(self, key_args):
         key = BundleDefinitionLocator(**key_args)
-        serialized = text_type(key)
+        serialized = str(key)
         deserialized = DefinitionKey.from_string(serialized)
         self.assertEqual(key, deserialized)
 

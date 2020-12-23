@@ -143,7 +143,7 @@ def _aside_v1_exclusions(draw, strategy):
     AsideDefinitionKeyV1 or AsideUsageKeyV1.
     """
     key = draw(strategy)
-    serialized = text_type(key)
+    serialized = str(key)
     assume('::' not in serialized)
     assume(not serialized.endswith(':'))
     return key

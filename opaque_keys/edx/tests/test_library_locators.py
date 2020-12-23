@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Tests of LibraryLocators
 """
@@ -84,7 +83,7 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         org = 'TestX'
         code = 'test-problem-bank'
         lib_key = LibraryLocator(org=org, library=code)
-        lib_key2 = CourseKey.from_string(text_type(lib_key))
+        lib_key2 = CourseKey.from_string(str(lib_key))
         self.assertEqual(lib_key, lib_key2)
 
     def test_lib_key_make_usage_key(self):
@@ -93,8 +92,8 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         made = lib_key.make_usage_key('html', 'html17')
         self.assertEqual(usage_key, made)
         self.assertEqual(
-            text_type(usage_key),
-            text_type(made)
+            str(usage_key),
+            str(made)
         )
 
     def test_lib_key_not_deprecated(self):
@@ -124,7 +123,7 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         self.assertEqual(lib_key.org, org)
         self.assertEqual(lib_key.library, code)  # pylint: disable=no-member
         self.assertEqual(lib_key.branch, branch)  # pylint: disable=no-member
-        lib_key2 = CourseKey.from_string(text_type(lib_key))
+        lib_key2 = CourseKey.from_string(str(lib_key))
         self.assertEqual(lib_key, lib_key2)
         self.assertEqual(lib_key.branch, branch)  # pylint: disable=no-member
 
@@ -190,10 +189,10 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         self.assertEqual(str(lib_key.version_guid), version_id_str)  # pylint: disable=no-member
         # Allow access to _to_string
         # pylint: disable=protected-access
-        expected_str = u'@'.join((lib_key.VERSION_PREFIX, version_id_str))
+        expected_str = '@'.join((lib_key.VERSION_PREFIX, version_id_str))
         self.assertEqual(lib_key._to_string(), expected_str)
-        self.assertEqual(str(lib_key), u'library-v1:' + expected_str)
-        self.assertEqual(lib_key.html_id(), u'library-v1:' + expected_str)
+        self.assertEqual(str(lib_key), 'library-v1:' + expected_str)
+        self.assertEqual(lib_key.html_id(), 'library-v1:' + expected_str)
 
     def test_library_constructor_version_url(self):
         # Test parsing a url when it starts with a version ID and there is also a block ID.
@@ -283,7 +282,7 @@ class LibraryLocatorV2Tests(TestCase):
     )
     def test_roundtrip_from_string(self, key):
         lib_key = LearningContextKey.from_string(key)
-        serialized = text_type(lib_key)
+        serialized = str(lib_key)
         self.assertEqual(key, serialized)
 
     @ddt.data(
@@ -293,7 +292,7 @@ class LibraryLocatorV2Tests(TestCase):
     )
     def test_roundtrip_from_key(self, key_args):
         key = LibraryLocatorV2(**key_args)
-        serialized = text_type(key)
+        serialized = str(key)
         deserialized = LearningContextKey.from_string(serialized)
         self.assertEqual(key, deserialized)
 

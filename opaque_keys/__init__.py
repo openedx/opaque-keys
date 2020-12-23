@@ -28,7 +28,7 @@ class InvalidKeyError(Exception):
     by any available providers).
     """
     def __init__(self, key_class, serialized):
-        super(InvalidKeyError, self).__init__(u'{}: {}'.format(key_class, serialized))
+        super().__init__(f'{key_class}: {serialized}')
 
 
 class OpaqueKeyMetaclass(ABCMeta):
@@ -40,12 +40,11 @@ class OpaqueKeyMetaclass(ABCMeta):
         if '__slots__' not in attrs:
             for field in attrs.get('KEY_FIELDS', []):
                 attrs.setdefault(field, None)
-        return super(OpaqueKeyMetaclass, mcs).__new__(mcs, name, bases, attrs)
+        return super().__new__(mcs, name, bases, attrs)
 
 
-@python_2_unicode_compatible
 @total_ordering
-class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
+class OpaqueKey(metaclass=OpaqueKeyMetaclass):
     """
     A base-class for implementing pluggable opaque keys. Individual key subclasses identify
     particular types of resources, without specifying the actual form of the key (or
@@ -103,7 +102,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
 
     KEY_FIELDS = []
     CANONICAL_NAMESPACE = None
-    NAMESPACE_SEPARATOR = u':'
+    NAMESPACE_SEPARATOR = ':'
     CHECKED_INIT = True
 
     # ============= ABSTRACT METHODS ==============
@@ -245,7 +244,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
             # Cache that the namespace doesn't correspond to a known plugin,
             # so that we don't waste time checking every time we hit
             # a particular unknown namespace (like i4x)
-            raise InvalidKeyError(cls, u'{}:*'.format(namespace))
+            raise InvalidKeyError(cls, f'{namespace}:*')
 
     LOADED_DRIVERS = defaultdict()  # If you change default, change test_default_deprecated
 
@@ -269,7 +268,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         Register a deprecated fallback class for this class to revert to.
         """
         if hasattr(cls, 'deprecated_fallback'):
-            raise AttributeError(u"Error: cannot register two fallback classes for {!r}.".format(cls))
+            raise AttributeError(f"Error: cannot register two fallback classes for {cls!r}.")
         cls.deprecated_fallback = fallback
 
     # ============= VALUE SEMANTICS ==============
@@ -293,21 +292,21 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         KEY_FIELDS as the arg order, and validating number and order of args.
         """
         if len(args) + len(kwargs) != len(self.KEY_FIELDS):
-            raise TypeError(u'__init__() takes exactly {} arguments ({} given)'.format(
+            raise TypeError('__init__() takes exactly {} arguments ({} given)'.format(
                 len(self.KEY_FIELDS),
                 len(args) + len(kwargs)
             ))
 
         keyed_args = dict(zip(self.KEY_FIELDS, args))
-        overlapping_args = viewkeys(keyed_args) & viewkeys(kwargs)
+        overlapping_args = keyed_args.keys() & kwargs.keys()
         if overlapping_args:
-            raise TypeError(u'__init__() got multiple values for keyword argument {!r}'.format(overlapping_args[0]))
+            raise TypeError('__init__() got multiple values for keyword argument {!r}'.format(overlapping_args[0]))
 
         keyed_args.update(kwargs)
 
-        for key in viewkeys(keyed_args):
+        for key in keyed_args.keys():
             if key not in self.KEY_FIELDS:
-                raise TypeError(u'__init__() got an unexpected argument {!r}'.format(key))
+                raise TypeError(f'__init__() got an unexpected argument {key!r}')
 
         self._unchecked_init(**keyed_args)
 
@@ -315,7 +314,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         """
         Set all kwargs as attributes.
         """
-        for key, value in viewitems(kwargs):
+        for key, value in kwargs.items():
             setattr(self, key, value)
 
     def replace(self, **kwargs):
@@ -329,7 +328,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         existing_values = {key: getattr(self, key) for key in self.KEY_FIELDS}  # pylint: disable=no-member
         existing_values['deprecated'] = self.deprecated
 
-        if all(value == existing_values[key] for (key, value) in iteritems(kwargs)):
+        if all(value == existing_values[key] for (key, value) in kwargs.items()):
             return self
 
         existing_values.update(kwargs)
@@ -337,12 +336,12 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
 
     def __setattr__(self, name, value):
         if getattr(self, '_initialized', False):
-            raise AttributeError(u"Can't set {!r}. OpaqueKeys are immutable.".format(name))
+            raise AttributeError(f"Can't set {name!r}. OpaqueKeys are immutable.")
 
-        super(OpaqueKey, self).__setattr__(name, value)  # pylint: disable=no-member
+        super().__setattr__(name, value)  # pylint: disable=no-member
 
     def __delattr__(self, name):
-        raise AttributeError(u"Can't delete {!r}. OpaqueKeys are immutable.".format(name))
+        raise AttributeError(f"Can't delete {name!r}. OpaqueKeys are immutable.")
 
     def __copy__(self):
         """
@@ -388,7 +387,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
     def __lt__(self, other):
         if (self.KEY_FIELDS, self.CANONICAL_NAMESPACE, self.deprecated) != (other.KEY_FIELDS, other.CANONICAL_NAMESPACE,
                                                                             other.deprecated):
-            raise TypeError(u"{!r} is incompatible with {!r}".format(self, other))
+            raise TypeError(f"{self!r} is incompatible with {other!r}")
         return self._key < other._key  # pylint: disable=protected-access
 
     def __hash__(self):
@@ -402,4 +401,4 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
 
     def __len__(self):
         """Return the number of characters in the serialized OpaqueKey"""
-        return len(text_type(self))
+        return len(str(self))
