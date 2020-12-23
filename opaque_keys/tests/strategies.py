@@ -4,7 +4,6 @@
 
 from functools import singledispatch, update_wrapper
 import string
-from six import text_type
 
 from hypothesis import strategies, assume
 from hypothesis.strategies._internal.core import cacheable

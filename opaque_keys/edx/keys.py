@@ -5,7 +5,6 @@ OpaqueKey abstract classes for edx-platform object types (courses, definitions, 
 import json
 from abc import abstractmethod, abstractproperty
 import warnings
-from six import text_type
 
 from opaque_keys import OpaqueKey
 

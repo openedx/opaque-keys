@@ -7,7 +7,6 @@ from unittest import TestCase
 
 import ddt
 from bson.objectid import ObjectId
-from six import text_type
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import UsageKey
@@ -32,10 +31,9 @@ class TestLibraryUsageLocators(LocatorBaseTest):
     """
     @ddt.data(
         f"lib-block-v1:org+lib+{BLOCK_TYPE_PREFIX}@category+{BLOCK_PREFIX}@name",
-        "lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name".format(VERSION_PREFIX,
-                                                                                       BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
-        "lib-block-v1:org+lib+{}@revision+{}@category+{}@name".format(LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX,
-                                                                       BLOCK_PREFIX),
+        f"lib-block-v1:org+lib+{VERSION_PREFIX}@519665f6223ebd6980884f2b+{BLOCK_TYPE_PREFIX}"
+        f"@category+{BLOCK_PREFIX}@name",
+        f"lib-block-v1:org+lib+{LibraryLocator.BRANCH_PREFIX}@revision+{BLOCK_TYPE_PREFIX}@category+{BLOCK_PREFIX}@name"
     )
     def test_string_roundtrip(self, url):
         self.assertEqual(

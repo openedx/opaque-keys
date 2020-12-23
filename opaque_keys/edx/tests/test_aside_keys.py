@@ -5,7 +5,6 @@ Tests of AsideUsageKeyV1 and AsideDefinitionKeyV1.
 import itertools
 from unittest import TestCase
 
-from six import text_type
 import ddt
 from hypothesis import HealthCheck, assume, given, settings, strategies
 

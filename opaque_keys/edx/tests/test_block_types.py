@@ -3,7 +3,6 @@ Tests of BlockTypeKey subclasses.
 """
 from unittest import TestCase
 
-from six import text_type
 import ddt
 
 from opaque_keys import InvalidKeyError

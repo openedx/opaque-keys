@@ -3,7 +3,6 @@ Tests of AssetLocators
 """
 from unittest import TestCase
 
-from six import text_type
 import ddt
 import itertools  # pylint: disable=wrong-import-order
 

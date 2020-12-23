@@ -7,7 +7,6 @@ import logging
 
 from hypothesis import strategies, given, assume, example, HealthCheck, settings
 from hypothesis.strategies._internal.core import cacheable
-from six import text_type
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey
 from opaque_keys import InvalidKeyError
 from opaque_keys.tests.strategies import keys_of_type

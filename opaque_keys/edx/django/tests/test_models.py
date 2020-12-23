@@ -10,7 +10,6 @@ except ImportError:  # pragma: no cover
 
 from unittest import mock
 import pytest
-import six
 
 from opaque_keys.edx.django.models import OpaqueKeyField, UsageKeyField
 from opaque_keys.edx.keys import CourseKey, UsageKey

@@ -8,7 +8,6 @@ from uuid import UUID
 
 import ddt
 from bson.objectid import ObjectId
-from six import text_type
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import DefinitionKey

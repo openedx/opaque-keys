@@ -2,7 +2,6 @@
 Thorough tests of BlockUsageLocator, as well as UsageKeys generally
 """
 from itertools import product
-from six import text_type
 
 import ddt
 import itertools  # pylint: disable=wrong-import-order

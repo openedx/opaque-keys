@@ -16,7 +16,6 @@ store scoped data alongside the definition and usage of the particular XBlock us
 commenting on.
 """
 import re
-from six import text_type
 
 from opaque_keys.edx.keys import AsideDefinitionKey, AsideUsageKey, DefinitionKey, UsageKey
 from opaque_keys import InvalidKeyError
@@ -114,8 +113,7 @@ class AsideDefinitionKeyV2(AsideDefinitionKey):  # pylint: disable=abstract-meth
     DEFINITION_KEY_FIELDS = ('block_type', )
 
     def __init__(self, definition_key, aside_type, deprecated=False):
-        super().__init__(definition_key=definition_key, aside_type=aside_type,
-                                                   deprecated=deprecated)
+        super().__init__(definition_key=definition_key, aside_type=aside_type, deprecated=deprecated)
 
     @property
     def block_type(self):
@@ -155,7 +153,7 @@ class AsideDefinitionKeyV2(AsideDefinitionKey):  # pylint: disable=abstract-meth
             def_key, aside_type = _split_keys_v2(serialized)
             return cls(DefinitionKey.from_string(def_key), aside_type)
         except ValueError as exc:
-            raise InvalidKeyError(cls, exc.args)
+            raise InvalidKeyError(cls, exc.args) from exc
 
     def _to_string(self):
         """
@@ -176,8 +174,7 @@ class AsideDefinitionKeyV1(AsideDefinitionKeyV2):  # pylint: disable=abstract-me
         serialized_def_key = str(definition_key)
         if '::' in serialized_def_key or serialized_def_key.endswith(':'):
             raise ValueError("Definition keys containing '::' or ending with ':' break the v1 parsing code")
-        super().__init__(definition_key=definition_key, aside_type=aside_type,
-                                                   deprecated=deprecated)
+        super().__init__(definition_key=definition_key, aside_type=aside_type, deprecated=deprecated)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -196,7 +193,7 @@ class AsideDefinitionKeyV1(AsideDefinitionKeyV2):  # pylint: disable=abstract-me
             def_key, aside_type = _split_keys_v1(serialized)
             return cls(DefinitionKey.from_string(def_key), aside_type)
         except ValueError as exc:
-            raise InvalidKeyError(cls, exc.args)
+            raise InvalidKeyError(cls, exc.args) from exc
 
     def _to_string(self):
         """
@@ -288,7 +285,7 @@ class AsideUsageKeyV2(AsideUsageKey):  # pylint: disable=abstract-method
             usage_key, aside_type = _split_keys_v2(serialized)
             return cls(UsageKey.from_string(usage_key), aside_type)
         except ValueError as exc:
-            raise InvalidKeyError(cls, exc.args)
+            raise InvalidKeyError(cls, exc.args) from exc
 
     def _to_string(self):
         """
@@ -328,7 +325,7 @@ class AsideUsageKeyV1(AsideUsageKeyV2):  # pylint: disable=abstract-method
             usage_key, aside_type = _split_keys_v1(serialized)
             return cls(UsageKey.from_string(usage_key), aside_type)
         except ValueError as exc:
-            raise InvalidKeyError(cls, exc.args)
+            raise InvalidKeyError(cls, exc.args) from exc
 
     def _to_string(self):
         """

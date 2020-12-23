@@ -9,8 +9,6 @@ except ImportError:  # pragma: no cover
     CharField = object
     Model = object
 
-import six
-
 from opaque_keys.edx.django.models import (
     BlockTypeKeyField, CourseKeyField, CreatorMixin, UsageKeyField
 )

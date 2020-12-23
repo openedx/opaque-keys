@@ -15,8 +15,6 @@ except ImportError:  # pragma: no cover
     CharField = object
     IsNull = object
 
-import six
-
 from opaque_keys.edx.keys import BlockTypeKey, CourseKey, LearningContextKey, UsageKey
 
 
@@ -129,7 +127,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
 
         if isinstance(value, str):
             value = self.KEY_CLASS.from_string(value)
-
+        # pylint: disable=W1116
         assert isinstance(value, self.KEY_CLASS), "%s is not an instance of %s" % (value, self.KEY_CLASS)
         serialized_key = str(_strip_value(value))
         if serialized_key.endswith('\n'):

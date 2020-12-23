@@ -197,10 +197,10 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
                 # but they share the same namespace.
                 raise InvalidKeyError(cls, serialized)
             return key_class._from_string(rest)
-        except InvalidKeyError:
+        except InvalidKeyError as error:
             if hasattr(cls, 'deprecated_fallback') and issubclass(cls.deprecated_fallback, cls):
                 return cls.deprecated_fallback._from_deprecated_string(serialized)
-            raise InvalidKeyError(cls, serialized)
+            raise InvalidKeyError(cls, serialized) from error
 
     @classmethod
     def _separate_namespace(cls, serialized):
@@ -240,11 +240,11 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
 
         try:
             return drivers[namespace].plugin
-        except KeyError:
+        except KeyError as error:
             # Cache that the namespace doesn't correspond to a known plugin,
             # so that we don't waste time checking every time we hit
             # a particular unknown namespace (like i4x)
-            raise InvalidKeyError(cls, f'{namespace}:*')
+            raise InvalidKeyError(cls, f'{namespace}:*') from error
 
     LOADED_DRIVERS = defaultdict()  # If you change default, change test_default_deprecated
 

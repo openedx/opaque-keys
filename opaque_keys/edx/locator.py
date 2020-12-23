@@ -8,11 +8,9 @@ import re
 import warnings
 from uuid import UUID
 
-import six
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from bson.son import SON
-from six import string_types, text_type
 
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, LearningContextKey, UsageKey, UsageKeyV2
@@ -65,8 +63,8 @@ class Locator(OpaqueKey):
         """
         try:
             return ObjectId(value)
-        except InvalidId:
-            raise InvalidKeyError(cls, '"%s" is not a valid version_guid' % value)
+        except InvalidId as key_error:
+            raise InvalidKeyError(cls, '"%s" is not a valid version_guid' % value) from key_error
 
 
 class CheckFieldMixin:
@@ -655,8 +653,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         if block_id is None and not deprecated:
             raise InvalidKeyError(self.__class__, "Missing block id")
 
-        super().__init__(course_key=course_key, block_type=block_type, block_id=block_id,
-                                                **kwargs)
+        super().__init__(course_key=course_key, block_type=block_type, block_id=block_id, **kwargs)
 
     def replace(self, **kwargs):
         # BlockUsageLocator allows for the replacement of 'KEY_FIELDS' in 'self.course_key'.
@@ -1063,11 +1060,11 @@ class LibraryUsageLocator(BlockUsageLocator):
                     self.__class__,
                     f"Invalid block_type or block_id ({block_type!r}, {block_id!r})"
                 )
-        except TypeError:
+        except TypeError as error:
             raise InvalidKeyError(
                 self.__class__,
                 f"Invalid block_type or block_id ({block_type!r}, {block_id!r})"
-            )
+            ) from error
 
         # We skip the BlockUsageLocator init and go to its superclass:
         # pylint: disable=bad-super-call
@@ -1183,8 +1180,8 @@ class DefinitionLocator(Locator, DefinitionKey):
         if isinstance(definition_id, str):
             try:
                 definition_id = self.as_object_id(definition_id)
-            except ValueError:
-                raise InvalidKeyError(DefinitionLocator, definition_id)
+            except ValueError as error:
+                raise InvalidKeyError(DefinitionLocator, definition_id) from error
         super().__init__(definition_id=definition_id, block_type=block_type, deprecated=False)
 
     def _to_string(self):
@@ -1452,8 +1449,8 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
         """
         try:
             (bundle_uuid_str, _version_or_draft, block_type, olx_path) = serialized.split(':', 3)
-        except ValueError:
-            raise InvalidKeyError(cls, serialized)
+        except ValueError as error:
+            raise InvalidKeyError(cls, serialized) from error
 
         if _version_or_draft.isdigit():
             version_string = _version_or_draft
@@ -1469,8 +1466,8 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
                 olx_path=olx_path,
                 _version_or_draft=_version_or_draft,
             )
-        except (ValueError, TypeError):
-            raise InvalidKeyError(cls, serialized)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
 
     @staticmethod
     def _check_draft_name(value):
@@ -1527,8 +1524,8 @@ class LibraryLocatorV2(CheckFieldMixin, LearningContextKey):
         try:
             (org, slug) = serialized.split(':')
             return cls(org=org, slug=slug)
-        except (ValueError, TypeError):
-            raise InvalidKeyError(cls, serialized)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
 
     def make_definition_usage(self, definition_key, usage_id=None):
         """
@@ -1610,8 +1607,8 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
             (library_org, library_slug, block_type, usage_id) = serialized.split(':')
             lib_key = LibraryLocatorV2(library_org, library_slug)
             return cls(lib_key, block_type=block_type, usage_id=usage_id)
-        except (ValueError, TypeError):
-            raise InvalidKeyError(cls, serialized)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
 
     def html_id(self):
         """
