@@ -28,7 +28,7 @@ def enable_db_access_for_all_tests(db):
 class TestCreatorMixin(TestCase):
     """Tests of the CreatorMixin class."""
     def setUp(self):
-        super(TestCreatorMixin, self).setUp()
+        super().setUp()
         self.model = ExampleModel(key='key-1')
         self.model.save()
 
@@ -70,7 +70,7 @@ class TestOpaqueKeyField(TestCase):
 class TestKeyFieldImplementation(TestCase):
     """Tests for all of the subclasses of OpaqueKeyField."""
     def setUp(self):
-        super(TestKeyFieldImplementation, self).setUp()
+        super().setUp()
         self.course_key = CourseKey.from_string('course-v1:edX+FUN101x+3T2017')
         self.usage_key = UsageKey.from_string('block-v1:edX+FUN101x+3T2017+type@html+block@12345678')
         self.model = ComplexModel(
@@ -81,7 +81,7 @@ class TestKeyFieldImplementation(TestCase):
         self.model.save()
 
     def tearDown(self):
-        super(TestKeyFieldImplementation, self).tearDown()
+        super().tearDown()
         self.model.delete()
 
     def test_fetch_from_db(self):

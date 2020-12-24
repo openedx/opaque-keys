@@ -24,7 +24,7 @@ class i4xEncoder(real_i4xEncoder):  # pylint: disable=invalid-name
             DeprecationWarning,
             stacklevel=2
         )
-        super(i4xEncoder, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class SlashSeparatedCourseKey(CourseLocator):
@@ -35,7 +35,7 @@ class SlashSeparatedCourseKey(CourseLocator):
             DeprecationWarning,
             stacklevel=2
         )
-        super(SlashSeparatedCourseKey, self).__init__(org, course, run, deprecated=True, **kwargs)
+        super().__init__(org, course, run, deprecated=True, **kwargs)
 
     @classmethod
     def from_string(cls, serialized):
@@ -147,7 +147,7 @@ class LocationBase:
             branch=revision,
             deprecated=True
         ))
-        super(LocationBase, self).__init__(course_key, category, name, deprecated=True, **kwargs)
+        super().__init__(course_key, category, name, deprecated=True, **kwargs)
 
     @classmethod
     def from_string(cls, serialized):
@@ -207,7 +207,7 @@ class DeprecatedLocation(BlockUsageLocator):
         if course_key.branch is not None:
             raise ValueError("DeprecatedLocations don't support course branches")
 
-        super(DeprecatedLocation, self).__init__(course_key, block_type, block_id)
+        super().__init__(course_key, block_type, block_id)
 
     @classmethod
     def _from_string(cls, serialized):

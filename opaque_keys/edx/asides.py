@@ -111,11 +111,11 @@ class AsideDefinitionKeyV2(AsideDefinitionKey):  # pylint: disable=abstract-meth
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
-    DEFINITION_KEY_FIELDS = ('block_type', )
+    DEFINITION_KEY_FIELDS = ('block_type',)
 
     def __init__(self, definition_key, aside_type, deprecated=False):
-        super(AsideDefinitionKeyV2, self).__init__(definition_key=definition_key, aside_type=aside_type,
-                                                   deprecated=deprecated)
+        super().__init__(definition_key=definition_key, aside_type=aside_type,
+                         deprecated=deprecated)
 
     @property
     def block_type(self):
@@ -136,7 +136,7 @@ class AsideDefinitionKeyV2(AsideDefinitionKey):  # pylint: disable=abstract-meth
                 in self.DEFINITION_KEY_FIELDS
                 if key in kwargs
             })
-        return super(AsideDefinitionKeyV2, self).replace(**kwargs)
+        return super().replace(**kwargs)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -155,7 +155,7 @@ class AsideDefinitionKeyV2(AsideDefinitionKey):  # pylint: disable=abstract-meth
             def_key, aside_type = _split_keys_v2(serialized)
             return cls(DefinitionKey.from_string(def_key), aside_type)
         except ValueError as exc:
-            raise InvalidKeyError(cls, exc.args)
+            raise InvalidKeyError(cls, exc.args) from exc
 
     def _to_string(self):
         """
@@ -176,8 +176,8 @@ class AsideDefinitionKeyV1(AsideDefinitionKeyV2):  # pylint: disable=abstract-me
         serialized_def_key = text_type(definition_key)
         if '::' in serialized_def_key or serialized_def_key.endswith(':'):
             raise ValueError("Definition keys containing '::' or ending with ':' break the v1 parsing code")
-        super(AsideDefinitionKeyV1, self).__init__(definition_key=definition_key, aside_type=aside_type,
-                                                   deprecated=deprecated)
+        super().__init__(definition_key=definition_key, aside_type=aside_type,
+                         deprecated=deprecated)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -196,7 +196,7 @@ class AsideDefinitionKeyV1(AsideDefinitionKeyV2):  # pylint: disable=abstract-me
             def_key, aside_type = _split_keys_v1(serialized)
             return cls(DefinitionKey.from_string(def_key), aside_type)
         except ValueError as exc:
-            raise InvalidKeyError(cls, exc.args)
+            raise InvalidKeyError(cls, exc.args) from exc
 
     def _to_string(self):
         """
@@ -219,7 +219,7 @@ class AsideUsageKeyV2(AsideUsageKey):  # pylint: disable=abstract-method
     USAGE_KEY_ATTRS = ('block_id', 'block_type', 'definition_key', 'course_key')
 
     def __init__(self, usage_key, aside_type, deprecated=False):
-        super(AsideUsageKeyV2, self).__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
+        super().__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
 
     @property
     def block_id(self):
@@ -269,7 +269,7 @@ class AsideUsageKeyV2(AsideUsageKey):  # pylint: disable=abstract-method
                 in self.USAGE_KEY_ATTRS
                 if key in kwargs
             })
-        return super(AsideUsageKeyV2, self).replace(**kwargs)
+        return super().replace(**kwargs)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -288,7 +288,7 @@ class AsideUsageKeyV2(AsideUsageKey):  # pylint: disable=abstract-method
             usage_key, aside_type = _split_keys_v2(serialized)
             return cls(UsageKey.from_string(usage_key), aside_type)
         except ValueError as exc:
-            raise InvalidKeyError(cls, exc.args)
+            raise InvalidKeyError(cls, exc.args) from exc
 
     def _to_string(self):
         """
@@ -309,7 +309,7 @@ class AsideUsageKeyV1(AsideUsageKeyV2):  # pylint: disable=abstract-method
         serialized_usage_key = text_type(usage_key)
         if '::' in serialized_usage_key or serialized_usage_key.endswith(':'):
             raise ValueError("Usage keys containing '::' or ending with ':' break the v1 parsing code")
-        super(AsideUsageKeyV1, self).__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
+        super().__init__(usage_key=usage_key, aside_type=aside_type, deprecated=deprecated)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -328,7 +328,7 @@ class AsideUsageKeyV1(AsideUsageKeyV2):  # pylint: disable=abstract-method
             usage_key, aside_type = _split_keys_v1(serialized)
             return cls(UsageKey.from_string(usage_key), aside_type)
         except ValueError as exc:
-            raise InvalidKeyError(cls, exc.args)
+            raise InvalidKeyError(cls, exc.args) from exc
 
     def _to_string(self):
         """

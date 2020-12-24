@@ -28,7 +28,7 @@ class InvalidKeyError(Exception):
     by any available providers).
     """
     def __init__(self, key_class, serialized):
-        super(InvalidKeyError, self).__init__(u'{}: {}'.format(key_class, serialized))
+        super().__init__(u'{}: {}'.format(key_class, serialized))
 
 
 class OpaqueKeyMetaclass(ABCMeta):
@@ -198,10 +198,10 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
                 # but they share the same namespace.
                 raise InvalidKeyError(cls, serialized)
             return key_class._from_string(rest)
-        except InvalidKeyError:
+        except InvalidKeyError as error:
             if hasattr(cls, 'deprecated_fallback') and issubclass(cls.deprecated_fallback, cls):
                 return cls.deprecated_fallback._from_deprecated_string(serialized)
-            raise InvalidKeyError(cls, serialized)
+            raise InvalidKeyError(cls, serialized) from error
 
     @classmethod
     def _separate_namespace(cls, serialized):
@@ -241,11 +241,11 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
 
         try:
             return drivers[namespace].plugin
-        except KeyError:
+        except KeyError as error:
             # Cache that the namespace doesn't correspond to a known plugin,
             # so that we don't waste time checking every time we hit
             # a particular unknown namespace (like i4x)
-            raise InvalidKeyError(cls, u'{}:*'.format(namespace))
+            raise InvalidKeyError(cls, u'{}:*'.format(namespace)) from error
 
     LOADED_DRIVERS = defaultdict()  # If you change default, change test_default_deprecated
 
@@ -339,7 +339,7 @@ class OpaqueKey(with_metaclass(OpaqueKeyMetaclass)):
         if getattr(self, '_initialized', False):
             raise AttributeError(u"Can't set {!r}. OpaqueKeys are immutable.".format(name))
 
-        super(OpaqueKey, self).__setattr__(name, value)  # pylint: disable=no-member
+        super().__setattr__(name, value)  # pylint: disable=no-member
 
     def __delattr__(self, name):
         raise AttributeError(u"Can't delete {!r}. OpaqueKeys are immutable.".format(name))

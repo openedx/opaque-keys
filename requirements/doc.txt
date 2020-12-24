@@ -6,7 +6,7 @@
 #
 alabaster==0.7.12         # via sphinx
 apipkg==1.5               # via -r requirements/test.txt, execnet
-astroid==2.3.3            # via -r requirements/test.txt, pylint, pylint-celery
+astroid==2.4.2            # via -r requirements/test.txt, pylint, pylint-celery
 attrs==20.3.0             # via -r requirements/test.txt, hypothesis, pytest
 babel==2.9.0              # via sphinx
 bleach==3.2.1             # via readme-renderer
@@ -14,11 +14,11 @@ certifi==2020.12.5        # via requests
 chardet==4.0.0            # via requests
 click-log==0.3.2          # via -r requirements/test.txt, edx-lint
 click==7.1.2              # via -r requirements/test.txt, click-log, edx-lint
-coverage==5.3             # via -r requirements/test.txt, pytest-cov
+coverage==5.3.1           # via -r requirements/test.txt, pytest-cov
 ddt==1.4.1                # via -r requirements/test.txt
 docutils==0.16            # via readme-renderer, sphinx
-edx-lint==1.5.2           # via -r requirements/test.txt
-edx-sphinx-theme==1.5.0   # via -r requirements/doc.in
+edx-lint==1.6             # via -r requirements/test.txt
+edx-sphinx-theme==1.6.0   # via -r requirements/doc.in
 execnet==1.7.1            # via -r requirements/test.txt, pytest-cache, pytest-xdist
 hypothesis==5.33.2        # via -r requirements/test.txt
 idna==2.10                # via requests
@@ -40,9 +40,9 @@ py==1.10.0                # via -r requirements/test.txt, pytest, pytest-forked
 pycodestyle==2.6.0        # via -r requirements/test.txt
 pygments==2.7.3           # via readme-renderer, sphinx
 pylint-celery==0.3        # via -r requirements/test.txt, edx-lint
-pylint-django==2.0.11     # via -r requirements/test.txt, edx-lint
+pylint-django==2.3.0      # via -r requirements/test.txt, edx-lint
 pylint-plugin-utils==0.6  # via -r requirements/test.txt, pylint-celery, pylint-django
-pylint==2.4.4             # via -r requirements/test.txt, edx-lint, pylint-celery, pylint-django, pylint-plugin-utils, pytest-pylint
+pylint==2.6.0             # via -r requirements/test.txt, edx-lint, pylint-celery, pylint-django, pylint-plugin-utils, pytest-pylint
 pymongo==3.11.2           # via -r requirements/test.txt
 pyparsing==2.4.7          # via -r requirements/test.txt, packaging
 pytest-cache==1.0         # via -r requirements/test.txt, pytest-pep8
@@ -58,7 +58,7 @@ requests==2.25.1          # via sphinx
 six==1.15.0               # via -r requirements/test.txt, astroid, bleach, edx-lint, edx-sphinx-theme, mock, pathlib2, pytest-xdist, readme-renderer, stevedore
 snowballstemmer==2.0.0    # via sphinx
 sortedcontainers==2.3.0   # via -r requirements/test.txt, hypothesis
-sphinx==3.3.1             # via -r requirements/doc.in, edx-sphinx-theme
+sphinx==3.4.0             # via -r requirements/doc.in, edx-sphinx-theme
 sphinxcontrib-applehelp==1.0.2  # via sphinx
 sphinxcontrib-devhelp==1.0.2  # via sphinx
 sphinxcontrib-htmlhelp==1.0.3  # via sphinx
@@ -66,11 +66,12 @@ sphinxcontrib-jsmath==1.0.1  # via sphinx
 sphinxcontrib-qthelp==1.0.3  # via sphinx
 sphinxcontrib-serializinghtml==1.1.4  # via sphinx
 stevedore==1.32.0         # via -r requirements/test.txt
+toml==0.10.2              # via -r requirements/test.txt, pylint
 typed-ast==1.4.1          # via -r requirements/test.txt, astroid
 urllib3==1.26.2           # via requests
 wcwidth==0.2.5            # via -r requirements/test.txt, pytest
 webencodings==0.5.1       # via bleach
-wrapt==1.11.2             # via -r requirements/test.txt, astroid
+wrapt==1.12.1             # via -r requirements/test.txt, astroid
 zipp==1.2.0               # via -r requirements/test.txt, importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:

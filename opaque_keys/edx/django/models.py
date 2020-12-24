@@ -48,7 +48,7 @@ class CreatorMixin:
     See: https://docs.djangoproject.com/en/1.11/releases/1.8/#subfieldbase
     """
     def contribute_to_class(self, cls, name, *args, **kwargs):
-        super(CreatorMixin, self).contribute_to_class(cls, name, *args, **kwargs)
+        super().contribute_to_class(cls, name, *args, **kwargs)
         setattr(cls, name, _Creator(self))
 
     def from_db_value(self, value, expression, connection):
@@ -97,7 +97,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if self.KEY_CLASS is None:
             raise ValueError('Must specify KEY_CLASS in OpaqueKeyField subclasses')
 
-        super(OpaqueKeyField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def to_python(self, value):
         if value is self.Empty or value is None:
@@ -130,7 +130,8 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if isinstance(value, six.string_types):
             value = self.KEY_CLASS.from_string(value)
 
-        assert isinstance(value, self.KEY_CLASS), u"%s is not an instance of %s" % (value, self.KEY_CLASS)
+        assert isinstance(value, self.KEY_CLASS.from_string(value)), \
+            u"%s is not an instance of %s" % (value, self.KEY_CLASS)
         serialized_key = six.text_type(_strip_value(value))
         if serialized_key.endswith('\n'):
             # An opaque key object serialized to a string with a trailing newline.
@@ -147,7 +148,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         """Validate Empty values, otherwise defer to the parent"""
         # raise validation error if the use of this field says it can't be blank but it is
         if self.blank or value is not self.Empty:
-            return super(OpaqueKeyField, self).validate(value, model_instance)
+            return super().validate(value, model_instance)
         raise ValidationError(self.error_messages['blank'])
 
     def run_validators(self, value):
@@ -155,7 +156,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if value is self.Empty:
             return None
 
-        return super(OpaqueKeyField, self).run_validators(value)
+        return super().run_validators(value)
 
 
 class OpaqueKeyFieldEmptyLookupIsNull(IsNull):
@@ -211,7 +212,7 @@ class LocationKeyField(UsageKeyField):
     """
     def __init__(self, *args, **kwargs):
         warnings.warn("LocationKeyField is deprecated. Please use UsageKeyField instead.", stacklevel=2)
-        super(LocationKeyField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class BlockTypeKeyField(OpaqueKeyField):

@@ -24,9 +24,10 @@ class LocalId:
     """
     Class for local ids for non-persisted xblocks (which can have hardcoded block_ids if necessary)
     """
+
     def __init__(self, block_id=None):
         self.block_id = block_id
-        super(LocalId, self).__init__()
+        super().__init__()
 
     def __str__(self):
         return "localid_{}".format(self.block_id or id(self))
@@ -65,14 +66,15 @@ class Locator(OpaqueKey):
         """
         try:
             return ObjectId(value)
-        except InvalidId:
-            raise InvalidKeyError(cls, u'"%s" is not a valid version_guid' % value)
+        except InvalidId as key_error:
+            raise InvalidKeyError(cls, u'"%s" is not a valid version_guid' % value) from key_error
 
 
 class CheckFieldMixin:
     """
     Mixin that provides handy methods for checking field types/values.
     """
+
     @classmethod
     def _check_key_string_field(cls, field_name, value, regexp=re.compile(r'^[a-zA-Z0-9_\-.]+$')):
         """
@@ -141,7 +143,7 @@ class BlockLocatorBase(Locator):
         return match.groupdict()
 
 
-class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-method
+class CourseLocator(BlockLocatorBase, CourseKey):  # pylint: disable=abstract-method
     """
     Examples of valid CourseLocator specifications:
      CourseLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))
@@ -208,7 +210,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
                     raise InvalidKeyError(self.__class__,
                                           u"Special characters not allowed in field {}: '{}'".format(name, value))
 
-        super(CourseLocator, self).__init__(
+        super().__init__(
             org=org,
             course=course,
             run=run,
@@ -459,7 +461,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         if kwargs.get('deprecated', False):
             raise InvalidKeyError(self.__class__, 'LibraryLocator cannot have deprecated=True')
 
-        super(LibraryLocator, self).__init__(
+        super().__init__(
             org=org,
             library=library,
             branch=branch,
@@ -577,9 +579,11 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         if self.library:  # pylint: disable=no-member
             parts.extend([self.org, self.library])  # pylint: disable=no-member
             if self.branch:  # pylint: disable=no-member
-                parts.append(u"{prefix}@{branch}".format(prefix=self.BRANCH_PREFIX, branch=self.branch))  # pylint: disable=no-member
+                parts.append(u"{prefix}@{branch}".format(prefix=self.BRANCH_PREFIX,
+                                                         branch=self.branch))  # pylint: disable=no-member
         if self.version_guid:  # pylint: disable=no-member
-            parts.append(u"{prefix}@{guid}".format(prefix=self.VERSION_PREFIX, guid=self.version_guid))  # pylint: disable=no-member
+            parts.append(u"{prefix}@{guid}".format(prefix=self.VERSION_PREFIX,
+                                                   guid=self.version_guid))  # pylint: disable=no-member
         return u"+".join(parts)
 
     def _to_deprecated_string(self):
@@ -655,8 +659,8 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         if block_id is None and not deprecated:
             raise InvalidKeyError(self.__class__, "Missing block id")
 
-        super(BlockUsageLocator, self).__init__(course_key=course_key, block_type=block_type, block_id=block_id,
-                                                **kwargs)
+        super().__init__(course_key=course_key, block_type=block_type, block_id=block_id,
+                         **kwargs)
 
     def replace(self, **kwargs):
         # BlockUsageLocator allows for the replacement of 'KEY_FIELDS' in 'self.course_key'.
@@ -678,7 +682,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
             kwargs['block_id'] = kwargs.pop('name')
         if 'category' in kwargs and 'block_type' not in kwargs:
             kwargs['block_type'] = kwargs.pop('category')
-        return super(BlockUsageLocator, self).replace(**kwargs)
+        return super().replace(**kwargs)
 
     @classmethod
     def _clean(cls, value, invalid):
@@ -1063,16 +1067,16 @@ class LibraryUsageLocator(BlockUsageLocator):
                     self.__class__,
                     u"Invalid block_type or block_id ({!r}, {!r})".format(block_type, block_id)
                 )
-        except TypeError:
+        except TypeError as type_error:
             raise InvalidKeyError(
                 self.__class__,
                 u"Invalid block_type or block_id ({!r}, {!r})".format(block_type, block_id)
-            )
+            ) from type_error
 
         # We skip the BlockUsageLocator init and go to its superclass:
         # pylint: disable=bad-super-call
-        super(BlockUsageLocator, self).__init__(library_key=library_key, block_type=block_type, block_id=block_id,
-                                                **kwargs)
+        super().__init__(library_key=library_key, block_type=block_type, block_id=block_id,
+                         **kwargs)
 
     def replace(self, **kwargs):
         # BlockUsageLocator allows for the replacement of 'KEY_FIELDS' in 'self.library_key'
@@ -1086,7 +1090,7 @@ class LibraryUsageLocator(BlockUsageLocator):
             kwargs['library_key'] = self.library_key.replace(**lib_key_kwargs)
         if 'course_key' in kwargs:
             kwargs['library_key'] = kwargs.pop('course_key')
-        return super(LibraryUsageLocator, self).replace(**kwargs)
+        return super().replace(**kwargs)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -1179,13 +1183,13 @@ class DefinitionLocator(Locator, DefinitionKey):
     block_type = None
     definition_id = None
 
-    def __init__(self, block_type, definition_id, deprecated=False):    # pylint: disable=unused-argument
+    def __init__(self, block_type, definition_id, deprecated=False):  # pylint: disable=unused-argument
         if isinstance(definition_id, string_types):
             try:
                 definition_id = self.as_object_id(definition_id)
-            except ValueError:
-                raise InvalidKeyError(DefinitionLocator, definition_id)
-        super(DefinitionLocator, self).__init__(definition_id=definition_id, block_type=block_type, deprecated=False)
+            except ValueError as value_error:
+                raise InvalidKeyError(DefinitionLocator, definition_id) from value_error
+        super().__init__(definition_id=definition_id, block_type=block_type, deprecated=False)
 
     def _to_string(self):
         """
@@ -1229,6 +1233,7 @@ class VersionTree:
     """
     Holds trees of Locators to represent version histories.
     """
+
     def __init__(self, locator, tree_dict=None):
         """
         :param locator: must be version specific (Course has version_guid or definition had id)
@@ -1246,7 +1251,7 @@ class VersionTree:
             self.children = [VersionTree(child, tree_dict) for child in tree_dict.get(version, [])]
 
 
-class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-method
+class AssetLocator(BlockUsageLocator, AssetKey):  # pylint: disable=abstract-method
     """
     An AssetKey implementation class.
     """
@@ -1285,7 +1290,7 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
             kwargs['block_id'] = kwargs.pop('path')
         if 'asset_type' in kwargs and 'block_type' not in kwargs:
             kwargs['block_type'] = kwargs.pop('asset_type')
-        return super(AssetLocator, self).replace(**kwargs)
+        return super().replace(**kwargs)
 
     def _to_deprecated_string(self):
         """
@@ -1414,7 +1419,7 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
             assert isinstance(bundle_version, int)
             _version_or_draft = bundle_version
 
-        super(BundleDefinitionLocator, self).__init__(
+        super().__init__(
             bundle_uuid=bundle_uuid,
             block_type=block_type,
             olx_path=olx_path,
@@ -1452,8 +1457,8 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
         """
         try:
             (bundle_uuid_str, _version_or_draft, block_type, olx_path) = serialized.split(':', 3)
-        except ValueError:
-            raise InvalidKeyError(cls, serialized)
+        except ValueError as value_error:
+            raise InvalidKeyError(cls, serialized) from value_error
 
         if _version_or_draft.isdigit():
             version_string = _version_or_draft
@@ -1469,8 +1474,8 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
                 olx_path=olx_path,
                 _version_or_draft=_version_or_draft,
             )
-        except (ValueError, TypeError):
-            raise InvalidKeyError(cls, serialized)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
 
     @staticmethod
     def _check_draft_name(value):
@@ -1511,7 +1516,7 @@ class LibraryLocatorV2(CheckFieldMixin, LearningContextKey):
         """
         self._check_key_string_field("org", org)
         self._check_key_string_field("slug", slug, regexp=self.SLUG_REGEXP)
-        super(LibraryLocatorV2, self).__init__(org=org, slug=slug)
+        super().__init__(org=org, slug=slug)
 
     def _to_string(self):
         """
@@ -1527,8 +1532,8 @@ class LibraryLocatorV2(CheckFieldMixin, LearningContextKey):
         try:
             (org, slug) = serialized.split(':')
             return cls(org=org, slug=slug)
-        except (ValueError, TypeError):
-            raise InvalidKeyError(cls, serialized)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
 
     def make_definition_usage(self, definition_key, usage_id=None):
         """
@@ -1578,7 +1583,7 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
             raise TypeError("lib_key must be a LibraryLocatorV2")
         self._check_key_string_field("block_type", block_type)
         self._check_key_string_field("usage_id", usage_id, regexp=self.USAGE_ID_REGEXP)
-        super(LibraryUsageLocatorV2, self).__init__(
+        super().__init__(
             lib_key=lib_key,
             block_type=block_type,
             usage_id=usage_id,
@@ -1610,8 +1615,8 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
             (library_org, library_slug, block_type, usage_id) = serialized.split(':')
             lib_key = LibraryLocatorV2(library_org, library_slug)
             return cls(lib_key, block_type=block_type, usage_id=usage_id)
-        except (ValueError, TypeError):
-            raise InvalidKeyError(cls, serialized)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
 
     def html_id(self):
         """

@@ -9,7 +9,7 @@ from unittest import TestCase
 class TestDeprecated(TestCase):
     """Base class (with utility methods) for deprecated Location tests"""
     def setUp(self):
-        super(TestDeprecated, self).setUp()
+        super().setUp()
 
         # Manually invoke the catch_warnings context manager so we can capture DeprecationWarnings
         # during this test run

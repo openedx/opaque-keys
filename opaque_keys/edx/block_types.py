@@ -30,7 +30,7 @@ class BlockTypeKeyV1(BlockTypeKey):  # pylint: disable=abstract-method
             raise InvalidKeyError(self.__class__, "block_family may not contain ':'.")
         if block_family in (XBLOCK_V1, XMODULE_V1):
             block_family = XBLOCK_V1
-        super(BlockTypeKeyV1, self).__init__(
+        super().__init__(
             block_family=block_family,
             block_type=block_type,
             deprecated=block_family == XBLOCK_V1,
