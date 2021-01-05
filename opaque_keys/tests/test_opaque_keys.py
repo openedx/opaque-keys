@@ -7,8 +7,6 @@ import json
 import pickle
 from unittest import TestCase
 
-from six import text_type
-
 from opaque_keys import OpaqueKey, InvalidKeyError
 
 
@@ -41,8 +39,8 @@ class HexKey(DummyKey):
             raise InvalidKeyError(cls, serialized)
         try:
             return cls(int(serialized, 16))
-        except (ValueError, TypeError):
-            raise InvalidKeyError(cls, serialized)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
 
 
 class HexKeyTwoFields(DummyKey):
@@ -71,14 +69,14 @@ class Base10Key(DummyKey):
 
     def _to_string(self):
         # For some reason, pylint doesn't think this key has a `value` attribute
-        return text_type(self.value)  # pylint: disable=no-member
+        return str(self.value)  # pylint: disable=no-member
 
     @classmethod
     def _from_string(cls, serialized):
         try:
             return cls(int(serialized))
-        except (ValueError, TypeError):
-            raise InvalidKeyError(cls, serialized)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
 
 
 class DictKey(DummyKey):
@@ -97,8 +95,8 @@ class DictKey(DummyKey):
     def _from_string(cls, serialized):
         try:
             return cls(json.loads(serialized))
-        except (ValueError, TypeError):
-            raise InvalidKeyError(cls, serialized)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
 
     def __hash__(self):
         return hash(type(self)) + sum([hash(elt) for elt in self.value.keys()])  # pylint: disable=no-member
@@ -140,7 +138,7 @@ class KeyTests(TestCase):
             DummyKey.from_string('dict:abcd')
 
         with self.assertRaises(InvalidKeyError):
-            DummyKey.from_string(u'\xfb:abcd')
+            DummyKey.from_string('\xfb:abcd')
 
     def test_unknown_namespace(self):
         with self.assertRaises(InvalidKeyError):

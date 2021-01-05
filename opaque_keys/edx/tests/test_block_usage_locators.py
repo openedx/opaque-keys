@@ -2,7 +2,6 @@
 Thorough tests of BlockUsageLocator, as well as UsageKeys generally
 """
 from itertools import product
-from six import text_type
 
 import ddt
 import itertools  # pylint: disable=wrong-import-order
@@ -22,7 +21,7 @@ GENERAL_PAIRS = [
     (' ', '_'),
     ('abc,', 'abc_'),
     ('ab    fg!@//\\aj', 'ab_fg_aj'),
-    (u"ab\xA9", "ab_"),  # no unicode allowed for now
+    ("ab\xA9", "ab_"),  # no unicode allowed for now
 ]
 
 # Block usage locator to use in tests.
@@ -55,7 +54,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
     def test_string_roundtrip(self, url):
         self.assertEqual(
             url,
-            text_type(UsageKey.from_string(url))
+            str(UsageKey.from_string(url))
         )
 
     @ddt.data(
@@ -94,8 +93,8 @@ class TestBlockUsageLocators(LocatorBaseTest):
         (["foo", "bar", "baz", "blat:blat", "foo:bar"], {}),  # ':' ok in name, not in category
         (('org', 'course', 'run', 'category', 'name with spaces', 'revision'), {}),
         (('org', 'course', 'run', 'category', 'name/with/slashes', 'revision'), {}),
-        (('org', 'course', 'run', 'category', 'name', u'\xae'), {}),
-        (('org', 'course', 'run', 'category', u'\xae', 'revision'), {}),
+        (('org', 'course', 'run', 'category', 'name', '\xae'), {}),
+        (('org', 'course', 'run', 'category', '\xae', 'revision'), {}),
         ((), {
             'tag': 'tag',
             'course': 'course',
@@ -175,7 +174,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
         )
 
         with self.assertRaises(InvalidKeyError):
-            BlockUsageLocator(course_key, 'c', 'n', deprecated=True).replace(block_id=u'name\xae')
+            BlockUsageLocator(course_key, 'c', 'n', deprecated=True).replace(block_id='name\xae')
 
     @ddt.data('course_key', 'block_type', 'block_id')
     def test_immutable(self, attr):
@@ -244,7 +243,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
             block_type='problem',
             block=expected_block_ref
         )
-        self.assertEqual(text_type(testobj), testurn)
+        self.assertEqual(str(testobj), testurn)
         testobj = testobj.for_version(ObjectId())
         agnostic = testobj.version_agnostic()
         self.assertIsNone(agnostic.version_guid)
@@ -357,19 +356,19 @@ class TestBlockUsageLocators(LocatorBaseTest):
         )
 
     def test_repr(self):
-        testurn = u'block-v1:mit.eecs+6002x+2014_T2+{}@published+{}@problem+{}@HW3'.format(
+        testurn = 'block-v1:mit.eecs+6002x+2014_T2+{}@published+{}@problem+{}@HW3'.format(
             CourseLocator.BRANCH_PREFIX, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
         )
         testobj = UsageKey.from_string(testurn)
-        expected = u"BlockUsageLocator(CourseLocator({}, {}, {}, {}, None), {}, {})".format(
-            repr(text_type('mit.eecs')),
-            repr(text_type('6002x')),
-            repr(text_type('2014_T2')),
-            repr(text_type('published')),
-            repr(text_type('problem')),
-            repr(text_type('HW3')),
+        expected = "BlockUsageLocator(CourseLocator({}, {}, {}, {}, None), {}, {})".format(
+            repr('mit.eecs'),
+            repr('6002x'),
+            repr('2014_T2'),
+            repr('published'),
+            repr('problem'),
+            repr('HW3'),
         )
-        self.assertEqual(expected, text_type(repr(testobj)))
+        self.assertEqual(expected, str(repr(testobj)))
 
     def test_local_id(self):
         local_id = LocalId()

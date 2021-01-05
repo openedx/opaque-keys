@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Tests of LibraryUsageLocator
 """
@@ -8,7 +7,6 @@ from unittest import TestCase
 
 import ddt
 from bson.objectid import ObjectId
-from six import text_type
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import UsageKey
@@ -32,27 +30,26 @@ class TestLibraryUsageLocators(LocatorBaseTest):
     Tests of :class:`.LibraryUsageLocator`
     """
     @ddt.data(
-        u"lib-block-v1:org+lib+{}@category+{}@name".format(BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
-        u"lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name".format(VERSION_PREFIX,
-                                                                                       BLOCK_TYPE_PREFIX, BLOCK_PREFIX),
-        u"lib-block-v1:org+lib+{}@revision+{}@category+{}@name".format(LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX,
-                                                                       BLOCK_PREFIX),
+        f"lib-block-v1:org+lib+{BLOCK_TYPE_PREFIX}@category+{BLOCK_PREFIX}@name",
+        f"lib-block-v1:org+lib+{VERSION_PREFIX}@519665f6223ebd6980884f2b+{BLOCK_TYPE_PREFIX}"
+        f"@category+{BLOCK_PREFIX}@name",
+        f"lib-block-v1:org+lib+{LibraryLocator.BRANCH_PREFIX}@revision+{BLOCK_TYPE_PREFIX}@category+{BLOCK_PREFIX}@name"
     )
     def test_string_roundtrip(self, url):
         self.assertEqual(
             url,
-            text_type(UsageKey.from_string(url))
+            str(UsageKey.from_string(url))
         )
 
     @ddt.data(
         ("TestX", "lib3", "html", "html17"),
-        (u"ΩmegaX", u"Ωμέγα", u"html", u"html15"),
+        ("ΩmegaX", "Ωμέγα", "html", "html15"),
     )
     @ddt.unpack
     def test_constructor(self, org, lib, block_type, block_id):
         lib_key = LibraryLocator(org=org, library=lib)
         lib_usage_key = LibraryUsageLocator(library_key=lib_key, block_type=block_type, block_id=block_id)
-        lib_usage_key2 = UsageKey.from_string(u"lib-block-v1:{}+{}+{}@{}+{}@{}".format(
+        lib_usage_key2 = UsageKey.from_string("lib-block-v1:{}+{}+{}@{}+{}@{}".format(
             org, lib,
             BLOCK_TYPE_PREFIX, block_type,
             BLOCK_PREFIX, block_id
@@ -82,7 +79,7 @@ class TestLibraryUsageLocators(LocatorBaseTest):
             LibraryUsageLocator(library_key=lib_key, **kwargs)
 
     @ddt.data(
-        "lib-block-v1:org+lib+{}@category".format(BLOCK_TYPE_PREFIX),
+        f"lib-block-v1:org+lib+{BLOCK_TYPE_PREFIX}@category",
     )
     def test_constructor_invalid_from_string(self, url):
         with self.assertRaises(InvalidKeyError):
@@ -90,11 +87,11 @@ class TestLibraryUsageLocators(LocatorBaseTest):
 
     @ddt.data(*itertools.product(
         (
-            u"lib-block-v1:org+lib+{}@category+{}@name{}".format(BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'),
-            u"lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name{}".format(
+            "lib-block-v1:org+lib+{}@category+{}@name{}".format(BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'),
+            "lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name{}".format(
                 VERSION_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'
             ),
-            u"lib-block-v1:org+lib+{}@revision+{}@category+{}@name{}".format(
+            "lib-block-v1:org+lib+{}@revision+{}@category+{}@name{}".format(
                 LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'
             ),
         ),
@@ -198,7 +195,7 @@ class LibraryUsageLocatorV2Tests(TestCase):
     )
     def test_roundtrip_from_string(self, key):
         usage_key = UsageKey.from_string(key)
-        serialized = text_type(usage_key)
+        serialized = str(usage_key)
         self.assertEqual(key, serialized)
 
     @ddt.data(
@@ -208,7 +205,7 @@ class LibraryUsageLocatorV2Tests(TestCase):
     )
     def test_roundtrip_from_key(self, key_args):
         key = LibraryUsageLocatorV2(**key_args)
-        serialized = text_type(key)
+        serialized = str(key)
         deserialized = UsageKey.from_string(serialized)
         self.assertEqual(key, deserialized)
 

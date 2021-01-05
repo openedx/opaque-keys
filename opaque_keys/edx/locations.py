@@ -24,7 +24,7 @@ class i4xEncoder(real_i4xEncoder):  # pylint: disable=invalid-name
             DeprecationWarning,
             stacklevel=2
         )
-        super(i4xEncoder, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class SlashSeparatedCourseKey(CourseLocator):
@@ -35,7 +35,7 @@ class SlashSeparatedCourseKey(CourseLocator):
             DeprecationWarning,
             stacklevel=2
         )
-        super(SlashSeparatedCourseKey, self).__init__(org, course, run, deprecated=True, **kwargs)
+        super().__init__(org, course, run, deprecated=True, **kwargs)
 
     @classmethod
     def from_string(cls, serialized):
@@ -86,7 +86,7 @@ class LocationBase:
             )
         else:
             warnings.warn(
-                u"{} is deprecated!".format(cls),
+                f"{cls} is deprecated!",
                 DeprecationWarning,
                 stacklevel=3
             )
@@ -147,7 +147,7 @@ class LocationBase:
             branch=revision,
             deprecated=True
         ))
-        super(LocationBase, self).__init__(course_key, category, name, deprecated=True, **kwargs)
+        super().__init__(course_key, category, name, deprecated=True, **kwargs)
 
     @classmethod
     def from_string(cls, serialized):
@@ -192,7 +192,7 @@ class DeprecatedLocation(BlockUsageLocator):
     The short-lived location:org+course+run+block_type+block_id syntax
     """
     CANONICAL_NAMESPACE = 'location'
-    URL_RE_SOURCE = u"""
+    URL_RE_SOURCE = """
         (?P<org>{ALLOWED_ID_CHARS}+)\\+(?P<course>{ALLOWED_ID_CHARS}+)\\+(?P<run>{ALLOWED_ID_CHARS}+)\\+
         (?P<block_type>{ALLOWED_ID_CHARS}+)\\+
         (?P<block_id>{ALLOWED_ID_CHARS}+)
@@ -207,7 +207,7 @@ class DeprecatedLocation(BlockUsageLocator):
         if course_key.branch is not None:
             raise ValueError("DeprecatedLocations don't support course branches")
 
-        super(DeprecatedLocation, self).__init__(course_key, block_type, block_id)
+        super().__init__(course_key, block_type, block_id)
 
     @classmethod
     def _from_string(cls, serialized):
@@ -228,7 +228,7 @@ class DeprecatedLocation(BlockUsageLocator):
         Return a string representing this location.
         """
         parts = [self.org, self.course, self.run, self.block_type, self.block_id]
-        return u"+".join(parts)
+        return "+".join(parts)
 
 
 class AssetLocation(LocationBase, AssetLocator):

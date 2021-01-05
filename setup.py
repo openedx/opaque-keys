@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 Package metadata for edx-opaque-keys.
 """
-from io import open
 
 from setuptools import setup, find_packages
 
