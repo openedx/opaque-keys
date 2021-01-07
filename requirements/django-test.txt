@@ -13,13 +13,15 @@ coverage==5.3.1           # via -r requirements/test.txt, pytest-cov
 ddt==1.4.1                # via -r requirements/test.txt
 edx-lint==1.6             # via -r requirements/test.txt
 execnet==1.7.1            # via -r requirements/test.txt, pytest-cache, pytest-xdist
-hypothesis==5.43.3        # via -r requirements/test.txt
-isort==5.6.4              # via -r requirements/test.txt, pylint
+hypothesis==5.33.2        # via -r requirements/test.txt
+importlib-metadata==2.1.1  # via -r requirements/test.txt, pluggy, pytest
+isort==4.3.21             # via -r requirements/test.txt, pylint
 lazy-object-proxy==1.4.3  # via -r requirements/test.txt, astroid
 mccabe==0.6.1             # via -r requirements/test.txt, pylint
-mock==4.0.3               # via -r requirements/test.txt
+mock==3.0.5               # via -r requirements/test.txt
 more-itertools==8.6.0     # via -r requirements/test.txt, pytest
 packaging==20.8           # via -r requirements/test.txt, pytest
+pathlib2==2.3.5           # via -r requirements/test.txt, pytest
 pbr==5.5.1                # via -r requirements/test.txt, stevedore
 pep8==1.7.1               # via -r requirements/test.txt, pytest-pep8
 pluggy==0.13.1            # via -r requirements/test.txt, pytest
@@ -39,11 +41,13 @@ pytest-pep8==1.0.6        # via -r requirements/test.txt
 pytest-pylint==0.15.1     # via -c requirements/constraints.txt, -r requirements/test.txt
 pytest-xdist==1.34.0      # via -c requirements/constraints.txt, -r requirements/test.txt
 pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements/test.txt, pytest-cache, pytest-cov, pytest-django, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
-pytz==2020.4              # via -r requirements/django.txt, django
-six==1.15.0               # via -r requirements/test.txt, astroid, edx-lint, pytest-xdist
+pytz==2020.5              # via -r requirements/django.txt, django
+six==1.15.0               # via -r requirements/test.txt, astroid, edx-lint, mock, pathlib2, pytest-xdist, stevedore
 sortedcontainers==2.3.0   # via -r requirements/test.txt, hypothesis
 sqlparse==0.4.1           # via -r requirements/django.txt, django
-stevedore==3.3.0          # via -r requirements/test.txt
+stevedore==1.32.0         # via -r requirements/test.txt
 toml==0.10.2              # via -r requirements/test.txt, pylint
+typed-ast==1.4.2          # via -r requirements/test.txt, astroid
 wcwidth==0.2.5            # via -r requirements/test.txt, pytest
 wrapt==1.12.1             # via -r requirements/test.txt, astroid
+zipp==1.2.0               # via -r requirements/test.txt, importlib-metadata

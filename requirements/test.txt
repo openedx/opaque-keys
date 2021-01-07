@@ -13,13 +13,15 @@ coverage==5.3.1           # via -r requirements/test.in, pytest-cov
 ddt==1.4.1                # via -r requirements/test.in
 edx-lint==1.6             # via -r requirements/test.in
 execnet==1.7.1            # via pytest-cache, pytest-xdist
-hypothesis==5.43.3        # via -r requirements/test.in
-isort==5.6.4              # via pylint
+hypothesis==5.33.2        # via -r requirements/test.in
+importlib-metadata==2.1.1  # via pluggy, pytest
+isort==4.3.21             # via pylint
 lazy-object-proxy==1.4.3  # via astroid
 mccabe==0.6.1             # via pylint
-mock==4.0.3               # via -r requirements/test.in
+mock==3.0.5               # via -r requirements/test.in
 more-itertools==8.6.0     # via pytest
 packaging==20.8           # via pytest
+pathlib2==2.3.5           # via pytest
 pbr==5.5.1                # via -r requirements/base.txt, stevedore
 pep8==1.7.1               # via pytest-pep8
 pluggy==0.13.1            # via pytest
@@ -38,9 +40,11 @@ pytest-pep8==1.0.6        # via -r requirements/test.in
 pytest-pylint==0.15.1     # via -c requirements/constraints.txt, -r requirements/test.in
 pytest-xdist==1.34.0      # via -c requirements/constraints.txt, -r requirements/test.in
 pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements/test.in, pytest-cache, pytest-cov, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
-six==1.15.0               # via -r requirements/base.txt, astroid, edx-lint, pytest-xdist
+six==1.15.0               # via -r requirements/base.txt, astroid, edx-lint, mock, pathlib2, pytest-xdist, stevedore
 sortedcontainers==2.3.0   # via hypothesis
-stevedore==3.3.0          # via -r requirements/base.txt
+stevedore==1.32.0         # via -r requirements/base.txt
 toml==0.10.2              # via pylint
+typed-ast==1.4.2          # via astroid
 wcwidth==0.2.5            # via pytest
 wrapt==1.12.1             # via astroid
+zipp==1.2.0               # via importlib-metadata
