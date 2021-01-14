@@ -4,50 +4,197 @@
 #
 #    make upgrade
 #
-apipkg==1.5               # via -r requirements/test.txt, execnet
-astroid==2.4.2            # via -r requirements/test.txt, pylint, pylint-celery
-attrs==20.3.0             # via -r requirements/test.txt, hypothesis, pytest
-click-log==0.3.2          # via -r requirements/test.txt, edx-lint
-click==7.1.2              # via -r requirements/test.txt, click-log, edx-lint
-coverage==5.3.1           # via -r requirements/test.txt, pytest-cov
-ddt==1.4.1                # via -r requirements/test.txt
-edx-lint==1.6             # via -r requirements/test.txt
-execnet==1.7.1            # via -r requirements/test.txt, pytest-cache, pytest-xdist
-hypothesis==5.33.2        # via -r requirements/test.txt
-importlib-metadata==2.1.1  # via -r requirements/test.txt, pluggy, pytest
-isort==4.3.21             # via -r requirements/test.txt, pylint
-lazy-object-proxy==1.4.3  # via -r requirements/test.txt, astroid
-mccabe==0.6.1             # via -r requirements/test.txt, pylint
-mock==3.0.5               # via -r requirements/test.txt
-more-itertools==8.6.0     # via -r requirements/test.txt, pytest
-packaging==20.8           # via -r requirements/test.txt, pytest
-pathlib2==2.3.5           # via -r requirements/test.txt, pytest
-pbr==5.5.1                # via -r requirements/test.txt, stevedore
-pep8==1.7.1               # via -r requirements/test.txt, pytest-pep8
-pluggy==0.13.1            # via -r requirements/test.txt, pytest
-py==1.10.0                # via -r requirements/test.txt, pytest, pytest-forked
-pycodestyle==2.6.0        # via -r requirements/test.txt
-pylint-celery==0.3        # via -r requirements/test.txt, edx-lint
-pylint-django==2.3.0      # via -r requirements/test.txt, edx-lint
-pylint-plugin-utils==0.6  # via -r requirements/test.txt, pylint-celery, pylint-django
-pylint==2.6.0             # via -r requirements/test.txt, edx-lint, pylint-celery, pylint-django, pylint-plugin-utils, pytest-pylint
-pymongo==3.11.2           # via -r requirements/test.txt
-pyparsing==2.4.7          # via -r requirements/test.txt, packaging
-pytest-cache==1.0         # via -r requirements/test.txt, pytest-pep8
-pytest-cov==2.10.1        # via -r requirements/test.txt
-pytest-django==3.10.0     # via -c requirements/constraints.txt, -r requirements/django-test.in
-pytest-forked==1.3.0      # via -r requirements/test.txt, pytest-xdist
-pytest-pep8==1.0.6        # via -r requirements/test.txt
-pytest-pylint==0.15.1     # via -c requirements/constraints.txt, -r requirements/test.txt
-pytest-xdist==1.34.0      # via -c requirements/constraints.txt, -r requirements/test.txt
-pytest==5.3.0             # via -c requirements/constraints.txt, -r requirements/test.txt, pytest-cache, pytest-cov, pytest-django, pytest-forked, pytest-pep8, pytest-pylint, pytest-xdist
-pytz==2020.5              # via -r requirements/django.txt, django
-six==1.15.0               # via -r requirements/test.txt, astroid, edx-lint, mock, pathlib2, pytest-xdist, stevedore
-sortedcontainers==2.3.0   # via -r requirements/test.txt, hypothesis
-sqlparse==0.4.1           # via -r requirements/django.txt, django
-stevedore==1.32.0         # via -r requirements/test.txt
-toml==0.10.2              # via -r requirements/test.txt, pylint
-typed-ast==1.4.2          # via -r requirements/test.txt, astroid
-wcwidth==0.2.5            # via -r requirements/test.txt, pytest
-wrapt==1.12.1             # via -r requirements/test.txt, astroid
-zipp==1.2.0               # via -r requirements/test.txt, importlib-metadata
+apipkg==1.5
+    # via
+    #   -r requirements/test.txt
+    #   execnet
+astroid==2.4.2
+    # via
+    #   -r requirements/test.txt
+    #   pylint
+    #   pylint-celery
+attrs==20.3.0
+    # via
+    #   -r requirements/test.txt
+    #   hypothesis
+    #   pytest
+click-log==0.3.2
+    # via
+    #   -r requirements/test.txt
+    #   edx-lint
+click==7.1.2
+    # via
+    #   -r requirements/test.txt
+    #   click-log
+    #   edx-lint
+coverage==5.3.1
+    # via
+    #   -r requirements/test.txt
+    #   pytest-cov
+ddt==1.4.1
+    # via -r requirements/test.txt
+    # via -r requirements/django.txt
+edx-lint==1.6
+    # via -r requirements/test.txt
+execnet==1.7.1
+    # via
+    #   -r requirements/test.txt
+    #   pytest-cache
+    #   pytest-xdist
+hypothesis==5.33.2
+    # via -r requirements/test.txt
+importlib-metadata==2.1.1
+    # via
+    #   -r requirements/test.txt
+    #   pluggy
+    #   pytest
+isort==4.3.21
+    # via
+    #   -r requirements/test.txt
+    #   pylint
+lazy-object-proxy==1.4.3
+    # via
+    #   -r requirements/test.txt
+    #   astroid
+mccabe==0.6.1
+    # via
+    #   -r requirements/test.txt
+    #   pylint
+mock==3.0.5
+    # via -r requirements/test.txt
+more-itertools==8.6.0
+    # via
+    #   -r requirements/test.txt
+    #   pytest
+packaging==20.8
+    # via
+    #   -r requirements/test.txt
+    #   pytest
+pathlib2==2.3.5
+    # via
+    #   -r requirements/test.txt
+    #   pytest
+pbr==5.5.1
+    # via
+    #   -r requirements/test.txt
+    #   stevedore
+pep8==1.7.1
+    # via
+    #   -r requirements/test.txt
+    #   pytest-pep8
+pluggy==0.13.1
+    # via
+    #   -r requirements/test.txt
+    #   pytest
+py==1.10.0
+    # via
+    #   -r requirements/test.txt
+    #   pytest
+    #   pytest-forked
+pycodestyle==2.6.0
+    # via -r requirements/test.txt
+pylint-celery==0.3
+    # via
+    #   -r requirements/test.txt
+    #   edx-lint
+pylint-django==2.3.0
+    # via
+    #   -r requirements/test.txt
+    #   edx-lint
+pylint-plugin-utils==0.6
+    # via
+    #   -r requirements/test.txt
+    #   pylint-celery
+    #   pylint-django
+pylint==2.6.0
+    # via
+    #   -r requirements/test.txt
+    #   edx-lint
+    #   pylint-celery
+    #   pylint-django
+    #   pylint-plugin-utils
+    #   pytest-pylint
+pymongo==3.11.2
+    # via -r requirements/test.txt
+pyparsing==2.4.7
+    # via
+    #   -r requirements/test.txt
+    #   packaging
+pytest-cache==1.0
+    # via
+    #   -r requirements/test.txt
+    #   pytest-pep8
+pytest-cov==2.10.1
+    # via -r requirements/test.txt
+pytest-django==3.10.0
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/django-test.in
+pytest-forked==1.3.0
+    # via
+    #   -r requirements/test.txt
+    #   pytest-xdist
+pytest-pep8==1.0.6
+    # via -r requirements/test.txt
+pytest-pylint==0.15.1
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/test.txt
+pytest-xdist==1.34.0
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/test.txt
+pytest==5.3.0
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/test.txt
+    #   pytest-cache
+    #   pytest-cov
+    #   pytest-django
+    #   pytest-forked
+    #   pytest-pep8
+    #   pytest-pylint
+    #   pytest-xdist
+pytz==2020.5
+    # via
+    #   -r requirements/django.txt
+    #   django
+six==1.15.0
+    # via
+    #   -r requirements/test.txt
+    #   astroid
+    #   edx-lint
+    #   mock
+    #   pathlib2
+    #   pytest-xdist
+    #   stevedore
+sortedcontainers==2.3.0
+    # via
+    #   -r requirements/test.txt
+    #   hypothesis
+sqlparse==0.4.1
+    # via
+    #   -r requirements/django.txt
+    #   django
+stevedore==1.32.0
+    # via -r requirements/test.txt
+toml==0.10.2
+    # via
+    #   -r requirements/test.txt
+    #   pylint
+typed-ast==1.4.2
+    # via
+    #   -r requirements/test.txt
+    #   astroid
+wcwidth==0.2.5
+    # via
+    #   -r requirements/test.txt
+    #   pytest
+wrapt==1.12.1
+    # via
+    #   -r requirements/test.txt
+    #   astroid
+zipp==1.2.0
+    # via
+    #   -r requirements/test.txt
+    #   importlib-metadata
