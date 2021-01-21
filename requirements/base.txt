@@ -9,8 +9,6 @@ pbr==5.5.1
 pymongo==3.11.2
     # via -r requirements/base.in
 six==1.15.0
-    # via
-    #   -r requirements/base.in
-    #   stevedore
-stevedore==1.32.0
+    # via -r requirements/base.in
+stevedore==3.3.0
     # via -r requirements/base.in
