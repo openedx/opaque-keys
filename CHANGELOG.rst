@@ -1,3 +1,8 @@
+# 2.2.0
+
+* Dropped support for Python3.5
+* Added support for Django 3.0 & Django 3.1
+
 # 2.0.2
 
 * Fixed django warnings

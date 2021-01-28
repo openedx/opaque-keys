@@ -22,7 +22,7 @@ attrs==20.3.0
     #   pytest
 babel==2.9.0
     # via sphinx
-bleach==3.2.2
+bleach==3.2.3
     # via readme-renderer
 certifi==2020.12.5
     # via requests
@@ -36,54 +36,70 @@ click==7.1.2
     # via
     #   -r requirements/test.txt
     #   click-log
+    #   code-annotations
     #   edx-lint
-coverage==5.3.1
+code-annotations==1.0.2
+    # via
+    #   -r requirements/test.txt
+    #   edx-lint
+coverage==5.4
     # via
     #   -r requirements/test.txt
     #   pytest-cov
 ddt==1.4.1
     # via -r requirements/test.txt
+django==2.2.17
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/test.txt
+    #   code-annotations
+    #   edx-lint
 docutils==0.16
     # via
     #   readme-renderer
     #   sphinx
-edx-lint==1.6
+edx-lint==3.0.2
     # via -r requirements/test.txt
 edx-sphinx-theme==1.6.1
     # via -r requirements/doc.in
-execnet==1.7.1
+execnet==1.8.0
     # via
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.0.2
+hypothesis==6.0.4
     # via -r requirements/test.txt
 idna==2.10
     # via requests
 imagesize==1.2.0
     # via sphinx
+iniconfig==1.1.1
+    # via
+    #   -r requirements/test.txt
+    #   pytest
 isort==5.7.0
     # via
     #   -r requirements/test.txt
     #   pylint
 jinja2==2.11.2
-    # via sphinx
+    # via
+    #   -r requirements/test.txt
+    #   code-annotations
+    #   sphinx
 lazy-object-proxy==1.4.3
     # via
     #   -r requirements/test.txt
     #   astroid
 markupsafe==1.1.1
-    # via jinja2
+    # via
+    #   -r requirements/test.txt
+    #   jinja2
 mccabe==0.6.1
     # via
     #   -r requirements/test.txt
     #   pylint
 mock==4.0.3
     # via -r requirements/test.txt
-more-itertools==8.6.0
-    # via
-    #   -r requirements/test.txt
-    #   pytest
 packaging==20.8
     # via
     #   -r requirements/test.txt
@@ -117,7 +133,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
-pylint-django==2.3.0
+pylint-django==2.4.2
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -152,17 +168,12 @@ pytest-forked==1.3.0
     #   pytest-xdist
 pytest-pep8==1.0.6
     # via -r requirements/test.txt
-pytest-pylint==0.15.1
+pytest-pylint==0.18.0
+    # via -r requirements/test.txt
+pytest-xdist==2.2.0
+    # via -r requirements/test.txt
+pytest==6.2.2
     # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/test.txt
-pytest-xdist==1.34.0
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/test.txt
-pytest==5.3.0
-    # via
-    #   -c requirements/constraints.txt
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-cov
@@ -170,8 +181,19 @@ pytest==5.3.0
     #   pytest-pep8
     #   pytest-pylint
     #   pytest-xdist
+python-slugify==4.0.1
+    # via
+    #   -r requirements/test.txt
+    #   code-annotations
 pytz==2020.5
-    # via babel
+    # via
+    #   -r requirements/test.txt
+    #   babel
+    #   django
+pyyaml==5.4.1
+    # via
+    #   -r requirements/test.txt
+    #   code-annotations
 readme-renderer==28.0
     # via -r requirements/doc.in
 requests==2.25.1
@@ -183,9 +205,8 @@ six==1.15.0
     #   bleach
     #   edx-lint
     #   edx-sphinx-theme
-    #   pytest-xdist
     #   readme-renderer
-snowballstemmer==2.0.0
+snowballstemmer==2.1.0
     # via sphinx
 sortedcontainers==2.3.0
     # via
@@ -207,18 +228,26 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.4
     # via sphinx
+sqlparse==0.4.1
+    # via
+    #   -r requirements/test.txt
+    #   django
 stevedore==3.3.0
-    # via -r requirements/test.txt
+    # via
+    #   -r requirements/test.txt
+    #   code-annotations
+text-unidecode==1.3
+    # via
+    #   -r requirements/test.txt
+    #   python-slugify
 toml==0.10.2
     # via
     #   -r requirements/test.txt
     #   pylint
-urllib3==1.26.2
-    # via requests
-wcwidth==0.2.5
-    # via
-    #   -r requirements/test.txt
     #   pytest
+    #   pytest-pylint
+urllib3==1.26.3
+    # via requests
 webencodings==0.5.1
     # via bleach
 wrapt==1.12.1

@@ -19,31 +19,43 @@ click-log==0.3.2
 click==7.1.2
     # via
     #   click-log
+    #   code-annotations
     #   edx-lint
-coverage==5.3.1
+code-annotations==1.0.2
+    # via edx-lint
+coverage==5.4
     # via
     #   -r requirements/test.in
     #   pytest-cov
 ddt==1.4.1
     # via -r requirements/test.in
-edx-lint==1.6
+django==2.2.17
+    # via
+    #   -c requirements/constraints.txt
+    #   code-annotations
+    #   edx-lint
+edx-lint==3.0.2
     # via -r requirements/test.in
-execnet==1.7.1
+execnet==1.8.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.0.2
+hypothesis==6.0.4
     # via -r requirements/test.in
+iniconfig==1.1.1
+    # via pytest
 isort==5.7.0
     # via pylint
+jinja2==2.11.2
+    # via code-annotations
 lazy-object-proxy==1.4.3
     # via astroid
+markupsafe==1.1.1
+    # via jinja2
 mccabe==0.6.1
     # via pylint
 mock==4.0.3
     # via -r requirements/test.in
-more-itertools==8.6.0
-    # via pytest
 packaging==20.8
     # via pytest
 pbr==5.5.1
@@ -62,7 +74,7 @@ pycodestyle==2.6.0
     # via -r requirements/test.in
 pylint-celery==0.3
     # via edx-lint
-pylint-django==2.3.0
+pylint-django==2.4.2
     # via edx-lint
 pylint-plugin-utils==0.6
     # via
@@ -87,17 +99,12 @@ pytest-forked==1.3.0
     # via pytest-xdist
 pytest-pep8==1.0.6
     # via -r requirements/test.in
-pytest-pylint==0.15.1
+pytest-pylint==0.18.0
+    # via -r requirements/test.in
+pytest-xdist==2.2.0
+    # via -r requirements/test.in
+pytest==6.2.2
     # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/test.in
-pytest-xdist==1.34.0
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/test.in
-pytest==5.3.0
-    # via
-    #   -c requirements/constraints.txt
     #   -r requirements/test.in
     #   pytest-cache
     #   pytest-cov
@@ -105,19 +112,31 @@ pytest==5.3.0
     #   pytest-pep8
     #   pytest-pylint
     #   pytest-xdist
+python-slugify==4.0.1
+    # via code-annotations
+pytz==2020.5
+    # via django
+pyyaml==5.4.1
+    # via code-annotations
 six==1.15.0
     # via
     #   -r requirements/base.txt
     #   astroid
     #   edx-lint
-    #   pytest-xdist
 sortedcontainers==2.3.0
     # via hypothesis
+sqlparse==0.4.1
+    # via django
 stevedore==3.3.0
-    # via -r requirements/base.txt
+    # via
+    #   -r requirements/base.txt
+    #   code-annotations
+text-unidecode==1.3
+    # via python-slugify
 toml==0.10.2
-    # via pylint
-wcwidth==0.2.5
-    # via pytest
+    # via
+    #   pylint
+    #   pytest
+    #   pytest-pylint
 wrapt==1.12.1
     # via astroid

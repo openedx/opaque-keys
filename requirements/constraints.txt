@@ -8,17 +8,5 @@
 # pin when possible.  Writing an issue against the offending project and
 # linking to it here is good.
 
-
-
-# pytest command fails if pytest > 5.3 is used
-# Look into https://github.com/pytest-dev/pytest/issues/6925
-pytest<=5.3
-
-# version >= 0.16 requires pytest >= 5.4
-pytest-pylint<0.16
-
-# pytest-xdist>=2.0.0 removes some aliases and until pytest-django>=3.10.0 is released, this will break tests.
-pytest-xdist==1.34.0
-
-# version 4.0.0 requires pytest >= 5.4.0
-pytest-django<4.0.0
+# stay on LTS release
+Django<2.3

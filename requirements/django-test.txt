@@ -26,41 +26,59 @@ click==7.1.2
     # via
     #   -r requirements/test.txt
     #   click-log
+    #   code-annotations
     #   edx-lint
-coverage==5.3.1
+code-annotations==1.0.2
+    # via
+    #   -r requirements/test.txt
+    #   edx-lint
+coverage==5.4
     # via
     #   -r requirements/test.txt
     #   pytest-cov
 ddt==1.4.1
     # via -r requirements/test.txt
-    # via -r requirements/django.txt
-edx-lint==1.6
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/django.txt
+    #   -r requirements/test.txt
+    #   code-annotations
+    #   edx-lint
+edx-lint==3.0.2
     # via -r requirements/test.txt
-execnet==1.7.1
+execnet==1.8.0
     # via
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.0.2
+hypothesis==6.0.4
     # via -r requirements/test.txt
+iniconfig==1.1.1
+    # via
+    #   -r requirements/test.txt
+    #   pytest
 isort==5.7.0
     # via
     #   -r requirements/test.txt
     #   pylint
+jinja2==2.11.2
+    # via
+    #   -r requirements/test.txt
+    #   code-annotations
 lazy-object-proxy==1.4.3
     # via
     #   -r requirements/test.txt
     #   astroid
+markupsafe==1.1.1
+    # via
+    #   -r requirements/test.txt
+    #   jinja2
 mccabe==0.6.1
     # via
     #   -r requirements/test.txt
     #   pylint
 mock==4.0.3
     # via -r requirements/test.txt
-more-itertools==8.6.0
-    # via
-    #   -r requirements/test.txt
-    #   pytest
 packaging==20.8
     # via
     #   -r requirements/test.txt
@@ -88,7 +106,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
-pylint-django==2.3.0
+pylint-django==2.4.2
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -117,27 +135,20 @@ pytest-cache==1.0
     #   pytest-pep8
 pytest-cov==2.11.1
     # via -r requirements/test.txt
-pytest-django==3.10.0
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/django-test.in
+pytest-django==4.1.0
+    # via -r requirements/django-test.in
 pytest-forked==1.3.0
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
 pytest-pep8==1.0.6
     # via -r requirements/test.txt
-pytest-pylint==0.15.1
+pytest-pylint==0.18.0
+    # via -r requirements/test.txt
+pytest-xdist==2.2.0
+    # via -r requirements/test.txt
+pytest==6.2.2
     # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/test.txt
-pytest-xdist==1.34.0
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/test.txt
-pytest==5.3.0
-    # via
-    #   -c requirements/constraints.txt
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-cov
@@ -146,16 +157,24 @@ pytest==5.3.0
     #   pytest-pep8
     #   pytest-pylint
     #   pytest-xdist
+python-slugify==4.0.1
+    # via
+    #   -r requirements/test.txt
+    #   code-annotations
 pytz==2020.5
     # via
     #   -r requirements/django.txt
+    #   -r requirements/test.txt
     #   django
+pyyaml==5.4.1
+    # via
+    #   -r requirements/test.txt
+    #   code-annotations
 six==1.15.0
     # via
     #   -r requirements/test.txt
     #   astroid
     #   edx-lint
-    #   pytest-xdist
 sortedcontainers==2.3.0
     # via
     #   -r requirements/test.txt
@@ -163,17 +182,22 @@ sortedcontainers==2.3.0
 sqlparse==0.4.1
     # via
     #   -r requirements/django.txt
+    #   -r requirements/test.txt
     #   django
 stevedore==3.3.0
-    # via -r requirements/test.txt
+    # via
+    #   -r requirements/test.txt
+    #   code-annotations
+text-unidecode==1.3
+    # via
+    #   -r requirements/test.txt
+    #   python-slugify
 toml==0.10.2
     # via
     #   -r requirements/test.txt
     #   pylint
-wcwidth==0.2.5
-    # via
-    #   -r requirements/test.txt
     #   pytest
+    #   pytest-pylint
 wrapt==1.12.1
     # via
     #   -r requirements/test.txt
