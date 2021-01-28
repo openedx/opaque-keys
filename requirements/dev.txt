@@ -114,10 +114,6 @@ imagesize==1.2.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-iniconfig==1.1.1
-    # via
-    #   -r requirements/doc.txt
-    #   pytest
 isort==5.7.0
     # via
     #   -r requirements/doc.txt
@@ -141,6 +137,10 @@ mccabe==0.6.1
     #   pylint
 mock==4.0.3
     # via -r requirements/doc.txt
+more-itertools==8.6.0
+    # via
+    #   -r requirements/doc.txt
+    #   pytest
 packaging==20.8
     # via
     #   -r requirements/doc.txt
@@ -221,10 +221,13 @@ pytest-pep8==1.0.6
     # via -r requirements/doc.txt
 pytest-pylint==0.18.0
     # via -r requirements/doc.txt
-pytest-xdist==2.2.0
-    # via -r requirements/doc.txt
-pytest==6.2.2
+pytest-xdist==1.34.0
     # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/doc.txt
+pytest==5.4.3
+    # via
+    #   -c requirements/constraints.txt
     #   -r requirements/doc.txt
     #   pytest-cache
     #   pytest-cov
@@ -261,6 +264,7 @@ six==1.15.0
     #   bleach
     #   edx-lint
     #   edx-sphinx-theme
+    #   pytest-xdist
     #   readme-renderer
     #   tox
     #   virtualenv
@@ -317,7 +321,6 @@ toml==0.10.2
     #   -r requirements/doc.txt
     #   -r requirements/travis.txt
     #   pylint
-    #   pytest
     #   pytest-pylint
     #   tox
 tox-battery==0.6.1
@@ -335,6 +338,10 @@ virtualenv==20.4.0
     # via
     #   -r requirements/travis.txt
     #   tox
+wcwidth==0.2.5
+    # via
+    #   -r requirements/doc.txt
+    #   pytest
 webencodings==0.5.1
     # via
     #   -r requirements/doc.txt

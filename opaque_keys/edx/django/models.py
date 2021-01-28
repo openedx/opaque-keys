@@ -101,7 +101,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if value is self.Empty or value is None:
             return None
 
-        error_message = "%s is not an instance of six.string_types or %s" % (value, self.KEY_CLASS)
+        error_message = "%s is not an instance of str or %s" % (value, self.KEY_CLASS)
         assert isinstance(value, (str,) + (self.KEY_CLASS,)), error_message
         if value == '':
             # handle empty string for models being created w/o fields populated
