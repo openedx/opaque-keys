@@ -31,7 +31,7 @@ ddt==1.4.1
     # via -r requirements/test.in
 django==2.2.17
     # via
-    #   -c requirements/constraints.txt
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   code-annotations
     #   edx-lint
 edx-lint==3.0.2
@@ -40,7 +40,7 @@ execnet==1.8.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.0.4
+hypothesis==6.1.0
     # via -r requirements/test.in
 isort==5.7.0
     # via pylint

@@ -39,7 +39,7 @@ coverage==5.4
 ddt==1.4.1
     # via -r requirements/test.txt
     # via
-    #   -c requirements/constraints.txt
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/django.txt
     #   -r requirements/test.txt
     #   code-annotations
@@ -51,7 +51,7 @@ execnet==1.8.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.0.4
+hypothesis==6.1.0
     # via -r requirements/test.txt
 isort==5.7.0
     # via
