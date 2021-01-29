@@ -8,14 +8,6 @@ formats, and allowing new serialization formats to be installed transparently.
 """
 from abc import ABCMeta, abstractmethod
 from functools import total_ordering
-from six import (
-    iteritems,
-    python_2_unicode_compatible,
-    text_type,
-    viewkeys,
-    viewitems,
-    with_metaclass,
-)
 from stevedore.enabled import EnabledExtensionManager
 
 # pylint: disable=wrong-import-order

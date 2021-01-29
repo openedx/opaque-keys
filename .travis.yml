@@ -22,7 +22,7 @@ deploy:
     secure: cnCf0zDyTEJycCDcxhH1GsvOWNGImjwc8WIrD/D5Hsk7p0IeMaEjc/t6gc1LO2iQKGlZq/BLDxUBmsEbrQUD1wvSBg/J+9Ji6yn9jJ87X6QSNq+Xy0brLe9RAeMElG3OLqbj6FHRMzk2EmOEJXI9ATqlXfdqFwgKCYrvf2GT2Ug=
   on:
     tags: true
-    python: '3.5'
+    python: '3.8'
     condition: $TOXENV = django22
     distributions: sdist bdist_wheel
     repo: edx/opaque-keys

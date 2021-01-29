@@ -2,5 +2,4 @@
 -c constraints.txt
 
 pymongo>=2.7.2
-six>=1.10.0
 stevedore>=0.14.1
