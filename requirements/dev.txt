@@ -89,9 +89,9 @@ docutils==0.16
     #   -r requirements/doc.txt
     #   readme-renderer
     #   sphinx
-edx-lint==4.0.0
+edx-lint==4.0.1
     # via -r requirements/doc.txt
-edx-sphinx-theme==1.6.1
+edx-sphinx-theme==2.0.0
     # via -r requirements/doc.txt
 execnet==1.8.0
     # via
@@ -137,7 +137,7 @@ mccabe==0.6.1
     #   pylint
 mock==4.0.3
     # via -r requirements/doc.txt
-more-itertools==8.6.0
+more-itertools==8.7.0
     # via
     #   -r requirements/doc.txt
     #   pytest
