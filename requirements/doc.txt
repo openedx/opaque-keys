@@ -10,7 +10,7 @@ apipkg==1.5
     # via
     #   -r requirements/test.txt
     #   execnet
-astroid==2.4.2
+astroid==2.5
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -48,7 +48,7 @@ coverage==5.4
     #   pytest-cov
 ddt==1.4.1
     # via -r requirements/test.txt
-django==2.2.18
+django==2.2.19
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
@@ -67,7 +67,7 @@ execnet==1.8.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.2.0
+hypothesis==6.3.2
     # via -r requirements/test.txt
 idna==2.10
     # via requests
@@ -82,7 +82,7 @@ jinja2==2.11.3
     #   -r requirements/test.txt
     #   code-annotations
     #   sphinx
-lazy-object-proxy==1.4.3
+lazy-object-proxy==1.5.2
     # via
     #   -r requirements/test.txt
     #   astroid
@@ -142,7 +142,7 @@ pylint-plugin-utils==0.6
     #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
-pylint==2.6.2
+pylint==2.7.1
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -197,14 +197,13 @@ pyyaml==5.4.1
     # via
     #   -r requirements/test.txt
     #   code-annotations
-readme-renderer==28.0
+readme-renderer==29.0
     # via -r requirements/doc.in
 requests==2.25.1
     # via sphinx
 six==1.15.0
     # via
     #   -r requirements/test.txt
-    #   astroid
     #   bleach
     #   edx-lint
     #   edx-sphinx-theme

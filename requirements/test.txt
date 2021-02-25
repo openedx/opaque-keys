@@ -6,7 +6,7 @@
 #
 apipkg==1.5
     # via execnet
-astroid==2.4.2
+astroid==2.5
     # via
     #   pylint
     #   pylint-celery
@@ -29,7 +29,7 @@ coverage==5.4
     #   pytest-cov
 ddt==1.4.1
     # via -r requirements/test.in
-django==2.2.18
+django==2.2.19
     # via
     #   -c requirements/constraints.txt
     #   code-annotations
@@ -40,13 +40,13 @@ execnet==1.8.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.2.0
+hypothesis==6.3.2
     # via -r requirements/test.in
 isort==5.7.0
     # via pylint
 jinja2==2.11.3
     # via code-annotations
-lazy-object-proxy==1.4.3
+lazy-object-proxy==1.5.2
     # via astroid
 markupsafe==1.1.1
     # via jinja2
@@ -80,7 +80,7 @@ pylint-plugin-utils==0.6
     # via
     #   pylint-celery
     #   pylint-django
-pylint==2.6.2
+pylint==2.7.1
     # via
     #   edx-lint
     #   pylint-celery
@@ -123,7 +123,6 @@ pyyaml==5.4.1
     # via code-annotations
 six==1.15.0
     # via
-    #   astroid
     #   edx-lint
     #   pytest-xdist
 sortedcontainers==2.3.0
