@@ -67,7 +67,7 @@ execnet==1.8.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.4.1
+hypothesis==6.7.0
     # via -r requirements/test.txt
 idna==2.10
     # via requests
@@ -125,7 +125,7 @@ py==1.10.0
     #   pytest-forked
 pycodestyle==2.6.0
     # via -r requirements/test.txt
-pygments==2.8.0
+pygments==2.8.1
     # via
     #   readme-renderer
     #   sphinx
@@ -215,7 +215,7 @@ sortedcontainers==2.3.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
-sphinx==3.5.1
+sphinx==3.5.2
     # via
     #   -r requirements/doc.in
     #   edx-sphinx-theme

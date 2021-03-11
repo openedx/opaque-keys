@@ -103,7 +103,7 @@ filelock==3.0.12
     #   -r requirements/travis.txt
     #   tox
     #   virtualenv
-hypothesis==6.4.1
+hypothesis==6.7.0
     # via -r requirements/doc.txt
 idna==2.10
     # via
@@ -174,7 +174,7 @@ py==1.10.0
     #   tox
 pycodestyle==2.6.0
     # via -r requirements/doc.txt
-pygments==2.8.0
+pygments==2.8.1
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
@@ -275,7 +275,7 @@ sortedcontainers==2.3.0
     # via
     #   -r requirements/doc.txt
     #   hypothesis
-sphinx==3.5.1
+sphinx==3.5.2
     # via
     #   -r requirements/doc.txt
     #   edx-sphinx-theme
