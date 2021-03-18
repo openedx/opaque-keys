@@ -46,7 +46,7 @@ coverage==5.5
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-ddt==1.4.1
+ddt==1.4.2
     # via -r requirements/test.txt
 django==2.2.19
     # via
@@ -58,7 +58,7 @@ docutils==0.16
     # via
     #   readme-renderer
     #   sphinx
-edx-lint==4.1.0
+edx-lint==4.1.1
     # via -r requirements/test.txt
 edx-sphinx-theme==2.0.0
     # via -r requirements/doc.in
@@ -67,7 +67,7 @@ execnet==1.8.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.7.0
+hypothesis==6.8.1
     # via -r requirements/test.txt
 idna==2.10
     # via requests
@@ -123,7 +123,7 @@ py==1.10.0
     #   -r requirements/test.txt
     #   pytest
     #   pytest-forked
-pycodestyle==2.6.0
+pycodestyle==2.7.0
     # via -r requirements/test.txt
 pygments==2.8.1
     # via
@@ -248,7 +248,7 @@ toml==0.10.2
     #   -r requirements/test.txt
     #   pylint
     #   pytest-pylint
-urllib3==1.26.3
+urllib3==1.26.4
     # via requests
 wcwidth==0.2.5
     # via
