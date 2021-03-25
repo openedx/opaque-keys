@@ -44,7 +44,7 @@ ddt==1.4.2
     #   -r requirements/test.txt
     #   code-annotations
     #   edx-lint
-edx-lint==4.1.1
+edx-lint==5.0.0
     # via -r requirements/test.txt
 execnet==1.8.0
     # via
@@ -53,7 +53,7 @@ execnet==1.8.0
     #   pytest-xdist
 hypothesis==6.8.1
     # via -r requirements/test.txt
-isort==5.7.0
+isort==5.8.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -61,7 +61,7 @@ jinja2==2.11.3
     # via
     #   -r requirements/test.txt
     #   code-annotations
-lazy-object-proxy==1.5.2
+lazy-object-proxy==1.6.0
     # via
     #   -r requirements/test.txt
     #   astroid
