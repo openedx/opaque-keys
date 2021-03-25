@@ -58,7 +58,7 @@ docutils==0.16
     # via
     #   readme-renderer
     #   sphinx
-edx-lint==4.1.1
+edx-lint==5.0.0
     # via -r requirements/test.txt
 edx-sphinx-theme==2.0.0
     # via -r requirements/doc.in
@@ -73,7 +73,7 @@ idna==2.10
     # via requests
 imagesize==1.2.0
     # via sphinx
-isort==5.7.0
+isort==5.8.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -82,7 +82,7 @@ jinja2==2.11.3
     #   -r requirements/test.txt
     #   code-annotations
     #   sphinx
-lazy-object-proxy==1.5.2
+lazy-object-proxy==1.6.0
     # via
     #   -r requirements/test.txt
     #   astroid
@@ -215,7 +215,7 @@ sortedcontainers==2.3.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
-sphinx==3.5.2
+sphinx==3.5.3
     # via
     #   -r requirements/doc.in
     #   edx-sphinx-theme
