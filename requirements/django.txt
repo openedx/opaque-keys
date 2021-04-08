@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-django==2.2.19
+django==2.2.20
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/django.in

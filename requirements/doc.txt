@@ -48,26 +48,26 @@ coverage==5.5
     #   pytest-cov
 ddt==1.4.2
     # via -r requirements/test.txt
-django==2.2.19
+django==2.2.20
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
     #   code-annotations
     #   edx-lint
-docutils==0.16
+docutils==0.17
     # via
     #   readme-renderer
     #   sphinx
 edx-lint==5.0.0
     # via -r requirements/test.txt
-edx-sphinx-theme==2.0.0
+edx-sphinx-theme==2.1.0
     # via -r requirements/doc.in
 execnet==1.8.0
     # via
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.8.3
+hypothesis==6.8.9
     # via -r requirements/test.txt
 idna==2.10
     # via requests

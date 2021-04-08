@@ -74,7 +74,7 @@ distlib==0.3.1
     # via
     #   -r requirements/travis.txt
     #   virtualenv
-django==2.2.19
+django==2.2.20
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/doc.txt
@@ -84,14 +84,14 @@ docopt==0.6.2
     # via
     #   -r requirements/travis.txt
     #   coveralls
-docutils==0.16
+docutils==0.17
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
     #   sphinx
 edx-lint==5.0.0
     # via -r requirements/doc.txt
-edx-sphinx-theme==2.0.0
+edx-sphinx-theme==2.1.0
     # via -r requirements/doc.txt
 execnet==1.8.0
     # via
@@ -103,7 +103,7 @@ filelock==3.0.12
     #   -r requirements/travis.txt
     #   tox
     #   virtualenv
-hypothesis==6.8.3
+hypothesis==6.8.9
     # via -r requirements/doc.txt
 idna==2.10
     # via

@@ -29,7 +29,7 @@ coverage==5.5
     #   pytest-cov
 ddt==1.4.2
     # via -r requirements/test.in
-django==2.2.19
+django==2.2.20
     # via
     #   -c requirements/constraints.txt
     #   code-annotations
@@ -40,7 +40,7 @@ execnet==1.8.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.8.3
+hypothesis==6.8.9
     # via -r requirements/test.in
 isort==5.8.0
     # via pylint
