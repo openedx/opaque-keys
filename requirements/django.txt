@@ -4,10 +4,10 @@
 #
 #    make upgrade
 #
-django==2.2.19
+django==2.2.20
     # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/django.in
+    #   -c constraints.txt
+    #   -r django.in
 pytz==2021.1
     # via django
 sqlparse==0.4.1
