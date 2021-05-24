@@ -1,3 +1,7 @@
+# 2.2.1
+
+* Upgraded dependencies
+
 # 2.2.0
 
 * Dropped support for Python3.5
