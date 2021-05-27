@@ -66,7 +66,7 @@ coverage[toml]==5.5
     #   -r requirements/travis.txt
     #   coveralls
     #   pytest-cov
-coveralls==3.0.1
+coveralls==3.1.0
     # via -r requirements/travis.txt
 ddt==1.4.2
     # via -r requirements/doc.txt
@@ -103,7 +103,7 @@ filelock==3.0.12
     #   -r requirements/travis.txt
     #   tox
     #   virtualenv
-hypothesis==6.13.4
+hypothesis==6.13.6
     # via -r requirements/doc.txt
 idna==2.10
     # via
@@ -335,12 +335,12 @@ tox==3.23.1
     # via
     #   -r requirements/travis.txt
     #   tox-battery
-urllib3==1.26.4
+urllib3==1.26.5
     # via
     #   -r requirements/doc.txt
     #   -r requirements/travis.txt
     #   requests
-virtualenv==20.4.6
+virtualenv==20.4.7
     # via
     #   -r requirements/travis.txt
     #   tox
