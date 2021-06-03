@@ -34,7 +34,7 @@ bleach==3.3.0
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
-certifi==2020.12.5
+certifi==2021.5.30
     # via
     #   -r requirements/doc.txt
     #   -r requirements/travis.txt
@@ -60,7 +60,7 @@ code-annotations==1.1.2
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-coverage[toml]==5.5
+coverage==5.5
     # via
     #   -r requirements/doc.txt
     #   -r requirements/travis.txt
@@ -70,11 +70,11 @@ coveralls==3.1.0
     # via -r requirements/travis.txt
 ddt==1.4.2
     # via -r requirements/doc.txt
-distlib==0.3.1
+distlib==0.3.2
     # via
     #   -r requirements/travis.txt
     #   virtualenv
-django==2.2.23
+django==2.2.24
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/doc.txt
@@ -93,7 +93,7 @@ edx-lint==5.0.0
     # via -r requirements/doc.txt
 edx-sphinx-theme==2.1.0
     # via -r requirements/doc.txt
-execnet==1.8.0
+execnet==1.8.1
     # via
     #   -r requirements/doc.txt
     #   pytest-cache
@@ -103,7 +103,7 @@ filelock==3.0.12
     #   -r requirements/travis.txt
     #   tox
     #   virtualenv
-hypothesis==6.13.7
+hypothesis==6.13.11
     # via -r requirements/doc.txt
 idna==2.10
     # via
@@ -196,7 +196,7 @@ pylint-plugin-utils==0.6
     #   -r requirements/doc.txt
     #   pylint-celery
     #   pylint-django
-pylint==2.8.2
+pylint==2.8.3
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -215,7 +215,7 @@ pytest-cache==1.0
     # via
     #   -r requirements/doc.txt
     #   pytest-pep8
-pytest-cov==2.12.0
+pytest-cov==2.12.1
     # via -r requirements/doc.txt
 pytest-forked==1.3.0
     # via
@@ -324,9 +324,9 @@ toml==0.10.2
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
     #   -r requirements/travis.txt
-    #   coverage
     #   pep517
     #   pylint
+    #   pytest-cov
     #   pytest-pylint
     #   tox
 tox-battery==0.6.1
