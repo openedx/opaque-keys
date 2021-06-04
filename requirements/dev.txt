@@ -103,7 +103,7 @@ filelock==3.0.12
     #   -r requirements/travis.txt
     #   tox
     #   virtualenv
-hypothesis==6.13.11
+hypothesis==6.13.13
     # via -r requirements/doc.txt
 idna==2.10
     # via
