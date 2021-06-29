@@ -33,7 +33,7 @@ def is_requirement(line):
 
 setup(
     name='edx-opaque-keys',
-    version='2.2.1',
+    version='2.2.2',
     author='edX',
     url='https://github.com/edx/opaque-keys',
     classifiers=[
