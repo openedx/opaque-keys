@@ -1,3 +1,7 @@
+# 2.2.2
+
+* Moved django pin from django.in to constraint.txt. Upgraded dependencies
+
 # 2.2.1
 
 * Upgraded dependencies
