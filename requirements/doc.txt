@@ -6,7 +6,7 @@
 #
 alabaster==0.7.12
     # via sphinx
-astroid==2.5.6
+astroid==2.6.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -50,14 +50,13 @@ django==2.2.24
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
     #   edx-lint
-docutils==0.16
+docutils==0.17.1
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   readme-renderer
     #   sphinx
 edx-lint==5.0.0
     # via -r requirements/test.txt
-edx-sphinx-theme==2.1.0
+edx-sphinx-theme==3.0.0
     # via -r requirements/doc.in
 execnet==1.9.0
     # via
@@ -126,7 +125,7 @@ pygments==2.9.0
     # via
     #   readme-renderer
     #   sphinx
-pylint==2.8.3
+pylint==2.9.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
