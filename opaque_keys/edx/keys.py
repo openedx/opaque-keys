@@ -204,8 +204,10 @@ class UsageKeyV2(UsageKey):
     UsageKeyV2 is just a subclass of UsageKey with slightly different behavior,
     but not a distinct key type (same KEY_TYPE). UsageKeyV2 should be used for
     new usage key types; the main differences between it and UsageKey are:
+
         * the .course_key property is considered deprecated for the new V2 key
           types, and they should implement .context_key instead.
+
         * the .definition_key property is explicitly disabled for V2 usage keys
     """
     __slots__ = ()
