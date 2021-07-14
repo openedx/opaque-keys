@@ -610,8 +610,11 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
 
     BlockUsageLocators also support deprecated Location-style formatting with the following mapping:
     Location(org, course, run, category, name, revision) is represented as a BlockUsageLocator with:
+
       - course_key = a CourseKey comprised of (org, course, run, branch=revision)
+
       - block_type = category
+
       - block_id = name
     """
     CANONICAL_NAMESPACE = 'block-v1'
