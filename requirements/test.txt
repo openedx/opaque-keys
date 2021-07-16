@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==2.5.6
+astroid==2.6.2
     # via
     #   pylint
     #   pylint-celery
@@ -38,9 +38,9 @@ execnet==1.9.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.14.0
+hypothesis==6.14.2
     # via -r requirements/test.in
-isort==5.9.1
+isort==5.9.2
     # via pylint
 jinja2==3.0.1
     # via code-annotations
@@ -54,7 +54,7 @@ mock==4.0.3
     # via -r requirements/test.in
 more-itertools==8.8.0
     # via pytest
-packaging==20.9
+packaging==21.0
     # via pytest
 pbr==5.6.0
     # via
@@ -70,7 +70,7 @@ py==1.10.0
     #   pytest-forked
 pycodestyle==2.7.0
     # via -r requirements/test.in
-pylint==2.8.3
+pylint==2.9.3
     # via
     #   edx-lint
     #   pylint-celery
@@ -85,7 +85,7 @@ pylint-plugin-utils==0.6
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==3.11.4
+pymongo==3.12.0
     # via -r requirements/base.txt
 pyparsing==2.4.7
     # via packaging
