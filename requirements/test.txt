@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==2.6.2
+astroid==2.6.6
     # via
     #   pylint
     #   pylint-celery
@@ -19,7 +19,7 @@ click==8.0.1
     #   edx-lint
 click-log==0.3.2
     # via edx-lint
-code-annotations==1.1.2
+code-annotations==1.2.0
     # via edx-lint
 coverage==5.5
     # via
@@ -30,7 +30,6 @@ ddt==1.4.2
 django==2.2.24
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
-    #   -c requirements/constraints.txt
     #   edx-lint
 edx-lint==5.0.0
     # via -r requirements/test.in
@@ -38,9 +37,9 @@ execnet==1.9.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.14.2
+hypothesis==6.14.6
     # via -r requirements/test.in
-isort==5.9.2
+isort==5.9.3
     # via pylint
 jinja2==3.0.1
     # via code-annotations
@@ -70,7 +69,7 @@ py==1.10.0
     #   pytest-forked
 pycodestyle==2.7.0
     # via -r requirements/test.in
-pylint==2.9.3
+pylint==2.9.6
     # via
     #   edx-lint
     #   pylint-celery
@@ -142,3 +141,6 @@ wcwidth==0.2.5
     # via pytest
 wrapt==1.12.1
     # via astroid
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
