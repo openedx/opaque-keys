@@ -3,9 +3,8 @@
 OpaqueKey abstract classes for edx-platform object types (courses, definitions, usages, and assets).
 """
 import json
-from abc import abstractmethod, abstractproperty
+from abc import abstractmethod
 import warnings
-from six import text_type
 
 from opaque_keys import OpaqueKey
 
@@ -46,14 +45,16 @@ class CourseKey(LearningContextKey):
     __slots__ = ()
     is_course = True
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def org(self):  # pragma: no cover
         """
         The organization that this course belongs to.
         """
         raise NotImplementedError()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def course(self):  # pragma: no cover
         """
         The name for this course.
@@ -62,7 +63,8 @@ class CourseKey(LearningContextKey):
         """
         raise NotImplementedError()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def run(self):  # pragma: no cover
         """
         The run for this course.
@@ -99,7 +101,8 @@ class DefinitionKey(OpaqueKey):
     KEY_TYPE = 'definition_key'
     __slots__ = ()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def block_type(self):  # pragma: no cover
         """
         The XBlock type of this definition.
@@ -114,7 +117,8 @@ class CourseObjectMixin:
     """
     __slots__ = ()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def course_key(self):  # pragma: no cover
         """
         Return the :class:`CourseKey` for the course containing this usage.
@@ -144,14 +148,16 @@ class AssetKey(CourseObjectMixin, OpaqueKey):
     KEY_TYPE = 'asset_key'
     __slots__ = ()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def asset_type(self):  # pragma: no cover
         """
         Return what type of asset this is.
         """
         raise NotImplementedError()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def path(self):  # pragma: no cover
         """
         Return the path for this asset.
@@ -166,21 +172,24 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
     KEY_TYPE = 'usage_key'
     __slots__ = ()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def definition_key(self):  # pragma: no cover
         """
         Return the :class:`DefinitionKey` for the XBlock containing this usage.
         """
         raise NotImplementedError()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def block_type(self):
         """
         The XBlock type of this usage.
         """
         raise NotImplementedError()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def block_id(self):
         """
         The name of this usage.
@@ -205,13 +214,16 @@ class UsageKeyV2(UsageKey):
     UsageKeyV2 is just a subclass of UsageKey with slightly different behavior,
     but not a distinct key type (same KEY_TYPE). UsageKeyV2 should be used for
     new usage key types; the main differences between it and UsageKey are:
+
         * the .course_key property is considered deprecated for the new V2 key
           types, and they should implement .context_key instead.
+
         * the .definition_key property is explicitly disabled for V2 usage keys
     """
     __slots__ = ()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def context_key(self):
         """
         Get the learning context key (LearningContextKey) for this XBlock usage.
@@ -254,14 +266,16 @@ class AsideDefinitionKey(DefinitionKey):
     """
     __slots__ = ()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def definition_key(self):
         """
         Return the DefinitionKey that this aside is decorating.
         """
         raise NotImplementedError()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def aside_type(self):
         """
         Return the type of this aside.
@@ -275,14 +289,16 @@ class AsideUsageKey(UsageKey):
     """
     __slots__ = ()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def usage_key(self):
         """
         Return the UsageKey that this aside is decorating.
         """
         raise NotImplementedError()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def aside_type(self):
         """
         Return the type of this aside.
@@ -296,10 +312,10 @@ class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
     If provided as the cls to json.dumps, will serialize and Locations as i4x strings and other
     keys using the unicode strings.
     """
-    def default(self, key):  # pylint: disable=arguments-differ, method-hidden
-        if isinstance(key, OpaqueKey):
-            return text_type(key)
-        super(i4xEncoder, self).default(key)
+    def default(self, o):  # pylint: disable=arguments-differ, method-hidden
+        if isinstance(o, OpaqueKey):
+            return str(o)
+        super().default(o)
         return None
 
 
@@ -311,7 +327,8 @@ class BlockTypeKey(OpaqueKey):
     KEY_TYPE = 'block_type'
     __slots__ = ()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def block_family(self):
         """
         Return the block-family identifier (the entry-point used to load that block
@@ -319,7 +336,8 @@ class BlockTypeKey(OpaqueKey):
         """
         raise NotImplementedError()
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def block_type(self):
         """
         Return the block_type of this block (the key in the entry-point to load the block

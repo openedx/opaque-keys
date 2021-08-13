@@ -1,3 +1,16 @@
+# 2.2.2
+
+* Moved django pin from django.in to constraint.txt. Upgraded dependencies
+
+# 2.2.1
+
+* Upgraded dependencies
+
+# 2.2.0
+
+* Dropped support for Python3.5
+* Added support for Django 3.0 & Django 3.1
+
 # 2.0.2
 
 * Fixed django warnings

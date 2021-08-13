@@ -4,5 +4,3 @@
 # Match resolved versions of core dependencies (doesn't actually pull them in)
 -c base.txt
 
-
-Django>=2.2,<3.0

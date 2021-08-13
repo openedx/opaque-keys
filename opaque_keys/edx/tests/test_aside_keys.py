@@ -5,7 +5,6 @@ Tests of AsideUsageKeyV1 and AsideDefinitionKeyV1.
 import itertools
 from unittest import TestCase
 
-from six import text_type
 import ddt
 from hypothesis import HealthCheck, assume, given, settings, strategies
 
@@ -133,7 +132,7 @@ class TestAsideKeys(TestCase):
     @ddt.unpack
     def test_usage_round_trip_deserialized(self, key_class, usage_key, aside_type):
         key = key_class(usage_key, aside_type)
-        serialized = text_type(key)
+        serialized = str(key)
         deserialized = AsideUsageKey.from_string(serialized)
         self.assertEqual(key, deserialized)
         self.assertEqual(usage_key, key.usage_key, usage_key)
@@ -151,7 +150,7 @@ class TestAsideKeys(TestCase):
     )
     def test_usage_round_trip_serialized(self, aside_key):
         deserialized = AsideUsageKey.from_string(aside_key)
-        serialized = text_type(deserialized)
+        serialized = str(deserialized)
         self.assertEqual(aside_key, serialized)
 
     @ddt.data(*itertools.product([
@@ -166,7 +165,7 @@ class TestAsideKeys(TestCase):
     @ddt.unpack
     def test_definition_round_trip_deserialized(self, key_class, definition_key, aside_type):
         key = key_class(definition_key, aside_type)
-        serialized = text_type(key)
+        serialized = str(key)
         deserialized = AsideDefinitionKey.from_string(serialized)
         self.assertEqual(key, deserialized)
         self.assertEqual(definition_key, key.definition_key, definition_key)
@@ -180,7 +179,7 @@ class TestAsideKeys(TestCase):
     )
     def test_definition_round_trip_serialized(self, aside_key):
         deserialized = AsideDefinitionKey.from_string(aside_key)
-        serialized = text_type(deserialized)
+        serialized = str(deserialized)
         self.assertEqual(aside_key, serialized)
 
     @ddt.data(*itertools.product([

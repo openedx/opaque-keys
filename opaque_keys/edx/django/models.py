@@ -15,8 +15,6 @@ except ImportError:  # pragma: no cover
     CharField = object
     IsNull = object
 
-import six
-
 from opaque_keys.edx.keys import BlockTypeKey, CourseKey, LearningContextKey, UsageKey
 
 
@@ -48,7 +46,7 @@ class CreatorMixin:
     See: https://docs.djangoproject.com/en/1.11/releases/1.8/#subfieldbase
     """
     def contribute_to_class(self, cls, name, *args, **kwargs):
-        super(CreatorMixin, self).contribute_to_class(cls, name, *args, **kwargs)
+        super().contribute_to_class(cls, name, *args, **kwargs)
         setattr(cls, name, _Creator(self))
 
     def from_db_value(self, value, expression, connection):
@@ -97,23 +95,23 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if self.KEY_CLASS is None:
             raise ValueError('Must specify KEY_CLASS in OpaqueKeyField subclasses')
 
-        super(OpaqueKeyField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def to_python(self, value):
         if value is self.Empty or value is None:
             return None
 
-        error_message = u"%s is not an instance of six.string_types or %s" % (value, self.KEY_CLASS)
-        assert isinstance(value, six.string_types + (self.KEY_CLASS,)), error_message
+        error_message = "%s is not an instance of str or %s" % (value, self.KEY_CLASS)
+        assert isinstance(value, (str,) + (self.KEY_CLASS,)), error_message
         if value == '':
             # handle empty string for models being created w/o fields populated
             return None
 
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             if value.endswith('\n'):
                 # An opaque key with a trailing newline has leaked into the DB.
                 # Log and strip the value.
-                log.warning(u'{}:{}:{}:to_python: Invalid key: {}. Removing trailing newline.'.format(
+                log.warning('{}:{}:{}:to_python: Invalid key: {}. Removing trailing newline.'.format(
                     self.model._meta.db_table,  # pylint: disable=protected-access
                     self.name,
                     self.KEY_CLASS.__name__,
@@ -127,15 +125,15 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if value is self.Empty or value is None:
             return ''  # CharFields should use '' as their empty value, rather than None
 
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             value = self.KEY_CLASS.from_string(value)
-
-        assert isinstance(value, self.KEY_CLASS), u"%s is not an instance of %s" % (value, self.KEY_CLASS)
-        serialized_key = six.text_type(_strip_value(value))
+        # pylint: disable=W1116
+        assert isinstance(value, self.KEY_CLASS), "%s is not an instance of %s" % (value, self.KEY_CLASS)
+        serialized_key = str(_strip_value(value))
         if serialized_key.endswith('\n'):
             # An opaque key object serialized to a string with a trailing newline.
             # Log the value - but do not modify it.
-            log.warning(u'{}:{}:{}:get_prep_value: Invalid key: {}.'.format(
+            log.warning('{}:{}:{}:get_prep_value: Invalid key: {}.'.format(
                 self.model._meta.db_table,  # pylint: disable=protected-access
                 self.name,
                 self.KEY_CLASS.__name__,
@@ -147,7 +145,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         """Validate Empty values, otherwise defer to the parent"""
         # raise validation error if the use of this field says it can't be blank but it is
         if self.blank or value is not self.Empty:
-            return super(OpaqueKeyField, self).validate(value, model_instance)
+            return super().validate(value, model_instance)
         raise ValidationError(self.error_messages['blank'])
 
     def run_validators(self, value):
@@ -155,7 +153,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if value is self.Empty:
             return None
 
-        return super(OpaqueKeyField, self).run_validators(value)
+        return super().run_validators(value)
 
 
 class OpaqueKeyFieldEmptyLookupIsNull(IsNull):
@@ -211,7 +209,7 @@ class LocationKeyField(UsageKeyField):
     """
     def __init__(self, *args, **kwargs):
         warnings.warn("LocationKeyField is deprecated. Please use UsageKeyField instead.", stacklevel=2)
-        super(LocationKeyField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class BlockTypeKeyField(OpaqueKeyField):

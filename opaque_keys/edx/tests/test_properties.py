@@ -7,18 +7,16 @@ import logging
 
 from hypothesis import strategies, given, assume, example, HealthCheck, settings
 from hypothesis.strategies._internal.core import cacheable
-from six import text_type
-from six.moves import range  # pylint: disable=redefined-builtin
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey
 from opaque_keys import InvalidKeyError
 from opaque_keys.tests.strategies import keys_of_type
 
 KEY_TYPES = (CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey)
-KEY_CLASSES = set(
+KEY_CLASSES = {
     extension.plugin
     for key_type in KEY_TYPES
     for extension in key_type._drivers()  # pylint: disable=protected-access
-)
+}
 
 LOGGER = logging.getLogger(__name__)
 
@@ -71,7 +69,7 @@ def valid_key_string(draw):
     """
     key_type = draw(strategies.shared(strategies.sampled_from(KEY_TYPES), key="key_type"))
     key = draw(keys_of_type(key_type))
-    return text_type(key)
+    return str(key)
 
 
 @strategies.composite
@@ -139,8 +137,8 @@ def perturbed_strings(string_strategy):
 )
 @example(
     key_type=CourseKey,
-    serialized=u'library-v1:-+-+branch@-+version@000000000000000000000000',
-    perturbed=u'library-v1:-+-+branch@-+versIon@000000000000000000000000',
+    serialized='library-v1:-+-+branch@-+version@000000000000000000000000',
+    perturbed='library-v1:-+-+branch@-+versIon@000000000000000000000000',
 )
 @example(
     key_type=DefinitionKey,
@@ -155,13 +153,13 @@ def perturbed_strings(string_strategy):
 )
 @example(
     key_type=UsageKey,
-    serialized=u'i4x://-/-/-/-@-',
-    perturbed=u'i4x:/-/-/-/-@-',
+    serialized='i4x://-/-/-/-@-',
+    perturbed='i4x:/-/-/-/-@-',
 )
 @example(
     key_type=AssetKey,
-    serialized=u'/c4x/-/-/-/-@0',
-    perturbed=u'/c4x/-/-/-/-@0/c4x/-/-/-/-@0',
+    serialized='/c4x/-/-/-/-@0',
+    perturbed='/c4x/-/-/-/-@0/c4x/-/-/-/-@0',
 )
 @example(
     key_type=UsageKey,
@@ -170,13 +168,13 @@ def perturbed_strings(string_strategy):
 )
 @example(
     key_type=UsageKey,
-    serialized=u'i4x://-/-/-/-@-',
-    perturbed=u'/i4x/-/-/-/-@-',
+    serialized='i4x://-/-/-/-@-',
+    perturbed='/i4x/-/-/-/-@-',
 )
 @example(
     key_type=UsageKey,
-    serialized=u'i4x://-/-/-/-@-',
-    perturbed=u'i4x://-/-/-/-@-/',
+    serialized='i4x://-/-/-/-@-',
+    perturbed='i4x://-/-/-/-@-/',
 )
 def test_perturbed_serializations(key_type, serialized, perturbed):
     assume(serialized != perturbed)
