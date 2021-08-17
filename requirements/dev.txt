@@ -8,7 +8,7 @@ alabaster==0.7.12
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==2.6.2
+astroid==2.6.6
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -26,7 +26,7 @@ backports.entry-points-selectable==1.1.0
     # via
     #   -r requirements/travis.txt
     #   virtualenv
-bleach==3.3.1
+bleach==4.0.0
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
@@ -35,7 +35,7 @@ certifi==2021.5.30
     #   -r requirements/doc.txt
     #   -r requirements/travis.txt
     #   requests
-charset-normalizer==2.0.2
+charset-normalizer==2.0.4
     # via
     #   -r requirements/doc.txt
     #   -r requirements/travis.txt
@@ -52,7 +52,7 @@ click-log==0.3.2
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-code-annotations==1.1.2
+code-annotations==1.2.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -62,7 +62,7 @@ coverage==5.5
     #   -r requirements/travis.txt
     #   coveralls
     #   pytest-cov
-coveralls==3.1.0
+coveralls==3.2.0
     # via -r requirements/travis.txt
 ddt==1.4.2
     # via -r requirements/doc.txt
@@ -73,7 +73,6 @@ distlib==0.3.2
 django==2.2.24
     # via
     #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
-    #   -c requirements/constraints.txt
     #   -r requirements/doc.txt
     #   edx-lint
 docopt==0.6.2
@@ -99,7 +98,7 @@ filelock==3.0.12
     #   -r requirements/travis.txt
     #   tox
     #   virtualenv
-hypothesis==6.14.2
+hypothesis==6.14.6
     # via -r requirements/doc.txt
 idna==3.2
     # via
@@ -110,7 +109,7 @@ imagesize==1.2.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-isort==5.9.2
+isort==5.9.3
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -149,7 +148,7 @@ pbr==5.6.0
     # via
     #   -r requirements/doc.txt
     #   stevedore
-pep517==0.10.0
+pep517==0.11.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
@@ -159,7 +158,7 @@ pep8==1.7.1
     #   pytest-pep8
 pip-tools==6.2.0
     # via -r requirements/pip-tools.txt
-platformdirs==2.0.2
+platformdirs==2.2.0
     # via
     #   -r requirements/travis.txt
     #   virtualenv
@@ -183,7 +182,7 @@ pygments==2.9.0
     #   -r requirements/doc.txt
     #   readme-renderer
     #   sphinx
-pylint==2.9.3
+pylint==2.9.6
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -279,7 +278,7 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/doc.txt
     #   hypothesis
-sphinx==4.1.1
+sphinx==4.1.2
     # via
     #   -r requirements/doc.txt
     #   edx-sphinx-theme
@@ -322,14 +321,16 @@ text-unidecode==1.3
 toml==0.10.2
     # via
     #   -r requirements/doc.txt
-    #   -r requirements/pip-tools.txt
     #   -r requirements/travis.txt
-    #   pep517
     #   pylint
     #   pytest-cov
     #   pytest-pylint
     #   tox
-tox==3.24.0
+tomli==1.2.1
+    # via
+    #   -r requirements/pip-tools.txt
+    #   pep517
+tox==3.24.1
     # via
     #   -r requirements/travis.txt
     #   tox-battery
@@ -340,7 +341,7 @@ urllib3==1.26.6
     #   -r requirements/doc.txt
     #   -r requirements/travis.txt
     #   requests
-virtualenv==20.6.0
+virtualenv==20.7.2
     # via
     #   -r requirements/travis.txt
     #   tox
@@ -352,7 +353,7 @@ webencodings==0.5.1
     # via
     #   -r requirements/doc.txt
     #   bleach
-wheel==0.36.2
+wheel==0.37.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
