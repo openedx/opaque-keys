@@ -37,7 +37,7 @@ execnet==1.9.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.14.6
+hypothesis==6.14.9
     # via -r requirements/test.in
 isort==5.9.3
     # via pylint
@@ -126,7 +126,7 @@ sortedcontainers==2.4.0
     # via hypothesis
 sqlparse==0.4.1
     # via django
-stevedore==3.3.0
+stevedore==3.4.0
     # via
     #   -r requirements/base.txt
     #   code-annotations
