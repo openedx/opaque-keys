@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==2.6.6
+astroid==2.7.3
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -34,18 +34,14 @@ coverage==5.5
     #   pytest-cov
 ddt==1.4.2
     # via -r requirements/test.txt
-    # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
-    #   -r requirements/test.txt
-    #   edx-lint
-edx-lint==5.0.0
+edx-lint==5.1.0
     # via -r requirements/test.txt
 execnet==1.9.0
     # via
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.14.6
+hypothesis==6.18.0
     # via -r requirements/test.txt
 isort==5.9.3
     # via
@@ -69,7 +65,7 @@ mccabe==0.6.1
     #   pylint
 mock==4.0.3
     # via -r requirements/test.txt
-more-itertools==8.8.0
+more-itertools==8.9.0
     # via
     #   -r requirements/test.txt
     #   pytest
@@ -85,8 +81,13 @@ pep8==1.7.1
     # via
     #   -r requirements/test.txt
     #   pytest-pep8
+platformdirs==2.3.0
+    # via
+    #   -r requirements/test.txt
+    #   pylint
 pluggy==0.13.1
     # via
+    #   -c requirements/constraints.txt
     #   -r requirements/test.txt
     #   pytest
 py==1.10.0
@@ -96,7 +97,7 @@ py==1.10.0
     #   pytest-forked
 pycodestyle==2.7.0
     # via -r requirements/test.txt
-pylint==2.9.6
+pylint==2.10.2
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -158,10 +159,6 @@ python-slugify==5.0.2
     # via
     #   -r requirements/test.txt
     #   code-annotations
-pytz==2021.1
-    # via
-    #   -r requirements/test.txt
-    #   django
 pyyaml==5.4.1
     # via
     #   -r requirements/test.txt
@@ -175,11 +172,7 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
-sqlparse==0.4.1
-    # via
-    #   -r requirements/test.txt
-    #   django
-stevedore==3.3.0
+stevedore==3.4.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
