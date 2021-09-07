@@ -3,4 +3,4 @@
 
 -r pip-tools.txt          # Contains pip-compile, used to generate pip requirements files
 -r doc.txt                # Core, testing, and doc generation dependencies
--r travis.txt             # tox and related dependencies
+-r ci.txt             # tox and related dependencies
