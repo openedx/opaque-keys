@@ -57,7 +57,7 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.18.0
+hypothesis==6.20.0
     # via -r requirements/test.txt
 idna==3.2
     # via requests
