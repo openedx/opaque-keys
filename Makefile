@@ -16,6 +16,7 @@ html_coverage:
 
 
 requirements:
+	pip install -qr requirements/pip.txt
 	pip install -r requirements/dev.txt
 
 test:
@@ -24,13 +25,14 @@ test:
 upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
 upgrade: ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
 	pip install -qr requirements/pip-tools.txt
+	pip-compile --upgrade --allow-unsafe --rebuild -o requirements/pip.txt requirements/pip.in
 	pip-compile --rebuild --upgrade -o requirements/pip-tools.txt requirements/pip-tools.in
 	pip-compile --rebuild --upgrade -o requirements/base.txt requirements/base.in
 	pip-compile --rebuild --upgrade -o requirements/django.txt requirements/django.in
 	pip-compile --rebuild --upgrade -o requirements/test.txt requirements/test.in
 	pip-compile --rebuild --upgrade -o requirements/django-test.txt requirements/django-test.in
 	pip-compile --rebuild --upgrade -o requirements/doc.txt requirements/doc.in
-	pip-compile --rebuild --upgrade -o requirements/travis.txt requirements/travis.in
+	pip-compile --rebuild --upgrade -o requirements/ci.txt requirements/ci.in
 	pip-compile --rebuild --upgrade -o requirements/dev.txt requirements/dev.in
 	# Let tox control the Django version for tests
 	sed '/^[dD]jango==/d' requirements/django-test.txt > requirements/django-test.tmp
