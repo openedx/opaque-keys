@@ -21,5 +21,4 @@ INSTALLED_APPS = tuple()
 
 BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
-DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
