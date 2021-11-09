@@ -4,3 +4,4 @@ include README.rst
 include requirements/base.in
 include requirements/django.in
 recursive-include opaque_keys *.html *.png *.gif *js *.css *jpg *jpeg *svg *py
+include requirements/constraints.txt
