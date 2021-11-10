@@ -13,6 +13,8 @@ from stevedore.enabled import EnabledExtensionManager
 # pylint: disable=wrong-import-order
 from _collections import defaultdict
 
+__version__ = '2.2.2'
+
 
 class InvalidKeyError(Exception):
     """
