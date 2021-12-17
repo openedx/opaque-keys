@@ -49,11 +49,10 @@ class TestLibraryUsageLocators(LocatorBaseTest):
     def test_constructor(self, org, lib, block_type, block_id):
         lib_key = LibraryLocator(org=org, library=lib)
         lib_usage_key = LibraryUsageLocator(library_key=lib_key, block_type=block_type, block_id=block_id)
-        lib_usage_key2 = UsageKey.from_string("lib-block-v1:{}+{}+{}@{}+{}@{}".format(
-            org, lib,
-            BLOCK_TYPE_PREFIX, block_type,
-            BLOCK_PREFIX, block_id
-        ))
+        lib_usage_key2 = UsageKey.from_string(
+            f"lib-block-v1:{org}+{lib}+{BLOCK_TYPE_PREFIX}"
+            f"@{block_type}+{BLOCK_PREFIX}@{block_id}"
+        )
         self.assertEqual(lib_usage_key, lib_usage_key2)
         self.assertEqual(lib_usage_key.library_key, lib_key)
         self.assertEqual(lib_usage_key.library_key, lib_key)
@@ -87,13 +86,13 @@ class TestLibraryUsageLocators(LocatorBaseTest):
 
     @ddt.data(*itertools.product(
         (
-            "lib-block-v1:org+lib+{}@category+{}@name{}".format(BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'),
-            "lib-block-v1:org+lib+{}@519665f6223ebd6980884f2b+{}@category+{}@name{}".format(
-                VERSION_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'
-            ),
-            "lib-block-v1:org+lib+{}@revision+{}@category+{}@name{}".format(
-                LibraryLocator.BRANCH_PREFIX, BLOCK_TYPE_PREFIX, BLOCK_PREFIX, '{}'
-            ),
+            f"lib-block-v1:org+lib+{BLOCK_TYPE_PREFIX}@category+{BLOCK_PREFIX}@name{{}}",
+            f"lib-block-v1:org+lib+{VERSION_PREFIX}"
+            f"@519665f6223ebd6980884f2b+{BLOCK_TYPE_PREFIX}@category+{BLOCK_PREFIX}"
+            f"@name{{}}",
+            f"lib-block-v1:org+lib+{LibraryLocator.BRANCH_PREFIX}"
+            f"@revision+{BLOCK_TYPE_PREFIX}@category+{BLOCK_PREFIX}"
+            f"@name{{}}",
         ),
         ('\n', '\n\n', ' ', '   ', '   \n'),
     ))

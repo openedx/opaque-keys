@@ -197,9 +197,9 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         # Test parsing a url when it starts with a version ID and there is also a block ID.
         # This hits the parsers parse_guid method.
         test_id_loc = '519665f6223ebd6980884f2b'
-        testobj = CourseKey.from_string("library-v1:{}@{}+{}@hw3".format(
-            LibraryLocator.VERSION_PREFIX, test_id_loc, LibraryLocator.BLOCK_PREFIX
-        ))
+        testobj = CourseKey.from_string(
+            f"library-v1:{LibraryLocator.VERSION_PREFIX}@{test_id_loc}+{LibraryLocator.BLOCK_PREFIX}@hw3"
+        )
         self.assertEqual(testobj.version_guid, ObjectId(test_id_loc))
         self.assertEqual(testobj.org, None)
         self.assertEqual(testobj.library, None)

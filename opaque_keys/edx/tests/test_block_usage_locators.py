@@ -26,9 +26,11 @@ GENERAL_PAIRS = [
 
 # Block usage locator to use in tests.
 TEST_ID_LOC = '519665f6223ebd6980884f2b'
-BLOCK_URL = 'block-v1:mit.eecs+6002x+2014_T2+{}@draft+{}@{}+{}@problem+{}@lab2'.format(
-    CourseLocator.BRANCH_PREFIX, CourseLocator.VERSION_PREFIX, TEST_ID_LOC,
-    BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
+BLOCK_URL = (
+    f'block-v1:org+course+run+{CourseLocator.BRANCH_PREFIX}'
+    f'@draft+{CourseLocator.VERSION_PREFIX}@{TEST_ID_LOC}'
+    f'+{BlockUsageLocator.BLOCK_TYPE_PREFIX}'
+    f'@problem+{BlockUsageLocator.BLOCK_PREFIX}@lab2'
 )
 
 
@@ -38,17 +40,18 @@ class TestBlockUsageLocators(LocatorBaseTest):
     Tests of :class:`.BlockUsageLocator`
     """
     @ddt.data(
-        "block-v1:org+course+run+{}@category+{}@name".format(BlockUsageLocator.BLOCK_TYPE_PREFIX,
-                                                             BlockUsageLocator.BLOCK_PREFIX),
-        "block-v1:org+course+run+{}@revision+{}@category+{}@name".format(CourseLocator.BRANCH_PREFIX,
-                                                                         BlockUsageLocator.BLOCK_TYPE_PREFIX,
-                                                                         BlockUsageLocator.BLOCK_PREFIX),
+        f"block-v1:org+course+run+{BlockUsageLocator.BLOCK_TYPE_PREFIX}"
+        f"@category+{BlockUsageLocator.BLOCK_PREFIX}@name",
+        f"block-v1:org+course+run+{CourseLocator.BRANCH_PREFIX}"
+        f"@revision+{BlockUsageLocator.BLOCK_TYPE_PREFIX}"
+        f"@category+{BlockUsageLocator.BLOCK_PREFIX}@name",
         "i4x://org/course/category/name",
         "i4x://org/course/category/name@revision",
         # now try the extended char sets - we expect that "%" should be OK in deprecated-style ids,
         # but should not be valid in new-style ids
-        "block-v1:org.dept.sub-prof+course.num.section-4+run.hour.min-99+{}@category+{}@name:12.33-44".format(
-            BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX),
+        f"block-v1:org.dept.sub-prof+course.num.section-4"
+        f"+run.hour.min-99+{BlockUsageLocator.BLOCK_TYPE_PREFIX}"
+        f"@category+{BlockUsageLocator.BLOCK_PREFIX}@name:12.33-44",
         "i4x://org.dept%sub-prof/course.num%section-4/category/name:12%33-44",
     )
     def test_string_roundtrip(self, url):
@@ -229,9 +232,11 @@ class TestBlockUsageLocators(LocatorBaseTest):
         expected_run = '2014_T2'
         expected_branch = 'published'
         expected_block_ref = 'HW3'
-        testurn = 'block-v1:{}+{}+{}+{}@{}+{}@{}+{}@{}'.format(
-            expected_org, expected_course, expected_run, CourseLocator.BRANCH_PREFIX, expected_branch,
-            BlockUsageLocator.BLOCK_TYPE_PREFIX, 'problem', BlockUsageLocator.BLOCK_PREFIX, 'HW3'
+        testurn = (
+            f'block-v1:{expected_org}+{expected_course}+{expected_run}'
+            f'+{CourseLocator.BRANCH_PREFIX}@{expected_branch}+'
+            f'{BlockUsageLocator.BLOCK_TYPE_PREFIX}@problem+'
+            f'{BlockUsageLocator.BLOCK_PREFIX}@HW3'
         )
         testobj = UsageKey.from_string(testurn)
         self.check_block_locn_fields(
@@ -259,12 +264,9 @@ class TestBlockUsageLocators(LocatorBaseTest):
     def test_block_constructor_url_version_prefix(self):
         test_id_loc = '519665f6223ebd6980884f2b'
         testobj = UsageKey.from_string(
-            'block-v1:mit.eecs+6002x+2014_T2+{}@{}+{}@problem+{}@lab2'.format(
-                CourseLocator.VERSION_PREFIX,
-                test_id_loc,
-                BlockUsageLocator.BLOCK_TYPE_PREFIX,
-                BlockUsageLocator.BLOCK_PREFIX
-            )
+            f'block-v1:mit.eecs+6002x+2014_T2+{CourseLocator.VERSION_PREFIX}'
+            f'@{test_id_loc}+{BlockUsageLocator.BLOCK_TYPE_PREFIX}'
+            f'@problem+{BlockUsageLocator.BLOCK_PREFIX}@lab2'
         )
         self.check_block_locn_fields(
             testobj,
@@ -291,10 +293,10 @@ class TestBlockUsageLocators(LocatorBaseTest):
     def test_block_constructor_url_kitchen_sink(self):
         test_id_loc = '519665f6223ebd6980884f2b'
         testobj = UsageKey.from_string(
-            'block-v1:mit.eecs+6002x+2014_T2+{}@draft+{}@{}+{}@problem+{}@lab2'.format(
-                CourseLocator.BRANCH_PREFIX, CourseLocator.VERSION_PREFIX, test_id_loc,
-                BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
-            )
+            f'block-v1:mit.eecs+6002x+2014_T2+{CourseLocator.BRANCH_PREFIX}'
+            f'@draft+{CourseLocator.VERSION_PREFIX}@{test_id_loc}+'
+            f'{BlockUsageLocator.BLOCK_TYPE_PREFIX}@problem+'
+            f'{BlockUsageLocator.BLOCK_PREFIX}@lab2'
         )
         self.check_block_locn_fields(
             testobj,
@@ -308,7 +310,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
 
     @ddt.data(*itertools.product(
         (
-            '{}{}'.format(BLOCK_URL, '{}'),
+            f'{BLOCK_URL}{{}}',
         ),
         ('\n', '\n\n', ' ', '   ', '   \n'),
     ))
@@ -356,17 +358,15 @@ class TestBlockUsageLocators(LocatorBaseTest):
         )
 
     def test_repr(self):
-        testurn = 'block-v1:mit.eecs+6002x+2014_T2+{}@published+{}@problem+{}@HW3'.format(
-            CourseLocator.BRANCH_PREFIX, BlockUsageLocator.BLOCK_TYPE_PREFIX, BlockUsageLocator.BLOCK_PREFIX
+        testurn = (
+            f'block-v1:mit.eecs+6002x+2014_T2+{CourseLocator.BRANCH_PREFIX}'
+            f'@published+{BlockUsageLocator.BLOCK_TYPE_PREFIX}'
+            f'@problem+{BlockUsageLocator.BLOCK_PREFIX}@HW3'
         )
         testobj = UsageKey.from_string(testurn)
-        expected = "BlockUsageLocator(CourseLocator({}, {}, {}, {}, None), {}, {})".format(
-            repr('mit.eecs'),
-            repr('6002x'),
-            repr('2014_T2'),
-            repr('published'),
-            repr('problem'),
-            repr('HW3'),
+        expected = (
+            f"BlockUsageLocator(CourseLocator({'mit.eecs'!r}, {'6002x'!r}, "
+            f"{'2014_T2'!r}, {'published'!r}, None), {'problem'!r}, {'HW3'!r})"
         )
         self.assertEqual(expected, str(repr(testobj)))
 

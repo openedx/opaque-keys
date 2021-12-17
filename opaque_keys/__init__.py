@@ -286,15 +286,14 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         KEY_FIELDS as the arg order, and validating number and order of args.
         """
         if len(args) + len(kwargs) != len(self.KEY_FIELDS):
-            raise TypeError('__init__() takes exactly {} arguments ({} given)'.format(
-                len(self.KEY_FIELDS),
-                len(args) + len(kwargs)
-            ))
+            raise TypeError(
+                f'__init__() takes exactly {len(self.KEY_FIELDS)} arguments ({len(args) + len(kwargs)} given)'
+            )
 
         keyed_args = dict(zip(self.KEY_FIELDS, args))
         overlapping_args = keyed_args.keys() & kwargs.keys()
         if overlapping_args:
-            raise TypeError('__init__() got multiple values for keyword argument {!r}'.format(overlapping_args[0]))
+            raise TypeError(f'__init__() got multiple values for keyword argument {overlapping_args[0]!r}')
 
         keyed_args.update(kwargs)
 
@@ -388,10 +387,8 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         return hash(self._key)
 
     def __repr__(self):
-        return '{}({})'.format(
-            self.__class__.__name__,
-            ', '.join(repr(getattr(self, key)) for key in self.KEY_FIELDS)  # pylint: disable=no-member
-        )
+        key_field_repr = ', '.join(repr(getattr(self, key)) for key in self.KEY_FIELDS)
+        return f'{self.__class__.__name__}({key_field_repr})'
 
     def __len__(self):
         """Return the number of characters in the serialized OpaqueKey"""
