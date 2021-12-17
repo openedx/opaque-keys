@@ -51,7 +51,7 @@ def _join_keys_v1(left, right):
     """
     if left.endswith(':') or '::' in left:
         raise ValueError("Can't join a left string ending in ':' or containing '::'")
-    return "{}::{}".format(_encode_v1(left), _encode_v1(right))
+    return f"{_encode_v1(left)}::{_encode_v1(right)}"
 
 
 def _split_keys_v1(joined):
@@ -90,7 +90,7 @@ def _join_keys_v2(left, right):
     """
     Join two keys into a format separable by using _split_keys_v2.
     """
-    return "{}::{}".format(_encode_v2(left), _encode_v2(right))
+    return f"{_encode_v2(left)}::{_encode_v2(right)}"
 
 
 def _split_keys_v2(joined):

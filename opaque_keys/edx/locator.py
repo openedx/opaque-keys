@@ -27,7 +27,8 @@ class LocalId:
         super().__init__()
 
     def __str__(self):
-        return "localid_{}".format(self.block_id or id(self))
+        identifier = self.block_id or id(self)
+        return f"localid_{identifier}"
 
 
 class Locator(OpaqueKey):
@@ -64,7 +65,7 @@ class Locator(OpaqueKey):
         try:
             return ObjectId(value)
         except InvalidId as key_error:
-            raise InvalidKeyError(cls, '"%s" is not a valid version_guid' % value) from key_error
+            raise InvalidKeyError(cls, f'"{value}" is not a valid version_guid') from key_error
 
 
 class CheckFieldMixin:
@@ -80,9 +81,11 @@ class CheckFieldMixin:
             Match the specified regular expression
         """
         if not isinstance(value, str):
-            raise TypeError("Expected a string, got {}={}".format(field_name, repr(value)))
+            raise TypeError(f"Expected a string, got {field_name}={value!r}")
         if not value or not re.match(regexp, value):
-            raise ValueError("{} is not a valid {}.{} field value.".format(repr(value), cls.__name__, field_name))
+            raise ValueError(
+                f"{value!r} is not a valid {cls.__name__}.{field_name} field value."
+            )
 
 
 # `BlockLocatorBase` is another abstract base class, so don't worry that it doesn't
@@ -934,12 +937,10 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Return a string representing this location.
         """
         # Allow access to _to_string protected method
-        return "{course_key}+{BLOCK_TYPE_PREFIX}@{block_type}+{BLOCK_PREFIX}@{block_id}".format(
-            course_key=self.course_key._to_string(),  # pylint: disable=protected-access
-            BLOCK_TYPE_PREFIX=self.BLOCK_TYPE_PREFIX,
-            block_type=self.block_type,
-            BLOCK_PREFIX=self.BLOCK_PREFIX,
-            block_id=self.block_id
+        return (
+            f"{self.course_key._to_string()}"  # pylint: disable=protected-access
+            f"+{self.BLOCK_TYPE_PREFIX}"
+            f"@{self.block_type}+{self.BLOCK_PREFIX}@{self.block_id}"
         )
 
     def html_id(self):
@@ -962,8 +963,10 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Returns an old-style location, represented as:
         i4x://org/course/category/name[@revision]  # Revision is optional
         """
-        # pylint: disable=missing-format-attribute
-        url = "{0.DEPRECATED_TAG}://{0.course_key.org}/{0.course_key.course}/{0.block_type}/{0.block_id}".format(self)
+        url = (
+            f"{self.DEPRECATED_TAG}://{self.course_key.org}/{self.course_key.course}"
+            f"/{self.block_type}/{self.block_id}"
+        )
         if self.course_key.branch:
             url += f"@{self.course_key.branch}"
         return url
@@ -1192,12 +1195,11 @@ class DefinitionLocator(Locator, DefinitionKey):
         Return a string representing this location.
         unicode(self) returns something like this: "519665f6223ebd6980884f2b+type+problem"
         """
-        return "{}+{}@{}".format(str(self.definition_id), self.BLOCK_TYPE_PREFIX, self.block_type)
+        return f"{self.definition_id!s}+{self.BLOCK_TYPE_PREFIX}@{self.block_type}"
 
     URL_RE = re.compile(
-        r"^(?P<definition_id>[a-f0-9]+)\+{}@(?P<block_type>{ALLOWED_ID_CHARS}+)\Z".format(
-            Locator.BLOCK_TYPE_PREFIX, ALLOWED_ID_CHARS=Locator.ALLOWED_ID_CHARS
-        ),
+        fr"^(?P<definition_id>[a-f0-9]+)\+{Locator.BLOCK_TYPE_PREFIX}"
+        fr"@(?P<block_type>{Locator.ALLOWED_ID_CHARS}+)\Z",
         re.VERBOSE | re.UNICODE
     )
 
@@ -1294,7 +1296,10 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
         /c4x/org/course/category/name
         """
         # pylint: disable=missing-format-attribute
-        url = "/{0.DEPRECATED_TAG}/{0.course_key.org}/{0.course_key.course}/{0.block_type}/{0.block_id}".format(self)
+        url = (
+            f"/{self.DEPRECATED_TAG}/{self.course_key.org}/{self.course_key.course}"
+            f"/{self.block_type}/{self.block_id}"
+        )
         if self.course_key.branch:
             url += f'@{self.course_key.branch}'
         return url

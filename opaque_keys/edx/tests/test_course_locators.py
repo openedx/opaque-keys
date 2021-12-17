@@ -169,9 +169,9 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         # Test parsing a url when it starts with a version ID and there is also a block ID.
         # This hits the parsers parse_guid method.
         test_id_loc = '519665f6223ebd6980884f2b'
-        testobj = CourseKey.from_string("course-v1:{}@{}+{}@hw3".format(
-            CourseLocator.VERSION_PREFIX, test_id_loc, CourseLocator.BLOCK_PREFIX
-        ))
+        testobj = CourseKey.from_string(
+            f"course-v1:{CourseLocator.VERSION_PREFIX}@{test_id_loc}+{CourseLocator.BLOCK_PREFIX}@hw3"
+        )
         self.check_course_locn_fields(
             testobj,
             version_guid=ObjectId(test_id_loc)
@@ -195,9 +195,10 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         org = 'mit.eecs'
         course = '~6002x'
         run = '2014_T2'
-        testobj = CourseKey.from_string('course-v1:{}+{}+{}+{}@draft-1+{}@{}'.format(
-            org, course, run, CourseLocator.BRANCH_PREFIX, CourseLocator.VERSION_PREFIX, test_id_loc
-        ))
+        testobj = CourseKey.from_string(
+            f'course-v1:{org}+{course}+{run}+{CourseLocator.BRANCH_PREFIX}'
+            f'@draft-1+{CourseLocator.VERSION_PREFIX}@{test_id_loc}'
+        )
         self.check_course_locn_fields(
             testobj,
             org=org,

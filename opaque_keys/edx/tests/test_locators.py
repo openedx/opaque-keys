@@ -29,14 +29,16 @@ class DefinitionLocatorTests(TestCase):
     """
 
     def test_description_locator_url(self):
-        object_id = '{:024x}'.format(random.randrange(16 ** 24))
+        random_value = random.randrange(16 ** 24)
+        object_id = f'{random_value:024x}'
         definition_locator = DefinitionLocator('html', object_id)
         self.assertEqual(f'def-v1:{object_id}+{DefinitionLocator.BLOCK_TYPE_PREFIX}@html',
                          str(definition_locator))
         self.assertEqual(definition_locator, DefinitionKey.from_string(str(definition_locator)))
 
     def test_description_locator_version(self):
-        object_id = '{:024x}'.format(random.randrange(16 ** 24))
+        random_value = random.randrange(16 ** 24)
+        object_id = f'{random_value:024x}'
         definition_locator = DefinitionLocator('html', object_id)
         self.assertEqual(object_id, str(definition_locator.version))
 

@@ -101,7 +101,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if value is self.Empty or value is None:
             return None
 
-        error_message = "%s is not an instance of str or %s" % (value, self.KEY_CLASS)
+        error_message = f"{value} is not an instance of str or {self.KEY_CLASS}"
         assert isinstance(value, (str,) + (self.KEY_CLASS,)), error_message
         if value == '':
             # handle empty string for models being created w/o fields populated
@@ -111,12 +111,16 @@ class OpaqueKeyField(CreatorMixin, CharField):
             if value.endswith('\n'):
                 # An opaque key with a trailing newline has leaked into the DB.
                 # Log and strip the value.
-                log.warning('{}:{}:{}:to_python: Invalid key: {}. Removing trailing newline.'.format(
-                    self.model._meta.db_table,  # pylint: disable=protected-access
-                    self.name,
-                    self.KEY_CLASS.__name__,
-                    repr(value)
-                ))
+                log.warning(
+                    '%(db_table)s:%(name)s:%(key_class_name)s:to_python: '
+                    'Invalid key: %(value)s. Removing trailing newline.',
+                    {
+                        'db_table': self.model._meta.db_table,  # pylint: disable=protected-access
+                        'name': self.name,
+                        'key_class_name': self.KEY_CLASS.__name__,
+                        'value': repr(value),
+                    }
+                )
                 value = value.rstrip()
             return self.KEY_CLASS.from_string(value)
         return value
@@ -127,18 +131,21 @@ class OpaqueKeyField(CreatorMixin, CharField):
 
         if isinstance(value, str):
             value = self.KEY_CLASS.from_string(value)
-        # pylint: disable=W1116
-        assert isinstance(value, self.KEY_CLASS), "%s is not an instance of %s" % (value, self.KEY_CLASS)
+        # pylint: disable=isinstance-second-argument-not-valid-type
+        assert isinstance(value, self.KEY_CLASS), f"{value} is not an instance of {self.KEY_CLASS}"
         serialized_key = str(_strip_value(value))
         if serialized_key.endswith('\n'):
             # An opaque key object serialized to a string with a trailing newline.
             # Log the value - but do not modify it.
-            log.warning('{}:{}:{}:get_prep_value: Invalid key: {}.'.format(
-                self.model._meta.db_table,  # pylint: disable=protected-access
-                self.name,
-                self.KEY_CLASS.__name__,
-                repr(serialized_key)
-            ))
+            log.warning(
+                '%(db_table)s:%(name)s:%(key_class_name)s:get_prep_value: Invalid key: %(serialized_key)s.',
+                {
+                    'db_table': self.model._meta.db_table,  # pylint: disable=protected-access
+                    'name': self.name,
+                    'key_class_name': self.KEY_CLASS.__name__,
+                    'serialized_key': repr(serialized_key),
+                }
+            )
         return serialized_key
 
     def validate(self, value, model_instance):
