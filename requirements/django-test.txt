@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==2.7.3
+astroid==2.9.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -14,7 +14,7 @@ attrs==21.2.0
     #   -r requirements/test.txt
     #   hypothesis
     #   pytest
-click==8.0.1
+click==8.0.3
     # via
     #   -r requirements/test.txt
     #   click-log
@@ -28,30 +28,30 @@ code-annotations==1.2.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage==5.5
+coverage[toml]==6.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-ddt==1.4.2
+ddt==1.4.4
     # via -r requirements/test.txt
-edx-lint==5.1.0
+edx-lint==5.2.1
     # via -r requirements/test.txt
 execnet==1.9.0
     # via
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.18.0
+hypothesis==6.31.6
     # via -r requirements/test.txt
-isort==5.9.3
+isort==5.10.1
     # via
     #   -r requirements/test.txt
     #   pylint
-jinja2==3.0.1
+jinja2==3.0.3
     # via
     #   -r requirements/test.txt
     #   code-annotations
-lazy-object-proxy==1.6.0
+lazy-object-proxy==1.7.1
     # via
     #   -r requirements/test.txt
     #   astroid
@@ -65,15 +65,15 @@ mccabe==0.6.1
     #   pylint
 mock==4.0.3
     # via -r requirements/test.txt
-more-itertools==8.9.0
+more-itertools==8.12.0
     # via
     #   -r requirements/test.txt
     #   pytest
-packaging==21.0
+packaging==21.3
     # via
     #   -r requirements/test.txt
     #   pytest
-pbr==5.6.0
+pbr==5.8.0
     # via
     #   -r requirements/test.txt
     #   stevedore
@@ -81,7 +81,7 @@ pep8==1.7.1
     # via
     #   -r requirements/test.txt
     #   pytest-pep8
-platformdirs==2.3.0
+platformdirs==2.4.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -90,14 +90,14 @@ pluggy==0.13.1
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
     #   pytest
-py==1.10.0
+py==1.11.0
     # via
     #   -r requirements/test.txt
     #   pytest
     #   pytest-forked
-pycodestyle==2.7.0
+pycodestyle==2.8.0
     # via -r requirements/test.txt
-pylint==2.10.2
+pylint==2.12.2
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -118,9 +118,9 @@ pylint-plugin-utils==0.6
     #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
-pymongo==3.12.0
+pymongo==3.12.3
     # via -r requirements/test.txt
-pyparsing==2.4.7
+pyparsing==3.0.6
     # via
     #   -r requirements/test.txt
     #   packaging
@@ -139,11 +139,11 @@ pytest-cache==1.0
     # via
     #   -r requirements/test.txt
     #   pytest-pep8
-pytest-cov==2.12.1
+pytest-cov==3.0.0
     # via -r requirements/test.txt
-pytest-django==4.4.0
+pytest-django==4.5.2
     # via -r requirements/django-test.in
-pytest-forked==1.3.0
+pytest-forked==1.4.0
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
@@ -159,7 +159,7 @@ python-slugify==5.0.2
     # via
     #   -r requirements/test.txt
     #   code-annotations
-pyyaml==5.4.1
+pyyaml==6.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -172,7 +172,7 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
-stevedore==3.4.0
+stevedore==3.5.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -184,13 +184,21 @@ toml==0.10.2
     # via
     #   -r requirements/test.txt
     #   pylint
-    #   pytest-cov
     #   pytest-pylint
+tomli==2.0.0
+    # via
+    #   -r requirements/test.txt
+    #   coverage
+typing-extensions==4.0.1
+    # via
+    #   -r requirements/test.txt
+    #   astroid
+    #   pylint
 wcwidth==0.2.5
     # via
     #   -r requirements/test.txt
     #   pytest
-wrapt==1.12.1
+wrapt==1.13.3
     # via
     #   -r requirements/test.txt
     #   astroid
