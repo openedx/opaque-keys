@@ -8,7 +8,7 @@ alabaster==0.7.12
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==2.9.2
+astroid==2.9.3
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -89,7 +89,7 @@ filelock==3.4.2
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.34.2
+hypothesis==6.35.0
     # via -r requirements/doc.txt
 idna==3.3
     # via
@@ -330,7 +330,7 @@ typing-extensions==4.0.1
     #   -r requirements/doc.txt
     #   astroid
     #   pylint
-urllib3==1.26.7
+urllib3==1.26.8
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
