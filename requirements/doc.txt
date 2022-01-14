@@ -6,7 +6,7 @@
 #
 alabaster==0.7.12
     # via sphinx
-astroid==2.9.2
+astroid==2.9.3
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -57,7 +57,7 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.34.2
+hypothesis==6.35.0
     # via -r requirements/test.txt
 idna==3.3
     # via requests
@@ -244,7 +244,7 @@ typing-extensions==4.0.1
     #   -r requirements/test.txt
     #   astroid
     #   pylint
-urllib3==1.26.7
+urllib3==1.26.8
     # via requests
 wcwidth==0.2.5
     # via
