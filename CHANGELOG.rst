@@ -1,3 +1,7 @@
+# 2.3.0
+
+* Added Support for Django40 and removed Django22, 30 and 31
+
 # 2.2.2
 
 * Moved django pin from django.in to constraint.txt. Upgraded dependencies
