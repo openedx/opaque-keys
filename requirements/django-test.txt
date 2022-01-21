@@ -41,7 +41,7 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.35.0
+hypothesis==6.36.0
     # via -r requirements/test.txt
 isort==5.10.1
     # via
