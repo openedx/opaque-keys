@@ -57,11 +57,13 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.35.0
+hypothesis==6.36.0
     # via -r requirements/test.txt
 idna==3.3
     # via requests
 imagesize==1.3.0
+    # via sphinx
+importlib-metadata==4.10.1
     # via sphinx
 isort==5.10.1
     # via
@@ -206,7 +208,7 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
-sphinx==4.3.2
+sphinx==4.4.0
     # via
     #   -r requirements/doc.in
     #   edx-sphinx-theme
@@ -256,6 +258,8 @@ wrapt==1.13.3
     # via
     #   -r requirements/test.txt
     #   astroid
+zipp==3.7.0
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
