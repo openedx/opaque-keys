@@ -50,6 +50,18 @@ class TestEncode(TestCase):
         (_left, _right) = _split_keys_v1(joined)
         self.assertEqual((left, right), (_left, _right))
 
+    @given(left=ENCODING_TEXT, right=ENCODING_TEXT)
+    @settings(suppress_health_check=[HealthCheck.too_slow])
+    def test_join_v1_error(self, left, right):
+        with self.assertRaises(ValueError) as context:
+            assume(left.endswith(':'))
+            _join_keys_v1(left, right)
+        self.assertTrue("Can't join a left string ending in ':' or containing '::'" in context.exception)
+        with self.assertRaises(ValueError) as context:
+            assume('::' in left)
+            _join_keys_v1(left, right)
+        self.assertTrue("Can't join a left string ending in ':' or containing '::'" in context.exception)
+
     @given(text=ENCODING_TEXT)
     @settings(suppress_health_check=[HealthCheck.too_slow])
     def test_decode_v1_roundtrip(self, text):
