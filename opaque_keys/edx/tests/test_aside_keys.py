@@ -56,11 +56,11 @@ class TestEncode(TestCase):
         with self.assertRaises(ValueError) as context:
             assume(left.endswith(':'))
             _join_keys_v1(left, right)
-        self.assertTrue("Can't join a left string ending in ':' or containing '::'" in context.exception)
+        self.assertIn("Can't join a left string ending in ':' or containing '::'" in context.exception)
         with self.assertRaises(ValueError) as context:
             assume('::' in left)
             _join_keys_v1(left, right)
-        self.assertTrue("Can't join a left string ending in ':' or containing '::'" in context.exception)
+        self.assertIn("Can't join a left string ending in ':' or containing '::'" in context.exception)
 
     @given(text=ENCODING_TEXT)
     @settings(suppress_health_check=[HealthCheck.too_slow])
