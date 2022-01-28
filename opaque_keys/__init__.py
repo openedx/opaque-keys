@@ -8,12 +8,12 @@ formats, and allowing new serialization formats to be installed transparently.
 """
 from abc import ABCMeta, abstractmethod
 from functools import total_ordering
-from stevedore.enabled import EnabledExtensionManager
 
 # pylint: disable=wrong-import-order
 from _collections import defaultdict
+from stevedore.enabled import EnabledExtensionManager
 
-__version__ = '2.2.2'
+__version__ = '2.3.0'
 
 
 class InvalidKeyError(Exception):

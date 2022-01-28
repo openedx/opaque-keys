@@ -2,6 +2,7 @@
 Useful django models for implementing XBlock infrastructure in django.
 If Django is unavailable, none of the classes below will work as intended.
 """
+# pylint: disable=abstract-method
 import logging
 import warnings
 
@@ -27,6 +28,7 @@ class _Creator:
 
     A placeholder class that provides a way to set the attribute on the model.
     """
+
     def __init__(self, field):
         self.field = field
 
@@ -45,6 +47,7 @@ class CreatorMixin:
     Mixin class to provide SubfieldBase functionality to django fields.
     See: https://docs.djangoproject.com/en/1.11/releases/1.8/#subfieldbase
     """
+
     def contribute_to_class(self, cls, name, *args, **kwargs):
         super().contribute_to_class(cls, name, *args, **kwargs)
         setattr(cls, name, _Creator(self))
@@ -168,6 +171,7 @@ class OpaqueKeyFieldEmptyLookupIsNull(IsNull):
     This overrides the default __isnull model filter to help enforce the special way
     we handle null / empty values in OpaqueKeyFields.
     """
+
     def get_prep_lookup(self):
         raise TypeError("Use this field's .Empty member rather than None or __isnull "
                         "to query for missing objects of this type.")
@@ -214,6 +218,7 @@ class LocationKeyField(UsageKeyField):
     """
     A django Field that stores a UsageKey object as a string.
     """
+
     def __init__(self, *args, **kwargs):
         warnings.warn("LocationKeyField is deprecated. Please use UsageKeyField instead.", stacklevel=2)
         super().__init__(*args, **kwargs)
