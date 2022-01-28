@@ -28,7 +28,7 @@ code-annotations==1.2.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==6.2
+coverage[toml]==6.3
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -120,7 +120,7 @@ pylint-plugin-utils==0.7
     #   pylint-django
 pymongo==3.12.3
     # via -r requirements/test.txt
-pyparsing==3.0.6
+pyparsing==3.0.7
     # via
     #   -r requirements/test.txt
     #   packaging

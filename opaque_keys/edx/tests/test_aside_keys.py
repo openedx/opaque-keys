@@ -50,6 +50,13 @@ class TestEncode(TestCase):
         (_left, _right) = _split_keys_v1(joined)
         self.assertEqual((left, right), (_left, _right))
 
+    @given(left=ENCODING_TEXT, right=ENCODING_TEXT)
+    @settings(suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much])
+    def test_join_v1_error(self, left, right):
+        assume(left.endswith(':'))
+        assume('::' in left)
+        self.assertRaises(ValueError, _join_keys_v1, left, right)
+
     @given(text=ENCODING_TEXT)
     @settings(suppress_health_check=[HealthCheck.too_slow])
     def test_decode_v1_roundtrip(self, text):
