@@ -51,7 +51,7 @@ class TestEncode(TestCase):
         self.assertEqual((left, right), (_left, _right))
 
     @given(left=ENCODING_TEXT, right=ENCODING_TEXT)
-    @settings(suppress_health_check=[HealthCheck.too_slow])
+    @settings(suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much])
     def test_join_v1_error(self, left, right):
         assume(left.endswith(':'))
         assume('::' in left)
