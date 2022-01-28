@@ -21,7 +21,7 @@ click-log==0.3.2
     # via edx-lint
 code-annotations==1.2.0
     # via edx-lint
-coverage[toml]==6.2
+coverage[toml]==6.3
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -86,7 +86,7 @@ pylint-plugin-utils==0.7
     #   pylint-django
 pymongo==3.12.3
     # via -r requirements/base.txt
-pyparsing==3.0.6
+pyparsing==3.0.7
     # via packaging
 pytest==5.4.3
     # via
