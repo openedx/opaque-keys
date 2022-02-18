@@ -12,6 +12,8 @@ attrs==21.4.0
     # via
     #   hypothesis
     #   pytest
+bson==0.5.10
+    # via -r requirements/base.txt
 click==8.0.3
     # via
     #   click-log
@@ -110,14 +112,21 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
+python-dateutil==2.8.2
+    # via
+    #   -r requirements/base.txt
+    #   bson
 python-slugify==6.0.1
     # via code-annotations
 pyyaml==6.0
     # via code-annotations
 six==1.16.0
     # via
+    #   -r requirements/base.txt
+    #   bson
     #   edx-lint
     #   pytest-xdist
+    #   python-dateutil
 sortedcontainers==2.4.0
     # via hypothesis
 stevedore==3.5.0

@@ -4,7 +4,15 @@
 #
 #    make upgrade
 #
+bson==0.5.10
+    # via -r requirements/base.in
 pbr==5.8.1
     # via stevedore
+python-dateutil==2.8.2
+    # via bson
+six==1.16.0
+    # via
+    #   bson
+    #   python-dateutil
 stevedore==3.5.0
     # via -r requirements/base.in

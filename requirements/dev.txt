@@ -26,6 +26,8 @@ bleach==4.1.0
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
+bson==0.5.10
+    # via -r requirements/doc.txt
 certifi==2021.10.8
     # via
     #   -r requirements/ci.txt
@@ -234,6 +236,10 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/doc.txt
+python-dateutil==2.8.2
+    # via
+    #   -r requirements/doc.txt
+    #   bson
 python-slugify==6.0.1
     # via
     #   -r requirements/doc.txt
@@ -259,9 +265,11 @@ six==1.16.0
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   bleach
+    #   bson
     #   edx-lint
     #   edx-sphinx-theme
     #   pytest-xdist
+    #   python-dateutil
     #   tox
     #   virtualenv
 snowballstemmer==2.2.0
