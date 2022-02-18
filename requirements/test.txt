@@ -33,7 +33,7 @@ execnet==1.9.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.36.1
+hypothesis==6.36.2
     # via -r requirements/test.in
 isort==5.10.1
     # via pylint
@@ -78,7 +78,7 @@ pylint==2.12.2
     #   pytest-pylint
 pylint-celery==0.3
     # via edx-lint
-pylint-django==2.5.0
+pylint-django==2.5.1
     # via edx-lint
 pylint-plugin-utils==0.7
     # via
@@ -112,7 +112,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
-python-slugify==5.0.2
+python-slugify==6.0.1
     # via code-annotations
 pyyaml==6.0
     # via code-annotations
@@ -134,7 +134,7 @@ toml==0.10.2
     #   pytest-pylint
 tomli==2.0.1
     # via coverage
-typing-extensions==4.0.1
+typing-extensions==4.1.1
     # via
     #   astroid
     #   pylint
