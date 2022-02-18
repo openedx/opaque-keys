@@ -6,7 +6,5 @@
 #
 pbr==5.8.1
     # via stevedore
-pymongo==3.12.3
-    # via -r requirements/base.in
 stevedore==3.5.0
     # via -r requirements/base.in

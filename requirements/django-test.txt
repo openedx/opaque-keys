@@ -41,7 +41,7 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.36.1
+hypothesis==6.37.0
     # via -r requirements/test.txt
 isort==5.10.1
     # via
@@ -55,7 +55,7 @@ lazy-object-proxy==1.7.1
     # via
     #   -r requirements/test.txt
     #   astroid
-markupsafe==2.0.1
+markupsafe==2.1.0
     # via
     #   -r requirements/test.txt
     #   jinja2
@@ -109,7 +109,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
-pylint-django==2.5.0
+pylint-django==2.5.2
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -118,8 +118,6 @@ pylint-plugin-utils==0.7
     #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
-pymongo==3.12.3
-    # via -r requirements/test.txt
 pyparsing==3.0.7
     # via
     #   -r requirements/test.txt
@@ -155,7 +153,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
-python-slugify==5.0.2
+python-slugify==6.0.1
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -189,7 +187,7 @@ tomli==2.0.1
     # via
     #   -r requirements/test.txt
     #   coverage
-typing-extensions==4.0.1
+typing-extensions==4.1.1
     # via
     #   -r requirements/test.txt
     #   astroid
