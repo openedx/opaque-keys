@@ -14,7 +14,7 @@ attrs==21.4.0
     #   -r requirements/test.txt
     #   hypothesis
     #   pytest
-click==8.0.3
+click==8.0.4
     # via
     #   -r requirements/test.txt
     #   click-log
@@ -28,7 +28,7 @@ code-annotations==1.3.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==6.3.1
+coverage[toml]==6.3.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -41,7 +41,7 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.36.1
+hypothesis==6.37.2
     # via -r requirements/test.txt
 isort==5.10.1
     # via
@@ -55,7 +55,7 @@ lazy-object-proxy==1.7.1
     # via
     #   -r requirements/test.txt
     #   astroid
-markupsafe==2.0.1
+markupsafe==2.1.0
     # via
     #   -r requirements/test.txt
     #   jinja2
@@ -81,7 +81,7 @@ pep8==1.7.1
     # via
     #   -r requirements/test.txt
     #   pytest-pep8
-platformdirs==2.5.0
+platformdirs==2.5.1
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -109,7 +109,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
-pylint-django==2.5.0
+pylint-django==2.5.2
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -155,7 +155,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
-python-slugify==5.0.2
+python-slugify==6.1.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -189,7 +189,7 @@ tomli==2.0.1
     # via
     #   -r requirements/test.txt
     #   coverage
-typing-extensions==4.0.1
+typing-extensions==4.1.1
     # via
     #   -r requirements/test.txt
     #   astroid
