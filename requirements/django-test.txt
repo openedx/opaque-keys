@@ -41,7 +41,7 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.37.2
+hypothesis==6.39.1
     # via -r requirements/test.txt
 isort==5.10.1
     # via
@@ -155,7 +155,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
-python-slugify==6.1.0
+python-slugify==6.1.1
     # via
     #   -r requirements/test.txt
     #   code-annotations
