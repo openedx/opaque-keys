@@ -89,7 +89,7 @@ filelock==3.6.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.39.1
+hypothesis==6.39.3
     # via -r requirements/doc.txt
 idna==3.3
     # via
@@ -248,7 +248,7 @@ pyyaml==6.0
     # via
     #   -r requirements/doc.txt
     #   code-annotations
-readme-renderer==32.0
+readme-renderer==33.0
     # via -r requirements/doc.txt
 requests==2.27.1
     # via
@@ -339,7 +339,7 @@ urllib3==1.26.8
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.13.2
+virtualenv==20.13.3
     # via
     #   -r requirements/ci.txt
     #   tox
