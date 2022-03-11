@@ -57,7 +57,7 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.39.1
+hypothesis==6.39.3
     # via -r requirements/test.txt
 idna==3.3
     # via requests
@@ -191,7 +191,7 @@ pyyaml==6.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
-readme-renderer==32.0
+readme-renderer==33.0
     # via -r requirements/doc.in
 requests==2.27.1
     # via sphinx
