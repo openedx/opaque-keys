@@ -8,7 +8,7 @@ alabaster==0.7.12
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==2.9.3
+astroid==2.11.1
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -62,6 +62,10 @@ coveralls==3.3.1
     # via -r requirements/ci.txt
 ddt==1.4.4
     # via -r requirements/doc.txt
+dill==0.3.4
+    # via
+    #   -r requirements/doc.txt
+    #   pylint
 distlib==0.3.4
     # via
     #   -r requirements/ci.txt
@@ -108,7 +112,7 @@ isort==5.10.1
     # via
     #   -r requirements/doc.txt
     #   pylint
-jinja2==3.0.3
+jinja2==3.1.0
     # via
     #   -r requirements/doc.txt
     #   code-annotations
@@ -121,7 +125,7 @@ markupsafe==2.1.1
     # via
     #   -r requirements/doc.txt
     #   jinja2
-mccabe==0.6.1
+mccabe==0.7.0
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -180,7 +184,7 @@ pygments==2.11.2
     #   -r requirements/doc.txt
     #   readme-renderer
     #   sphinx
-pylint==2.12.2
+pylint==2.13.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -240,7 +244,7 @@ python-slugify==6.1.1
     # via
     #   -r requirements/doc.txt
     #   code-annotations
-pytz==2021.3
+pytz==2022.1
     # via
     #   -r requirements/doc.txt
     #   babel
@@ -314,7 +318,6 @@ toml==0.10.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
-    #   pylint
     #   pytest-pylint
     #   tox
 tomli==2.0.1
@@ -323,6 +326,7 @@ tomli==2.0.1
     #   -r requirements/pip-tools.txt
     #   coverage
     #   pep517
+    #   pylint
 tox==3.24.5
     # via
     #   -r requirements/ci.txt
@@ -339,7 +343,7 @@ urllib3==1.26.9
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.13.3
+virtualenv==20.13.4
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -355,7 +359,7 @@ wheel==0.37.1
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-wrapt==1.13.3
+wrapt==1.14.0
     # via
     #   -r requirements/doc.txt
     #   astroid
