@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==2.9.3
+astroid==2.11.2
     # via
     #   pylint
     #   pylint-celery
@@ -12,7 +12,7 @@ attrs==21.4.0
     # via
     #   hypothesis
     #   pytest
-click==8.0.4
+click==8.1.2
     # via
     #   click-log
     #   code-annotations
@@ -27,23 +27,25 @@ coverage[toml]==6.3.2
     #   pytest-cov
 ddt==1.4.4
     # via -r requirements/test.in
-edx-lint==5.2.1
+dill==0.3.4
+    # via pylint
+edx-lint==5.2.2
     # via -r requirements/test.in
 execnet==1.9.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.39.4
+hypothesis==6.41.0
     # via -r requirements/test.in
 isort==5.10.1
     # via pylint
-jinja2==3.0.3
+jinja2==3.1.1
     # via code-annotations
 lazy-object-proxy==1.7.1
     # via astroid
 markupsafe==2.1.1
     # via jinja2
-mccabe==0.6.1
+mccabe==0.7.0
     # via pylint
 mock==4.0.3
     # via -r requirements/test.in
@@ -69,7 +71,7 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.8.0
     # via -r requirements/test.in
-pylint==2.12.2
+pylint==2.13.5
     # via
     #   edx-lint
     #   pylint-celery
@@ -78,7 +80,7 @@ pylint==2.12.2
     #   pytest-pylint
 pylint-celery==0.3
     # via edx-lint
-pylint-django==2.5.2
+pylint-django==2.5.3
     # via edx-lint
 pylint-plugin-utils==0.7
     # via
@@ -129,18 +131,18 @@ stevedore==3.5.0
 text-unidecode==1.3
     # via python-slugify
 toml==0.10.2
-    # via
-    #   pylint
-    #   pytest-pylint
+    # via pytest-pylint
 tomli==2.0.1
-    # via coverage
+    # via
+    #   coverage
+    #   pylint
 typing-extensions==4.1.1
     # via
     #   astroid
     #   pylint
 wcwidth==0.2.5
     # via pytest
-wrapt==1.13.3
+wrapt==1.14.0
     # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:

@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==2.9.3
+astroid==2.11.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -14,7 +14,7 @@ attrs==21.4.0
     #   -r requirements/test.txt
     #   hypothesis
     #   pytest
-click==8.0.4
+click==8.1.2
     # via
     #   -r requirements/test.txt
     #   click-log
@@ -34,20 +34,24 @@ coverage[toml]==6.3.2
     #   pytest-cov
 ddt==1.4.4
     # via -r requirements/test.txt
-edx-lint==5.2.1
+dill==0.3.4
+    # via
+    #   -r requirements/test.txt
+    #   pylint
+edx-lint==5.2.2
     # via -r requirements/test.txt
 execnet==1.9.0
     # via
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.39.4
+hypothesis==6.41.0
     # via -r requirements/test.txt
 isort==5.10.1
     # via
     #   -r requirements/test.txt
     #   pylint
-jinja2==3.0.3
+jinja2==3.1.1
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -59,7 +63,7 @@ markupsafe==2.1.1
     # via
     #   -r requirements/test.txt
     #   jinja2
-mccabe==0.6.1
+mccabe==0.7.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -97,7 +101,7 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.8.0
     # via -r requirements/test.txt
-pylint==2.12.2
+pylint==2.13.5
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -109,7 +113,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
-pylint-django==2.5.2
+pylint-django==2.5.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -183,12 +187,12 @@ text-unidecode==1.3
 toml==0.10.2
     # via
     #   -r requirements/test.txt
-    #   pylint
     #   pytest-pylint
 tomli==2.0.1
     # via
     #   -r requirements/test.txt
     #   coverage
+    #   pylint
 typing-extensions==4.1.1
     # via
     #   -r requirements/test.txt
@@ -198,7 +202,7 @@ wcwidth==0.2.5
     # via
     #   -r requirements/test.txt
     #   pytest
-wrapt==1.13.3
+wrapt==1.14.0
     # via
     #   -r requirements/test.txt
     #   astroid
