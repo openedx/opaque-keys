@@ -8,7 +8,7 @@ alabaster==0.7.12
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==2.11.2
+astroid==2.11.3
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -18,7 +18,7 @@ attrs==21.4.0
     #   -r requirements/doc.txt
     #   hypothesis
     #   pytest
-babel==2.9.1
+babel==2.10.1
     # via
     #   -r requirements/doc.txt
     #   sphinx
@@ -93,7 +93,7 @@ filelock==3.6.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.43.1
+hypothesis==6.44.0
     # via -r requirements/doc.txt
 idna==3.3
     # via
@@ -156,7 +156,7 @@ pep8==1.7.1
     #   pytest-pep8
 pip-tools==6.6.0
     # via -r requirements/pip-tools.txt
-platformdirs==2.5.1
+platformdirs==2.5.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -183,7 +183,7 @@ pygments==2.11.2
     #   -r requirements/doc.txt
     #   readme-renderer
     #   sphinx
-pylint==2.13.5
+pylint==2.13.7
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -251,7 +251,7 @@ pyyaml==6.0
     # via
     #   -r requirements/doc.txt
     #   code-annotations
-readme-renderer==34.0
+readme-renderer==35.0
     # via -r requirements/doc.txt
 requests==2.27.1
     # via
@@ -332,7 +332,7 @@ tox==3.25.0
     #   tox-battery
 tox-battery==0.6.1
     # via -r requirements/ci.txt
-typing-extensions==4.1.1
+typing-extensions==4.2.0
     # via
     #   -r requirements/doc.txt
     #   astroid
