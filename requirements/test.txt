@@ -12,7 +12,7 @@ attrs==21.4.0
     # via
     #   hypothesis
     #   pytest
-click==8.1.2
+click==8.1.3
     # via
     #   click-log
     #   code-annotations
@@ -35,11 +35,11 @@ execnet==1.9.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.44.0
+hypothesis==6.45.1
     # via -r requirements/test.in
 isort==5.10.1
     # via pylint
-jinja2==3.1.1
+jinja2==3.1.2
     # via code-annotations
 lazy-object-proxy==1.7.1
     # via astroid
@@ -114,7 +114,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
-python-slugify==6.1.1
+python-slugify==6.1.2
     # via code-annotations
 pyyaml==6.0
     # via code-annotations

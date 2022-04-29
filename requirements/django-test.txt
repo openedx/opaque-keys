@@ -14,7 +14,7 @@ attrs==21.4.0
     #   -r requirements/test.txt
     #   hypothesis
     #   pytest
-click==8.1.2
+click==8.1.3
     # via
     #   -r requirements/test.txt
     #   click-log
@@ -45,13 +45,13 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.44.0
+hypothesis==6.45.1
     # via -r requirements/test.txt
 isort==5.10.1
     # via
     #   -r requirements/test.txt
     #   pylint
-jinja2==3.1.1
+jinja2==3.1.2
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -159,7 +159,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
-python-slugify==6.1.1
+python-slugify==6.1.2
     # via
     #   -r requirements/test.txt
     #   code-annotations
