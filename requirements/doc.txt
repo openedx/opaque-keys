@@ -6,7 +6,7 @@
 #
 alabaster==0.7.12
     # via sphinx
-astroid==2.11.3
+astroid==2.11.4
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -24,7 +24,7 @@ certifi==2021.10.8
     # via requests
 charset-normalizer==2.0.12
     # via requests
-click==8.1.2
+click==8.1.3
     # via
     #   -r requirements/test.txt
     #   click-log
@@ -61,7 +61,7 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.44.0
+hypothesis==6.46.2
     # via -r requirements/test.txt
 idna==3.3
     # via requests
@@ -73,7 +73,7 @@ isort==5.10.1
     # via
     #   -r requirements/test.txt
     #   pylint
-jinja2==3.1.1
+jinja2==3.1.2
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -101,7 +101,7 @@ packaging==21.3
     #   -r requirements/test.txt
     #   pytest
     #   sphinx
-pbr==5.8.1
+pbr==5.9.0
     # via
     #   -r requirements/test.txt
     #   stevedore
@@ -125,11 +125,11 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.8.0
     # via -r requirements/test.txt
-pygments==2.11.2
+pygments==2.12.0
     # via
     #   readme-renderer
     #   sphinx
-pylint==2.13.7
+pylint==2.13.8
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -184,7 +184,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
-python-slugify==6.1.1
+python-slugify==6.1.2
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -257,7 +257,7 @@ wcwidth==0.2.5
     #   pytest
 webencodings==0.5.1
     # via bleach
-wrapt==1.14.0
+wrapt==1.14.1
     # via
     #   -r requirements/test.txt
     #   astroid
