@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==2.11.3
+astroid==2.11.5
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -14,7 +14,7 @@ attrs==21.4.0
     #   -r requirements/test.txt
     #   hypothesis
     #   pytest
-click==8.1.2
+click==8.1.3
     # via
     #   -r requirements/test.txt
     #   click-log
@@ -28,13 +28,13 @@ code-annotations==1.3.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==6.3.2
+coverage[toml]==6.4
     # via
     #   -r requirements/test.txt
     #   pytest-cov
-ddt==1.4.4
+ddt==1.5.0
     # via -r requirements/test.txt
-dill==0.3.4
+dill==0.3.5.1
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -45,13 +45,13 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.44.0
+hypothesis==6.46.7
     # via -r requirements/test.txt
 isort==5.10.1
     # via
     #   -r requirements/test.txt
     #   pylint
-jinja2==3.1.1
+jinja2==3.1.2
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -69,7 +69,7 @@ mccabe==0.7.0
     #   pylint
 mock==4.0.3
     # via -r requirements/test.txt
-more-itertools==8.12.0
+more-itertools==8.13.0
     # via
     #   -r requirements/test.txt
     #   pytest
@@ -77,7 +77,7 @@ packaging==21.3
     # via
     #   -r requirements/test.txt
     #   pytest
-pbr==5.8.1
+pbr==5.9.0
     # via
     #   -r requirements/test.txt
     #   stevedore
@@ -101,7 +101,7 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.8.0
     # via -r requirements/test.txt
-pylint==2.13.7
+pylint==2.13.9
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -124,7 +124,7 @@ pylint-plugin-utils==0.7
     #   pylint-django
 pymongo==3.12.3
     # via -r requirements/test.txt
-pyparsing==3.0.8
+pyparsing==3.0.9
     # via
     #   -r requirements/test.txt
     #   packaging
@@ -159,7 +159,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
-python-slugify==6.1.1
+python-slugify==6.1.2
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -202,7 +202,7 @@ wcwidth==0.2.5
     # via
     #   -r requirements/test.txt
     #   pytest
-wrapt==1.14.0
+wrapt==1.14.1
     # via
     #   -r requirements/test.txt
     #   astroid
