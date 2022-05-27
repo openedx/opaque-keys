@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==2.11.3
+astroid==2.11.5
     # via
     #   pylint
     #   pylint-celery
@@ -12,7 +12,7 @@ attrs==21.4.0
     # via
     #   hypothesis
     #   pytest
-click==8.1.2
+click==8.1.3
     # via
     #   click-log
     #   code-annotations
@@ -21,13 +21,13 @@ click-log==0.4.0
     # via edx-lint
 code-annotations==1.3.0
     # via edx-lint
-coverage[toml]==6.3.2
+coverage[toml]==6.4
     # via
     #   -r requirements/test.in
     #   pytest-cov
-ddt==1.4.4
+ddt==1.5.0
     # via -r requirements/test.in
-dill==0.3.4
+dill==0.3.5.1
     # via pylint
 edx-lint==5.2.2
     # via -r requirements/test.in
@@ -35,11 +35,11 @@ execnet==1.9.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.44.0
+hypothesis==6.46.9
     # via -r requirements/test.in
 isort==5.10.1
     # via pylint
-jinja2==3.1.1
+jinja2==3.1.2
     # via code-annotations
 lazy-object-proxy==1.7.1
     # via astroid
@@ -49,11 +49,11 @@ mccabe==0.7.0
     # via pylint
 mock==4.0.3
     # via -r requirements/test.in
-more-itertools==8.12.0
+more-itertools==8.13.0
     # via pytest
 packaging==21.3
     # via pytest
-pbr==5.8.1
+pbr==5.9.0
     # via
     #   -r requirements/base.txt
     #   stevedore
@@ -71,7 +71,7 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.8.0
     # via -r requirements/test.in
-pylint==2.13.7
+pylint==2.13.9
     # via
     #   edx-lint
     #   pylint-celery
@@ -88,7 +88,7 @@ pylint-plugin-utils==0.7
     #   pylint-django
 pymongo==3.12.3
     # via -r requirements/base.txt
-pyparsing==3.0.8
+pyparsing==3.0.9
     # via packaging
 pytest==5.4.3
     # via
@@ -114,7 +114,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
-python-slugify==6.1.1
+python-slugify==6.1.2
     # via code-annotations
 pyyaml==6.0
     # via code-annotations
@@ -142,7 +142,7 @@ typing-extensions==4.2.0
     #   pylint
 wcwidth==0.2.5
     # via pytest
-wrapt==1.14.0
+wrapt==1.14.1
     # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:
