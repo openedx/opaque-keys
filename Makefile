@@ -25,6 +25,7 @@ test:
 upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
 upgrade: ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
 	pip install -qr requirements/pip-tools.txt
+	pip install -qr requirements/pip.txt
 	pip-compile --upgrade --allow-unsafe --rebuild -o requirements/pip.txt requirements/pip.in
 	pip-compile --rebuild --upgrade -o requirements/pip-tools.txt requirements/pip-tools.in
 	pip-compile --rebuild --upgrade -o requirements/base.txt requirements/base.in

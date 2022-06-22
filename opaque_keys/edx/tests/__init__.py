@@ -14,11 +14,13 @@ class TestDeprecated(TestCase):
         # Manually invoke the catch_warnings context manager so we can capture DeprecationWarnings
         # during this test run
         self.cws = warnings.catch_warnings()
+        # pylint: disable-next=unnecessary-dunder-call
         self.cws.__enter__()
         # Python 2.7 by default suppresses DeprecationWarnings. Make sure we show these, always, during tests.
         warnings.simplefilter('always', DeprecationWarning)
 
         # Manually exit the catch_warnings context manager when the test is done
+        # pylint: disable-next=unnecessary-dunder-call
         self.addCleanup(self.cws.__exit__)
 
     @contextmanager

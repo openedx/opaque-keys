@@ -99,7 +99,7 @@ class DictKey(DummyKey):
             raise InvalidKeyError(cls, serialized) from error
 
     def __hash__(self):
-        return hash(type(self)) + sum([hash(elt) for elt in self.value.keys()])  # pylint: disable=no-member
+        return hash(type(self)) + sum(hash(elt) for elt in self.value.keys())  # pylint: disable=no-member
 # pylint: enable=abstract-method
 
 
