@@ -380,3 +380,15 @@ class TestBlockUsageLocators(LocatorBaseTest):
             ).block_id,
             local_id
         )
+
+    def test_local_id_str(self):
+        local_id = LocalId()
+        test_id = BlockUsageLocator(
+            CourseLocator('org', 'course', 'run'),
+            'problem',
+            local_id
+        ).block_id
+        self.assertEqual(
+            f"{test_id}",
+            str(local_id)
+        )
