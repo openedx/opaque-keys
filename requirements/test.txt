@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==2.11.6
+astroid==2.11.7
     # via
     #   pylint
     #   pylint-celery
@@ -21,7 +21,7 @@ click-log==0.4.0
     # via edx-lint
 code-annotations==1.3.0
     # via edx-lint
-coverage[toml]==6.4.1
+coverage[toml]==6.4.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -37,7 +37,7 @@ execnet==1.9.0
     # via
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.47.3
+hypothesis==6.52.3
     # via -r requirements/test.in
 isort==5.10.1
     # via pylint
@@ -73,7 +73,7 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.8.0
     # via -r requirements/test.in
-pylint==2.14.3
+pylint==2.14.5
     # via
     #   edx-lint
     #   pylint-celery
@@ -126,7 +126,7 @@ six==1.16.0
     #   pytest-xdist
 sortedcontainers==2.4.0
     # via hypothesis
-stevedore==3.5.0
+stevedore==4.0.0
     # via
     #   -r requirements/base.txt
     #   code-annotations
@@ -138,9 +138,9 @@ tomli==2.0.1
     # via
     #   coverage
     #   pylint
-tomlkit==0.11.0
+tomlkit==0.11.1
     # via pylint
-typing-extensions==4.2.0
+typing-extensions==4.3.0
     # via
     #   astroid
     #   pylint

@@ -6,7 +6,7 @@
 #
 alabaster==0.7.12
     # via sphinx
-astroid==2.11.6
+astroid==2.11.7
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -18,11 +18,11 @@ attrs==21.4.0
     #   pytest
 babel==2.10.3
     # via sphinx
-bleach==5.0.0
+bleach==5.0.1
     # via readme-renderer
 certifi==2022.6.15
     # via requests
-charset-normalizer==2.0.12
+charset-normalizer==2.1.0
     # via requests
 click==8.1.3
     # via
@@ -38,7 +38,7 @@ code-annotations==1.3.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==6.4.1
+coverage[toml]==6.4.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -65,13 +65,13 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.47.3
+hypothesis==6.52.3
     # via -r requirements/test.txt
 idna==3.3
     # via requests
-imagesize==1.3.0
+imagesize==1.4.1
     # via sphinx
-importlib-metadata==4.11.4
+importlib-metadata==4.12.0
     # via sphinx
 isort==5.10.1
     # via
@@ -133,7 +133,7 @@ pygments==2.12.0
     # via
     #   readme-renderer
     #   sphinx
-pylint==2.14.3
+pylint==2.14.5
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -200,7 +200,7 @@ pyyaml==6.0
     #   code-annotations
 readme-renderer==35.0
     # via -r requirements/doc.in
-requests==2.28.0
+requests==2.28.1
     # via sphinx
 six==1.16.0
     # via
@@ -231,7 +231,7 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-stevedore==3.5.0
+stevedore==4.0.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -248,16 +248,16 @@ tomli==2.0.1
     #   -r requirements/test.txt
     #   coverage
     #   pylint
-tomlkit==0.11.0
+tomlkit==0.11.1
     # via
     #   -r requirements/test.txt
     #   pylint
-typing-extensions==4.2.0
+typing-extensions==4.3.0
     # via
     #   -r requirements/test.txt
     #   astroid
     #   pylint
-urllib3==1.26.9
+urllib3==1.26.10
     # via requests
 wcwidth==0.2.5
     # via
@@ -269,7 +269,7 @@ wrapt==1.14.1
     # via
     #   -r requirements/test.txt
     #   astroid
-zipp==3.8.0
+zipp==3.8.1
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
