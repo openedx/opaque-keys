@@ -8,12 +8,12 @@ alabaster==0.7.12
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==2.11.6
+astroid==2.11.7
     # via
     #   -r requirements/doc.txt
     #   pylint
     #   pylint-celery
-attrs==21.4.0
+attrs==22.1.0
     # via
     #   -r requirements/doc.txt
     #   hypothesis
@@ -22,16 +22,20 @@ babel==2.10.3
     # via
     #   -r requirements/doc.txt
     #   sphinx
-bleach==5.0.0
+bleach==5.0.1
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
+build==0.8.0
+    # via
+    #   -r requirements/pip-tools.txt
+    #   pip-tools
 certifi==2022.6.15
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   requests
-charset-normalizer==2.0.12
+charset-normalizer==2.1.0
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -52,7 +56,7 @@ code-annotations==1.3.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-coverage[toml]==6.4.1
+coverage[toml]==6.4.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -66,7 +70,7 @@ dill==0.3.5.1
     # via
     #   -r requirements/doc.txt
     #   pylint
-distlib==0.3.4
+distlib==0.3.5
     # via
     #   -r requirements/ci.txt
     #   virtualenv
@@ -74,7 +78,7 @@ docopt==0.6.2
     # via
     #   -r requirements/ci.txt
     #   coveralls
-docutils==0.18.1
+docutils==0.19
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
@@ -97,18 +101,18 @@ filelock==3.7.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.47.3
+hypothesis==6.53.0
     # via -r requirements/doc.txt
 idna==3.3
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   requests
-imagesize==1.3.0
+imagesize==1.4.1
     # via
     #   -r requirements/doc.txt
     #   sphinx
-importlib-metadata==4.11.4
+importlib-metadata==4.12.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
@@ -143,6 +147,8 @@ packaging==21.3
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
+    #   -r requirements/pip-tools.txt
+    #   build
     #   pytest
     #   sphinx
     #   tox
@@ -153,12 +159,12 @@ pbr==5.9.0
 pep517==0.12.0
     # via
     #   -r requirements/pip-tools.txt
-    #   pip-tools
+    #   build
 pep8==1.7.1
     # via
     #   -r requirements/doc.txt
     #   pytest-pep8
-pip-tools==6.6.2
+pip-tools==6.8.0
     # via -r requirements/pip-tools.txt
 platformdirs==2.5.2
     # via
@@ -187,7 +193,7 @@ pygments==2.12.0
     #   -r requirements/doc.txt
     #   readme-renderer
     #   sphinx
-pylint==2.14.3
+pylint==2.14.5
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -214,6 +220,7 @@ pyparsing==3.0.9
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
+    #   -r requirements/pip-tools.txt
     #   packaging
 pytest==5.4.3
     # via
@@ -257,7 +264,7 @@ pyyaml==6.0
     #   code-annotations
 readme-renderer==35.0
     # via -r requirements/doc.txt
-requests==2.28.0
+requests==2.28.1
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -272,7 +279,6 @@ six==1.16.0
     #   edx-sphinx-theme
     #   pytest-xdist
     #   tox
-    #   virtualenv
 snowballstemmer==2.2.0
     # via
     #   -r requirements/doc.txt
@@ -281,7 +287,7 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/doc.txt
     #   hypothesis
-sphinx==5.0.2
+sphinx==5.1.1
     # via
     #   -r requirements/doc.txt
     #   edx-sphinx-theme
@@ -309,7 +315,7 @@ sphinxcontrib-serializinghtml==1.1.5
     # via
     #   -r requirements/doc.txt
     #   sphinx
-stevedore==3.5.0
+stevedore==4.0.0
     # via
     #   -r requirements/doc.txt
     #   code-annotations
@@ -327,30 +333,31 @@ tomli==2.0.1
     # via
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
+    #   build
     #   coverage
     #   pep517
     #   pylint
-tomlkit==0.11.0
+tomlkit==0.11.1
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==3.25.0
+tox==3.25.1
     # via
     #   -r requirements/ci.txt
     #   tox-battery
 tox-battery==0.6.1
     # via -r requirements/ci.txt
-typing-extensions==4.2.0
+typing-extensions==4.3.0
     # via
     #   -r requirements/doc.txt
     #   astroid
     #   pylint
-urllib3==1.26.9
+urllib3==1.26.11
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.14.1
+virtualenv==20.16.2
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -370,7 +377,7 @@ wrapt==1.14.1
     # via
     #   -r requirements/doc.txt
     #   astroid
-zipp==3.8.0
+zipp==3.8.1
     # via
     #   -r requirements/doc.txt
     #   importlib-metadata
