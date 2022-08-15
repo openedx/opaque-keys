@@ -382,5 +382,5 @@ def keys_of_type(cls, blacklist=None):
     return strategies.one_of(*[
         instances_of_key(extension.plugin)
         for extension in cls._drivers()  # pylint: disable=protected-access
-        if not(issubclass(extension.plugin, blacklist))
+        if not (issubclass(extension.plugin, blacklist))
     ])
