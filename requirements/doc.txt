@@ -22,7 +22,7 @@ bleach==5.0.1
     # via readme-renderer
 certifi==2022.6.15
     # via requests
-charset-normalizer==2.1.0
+charset-normalizer==2.1.1
     # via requests
 click==8.1.3
     # via
@@ -65,7 +65,7 @@ execnet==1.9.0
     #   -r requirements/test.txt
     #   pytest-cache
     #   pytest-xdist
-hypothesis==6.54.3
+hypothesis==6.54.4
     # via -r requirements/test.txt
 idna==3.3
     # via requests
@@ -198,7 +198,7 @@ pyyaml==6.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
-readme-renderer==36.0
+readme-renderer==37.0
     # via -r requirements/doc.in
 requests==2.28.1
     # via sphinx
@@ -257,7 +257,7 @@ typing-extensions==4.3.0
     #   -r requirements/test.txt
     #   astroid
     #   pylint
-urllib3==1.26.11
+urllib3==1.26.12
     # via requests
 wcwidth==0.2.5
     # via
