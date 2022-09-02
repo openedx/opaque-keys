@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==2.11.7
+astroid==2.12.5
     # via
     #   pylint
     #   pylint-celery
@@ -31,7 +31,7 @@ dill==0.3.5.1
     # via pylint
 edx-lint==5.2.4
     # via -r requirements/test.in
-exceptiongroup==1.0.0rc8
+exceptiongroup==1.0.0rc9
     # via hypothesis
 execnet==1.9.0
     # via
@@ -73,7 +73,7 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.9.1
     # via -r requirements/test.in
-pylint==2.14.5
+pylint==2.15.0
     # via
     #   edx-lint
     #   pylint-celery
@@ -148,6 +148,3 @@ wcwidth==0.2.5
     # via pytest
 wrapt==1.14.1
     # via astroid
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools

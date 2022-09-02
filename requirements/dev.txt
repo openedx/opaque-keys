@@ -8,7 +8,7 @@ alabaster==0.7.12
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==2.11.7
+astroid==2.12.5
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -70,7 +70,7 @@ dill==0.3.5.1
     # via
     #   -r requirements/doc.txt
     #   pylint
-distlib==0.3.5
+distlib==0.3.6
     # via
     #   -r requirements/ci.txt
     #   virtualenv
@@ -87,7 +87,7 @@ edx-lint==5.2.4
     # via -r requirements/doc.txt
 edx-sphinx-theme==3.0.0
     # via -r requirements/doc.txt
-exceptiongroup==1.0.0rc8
+exceptiongroup==1.0.0rc9
     # via
     #   -r requirements/doc.txt
     #   hypothesis
@@ -193,7 +193,7 @@ pygments==2.13.0
     #   -r requirements/doc.txt
     #   readme-renderer
     #   sphinx
-pylint==2.14.5
+pylint==2.15.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -357,7 +357,7 @@ urllib3==1.26.12
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.16.3
+virtualenv==20.16.4
     # via
     #   -r requirements/ci.txt
     #   tox
