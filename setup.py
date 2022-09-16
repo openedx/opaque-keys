@@ -95,7 +95,7 @@ setup(
     name='edx-opaque-keys',
     version=VERSION,
     author='edX',
-    url='https://github.com/edx/opaque-keys',
+    url='https://github.com/openedx/opaque-keys',
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU Affero General Public License v3",
