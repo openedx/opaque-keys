@@ -3,6 +3,6 @@
 
 -r test.txt               # Core and testing dependencies for this package
 
-edx_sphinx_theme          # edX theme for Sphinx output
+sphinx-book-theme         # Common theme for all Open edX projects
 readme_renderer           # Validates README.rst for usage on PyPI
 Sphinx                    # Documentation builder
