@@ -4,6 +4,10 @@
 #
 #    make upgrade
 #
+accessible-pygments==0.0.4
+    # via
+    #   -r requirements/doc.txt
+    #   pydata-sphinx-theme
 alabaster==0.7.12
     # via
     #   -r requirements/doc.txt
@@ -21,7 +25,12 @@ attrs==22.1.0
 babel==2.10.3
     # via
     #   -r requirements/doc.txt
+    #   pydata-sphinx-theme
     #   sphinx
+beautifulsoup4==4.12.2
+    # via
+    #   -r requirements/doc.txt
+    #   pydata-sphinx-theme
 bleach==5.0.1
     # via
     #   -r requirements/doc.txt
@@ -81,11 +90,10 @@ docopt==0.6.2
 docutils==0.19
     # via
     #   -r requirements/doc.txt
+    #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
 edx-lint==5.2.4
-    # via -r requirements/doc.txt
-edx-sphinx-theme==3.0.0
     # via -r requirements/doc.txt
 exceptiongroup==1.0.0rc8
     # via
@@ -149,6 +157,7 @@ packaging==21.3
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
     #   build
+    #   pydata-sphinx-theme
     #   pytest
     #   sphinx
     #   tox
@@ -188,9 +197,15 @@ py==1.11.0
     #   tox
 pycodestyle==2.9.1
     # via -r requirements/doc.txt
+pydata-sphinx-theme==0.13.3
+    # via
+    #   -r requirements/doc.txt
+    #   sphinx-book-theme
 pygments==2.13.0
     # via
     #   -r requirements/doc.txt
+    #   accessible-pygments
+    #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
 pylint==2.14.5
@@ -276,7 +291,6 @@ six==1.16.0
     #   -r requirements/doc.txt
     #   bleach
     #   edx-lint
-    #   edx-sphinx-theme
     #   pytest-xdist
     #   tox
 snowballstemmer==2.2.0
@@ -287,10 +301,18 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/doc.txt
     #   hypothesis
-sphinx==5.1.1
+soupsieve==2.4.1
     # via
     #   -r requirements/doc.txt
-    #   edx-sphinx-theme
+    #   beautifulsoup4
+sphinx==5.1.1
+    # via
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -r requirements/doc.txt
+    #   pydata-sphinx-theme
+    #   sphinx-book-theme
+sphinx-book-theme==1.0.1
+    # via -r requirements/doc.txt
 sphinxcontrib-applehelp==1.0.2
     # via
     #   -r requirements/doc.txt
@@ -343,6 +365,7 @@ tomlkit==0.11.4
     #   pylint
 tox==3.25.1
     # via
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/ci.txt
     #   tox-battery
 tox-battery==0.6.1
@@ -351,6 +374,7 @@ typing-extensions==4.3.0
     # via
     #   -r requirements/doc.txt
     #   astroid
+    #   pydata-sphinx-theme
     #   pylint
 urllib3==1.26.12
     # via
