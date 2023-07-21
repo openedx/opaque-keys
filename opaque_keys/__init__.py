@@ -6,11 +6,12 @@ These keys are designed to provide a limited, forward-evolveable interface to
 an application, while concealing the particulars of the serialization
 formats, and allowing new serialization formats to be installed transparently.
 """
+from __future__ import annotations
 from abc import ABCMeta, abstractmethod
+from collections import defaultdict
 from functools import total_ordering
+from typing import Self
 
-# pylint: disable=wrong-import-order
-from _collections import defaultdict
 from stevedore.enabled import EnabledExtensionManager
 
 __version__ = '2.4.0'
@@ -94,15 +95,16 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
     """
     __slots__ = ('_initialized', 'deprecated')
 
-    KEY_FIELDS = []
-    CANONICAL_NAMESPACE = None
+    KEY_FIELDS: tuple[str, ...]
+    CANONICAL_NAMESPACE: str
+    KEY_TYPE: str
     NAMESPACE_SEPARATOR = ':'
-    CHECKED_INIT = True
+    CHECKED_INIT: bool = True
 
     # ============= ABSTRACT METHODS ==============
     @classmethod
     @abstractmethod
-    def _from_string(cls, serialized):
+    def _from_string(cls, serialized: str):
         """
         Return an instance of `cls` parsed from its `serialized` form.
 
@@ -117,7 +119,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         raise NotImplementedError()
 
     @abstractmethod
-    def _to_string(self):
+    def _to_string(self) -> str:
         """
         Return a serialization of `self`.
 
@@ -158,7 +160,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
 
     # ============= SERIALIZATION ==============
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Serialize this :class:`OpaqueKey`, in the form ``<CANONICAL_NAMESPACE>:<value of _to_string>``.
         """
@@ -168,7 +170,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])  # pylint: disable=no-member
 
     @classmethod
-    def from_string(cls, serialized):
+    def from_string(cls, serialized: str) -> Self:
         """
         Return a :class:`OpaqueKey` object deserialized from
         the `serialized` argument. This object will be an instance
@@ -192,12 +194,12 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
                 raise InvalidKeyError(cls, serialized)
             return key_class._from_string(rest)
         except InvalidKeyError as error:
-            if hasattr(cls, 'deprecated_fallback') and issubclass(cls.deprecated_fallback, cls):
-                return cls.deprecated_fallback._from_deprecated_string(serialized)
+            if hasattr(cls, 'deprecated_fallback') and issubclass(cls.deprecated_fallback, cls):  # type: ignore
+                return cls.deprecated_fallback._from_deprecated_string(serialized)  # type: ignore
             raise InvalidKeyError(cls, serialized) from error
 
     @classmethod
-    def _separate_namespace(cls, serialized):
+    def _separate_namespace(cls, serialized: str):
         """
         Return the namespace from a serialized :class:`OpaqueKey`, and
         the rest of the key.
@@ -220,7 +222,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         return (namespace, rest)
 
     @classmethod
-    def get_namespace_plugin(cls, namespace):
+    def get_namespace_plugin(cls, namespace: str):
         """
         Return the registered OpaqueKey subclass of cls for the supplied namespace
         """
@@ -240,10 +242,10 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
             # a particular unknown namespace (like i4x)
             raise InvalidKeyError(cls, f'{namespace}:*') from error
 
-    LOADED_DRIVERS = defaultdict()  # If you change default, change test_default_deprecated
+    LOADED_DRIVERS: dict[type[OpaqueKey], EnabledExtensionManager] = defaultdict()  # If you change default, change test_default_deprecated
 
     @classmethod
-    def _drivers(cls):
+    def _drivers(cls: type[OpaqueKey]):
         """
         Return a driver manager for all key classes that are
         subclasses of `cls`.
@@ -366,30 +368,30 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         return pickleable_dict
 
     @property
-    def _key(self):
+    def _key(self) -> tuple:
         """Returns a tuple of key fields"""
         # pylint: disable=no-member
         return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE, self.deprecated)
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return isinstance(other, OpaqueKey) and self._key == other._key  # pylint: disable=protected-access
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return not self == other
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         if (self.KEY_FIELDS, self.CANONICAL_NAMESPACE, self.deprecated) != (other.KEY_FIELDS, other.CANONICAL_NAMESPACE,
                                                                             other.deprecated):
             raise TypeError(f"{self!r} is incompatible with {other!r}")
         return self._key < other._key  # pylint: disable=protected-access
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self._key)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         key_field_repr = ', '.join(repr(getattr(self, key)) for key in self.KEY_FIELDS)
         return f'{self.__class__.__name__}({key_field_repr})'
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Return the number of characters in the serialized OpaqueKey"""
         return len(str(self))

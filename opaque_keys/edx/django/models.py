@@ -16,6 +16,7 @@ except ImportError:  # pragma: no cover
     CharField = object
     IsNull = object
 
+from opaque_keys import OpaqueKey
 from opaque_keys.edx.keys import BlockTypeKey, CourseKey, LearningContextKey, UsageKey
 
 
@@ -92,7 +93,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
     description = "An OpaqueKey object, saved to the DB in the form of a string."
 
     Empty = object()
-    KEY_CLASS = None
+    KEY_CLASS: type[OpaqueKey]
 
     def __init__(self, *args, **kwargs):
         if self.KEY_CLASS is None:

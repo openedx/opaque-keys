@@ -162,7 +162,7 @@ def _fields_for_aside_def_key_v1(cls, field):  # pylint: disable=missing-docstri
 
 @fields_for_key.register(AsideUsageKeyV1)
 @cacheable
-def _fields_for_aside_usage_key_v1(cls, field):  # pylint: disable=missing-docstring, function-redefined
+def _fields_for_aside_usage_key_v1(cls, field):  # pylint: disable=missing-docstring
     if field == 'deprecated':
         return strategies.just(False)
     if field == 'usage_key':
@@ -184,7 +184,7 @@ def _fields_for_aside_def_key_v2(cls, field):  # pylint: disable=missing-docstri
 
 @fields_for_key.register(AsideUsageKeyV2)
 @cacheable
-def _fields_for_aside_usage_key_v2(cls, field):  # pylint: disable=missing-docstring, function-redefined
+def _fields_for_aside_usage_key_v2(cls, field):  # pylint: disable=missing-docstring
     if field == 'deprecated':
         return strategies.just(False)
     if field == 'usage_key':
@@ -194,7 +194,7 @@ def _fields_for_aside_usage_key_v2(cls, field):  # pylint: disable=missing-docst
 
 @fields_for_key.register(LibraryLocator)
 @cacheable
-def _fields_for_library_locator(cls, field):  # pylint: disable=missing-docstring, function-redefined
+def _fields_for_library_locator(cls, field):  # pylint: disable=missing-docstring
     if field == 'version_guid':
         return version_guids()
     if field in ('org', 'library', 'branch'):
@@ -206,7 +206,7 @@ def _fields_for_library_locator(cls, field):  # pylint: disable=missing-docstrin
 
 @fields_for_key.register(LibraryLocatorV2)
 @cacheable
-def _fields_for_library_locator_v2(cls, field):  # pylint: disable=missing-docstring, function-redefined
+def _fields_for_library_locator_v2(cls, field):  # pylint: disable=missing-docstring
     if field == 'org':
         return ascii_identifier()
     if field == 'slug':
@@ -216,7 +216,7 @@ def _fields_for_library_locator_v2(cls, field):  # pylint: disable=missing-docst
 
 @fields_for_key.register(DefinitionLocator)
 @cacheable
-def _fields_for_definition_locator(cls, field):  # pylint: disable=missing-docstring, function-redefined
+def _fields_for_definition_locator(cls, field):  # pylint: disable=missing-docstring
     if field == 'definition_id':
         return version_guids()
     if field == 'block_type':
@@ -226,7 +226,7 @@ def _fields_for_definition_locator(cls, field):  # pylint: disable=missing-docst
 
 @fields_for_key.register(BundleDefinitionLocator)
 @cacheable
-def _fields_for_bundle_def_locator(cls, field):  # pylint: disable=missing-docstring, function-redefined
+def _fields_for_bundle_def_locator(cls, field):  # pylint: disable=missing-docstring
     if field == 'bundle_uuid':
         return strategies.uuids()
     if field == 'block_type':
@@ -240,7 +240,7 @@ def _fields_for_bundle_def_locator(cls, field):  # pylint: disable=missing-docst
 
 @fields_for_key.register(LibraryUsageLocatorV2)
 @cacheable
-def _fields_for_library_locator_v2(cls, field):  # pylint: disable=missing-docstring, function-redefined
+def _fields_for_library_usage_locator_v2(cls, field):  # pylint: disable=missing-docstring
     if field == 'lib_key':
         return instances_of_key(LibraryLocatorV2)
     if field == 'block_type':
@@ -277,7 +277,7 @@ def instances_of_key(cls, **kwargs):
 
 @instances_of_key.register(BlockTypeKeyV1)
 @cacheable
-def _instances_of_block_type_key(cls, **kwargs):  # pylint: disable=missing-docstring, function-redefined
+def _instances_of_block_type_key(cls, **kwargs):  # pylint: disable=missing-docstring
 
     return strategies.builds(
         cls,
@@ -293,7 +293,7 @@ def _instances_of_block_type_key(cls, **kwargs):  # pylint: disable=missing-docs
 
 @instances_of_key.register(CourseLocator)
 @cacheable
-def _instances_of_course_locator(cls, **kwargs):  # pylint: disable=missing-docstring, function-redefined
+def _instances_of_course_locator(cls, **kwargs):  # pylint: disable=missing-docstring
 
     return strategies.builds(
         cls,
@@ -315,7 +315,7 @@ def _instances_of_course_locator(cls, **kwargs):  # pylint: disable=missing-docs
 
 @instances_of_key.register(BlockUsageLocator)
 @cacheable
-def _instances_of_block_usage(cls, **kwargs):  # pylint: disable=missing-docstring, function-redefined
+def _instances_of_block_usage(cls, **kwargs):  # pylint: disable=missing-docstring
 
     def locator_for_course(course_key):
         """
@@ -343,7 +343,7 @@ def _instances_of_block_usage(cls, **kwargs):  # pylint: disable=missing-docstri
 
 @instances_of_key.register(LibraryUsageLocator)
 @cacheable
-def _instances_of_library_usage(cls, **kwargs):  # pylint: disable=missing-docstring, function-redefined
+def _instances_of_library_usage(cls, **kwargs):  # pylint: disable=missing-docstring
 
     return strategies.builds(
         cls,
@@ -355,7 +355,7 @@ def _instances_of_library_usage(cls, **kwargs):  # pylint: disable=missing-docst
 
 @instances_of_key.register(DeprecatedLocation)
 @cacheable
-def _instances_of_deprecated_loc(cls, **kwargs):  # pylint: disable=missing-docstring, function-redefined
+def _instances_of_deprecated_loc(cls, **kwargs):  # pylint: disable=missing-docstring
 
     return strategies.builds(
         cls,
