@@ -5,13 +5,14 @@ from __future__ import annotations
 import inspect
 import logging
 import re
-from typing import Any, Literal, Self
+from typing import Any
 import warnings
 from uuid import UUID
 
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from bson.son import SON
+from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
 
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, LearningContextKey, UsageKey, UsageKeyV2

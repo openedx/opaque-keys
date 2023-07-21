@@ -2,6 +2,7 @@
 Useful django models for implementing XBlock infrastructure in django.
 If Django is unavailable, none of the classes below will work as intended.
 """
+from __future__ import annotations
 # pylint: disable=abstract-method
 import logging
 import warnings
