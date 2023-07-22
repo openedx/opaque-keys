@@ -22,7 +22,6 @@ LOGGER = logging.getLogger(__name__)
 
 # composite strategies confuse pylint (because they silently provide the `draw`
 # argument), so we stop it from complaining about them.
-# pylint: disable=no-value-for-parameter
 
 
 def insert(string, index, character):

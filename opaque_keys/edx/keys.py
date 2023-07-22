@@ -11,7 +11,7 @@ from typing_extensions import Self  # For python 3.11 plus, can just use "from t
 from opaque_keys import OpaqueKey
 
 
-class LearningContextKey(OpaqueKey):
+class LearningContextKey(OpaqueKey):  # pylint: disable=abstract-method
     """
     An :class:`opaque_keys.OpaqueKey` identifying a course, a library, a
     program, a website, or some other collection of content where learning
@@ -307,7 +307,7 @@ class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
     If provided as the cls to json.dumps, will serialize and Locations as i4x strings and other
     keys using the unicode strings.
     """
-    def default(self, o):  # pylint: disable=arguments-differ, method-hidden
+    def default(self, o):
         if isinstance(o, OpaqueKey):
             return str(o)
         super().default(o)

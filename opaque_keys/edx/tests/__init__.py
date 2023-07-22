@@ -20,7 +20,6 @@ class TestDeprecated(TestCase):
         warnings.simplefilter('always', DeprecationWarning)
 
         # Manually exit the catch_warnings context manager when the test is done
-        # pylint: disable-next=unnecessary-dunder-call
         self.addCleanup(self.cws.__exit__)
 
     @contextmanager

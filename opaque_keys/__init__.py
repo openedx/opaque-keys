@@ -144,7 +144,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
             InvalidKeyError: Should be raised if `serialized` is not a valid serialized key
                 understood by `cls`.
         """
-        raise NotImplementedError()
+        raise AttributeError("The specified key type does not have a deprecated version.")
 
     def _to_deprecated_string(self):
         """
@@ -156,7 +156,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
 
         This serialization should not include the namespace prefix.
         """
-        raise NotImplementedError()
+        raise AttributeError("The specified key type does not have a deprecated version.")
 
     # ============= SERIALIZATION ==============
 
@@ -167,7 +167,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         if self.deprecated:
             # no namespace on deprecated
             return self._to_deprecated_string()
-        return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])  # pylint: disable=no-member
+        return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])
 
     @classmethod
     def from_string(cls, serialized: str) -> Self:
@@ -242,7 +242,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
             # a particular unknown namespace (like i4x)
             raise InvalidKeyError(cls, f'{namespace}:*') from error
 
-    LOADED_DRIVERS: dict[type[OpaqueKey], EnabledExtensionManager] = defaultdict()  # If you change default, change test_default_deprecated
+    LOADED_DRIVERS: dict[type[OpaqueKey], EnabledExtensionManager] = defaultdict()
 
     @classmethod
     def _drivers(cls: type[OpaqueKey]):
@@ -252,7 +252,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         """
         if cls not in cls.LOADED_DRIVERS:
             cls.LOADED_DRIVERS[cls] = EnabledExtensionManager(
-                cls.KEY_TYPE,  # pylint: disable=no-member
+                cls.KEY_TYPE,
                 check_func=lambda extension: issubclass(extension.plugin, cls),
                 invoke_on_load=False,
             )
@@ -270,17 +270,16 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
     # ============= VALUE SEMANTICS ==============
     def __init__(self, *args, **kwargs):
         # The __init__ expects child classes to implement KEY_FIELDS
-        # pylint: disable=no-member
 
         # a flag used to indicate that this instance was deserialized from the
         # deprecated form and should serialize to the deprecated form
-        self.deprecated = kwargs.pop('deprecated', False)  # pylint: disable=assigning-non-slot
+        self.deprecated = kwargs.pop('deprecated', False)
 
         if self.CHECKED_INIT:
             self._checked_init(*args, **kwargs)
         else:
             self._unchecked_init(**kwargs)
-        self._initialized = True  # pylint: disable=assigning-non-slot
+        self._initialized = True
 
     def _checked_init(self, *args, **kwargs):
         """
@@ -320,7 +319,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         Subclasses should override this if they have required properties that aren't included in their
         ``KEY_FIELDS``.
         """
-        existing_values = {key: getattr(self, key) for key in self.KEY_FIELDS}  # pylint: disable=no-member
+        existing_values = {key: getattr(self, key) for key in self.KEY_FIELDS}
         existing_values['deprecated'] = self.deprecated
 
         if all(value == existing_values[key] for (key, value) in kwargs.items()):
@@ -333,7 +332,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         if getattr(self, '_initialized', False):
             raise AttributeError(f"Can't set {name!r}. OpaqueKeys are immutable.")
 
-        super().__setattr__(name, value)  # pylint: disable=no-member
+        super().__setattr__(name, value)
 
     def __delattr__(self, name):
         raise AttributeError(f"Can't delete {name!r}. OpaqueKeys are immutable.")
@@ -354,15 +353,15 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
     def __setstate__(self, state_dict):
         # used by pickle to set fields on an unpickled object
         for key in state_dict:
-            if key in self.KEY_FIELDS:  # pylint: disable=no-member
+            if key in self.KEY_FIELDS:
                 setattr(self, key, state_dict[key])
-        self.deprecated = state_dict['deprecated']  # pylint: disable=assigning-non-slot
-        self._initialized = True  # pylint: disable=assigning-non-slot
+        self.deprecated = state_dict['deprecated']
+        self._initialized = True
 
     def __getstate__(self):
         # used by pickle to get fields on an unpickled object
         pickleable_dict = {}
-        for key in self.KEY_FIELDS:  # pylint: disable=no-member
+        for key in self.KEY_FIELDS:
             pickleable_dict[key] = getattr(self, key)
         pickleable_dict['deprecated'] = self.deprecated
         return pickleable_dict
@@ -370,11 +369,10 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
     @property
     def _key(self) -> tuple:
         """Returns a tuple of key fields"""
-        # pylint: disable=no-member
         return tuple(getattr(self, field) for field in self.KEY_FIELDS) + (self.CANONICAL_NAMESPACE, self.deprecated)
 
     def __eq__(self, other) -> bool:
-        return isinstance(other, OpaqueKey) and self._key == other._key  # pylint: disable=protected-access
+        return isinstance(other, OpaqueKey) and self._key == other._key
 
     def __ne__(self, other) -> bool:
         return not self == other
@@ -383,7 +381,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         if (self.KEY_FIELDS, self.CANONICAL_NAMESPACE, self.deprecated) != (other.KEY_FIELDS, other.CANONICAL_NAMESPACE,
                                                                             other.deprecated):
             raise TypeError(f"{self!r} is incompatible with {other!r}")
-        return self._key < other._key  # pylint: disable=protected-access
+        return self._key < other._key
 
     def __hash__(self) -> int:
         return hash(self._key)

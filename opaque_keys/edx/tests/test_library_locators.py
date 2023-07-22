@@ -1,8 +1,7 @@
 """
 Tests of LibraryLocators
 """
-
-import itertools  # pylint: disable=wrong-import-order
+import itertools
 from unittest import TestCase
 
 import ddt
@@ -48,12 +47,12 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         code = 'test-problem-bank'
         lib_key = LibraryLocator(org=org, library=code)
         self.assertEqual(lib_key.org, org)
-        self.assertEqual(lib_key.library, code)  # pylint: disable=no-member
+        self.assertEqual(lib_key.library, code)
         with self.assertDeprecationWarning():
             self.assertEqual(lib_key.course, code)
         with self.assertDeprecationWarning():
             self.assertEqual(lib_key.run, 'library')
-        self.assertEqual(lib_key.branch, None)  # pylint: disable=no-member
+        self.assertEqual(lib_key.branch, None)
 
     def test_constructor_using_course(self):
         org = 'TestX'
@@ -62,7 +61,7 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         with self.assertDeprecationWarning():
             lib_key2 = LibraryLocator(org=org, course=code)
         self.assertEqual(lib_key, lib_key2)
-        self.assertEqual(lib_key2.library, code)  # pylint: disable=no-member
+        self.assertEqual(lib_key2.library, code)
 
     def test_version_property_deprecated(self):
         lib_key = CourseKey.from_string('library-v1:TestX+lib1+version@519665f6223ebd6980884f2b')
@@ -120,11 +119,11 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         branch = 'future-purposes-perhaps'
         lib_key = LibraryLocator(org=org, library=code, branch=branch)
         self.assertEqual(lib_key.org, org)
-        self.assertEqual(lib_key.library, code)  # pylint: disable=no-member
-        self.assertEqual(lib_key.branch, branch)  # pylint: disable=no-member
+        self.assertEqual(lib_key.library, code)
+        self.assertEqual(lib_key.branch, branch)
         lib_key2 = CourseKey.from_string(str(lib_key))
         self.assertEqual(lib_key, lib_key2)
-        self.assertEqual(lib_key.branch, branch)  # pylint: disable=no-member
+        self.assertEqual(lib_key.branch, branch)
 
     def test_for_branch(self):
         lib_key = LibraryLocator(org='TestX', library='test', branch='initial')
@@ -139,7 +138,7 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
     def test_version_only_lib_key(self):
         version_only_lib_key = LibraryLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))
         self.assertEqual(version_only_lib_key.org, None)
-        self.assertEqual(version_only_lib_key.library, None)  # pylint: disable=no-member
+        self.assertEqual(version_only_lib_key.library, None)
         with self.assertRaises(InvalidKeyError):
             version_only_lib_key.for_branch("test")
 
@@ -182,10 +181,10 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         version_id_obj = ObjectId(version_id)
 
         lib_key = LibraryLocator(version_guid=version_id)
-        self.assertEqual(lib_key.version_guid, version_id_obj)  # pylint: disable=no-member
+        self.assertEqual(lib_key.version_guid, version_id_obj)
         self.assertEqual(lib_key.org, None)
-        self.assertEqual(lib_key.library, None)  # pylint: disable=no-member
-        self.assertEqual(str(lib_key.version_guid), version_id_str)  # pylint: disable=no-member
+        self.assertEqual(lib_key.library, None)
+        self.assertEqual(str(lib_key.version_guid), version_id_str)
         # Allow access to _to_string
         # pylint: disable=protected-access
         expected_str = '@'.join((lib_key.VERSION_PREFIX, version_id_str))

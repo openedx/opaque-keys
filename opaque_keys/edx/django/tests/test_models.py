@@ -23,7 +23,6 @@ def enable_db_access_for_all_tests(db):
     """Enable DB access for all tests."""
 
 
-#  pylint: disable=no-member
 class TestCreatorMixin(TestCase):
     """Tests of the CreatorMixin class."""
     def setUp(self):
