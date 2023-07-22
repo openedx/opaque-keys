@@ -8,6 +8,7 @@ ddt
 edx-lint
 hypothesis
 mock
+mypy
 pycodestyle
 pytest
 pytest-cov
