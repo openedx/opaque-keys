@@ -4,3 +4,4 @@
 # migration guide here: https://pymongo.readthedocs.io/en/4.0/migrate-to-pymongo4.html
 pymongo>=2.7.2,<4.0
 stevedore>=0.14.1
+typing-extensions
