@@ -1,3 +1,7 @@
+# 2.5.0
+
+* Added python type hints
+
 # 2.4.0
 
 * Added Support for Django 4.2
