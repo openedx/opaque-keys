@@ -1,3 +1,7 @@
+# 2.4.0
+
+* Added Support for Django 4.2
+
 # 2.3.0
 
 * Added Support for Django40 and removed Django22, 30 and 31

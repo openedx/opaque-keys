@@ -13,7 +13,7 @@ from functools import total_ordering
 from _collections import defaultdict
 from stevedore.enabled import EnabledExtensionManager
 
-__version__ = '2.3.0'
+__version__ = '2.4.0'
 
 
 class InvalidKeyError(Exception):
