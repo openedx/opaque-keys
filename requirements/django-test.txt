@@ -77,6 +77,12 @@ more-itertools==8.14.0
     # via
     #   -r requirements/test.txt
     #   pytest
+mypy==1.4.1
+    # via -r requirements/test.txt
+mypy-extensions==1.0.0
+    # via
+    #   -r requirements/test.txt
+    #   mypy
 packaging==21.3
     # via
     #   -r requirements/test.txt

@@ -1,16 +1,18 @@
 """
 Identifier for course resources.
 """
-
+from __future__ import annotations
 import inspect
 import logging
 import re
+from typing import Any
 import warnings
 from uuid import UUID
 
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from bson.son import SON
+from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
 
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, LearningContextKey, UsageKey, UsageKeyV2
@@ -22,7 +24,7 @@ class LocalId:
     """
     Class for local ids for non-persisted xblocks (which can have hardcoded block_ids if necessary)
     """
-    def __init__(self, block_id=None):
+    def __init__(self, block_id: str | None = None):
         self.block_id = block_id
         super().__init__()
 
@@ -55,7 +57,7 @@ class Locator(OpaqueKey):
         raise NotImplementedError()
 
     @classmethod
-    def as_object_id(cls, value):
+    def as_object_id(cls, value: Any) -> ObjectId:
         """
         Attempts to cast value as a bson.objectid.ObjectId.
 
@@ -73,7 +75,7 @@ class CheckFieldMixin:
     Mixin that provides handy methods for checking field types/values.
     """
     @classmethod
-    def _check_key_string_field(cls, field_name, value, regexp=re.compile(r'^[a-zA-Z0-9_\-.]+$')):
+    def _check_key_string_field(cls, field_name: str, value: str, regexp=re.compile(r'^[a-zA-Z0-9_\-.]+$')):
         """
         Helper method to verify that a key's string field(s) meet certain
         requirements:
@@ -125,7 +127,7 @@ class BlockLocatorBase(Locator):
     URL_RE = re.compile('^' + URL_RE_SOURCE + r'\Z', re.VERBOSE | re.UNICODE)
 
     @classmethod
-    def parse_url(cls, string):  # pylint: disable=redefined-outer-name
+    def parse_url(cls, string: str) -> dict[str, str]:
         """
         If it can be parsed as a version_guid with no preceding org + offering, returns a dict
         with key 'version_guid' and the value,
@@ -139,10 +141,10 @@ class BlockLocatorBase(Locator):
         match = cls.URL_RE.match(string)
         if not match:
             raise InvalidKeyError(cls, string)
-        return match.groupdict()
+        return match.groupdict()  # type: ignore
 
 
-class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-method
+class CourseLocator(BlockLocatorBase, CourseKey):
     """
     Examples of valid CourseLocator specifications:
      CourseLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))
@@ -158,18 +160,30 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
     the persistence layer may raise exceptions if the given version != the current such version
     of the course.
     """
-
-    # pylint: disable=no-member
-
     CANONICAL_NAMESPACE = 'course-v1'
     KEY_FIELDS = ('org', 'course', 'run', 'branch', 'version_guid')
+    org: str | None
+    course: str | None
+    run: str | None
+    branch: str | None
+    version_guid: ObjectId | None
+
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
     # Characters that are forbidden in the deprecated format
     INVALID_CHARS_DEPRECATED = re.compile(r"[^\w.%-]", re.UNICODE)
 
-    def __init__(self, org=None, course=None, run=None, branch=None, version_guid=None, deprecated=False, **kwargs):
+    def __init__(
+        self,
+        org: str | None = None,
+        course: str | None = None,
+        run: str | None = None,
+        branch: str | None = None,
+        version_guid: str | ObjectId | None = None,
+        deprecated: bool = False,
+        **kwargs,
+    ):
         """
         Construct a CourseLocator
 
@@ -191,7 +205,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
             for part in (org, course, run):
                 self._check_location_part(part, self.INVALID_CHARS_DEPRECATED)
 
-            fields = [org, course]
+            fields: list[str] = [org, course]  # type: ignore
             # Deprecated style allowed to have None for run and branch, and allowed to have '' for run
             if run:
                 fields.append(run)
@@ -227,7 +241,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
             raise InvalidKeyError(self.__class__, "Either version_guid or org, course, and run should be set")
 
     @classmethod
-    def _check_location_part(cls, val, regexp):  # pylint: disable=missing-docstring
+    def _check_location_part(cls, val, regexp):  # pylint: disable=missing-function-docstring
         if val is None:
             return
         if not isinstance(val, str):
@@ -236,7 +250,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
             raise InvalidKeyError(cls, f"Invalid characters in {val!r}.")
 
     @property
-    def version(self):
+    def version(self) -> str | None:
         """
         Deprecated. The ambiguously named field from CourseLocation which code
         expects to find. Equivalent to version_guid.
@@ -326,7 +340,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
         """
         return self.replace(version_guid=None)
 
-    def course_agnostic(self):
+    def course_agnostic(self) -> Self:
         """
         We only care about the locator's version not its course.
         Returns a copy of itself without any course info.
@@ -336,7 +350,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
         """
         return self.replace(org=None, course=None, run=None, branch=None)
 
-    def for_branch(self, branch):
+    def for_branch(self, branch: str | None) -> Self:
         """
         Return a new CourseLocator for another branch of the same course (also version agnostic)
         """
@@ -344,32 +358,32 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
             raise InvalidKeyError(self.__class__, "Branches must have full course ids not just versions")
         return self.replace(branch=branch, version_guid=None)
 
-    def for_version(self, version_guid):
+    def for_version(self, version_guid: str) -> Self:
         """
         Return a new CourseLocator for another version of the same course and branch. Usually used
         when the head is updated (and thus the course x branch now points to this version)
         """
         return self.replace(version_guid=version_guid)
 
-    def _to_string(self):
+    def _to_string(self) -> str:
         """
         Return a string representing this location.
         """
-        parts = []
+        parts: list[str] = []
         if self.course and self.run:
-            parts.extend([self.org, self.course, self.run])
+            parts.extend([self.org, self.course, self.run])  # type: ignore
             if self.branch:
                 parts.append(f"{self.BRANCH_PREFIX}@{self.branch}")
         if self.version_guid:
             parts.append(f"{self.VERSION_PREFIX}@{self.version_guid}")
         return "+".join(parts)
 
-    def _to_deprecated_string(self):
+    def _to_deprecated_string(self) -> str:
         """Returns an 'old-style' course id, represented as 'org/course/run'"""
-        return '/'.join([self.org, self.course, self.run])
+        return '/'.join([self.org, self.course, self.run])  # type: ignore
 
     @classmethod
-    def _from_deprecated_string(cls, serialized):
+    def _from_deprecated_string(cls, serialized: str) -> Self:
         """
         Return an instance of `cls` parsed from its deprecated `serialized` form.
 
@@ -388,7 +402,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):   # pylint: disable=abstract-m
         if serialized.count('/') != 2:
             raise InvalidKeyError(cls, serialized)
 
-        return cls(*serialized.split('/'), deprecated=True)
+        return cls(*serialized.split('/'), deprecated=True)  # type: ignore
 
 
 CourseKey.set_deprecated_fallback(CourseLocator)
@@ -419,11 +433,21 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
     CANONICAL_NAMESPACE = 'library-v1'
     RUN = 'library'  # For backwards compatibility, LibraryLocators have a read-only 'run' property equal to this
     KEY_FIELDS = ('org', 'library', 'branch', 'version_guid')
+    library: str
+    branch: str
+    version_guid: ObjectId
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
     is_course = False  # These keys inherit from CourseKey for historical reasons but are not courses
 
-    def __init__(self, org=None, library=None, branch=None, version_guid=None, **kwargs):
+    def __init__(
+        self,
+        org: str | None = None,
+        library: str | None = None,
+        branch: str | None = None,
+        version_guid: str | None = None,
+        **kwargs,
+    ):
         """
         Construct a LibraryLocator
 
@@ -468,7 +492,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
             **kwargs
         )
 
-        if self.version_guid is None and (self.org is None or self.library is None):  # pylint: disable=no-member
+        if self.version_guid is None and (self.org is None or self.library is None):
             raise InvalidKeyError(self.__class__, "Either version_guid or org and library should be set")
 
     @property
@@ -485,7 +509,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         Deprecated. Return a 'course' for compatibility with CourseLocator.
         """
         warnings.warn("Accessing 'course' on a LibraryLocator is deprecated.", DeprecationWarning, stacklevel=2)
-        return self.library  # pylint: disable=no-member
+        return self.library
 
     @property
     def version(self):
@@ -498,7 +522,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
             DeprecationWarning,
             stacklevel=2
         )
-        return self.version_guid  # pylint: disable=no-member
+        return self.version_guid
 
     @classmethod
     def _from_string(cls, serialized):
@@ -575,12 +599,12 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
         Return a string representing this location.
         """
         parts = []
-        if self.library:  # pylint: disable=no-member
-            parts.extend([self.org, self.library])  # pylint: disable=no-member
-            if self.branch:  # pylint: disable=no-member
-                parts.append(f"{self.BRANCH_PREFIX}@{self.branch}")  # pylint: disable=no-member
-        if self.version_guid:  # pylint: disable=no-member
-            parts.append(f"{self.VERSION_PREFIX}@{self.version_guid}")  # pylint: disable=no-member
+        if self.library:
+            parts.extend([self.org, self.library])
+            if self.branch:
+                parts.append(f"{self.BRANCH_PREFIX}@{self.branch}")
+        if self.version_guid:
+            parts.append(f"{self.VERSION_PREFIX}@{self.version_guid}")
         return "+".join(parts)
 
     def _to_deprecated_string(self):
@@ -626,9 +650,9 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
 
     DEPRECATED_TAG = 'i4x'  # to combine Locations with BlockUsageLocators
 
-    # fake out class introspection as this is an attr in this class's instances
-    course_key = None
-    block_type = None
+    course_key: CourseLocator
+    block_type: str
+    block_id: str
 
     DEPRECATED_URL_RE = re.compile("""
         i4x://
@@ -661,7 +685,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
 
         super().__init__(course_key=course_key, block_type=block_type, block_id=block_id, **kwargs)
 
-    def replace(self, **kwargs):
+    def replace(self, **kwargs) -> Self:
         # BlockUsageLocator allows for the replacement of 'KEY_FIELDS' in 'self.course_key'.
         # This includes the deprecated 'KEY_FIELDS' of CourseLocator `'revision'` and `'version'`.
         course_key_kwargs = {}
@@ -693,7 +717,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         return re.sub('_+', '_', invalid.sub('_', value))
 
     @classmethod
-    def clean(cls, value):
+    def clean(cls, value: str) -> str:
         """
         Should only be called on deprecated-style values
 
@@ -702,7 +726,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         return cls._clean(value, cls.DEPRECATED_INVALID_CHARS)
 
     @classmethod
-    def clean_keeping_underscores(cls, value):
+    def clean_keeping_underscores(cls, value: str) -> str:
         """
         Should only be called on deprecated-style values
 
@@ -713,7 +737,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         return cls.DEPRECATED_INVALID_CHARS.sub('_', value)
 
     @classmethod
-    def clean_for_url_name(cls, value):
+    def clean_for_url_name(cls, value: str) -> str:
         """
         Should only be called on deprecated-style values
 
@@ -722,7 +746,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         return cls._clean(value, cls.DEPRECATED_INVALID_CHARS_NAME)
 
     @classmethod
-    def clean_for_html(cls, value):
+    def clean_for_html(cls, value: str) -> str:
         """
         Should only be called on deprecated-style values
 
@@ -732,7 +756,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         return cls._clean(value, cls.DEPRECATED_INVALID_HTML_CHARS)
 
     @classmethod
-    def _from_string(cls, serialized):
+    def _from_string(cls, serialized: str) -> Self:
         """
         Requests CourseLocator to deserialize its part and then adds the local deserialization of block
         """
@@ -744,7 +768,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
             raise InvalidKeyError(cls, serialized)
         return cls(course_key, parsed_parts.get('block_type'), block_id)
 
-    def version_agnostic(self):
+    def version_agnostic(self) -> Self:
         """
         We don't care if the locator's version is not the current head; so, avoid version conflict
         by reducing info.
@@ -755,7 +779,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         """
         return self.replace(course_key=self.course_key.version_agnostic())
 
-    def course_agnostic(self):
+    def course_agnostic(self) -> Self:
         """
         We only care about the locator's version not its course.
         Returns a copy of itself without any course info.
@@ -1046,11 +1070,10 @@ class LibraryUsageLocator(BlockUsageLocator):
     CANONICAL_NAMESPACE = 'lib-block-v1'
     KEY_FIELDS = ('library_key', 'block_type', 'block_id')
 
-    # fake out class introspection as this is an attr in this class's instances
-    library_key = None
-    block_type = None
+    library_key: LibraryLocator
+    block_type: str
 
-    def __init__(self, library_key, block_type, block_id, **kwargs):
+    def __init__(self, library_key: LibraryLocator, block_type: str, block_id: str, **kwargs):
         """
         Construct a LibraryUsageLocator
         """
@@ -1073,7 +1096,6 @@ class LibraryUsageLocator(BlockUsageLocator):
             ) from error
 
         # We skip the BlockUsageLocator init and go to its superclass:
-        # pylint: disable=bad-super-call
         super(BlockUsageLocator, self).__init__(library_key=library_key, block_type=block_type, block_id=block_id,
                                                 **kwargs)
 
@@ -1179,10 +1201,10 @@ class DefinitionLocator(Locator, DefinitionKey):
     CHECKED_INIT = False
 
     # override the abstractproperty
-    block_type = None
-    definition_id = None
+    block_type: str
+    definition_id: ObjectId
 
-    def __init__(self, block_type, definition_id, deprecated=False):    # pylint: disable=unused-argument
+    def __init__(self, block_type: str, definition_id: ObjectId | str, deprecated: bool = False):    # pylint: disable=unused-argument
         if isinstance(definition_id, str):
             try:
                 definition_id = self.as_object_id(definition_id)
@@ -1190,7 +1212,7 @@ class DefinitionLocator(Locator, DefinitionKey):
                 raise InvalidKeyError(DefinitionLocator, definition_id) from error
         super().__init__(definition_id=definition_id, block_type=block_type, deprecated=False)
 
-    def _to_string(self):
+    def _to_string(self) -> str:
         """
         Return a string representing this location.
         unicode(self) returns something like this: "519665f6223ebd6980884f2b+type+problem"
@@ -1204,7 +1226,7 @@ class DefinitionLocator(Locator, DefinitionKey):
     )
 
     @classmethod
-    def _from_string(cls, serialized):
+    def _from_string(cls, serialized: str) -> Self:
         """
         Return a DefinitionLocator parsing the given serialized string
         :param serialized: matches the string to
@@ -1213,14 +1235,14 @@ class DefinitionLocator(Locator, DefinitionKey):
         if not parse:
             raise InvalidKeyError(cls, serialized)
 
-        parse = parse.groupdict()
-        if parse['definition_id']:
-            parse['definition_id'] = cls.as_object_id(parse['definition_id'])
+        data = parse.groupdict()
+        if data['definition_id']:
+            data['definition_id'] = cls.as_object_id(data['definition_id'])
 
-        return cls(**{key: parse.get(key) for key in cls.KEY_FIELDS})
+        return cls(**{key: data.get(key) for key in cls.KEY_FIELDS})  # type: ignore
 
     @property
-    def version(self):
+    def version(self) -> ObjectId:
         """
         Returns the ObjectId referencing this specific location.
         """
@@ -1295,7 +1317,6 @@ class AssetLocator(BlockUsageLocator, AssetKey):    # pylint: disable=abstract-m
 
         /c4x/org/course/category/name
         """
-        # pylint: disable=missing-format-attribute
         url = (
             f"/{self.DEPRECATED_TAG}/{self.course_key.org}/{self.course_key.course}"
             f"/{self.block_type}/{self.block_id}"
@@ -1384,13 +1405,23 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
     """
     CANONICAL_NAMESPACE = 'bundle-olx'
     KEY_FIELDS = ('bundle_uuid', 'block_type', 'olx_path', '_version_or_draft')
+    bundle_uuid: UUID
+    olx_path: str
+    _version_or_draft: int | str
+
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
     OLX_PATH_REGEXP = re.compile(r'^[\w\-./]+$', flags=re.UNICODE)
 
-    # pylint: disable=no-member
-
-    def __init__(self, bundle_uuid, block_type, olx_path, bundle_version=None, draft_name=None, _version_or_draft=None):
+    def __init__(
+        self,
+        bundle_uuid: UUID | str,
+        block_type: str,
+        olx_path: str,
+        bundle_version: int | None = None,
+        draft_name: str | None = None,
+        _version_or_draft: str | int | None = None,
+    ):
         """
         Instantiate a new BundleDefinitionLocator
         """
@@ -1427,7 +1458,7 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
         )
 
     @property
-    def bundle_version(self):
+    def bundle_version(self) -> int | None:
         """
         Get the Blockstore bundle version number, or None if a Blockstore draft
         name has been specified instead.
@@ -1435,14 +1466,14 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
         return self._version_or_draft if isinstance(self._version_or_draft, int) else None
 
     @property
-    def draft_name(self):
+    def draft_name(self) -> str | None:
         """
         Get the Blockstore draft name, or None if a Blockstore bundle version
         number has been specified instead.
         """
         return self._version_or_draft if not isinstance(self._version_or_draft, int) else None
 
-    def _to_string(self):
+    def _to_string(self) -> str:
         """
         Return a string representing this BundleDefinitionLocator
         """
@@ -1451,10 +1482,11 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
         ))
 
     @classmethod
-    def _from_string(cls, serialized):
+    def _from_string(cls, serialized: str) -> Self:
         """
         Return a BundleDefinitionLocator by parsing the given serialized string
         """
+        _version_or_draft: int | str
         try:
             (bundle_uuid_str, _version_or_draft, block_type, olx_path) = serialized.split(':', 3)
         except ValueError as error:
@@ -1502,13 +1534,13 @@ class LibraryLocatorV2(CheckFieldMixin, LearningContextKey):
     """
     CANONICAL_NAMESPACE = 'lib'
     KEY_FIELDS = ('org', 'slug')
+    org: str
+    slug: str
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
     # Allow library slugs to contain unicode characters
     SLUG_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
-
-    # pylint: disable=no-member
 
     def __init__(self, org, slug):
         """
@@ -1518,14 +1550,14 @@ class LibraryLocatorV2(CheckFieldMixin, LearningContextKey):
         self._check_key_string_field("slug", slug, regexp=self.SLUG_REGEXP)
         super().__init__(org=org, slug=slug)
 
-    def _to_string(self):
+    def _to_string(self) -> str:
         """
         Serialize this key as a string
         """
         return ":".join((self.org, self.slug))
 
     @classmethod
-    def _from_string(cls, serialized):
+    def _from_string(cls, serialized: str) -> Self:
         """
         Instantiate this key from a serialized string
         """
@@ -1535,18 +1567,7 @@ class LibraryLocatorV2(CheckFieldMixin, LearningContextKey):
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
 
-    def make_definition_usage(self, definition_key, usage_id=None):
-        """
-        Return a usage key, given the given the specified definition key and
-        usage_id.
-        """
-        return LibraryUsageLocatorV2(
-            lib_key=self,
-            block_type=definition_key.block_type,
-            usage_id=usage_id,
-        )
-
-    def for_branch(self, branch):
+    def for_branch(self, branch: str | None):
         """
         Compatibility helper.
         Some code calls .for_branch(None) on course keys. By implementing this,
@@ -1567,15 +1588,16 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
     """
     CANONICAL_NAMESPACE = 'lb'  # "Library Block"
     KEY_FIELDS = ('lib_key', 'block_type', 'usage_id')
+    lib_key: LibraryLocatorV2
+    usage_id: str
+
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
     # Allow usage IDs to contian unicode characters
     USAGE_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    # pylint: disable=no-member
-
-    def __init__(self, lib_key, block_type, usage_id):
+    def __init__(self, lib_key: LibraryLocatorV2, block_type: str, usage_id: str):
         """
         Construct a LibraryUsageLocatorV2
         """
@@ -1590,24 +1612,24 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
         )
 
     @property
-    def context_key(self):
+    def context_key(self) -> LibraryLocatorV2:
         return self.lib_key
 
     @property
-    def block_id(self):
+    def block_id(self) -> str:
         """
         Get the 'block ID' which is another name for the usage ID.
         """
         return self.usage_id
 
-    def _to_string(self):
+    def _to_string(self) -> str:
         """
         Serialize this key as a string
         """
         return ":".join((self.lib_key.org, self.lib_key.slug, self.block_type, self.usage_id))
 
     @classmethod
-    def _from_string(cls, serialized):
+    def _from_string(cls, serialized: str) -> Self:
         """
         Instantiate this key from a serialized string
         """
@@ -1618,7 +1640,7 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
 
-    def html_id(self):
+    def html_id(self) -> str:
         """
         Return an id which can be used on an html page as an id attr of an html
         element. This is only in here for backwards-compatibility with XModules;

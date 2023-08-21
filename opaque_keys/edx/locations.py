@@ -1,7 +1,7 @@
 """
 Deprecated OpaqueKey implementations used by XML and Mongo modulestores
 """
-
+from __future__ import annotations
 import re
 import warnings
 
@@ -67,7 +67,7 @@ class SlashSeparatedCourseKey(CourseLocator):
 class LocationBase:
     """Deprecated. Base class for :class:`Location` and :class:`AssetLocation`"""
 
-    DEPRECATED_TAG = None  # Subclasses should define what DEPRECATED_TAG is
+    DEPRECATED_TAG: str | None = None  # Subclasses should define what DEPRECATED_TAG is
 
     @classmethod
     def _deprecation_warning(cls):

@@ -2,7 +2,7 @@
 Useful django models for implementing XBlock infrastructure in django.
 If Django is unavailable, none of the classes below will work as intended.
 """
-# pylint: disable=abstract-method
+from __future__ import annotations
 import logging
 import warnings
 
@@ -16,6 +16,7 @@ except ImportError:  # pragma: no cover
     CharField = object
     IsNull = object
 
+from opaque_keys import OpaqueKey
 from opaque_keys.edx.keys import BlockTypeKey, CourseKey, LearningContextKey, UsageKey
 
 
@@ -41,7 +42,7 @@ class _Creator:
         obj.__dict__[self.field.name] = self.field.to_python(value)
 
 
-# pylint: disable=missing-docstring,unused-argument
+# pylint: disable=unused-argument
 class CreatorMixin:
     """
     Mixin class to provide SubfieldBase functionality to django fields.
@@ -77,7 +78,6 @@ def _strip_value(value, lookup='exact'):
     return stripped_value
 
 
-# pylint: disable=logging-format-interpolation
 class OpaqueKeyField(CreatorMixin, CharField):
     """
     A django field for storing OpaqueKeys.
@@ -92,7 +92,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
     description = "An OpaqueKey object, saved to the DB in the form of a string."
 
     Empty = object()
-    KEY_CLASS = None
+    KEY_CLASS: type[OpaqueKey]
 
     def __init__(self, *args, **kwargs):
         if self.KEY_CLASS is None:
@@ -100,7 +100,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
 
         super().__init__(*args, **kwargs)
 
-    def to_python(self, value):
+    def to_python(self, value):  # pylint: disable=missing-function-docstring
         if value is self.Empty or value is None:
             return None
 
@@ -128,13 +128,12 @@ class OpaqueKeyField(CreatorMixin, CharField):
             return self.KEY_CLASS.from_string(value)
         return value
 
-    def get_prep_value(self, value):
+    def get_prep_value(self, value):  # pylint: disable=missing-function-docstring
         if value is self.Empty or value is None:
             return ''  # CharFields should use '' as their empty value, rather than None
 
         if isinstance(value, str):
             value = self.KEY_CLASS.from_string(value)
-        # pylint: disable=isinstance-second-argument-not-valid-type
         assert isinstance(value, self.KEY_CLASS), f"{value} is not an instance of {self.KEY_CLASS}"
         serialized_key = str(_strip_value(value))
         if serialized_key.endswith('\n'):
@@ -178,7 +177,6 @@ class OpaqueKeyFieldEmptyLookupIsNull(IsNull):
 
 
 try:
-    #  pylint: disable=no-member
     OpaqueKeyField.register_lookup(OpaqueKeyFieldEmptyLookupIsNull)
 except AttributeError:
     #  Django was not imported

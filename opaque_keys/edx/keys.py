@@ -1,15 +1,17 @@
 """
-;
 OpaqueKey abstract classes for edx-platform object types (courses, definitions, usages, and assets).
 """
+from __future__ import annotations
 import json
 from abc import abstractmethod
 import warnings
 
+from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
+
 from opaque_keys import OpaqueKey
 
 
-class LearningContextKey(OpaqueKey):
+class LearningContextKey(OpaqueKey):  # pylint: disable=abstract-method
     """
     An :class:`opaque_keys.OpaqueKey` identifying a course, a library, a
     program, a website, or some other collection of content where learning
@@ -30,13 +32,6 @@ class LearningContextKey(OpaqueKey):
     # just isinstance(key, CourseKey)
     is_course = False
 
-    def make_definition_usage(self, definition_key, usage_id=None):
-        """
-        Return a usage key, given the given the specified definition key and
-        usage_id.
-        """
-        raise NotImplementedError()
-
 
 class CourseKey(LearningContextKey):
     """
@@ -47,7 +42,7 @@ class CourseKey(LearningContextKey):
 
     @property
     @abstractmethod
-    def org(self):  # pragma: no cover
+    def org(self) -> str | None:  # pragma: no cover
         """
         The organization that this course belongs to.
         """
@@ -55,7 +50,7 @@ class CourseKey(LearningContextKey):
 
     @property
     @abstractmethod
-    def course(self):  # pragma: no cover
+    def course(self) -> str | None:  # pragma: no cover
         """
         The name for this course.
 
@@ -65,7 +60,7 @@ class CourseKey(LearningContextKey):
 
     @property
     @abstractmethod
-    def run(self):  # pragma: no cover
+    def run(self) -> str | None:  # pragma: no cover
         """
         The run for this course.
 
@@ -74,7 +69,7 @@ class CourseKey(LearningContextKey):
         raise NotImplementedError()
 
     @abstractmethod
-    def make_usage_key(self, block_type, block_id):  # pragma: no cover
+    def make_usage_key(self, block_type: str, block_id: str) -> UsageKey:  # pragma: no cover
         """
         Return a usage key, given the given the specified block_type and block_id.
 
@@ -84,7 +79,7 @@ class CourseKey(LearningContextKey):
         raise NotImplementedError()
 
     @abstractmethod
-    def make_asset_key(self, asset_type, path):  # pragma: no cover
+    def make_asset_key(self, asset_type: str, path: str) -> AssetKey:  # pragma: no cover
         """
         Return an asset key, given the given the specified path.
 
@@ -103,7 +98,7 @@ class DefinitionKey(OpaqueKey):
 
     @property
     @abstractmethod
-    def block_type(self):  # pragma: no cover
+    def block_type(self) -> str:  # pragma: no cover
         """
         The XBlock type of this definition.
         """
@@ -119,14 +114,14 @@ class CourseObjectMixin:
 
     @property
     @abstractmethod
-    def course_key(self):  # pragma: no cover
+    def course_key(self) -> CourseKey:  # pragma: no cover
         """
         Return the :class:`CourseKey` for the course containing this usage.
         """
         raise NotImplementedError()
 
     @abstractmethod
-    def map_into_course(self, course_key):  # pragma: no cover
+    def map_into_course(self, course_key: CourseKey) -> Self:  # pragma: no cover
         """
         Return a new :class:`UsageKey` or :class:`AssetKey` representing this usage inside the
         course identified by the supplied :class:`CourseKey`. It returns the same type as
@@ -150,7 +145,7 @@ class AssetKey(CourseObjectMixin, OpaqueKey):
 
     @property
     @abstractmethod
-    def asset_type(self):  # pragma: no cover
+    def asset_type(self) -> str:  # pragma: no cover
         """
         Return what type of asset this is.
         """
@@ -158,7 +153,7 @@ class AssetKey(CourseObjectMixin, OpaqueKey):
 
     @property
     @abstractmethod
-    def path(self):  # pragma: no cover
+    def path(self) -> str:  # pragma: no cover
         """
         Return the path for this asset.
         """
@@ -174,7 +169,7 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
 
     @property
     @abstractmethod
-    def definition_key(self):  # pragma: no cover
+    def definition_key(self) -> DefinitionKey:  # pragma: no cover
         """
         Return the :class:`DefinitionKey` for the XBlock containing this usage.
         """
@@ -182,7 +177,7 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
 
     @property
     @abstractmethod
-    def block_type(self):
+    def block_type(self) -> str:
         """
         The XBlock type of this usage.
         """
@@ -190,14 +185,14 @@ class UsageKey(CourseObjectMixin, OpaqueKey):
 
     @property
     @abstractmethod
-    def block_id(self):
+    def block_id(self) -> str:
         """
         The name of this usage.
         """
         raise NotImplementedError()
 
     @property
-    def context_key(self):
+    def context_key(self) -> LearningContextKey:
         """
         Get the learning context key (LearningContextKey) for this XBlock usage.
         """
@@ -224,7 +219,7 @@ class UsageKeyV2(UsageKey):
 
     @property
     @abstractmethod
-    def context_key(self):
+    def context_key(self) -> LearningContextKey:
         """
         Get the learning context key (LearningContextKey) for this XBlock usage.
         May be a course key, library key, or some other LearningContextKey type.
@@ -232,7 +227,7 @@ class UsageKeyV2(UsageKey):
         raise NotImplementedError()
 
     @property
-    def definition_key(self):
+    def definition_key(self) -> DefinitionKey:
         """
         Returns the definition key for this usage. For the newer V2 key types,
         this cannot be done with the key alone, so it's necessary to ask the
@@ -245,11 +240,11 @@ class UsageKeyV2(UsageKey):
         )
 
     @property
-    def course_key(self):
+    def course_key(self) -> CourseKey:
         warnings.warn("Use .context_key instead of .course_key", DeprecationWarning, stacklevel=2)
-        return self.context_key
+        return self.context_key  # type: ignore
 
-    def map_into_course(self, course_key):
+    def map_into_course(self, course_key: CourseKey) -> Self:
         """
         Implement map_into_course for API compatibility. Shouldn't be used in
         new code.
@@ -312,7 +307,7 @@ class i4xEncoder(json.JSONEncoder):  # pylint: disable=invalid-name
     If provided as the cls to json.dumps, will serialize and Locations as i4x strings and other
     keys using the unicode strings.
     """
-    def default(self, o):  # pylint: disable=arguments-differ, method-hidden
+    def default(self, o):
         if isinstance(o, OpaqueKey):
             return str(o)
         super().default(o)
@@ -329,7 +324,7 @@ class BlockTypeKey(OpaqueKey):
 
     @property
     @abstractmethod
-    def block_family(self):
+    def block_family(self) -> str:
         """
         Return the block-family identifier (the entry-point used to load that block
         family).
@@ -338,7 +333,7 @@ class BlockTypeKey(OpaqueKey):
 
     @property
     @abstractmethod
-    def block_type(self):
+    def block_type(self) -> str:
         """
         Return the block_type of this block (the key in the entry-point to load the block
         with).

@@ -108,6 +108,7 @@ setup(
     ],
     # We are including the tests because other libraries do use mixins from them.
     packages=find_packages(),
+    include_package_data=True,
     license='AGPL-3.0',
     install_requires=load_requirements('requirements/base.in'),
     extras_require={

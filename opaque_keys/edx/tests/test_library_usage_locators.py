@@ -1,8 +1,7 @@
 """
 Tests of LibraryUsageLocator
 """
-
-import itertools  # pylint: disable=wrong-import-order
+import itertools
 from unittest import TestCase
 
 import ddt

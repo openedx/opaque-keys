@@ -34,7 +34,6 @@ class Container:
         return self.text == obj.text
 
 
-#  pylint: disable=missing-docstring
 class ExampleField(CreatorMixin, CharField):
     """A simple Django Field to assist in testing the CreatorMixin class."""
 

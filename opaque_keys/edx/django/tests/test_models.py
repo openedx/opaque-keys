@@ -23,7 +23,6 @@ def enable_db_access_for_all_tests(db):
     """Enable DB access for all tests."""
 
 
-#  pylint: disable=no-member
 class TestCreatorMixin(TestCase):
     """Tests of the CreatorMixin class."""
     def setUp(self):
@@ -33,7 +32,7 @@ class TestCreatorMixin(TestCase):
 
     def test_char_field_is_converted_to_container(self):
         expected = Container('key-1').transform()
-        self.assertEqual(expected, self.model.key.transform())
+        self.assertEqual(expected, self.model.key.transform())  # pylint: disable=no-member
 
     def test_load_model_from_db(self):
         fetched_model = ExampleModel.objects.get(key='key-1')
@@ -48,8 +47,8 @@ class EmptyKeyClassField(OpaqueKeyField):
 class TestOpaqueKeyField(TestCase):
     """Tests the implementation of OpaqueKeyField methods."""
     def test_null_key_class_raises_value_error(self):
-        with self.assertRaises(ValueError):
-            EmptyKeyClassField()
+        with self.assertRaises(AttributeError):
+            EmptyKeyClassField()  # AttributeError: 'EmptyKeyClassField' object has no attribute 'KEY_CLASS'
 
     def test_to_python_trailing_newline_stripped(self):
         field = ComplexModel()._meta.get_field('course_key')

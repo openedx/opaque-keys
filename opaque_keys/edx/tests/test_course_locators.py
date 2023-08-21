@@ -79,7 +79,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
             CourseLocator(version_guid=None)
 
     def test_course_constructor_version_guid(self):
-        # pylint: disable=no-member,protected-access
+        # pylint: disable=protected-access
 
         # generate a random location
         test_id_1 = ObjectId()
@@ -234,7 +234,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
             branch=test_branch,
         )
 
-        # pylint: disable=no-member,protected-access
+        # pylint: disable=protected-access
         self.assertEqual(testobj.branch, test_branch)
         self.assertEqual(testobj._to_string(), expected_urn)
 

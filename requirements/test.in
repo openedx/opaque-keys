@@ -8,9 +8,8 @@ ddt
 edx-lint
 hypothesis
 mock
+mypy
 pycodestyle
 pytest
 pytest-cov
-pytest-pep8
-pytest-pylint
 pytest-xdist
