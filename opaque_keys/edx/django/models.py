@@ -194,6 +194,12 @@ class LearningContextKeyField(OpaqueKeyField):
     """
     description = "A LearningContextKey object, saved to the DB in the form of a string"
     KEY_CLASS = LearningContextKey
+    # Declare the field types for the django-stubs mypy type hint plugin.
+    # See https://github.com/typeddjango/django-stubs/blob/6a850f6/django-stubs/db/models/fields/__init__.pyi#L503-L511
+    # for examples of how this works for the standard field types in the upstream codebase.
+    # Note that these particular type annotations have no effect at runtime nor on Django itself nor on PyLance.
+    _pyi_private_set_type: LearningContextKey | str | None  # The types that you can set into this field.
+    _pyi_private_get_type: LearningContextKey  # The type that you get when you read from this field
 
 
 class CourseKeyField(OpaqueKeyField):
@@ -202,6 +208,9 @@ class CourseKeyField(OpaqueKeyField):
     """
     description = "A CourseKey object, saved to the DB in the form of a string"
     KEY_CLASS = CourseKey
+    # Declare the field types for the django-stubs mypy type hint plugin:
+    _pyi_private_set_type: CourseKey | str | None
+    _pyi_private_get_type: CourseKey
 
 
 class UsageKeyField(OpaqueKeyField):
@@ -210,6 +219,9 @@ class UsageKeyField(OpaqueKeyField):
     """
     description = "A Location object, saved to the DB in the form of a string"
     KEY_CLASS = UsageKey
+    # Declare the field types for the django-stubs mypy type hint plugin:
+    _pyi_private_set_type: UsageKey | str | None
+    _pyi_private_get_type: UsageKey
 
 
 class LocationKeyField(UsageKeyField):
@@ -228,3 +240,6 @@ class BlockTypeKeyField(OpaqueKeyField):
     """
     description = "A BlockTypeKey object, saved to the DB in the form of a string."
     KEY_CLASS = BlockTypeKey
+    # Declare the field types for the django-stubs mypy type hint plugin:
+    _pyi_private_set_type: BlockTypeKey | str | None
+    _pyi_private_get_type: BlockTypeKey
