@@ -15,10 +15,10 @@ metadata:
 spec:
 
   # (Required) This can be a group(`group:<group_name>` or a user(`user:<github_username>`)
-  owner: "group:arch-bom"
+  owner: "group:axim-engineering"
 
   # (Required) Acceptable Type Values: service, website, library
   type: 'library'
 
   # (Required) Acceptable Lifecycle Values: experimental, production, deprecated
-  lifecycle: 'experimental'
+  lifecycle: 'production'
