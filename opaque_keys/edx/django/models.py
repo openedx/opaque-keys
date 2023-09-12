@@ -199,7 +199,7 @@ class LearningContextKeyField(OpaqueKeyField):
     # for examples of how this works for the standard field types in the upstream codebase.
     # Note that these particular type annotations have no effect at runtime nor on Django itself nor on PyLance.
     _pyi_private_set_type: LearningContextKey | str | None  # The types that you can set into this field.
-    _pyi_private_get_type: LearningContextKey  # The type that you get when you read from this field
+    _pyi_private_get_type: LearningContextKey | None  # The type that you get when you read from this field
 
 
 class CourseKeyField(OpaqueKeyField):
@@ -210,7 +210,7 @@ class CourseKeyField(OpaqueKeyField):
     KEY_CLASS = CourseKey
     # Declare the field types for the django-stubs mypy type hint plugin:
     _pyi_private_set_type: CourseKey | str | None
-    _pyi_private_get_type: CourseKey
+    _pyi_private_get_type: CourseKey | None
 
 
 class UsageKeyField(OpaqueKeyField):
@@ -221,7 +221,7 @@ class UsageKeyField(OpaqueKeyField):
     KEY_CLASS = UsageKey
     # Declare the field types for the django-stubs mypy type hint plugin:
     _pyi_private_set_type: UsageKey | str | None
-    _pyi_private_get_type: UsageKey
+    _pyi_private_get_type: UsageKey | None
 
 
 class LocationKeyField(UsageKeyField):
@@ -242,4 +242,4 @@ class BlockTypeKeyField(OpaqueKeyField):
     KEY_CLASS = BlockTypeKey
     # Declare the field types for the django-stubs mypy type hint plugin:
     _pyi_private_set_type: BlockTypeKey | str | None
-    _pyi_private_get_type: BlockTypeKey
+    _pyi_private_get_type: BlockTypeKey | None
