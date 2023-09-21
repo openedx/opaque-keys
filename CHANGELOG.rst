@@ -1,3 +1,8 @@
+# 2.5.1
+
+* Fixed - py.typed file wasn't installed properly via setuptools.
+* Added type hints for the OpaqueKeyField subclasses (requires mypy plugin)
+
 # 2.5.0
 
 * Added python type hints
