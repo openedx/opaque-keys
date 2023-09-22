@@ -761,7 +761,7 @@ class BlockUsageLocator(BlockLocatorBase, UsageKey):
         Requests CourseLocator to deserialize its part and then adds the local deserialization of block
         """
         # Allow access to _from_string protected method
-        course_key = CourseLocator._from_string(serialized)  # pylint: disable=protected-access
+        course_key = CourseLocator._from_string(serialized)
         parsed_parts = cls.parse_url(serialized)
         block_id = parsed_parts.get('block_id', None)
         if block_id is None:

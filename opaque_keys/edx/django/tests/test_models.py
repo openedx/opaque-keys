@@ -32,7 +32,7 @@ class TestCreatorMixin(TestCase):
 
     def test_char_field_is_converted_to_container(self):
         expected = Container('key-1').transform()
-        self.assertEqual(expected, self.model.key.transform())  # pylint: disable=no-member
+        self.assertEqual(expected, self.model.key.transform())
 
     def test_load_model_from_db(self):
         fetched_model = ExampleModel.objects.get(key='key-1')
