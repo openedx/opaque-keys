@@ -12,7 +12,7 @@ alabaster==0.7.13
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==2.15.6
+astroid==2.15.8
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -22,7 +22,7 @@ attrs==23.1.0
     #   -r requirements/doc.txt
     #   hypothesis
     #   pytest
-babel==2.12.1
+babel==2.13.0
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
@@ -39,7 +39,7 @@ certifi==2023.7.22
     # via
     #   -r requirements/doc.txt
     #   requests
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -59,7 +59,7 @@ code-annotations==1.5.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-coverage[toml]==7.3.1
+coverage[toml]==7.3.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -95,7 +95,7 @@ filelock==3.12.4
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.86.2
+hypothesis==6.87.1
     # via -r requirements/doc.txt
 idna==3.4
     # via
@@ -148,7 +148,7 @@ nh3==0.2.14
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
-packaging==23.1
+packaging==23.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -164,7 +164,7 @@ pbr==5.11.1
     #   stevedore
 pip-tools==7.3.0
     # via -r requirements/pip-tools.txt
-platformdirs==3.10.0
+platformdirs==3.11.0
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -197,7 +197,7 @@ pygments==2.16.1
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==2.17.5
+pylint==2.17.7
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -346,7 +346,7 @@ typing-extensions==4.8.0
     #   mypy
     #   pydata-sphinx-theme
     #   pylint
-urllib3==2.0.5
+urllib3==2.0.6
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -354,7 +354,7 @@ virtualenv==20.24.5
     # via
     #   -r requirements/ci.txt
     #   tox
-wcwidth==0.2.6
+wcwidth==0.2.8
     # via
     #   -r requirements/doc.txt
     #   pytest

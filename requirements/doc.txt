@@ -8,7 +8,7 @@ accessible-pygments==0.0.4
     # via pydata-sphinx-theme
 alabaster==0.7.13
     # via sphinx
-astroid==2.15.6
+astroid==2.15.8
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -18,7 +18,7 @@ attrs==23.1.0
     #   -r requirements/test.txt
     #   hypothesis
     #   pytest
-babel==2.12.1
+babel==2.13.0
     # via
     #   pydata-sphinx-theme
     #   sphinx
@@ -26,7 +26,7 @@ beautifulsoup4==4.12.2
     # via pydata-sphinx-theme
 certifi==2023.7.22
     # via requests
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via requests
 click==8.1.7
     # via
@@ -42,7 +42,7 @@ code-annotations==1.5.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.3.1
+coverage[toml]==7.3.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -67,7 +67,7 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.86.2
+hypothesis==6.87.1
     # via -r requirements/test.txt
 idna==3.4
     # via requests
@@ -110,7 +110,7 @@ mypy-extensions==1.0.0
     #   mypy
 nh3==0.2.14
     # via readme-renderer
-packaging==23.1
+packaging==23.2
     # via
     #   -r requirements/test.txt
     #   pydata-sphinx-theme
@@ -120,7 +120,7 @@ pbr==5.11.1
     # via
     #   -r requirements/test.txt
     #   stevedore
-platformdirs==3.10.0
+platformdirs==3.11.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -144,7 +144,7 @@ pygments==2.16.1
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==2.17.5
+pylint==2.17.7
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -254,9 +254,9 @@ typing-extensions==4.8.0
     #   mypy
     #   pydata-sphinx-theme
     #   pylint
-urllib3==2.0.5
+urllib3==2.0.6
     # via requests
-wcwidth==0.2.6
+wcwidth==0.2.8
     # via
     #   -r requirements/test.txt
     #   pytest
