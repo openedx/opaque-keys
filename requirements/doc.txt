@@ -67,7 +67,7 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.87.1
+hypothesis==6.87.4
     # via -r requirements/test.txt
 idna==3.4
     # via requests
@@ -102,7 +102,7 @@ more-itertools==10.1.0
     # via
     #   -r requirements/test.txt
     #   pytest
-mypy==1.5.1
+mypy==1.6.0
     # via -r requirements/test.txt
 mypy-extensions==1.0.0
     # via
@@ -134,7 +134,7 @@ py==1.11.0
     #   -r requirements/test.txt
     #   pytest
     #   pytest-forked
-pycodestyle==2.11.0
+pycodestyle==2.11.1
     # via -r requirements/test.txt
 pydata-sphinx-theme==0.14.1
     # via sphinx-book-theme
