@@ -35,7 +35,7 @@ exceptiongroup==1.1.3
     # via hypothesis
 execnet==2.0.2
     # via pytest-xdist
-hypothesis==6.87.1
+hypothesis==6.88.1
     # via -r requirements/test.in
 isort==5.12.0
     # via pylint
@@ -51,7 +51,7 @@ mock==5.1.0
     # via -r requirements/test.in
 more-itertools==10.1.0
     # via pytest
-mypy==1.5.1
+mypy==1.6.1
     # via -r requirements/test.in
 mypy-extensions==1.0.0
     # via mypy
@@ -71,7 +71,7 @@ py==1.11.0
     # via
     #   pytest
     #   pytest-forked
-pycodestyle==2.11.0
+pycodestyle==2.11.1
     # via -r requirements/test.in
 pylint==2.17.7
     # via

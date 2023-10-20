@@ -63,6 +63,7 @@ coverage[toml]==7.3.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
+    #   coverage
     #   pytest-cov
 ddt==1.6.0
     # via -r requirements/doc.txt
@@ -95,7 +96,7 @@ filelock==3.12.4
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.87.1
+hypothesis==6.88.1
     # via -r requirements/doc.txt
 idna==3.4
     # via
@@ -138,7 +139,7 @@ more-itertools==10.1.0
     # via
     #   -r requirements/doc.txt
     #   pytest
-mypy==1.5.1
+mypy==1.6.1
     # via -r requirements/doc.txt
 mypy-extensions==1.0.0
     # via
@@ -184,7 +185,7 @@ py==1.11.0
     #   pytest
     #   pytest-forked
     #   tox
-pycodestyle==2.11.0
+pycodestyle==2.11.1
     # via -r requirements/doc.txt
 pydata-sphinx-theme==0.14.1
     # via
@@ -346,7 +347,7 @@ typing-extensions==4.8.0
     #   mypy
     #   pydata-sphinx-theme
     #   pylint
-urllib3==2.0.6
+urllib3==2.0.7
     # via
     #   -r requirements/doc.txt
     #   requests
