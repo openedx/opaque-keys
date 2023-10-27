@@ -12,7 +12,7 @@ alabaster==0.7.13
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==2.15.8
+astroid==3.0.1
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -22,7 +22,7 @@ attrs==23.1.0
     #   -r requirements/doc.txt
     #   hypothesis
     #   pytest
-babel==2.13.0
+babel==2.13.1
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
@@ -39,7 +39,7 @@ certifi==2023.7.22
     # via
     #   -r requirements/doc.txt
     #   requests
-charset-normalizer==3.3.0
+charset-normalizer==3.3.1
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -63,6 +63,7 @@ coverage[toml]==7.3.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
+    #   coverage
     #   pytest-cov
 ddt==1.6.0
     # via -r requirements/doc.txt
@@ -80,7 +81,7 @@ docutils==0.19
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-edx-lint==5.3.4
+edx-lint==5.3.6
     # via -r requirements/doc.txt
 exceptiongroup==1.1.3
     # via
@@ -95,7 +96,7 @@ filelock==3.12.4
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.87.1
+hypothesis==6.88.1
     # via -r requirements/doc.txt
 idna==3.4
     # via
@@ -120,10 +121,6 @@ jinja2==3.1.2
     #   -r requirements/doc.txt
     #   code-annotations
     #   sphinx
-lazy-object-proxy==1.9.0
-    # via
-    #   -r requirements/doc.txt
-    #   astroid
 markupsafe==2.1.3
     # via
     #   -r requirements/doc.txt
@@ -138,7 +135,7 @@ more-itertools==10.1.0
     # via
     #   -r requirements/doc.txt
     #   pytest
-mypy==1.5.1
+mypy==1.6.1
     # via -r requirements/doc.txt
 mypy-extensions==1.0.0
     # via
@@ -184,9 +181,9 @@ py==1.11.0
     #   pytest
     #   pytest-forked
     #   tox
-pycodestyle==2.11.0
+pycodestyle==2.11.1
     # via -r requirements/doc.txt
-pydata-sphinx-theme==0.14.1
+pydata-sphinx-theme==0.14.2
     # via
     #   -r requirements/doc.txt
     #   sphinx-book-theme
@@ -197,7 +194,7 @@ pygments==2.16.1
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==2.17.7
+pylint==3.0.2
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -208,7 +205,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-pylint-django==2.5.3
+pylint-django==2.5.5
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -346,11 +343,11 @@ typing-extensions==4.8.0
     #   mypy
     #   pydata-sphinx-theme
     #   pylint
-urllib3==2.0.6
+urllib3==2.0.7
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.24.5
+virtualenv==20.24.6
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -362,10 +359,6 @@ wheel==0.41.2
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-wrapt==1.15.0
-    # via
-    #   -r requirements/doc.txt
-    #   astroid
 zipp==3.17.0
     # via
     #   -r requirements/doc.txt
