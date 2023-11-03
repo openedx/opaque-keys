@@ -26,7 +26,7 @@ beautifulsoup4==4.12.2
     # via pydata-sphinx-theme
 certifi==2023.7.22
     # via requests
-charset-normalizer==3.3.1
+charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via
@@ -133,7 +133,7 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.11.1
     # via -r requirements/test.txt
-pydata-sphinx-theme==0.14.2
+pydata-sphinx-theme==0.14.3
     # via sphinx-book-theme
 pygments==2.16.1
     # via
@@ -240,7 +240,7 @@ tomli==2.0.1
     #   coverage
     #   mypy
     #   pylint
-tomlkit==0.12.1
+tomlkit==0.12.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -253,7 +253,7 @@ typing-extensions==4.8.0
     #   pylint
 urllib3==2.0.7
     # via requests
-wcwidth==0.2.8
+wcwidth==0.2.9
     # via
     #   -r requirements/test.txt
     #   pytest
