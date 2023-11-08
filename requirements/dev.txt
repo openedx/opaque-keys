@@ -39,7 +39,7 @@ certifi==2023.7.22
     # via
     #   -r requirements/doc.txt
     #   requests
-charset-normalizer==3.3.1
+charset-normalizer==3.3.2
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -91,7 +91,7 @@ execnet==2.0.2
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.12.4
+filelock==3.13.1
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -183,7 +183,7 @@ py==1.11.0
     #   tox
 pycodestyle==2.11.1
     # via -r requirements/doc.txt
-pydata-sphinx-theme==0.14.2
+pydata-sphinx-theme==0.14.3
     # via
     #   -r requirements/doc.txt
     #   sphinx-book-theme
@@ -325,7 +325,7 @@ tomli==2.0.1
     #   pylint
     #   pyproject-hooks
     #   tox
-tomlkit==0.12.1
+tomlkit==0.12.2
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -351,11 +351,11 @@ virtualenv==20.24.6
     # via
     #   -r requirements/ci.txt
     #   tox
-wcwidth==0.2.8
+wcwidth==0.2.9
     # via
     #   -r requirements/doc.txt
     #   pytest
-wheel==0.41.2
+wheel==0.41.3
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools

@@ -123,7 +123,7 @@ tomli==2.0.1
     #   coverage
     #   mypy
     #   pylint
-tomlkit==0.12.1
+tomlkit==0.12.2
     # via pylint
 typing-extensions==4.8.0
     # via
@@ -131,5 +131,5 @@ typing-extensions==4.8.0
     #   astroid
     #   mypy
     #   pylint
-wcwidth==0.2.8
+wcwidth==0.2.9
     # via pytest
