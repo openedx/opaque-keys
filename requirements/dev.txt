@@ -65,7 +65,7 @@ coverage[toml]==7.3.2
     #   -r requirements/doc.txt
     #   coverage
     #   pytest-cov
-ddt==1.6.0
+ddt==1.7.0
     # via -r requirements/doc.txt
 dill==0.3.7
     # via
@@ -96,7 +96,7 @@ filelock==3.13.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.88.1
+hypothesis==6.88.3
     # via -r requirements/doc.txt
 idna==3.4
     # via
@@ -155,7 +155,7 @@ packaging==23.2
     #   pytest
     #   sphinx
     #   tox
-pbr==5.11.1
+pbr==6.0.0
     # via
     #   -r requirements/doc.txt
     #   stevedore

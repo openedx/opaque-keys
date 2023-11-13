@@ -33,7 +33,7 @@ coverage[toml]==7.3.2
     #   -r requirements/test.txt
     #   coverage
     #   pytest-cov
-ddt==1.6.0
+ddt==1.7.0
     # via -r requirements/test.txt
 dill==0.3.7
     # via
@@ -49,7 +49,7 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.88.1
+hypothesis==6.88.3
     # via -r requirements/test.txt
 isort==5.12.0
     # via
@@ -83,7 +83,7 @@ packaging==23.2
     # via
     #   -r requirements/test.txt
     #   pytest
-pbr==5.11.1
+pbr==6.0.0
     # via
     #   -r requirements/test.txt
     #   stevedore
