@@ -68,7 +68,7 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.88.3
+hypothesis==6.89.0
     # via -r requirements/test.txt
 idna==3.4
     # via requests
@@ -99,7 +99,7 @@ more-itertools==10.1.0
     # via
     #   -r requirements/test.txt
     #   pytest
-mypy==1.6.1
+mypy==1.7.0
     # via -r requirements/test.txt
 mypy-extensions==1.0.0
     # via
@@ -119,6 +119,7 @@ pbr==6.0.0
     #   stevedore
 platformdirs==3.11.0
     # via
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/test.txt
     #   pylint
 pluggy==0.13.1
@@ -240,7 +241,7 @@ tomli==2.0.1
     #   coverage
     #   mypy
     #   pylint
-tomlkit==0.12.2
+tomlkit==0.12.3
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -251,9 +252,9 @@ typing-extensions==4.8.0
     #   mypy
     #   pydata-sphinx-theme
     #   pylint
-urllib3==2.0.7
+urllib3==2.1.0
     # via requests
-wcwidth==0.2.9
+wcwidth==0.2.10
     # via
     #   -r requirements/test.txt
     #   pytest
