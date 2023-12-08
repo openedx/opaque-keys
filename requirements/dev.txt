@@ -330,10 +330,6 @@ tomlkit==0.12.3
     #   -r requirements/doc.txt
     #   pylint
 tox==3.28.0
-    # via
-    #   -r requirements/ci.txt
-    #   tox-battery
-tox-battery==0.6.2
     # via -r requirements/ci.txt
 typing-extensions==4.8.0
     # via
