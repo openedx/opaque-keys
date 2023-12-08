@@ -49,7 +49,7 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.91.0
+hypothesis==6.91.1
     # via -r requirements/test.txt
 isort==5.12.0
     # via
@@ -87,9 +87,8 @@ pbr==6.0.0
     # via
     #   -r requirements/test.txt
     #   stevedore
-platformdirs==3.11.0
+platformdirs==4.1.0
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/test.txt
     #   pylint
 pluggy==0.13.1

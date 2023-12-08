@@ -96,7 +96,7 @@ filelock==3.13.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.91.0
+hypothesis==6.91.1
     # via -r requirements/doc.txt
 idna==3.6
     # via
@@ -106,7 +106,7 @@ imagesize==1.4.1
     # via
     #   -r requirements/doc.txt
     #   sphinx
-importlib-metadata==6.8.0
+importlib-metadata==7.0.0
     # via
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
@@ -141,7 +141,7 @@ mypy-extensions==1.0.0
     # via
     #   -r requirements/doc.txt
     #   mypy
-nh3==0.2.14
+nh3==0.2.15
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
@@ -161,9 +161,8 @@ pbr==6.0.0
     #   stevedore
 pip-tools==7.3.0
     # via -r requirements/pip-tools.txt
-platformdirs==3.11.0
+platformdirs==4.1.0
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   pylint
@@ -347,7 +346,7 @@ urllib3==2.1.0
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.24.7
+virtualenv==20.25.0
     # via
     #   -r requirements/ci.txt
     #   tox
