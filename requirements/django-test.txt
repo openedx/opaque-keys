@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==3.0.1
+astroid==3.0.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -28,7 +28,7 @@ code-annotations==1.5.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.3.2
+coverage[toml]==7.3.3
     # via
     #   -r requirements/test.txt
     #   coverage
@@ -49,9 +49,9 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.91.1
+hypothesis==6.92.0
     # via -r requirements/test.txt
-isort==5.12.0
+isort==5.13.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -103,7 +103,7 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.11.1
     # via -r requirements/test.txt
-pylint==3.0.2
+pylint==3.0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -180,7 +180,7 @@ tomlkit==0.12.3
     # via
     #   -r requirements/test.txt
     #   pylint
-typing-extensions==4.8.0
+typing-extensions==4.9.0
     # via
     #   -r requirements/test.txt
     #   astroid
