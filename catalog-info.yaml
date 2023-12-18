@@ -4,7 +4,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: "Component"
 metadata:
-  name: 'opaque keys'
+  name: 'opaque-keys'
   description: "A package for Open edX events tracking"
   annotations:
     # (Optional) Annotation keys and values can be whatever you want.
