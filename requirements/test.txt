@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==3.0.1
+astroid==3.0.2
     # via
     #   pylint
     #   pylint-celery
@@ -21,7 +21,7 @@ click-log==0.4.0
     # via edx-lint
 code-annotations==1.5.0
     # via edx-lint
-coverage[toml]==7.3.2
+coverage[toml]==7.3.4
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -35,9 +35,9 @@ exceptiongroup==1.2.0
     # via hypothesis
 execnet==2.0.2
     # via pytest-xdist
-hypothesis==6.91.1
+hypothesis==6.92.1
     # via -r requirements/test.in
-isort==5.12.0
+isort==5.13.2
     # via pylint
 jinja2==3.1.2
     # via code-annotations
@@ -49,7 +49,7 @@ mock==5.1.0
     # via -r requirements/test.in
 more-itertools==10.1.0
     # via pytest
-mypy==1.7.1
+mypy==1.8.0
     # via -r requirements/test.in
 mypy-extensions==1.0.0
     # via mypy
@@ -71,7 +71,7 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.11.1
     # via -r requirements/test.in
-pylint==3.0.2
+pylint==3.0.3
     # via
     #   edx-lint
     #   pylint-celery
@@ -125,7 +125,7 @@ tomli==2.0.1
     #   pylint
 tomlkit==0.12.3
     # via pylint
-typing-extensions==4.8.0
+typing-extensions==4.9.0
     # via
     #   -r requirements/base.txt
     #   astroid

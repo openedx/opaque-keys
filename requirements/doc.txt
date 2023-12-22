@@ -8,7 +8,7 @@ accessible-pygments==0.0.4
     # via pydata-sphinx-theme
 alabaster==0.7.13
     # via sphinx
-astroid==3.0.1
+astroid==3.0.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -18,7 +18,7 @@ attrs==23.1.0
     #   -r requirements/test.txt
     #   hypothesis
     #   pytest
-babel==2.13.1
+babel==2.14.0
     # via
     #   pydata-sphinx-theme
     #   sphinx
@@ -42,7 +42,7 @@ code-annotations==1.5.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.3.2
+coverage[toml]==7.3.4
     # via
     #   -r requirements/test.txt
     #   coverage
@@ -68,7 +68,7 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.91.1
+hypothesis==6.92.1
     # via -r requirements/test.txt
 idna==3.6
     # via requests
@@ -76,7 +76,7 @@ imagesize==1.4.1
     # via sphinx
 importlib-metadata==7.0.0
     # via sphinx
-isort==5.12.0
+isort==5.13.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -99,7 +99,7 @@ more-itertools==10.1.0
     # via
     #   -r requirements/test.txt
     #   pytest
-mypy==1.7.1
+mypy==1.8.0
     # via -r requirements/test.txt
 mypy-extensions==1.0.0
     # via
@@ -141,7 +141,7 @@ pygments==2.17.2
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==3.0.2
+pylint==3.0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -244,7 +244,7 @@ tomlkit==0.12.3
     # via
     #   -r requirements/test.txt
     #   pylint
-typing-extensions==4.8.0
+typing-extensions==4.9.0
     # via
     #   -r requirements/test.txt
     #   astroid
