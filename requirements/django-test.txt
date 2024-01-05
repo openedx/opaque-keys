@@ -9,7 +9,7 @@ astroid==3.0.2
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-attrs==23.1.0
+attrs==23.2.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
@@ -33,7 +33,7 @@ coverage[toml]==7.4.0
     #   -r requirements/test.txt
     #   coverage
     #   pytest-cov
-ddt==1.7.0
+ddt==1.7.1
     # via -r requirements/test.txt
 dill==0.3.7
     # via
