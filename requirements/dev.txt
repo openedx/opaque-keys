@@ -27,7 +27,7 @@ babel==2.14.0
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.12.2
+beautifulsoup4==4.12.3
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
@@ -96,7 +96,7 @@ filelock==3.13.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.92.2
+hypothesis==6.97.0
     # via -r requirements/doc.txt
 idna==3.6
     # via
@@ -116,12 +116,12 @@ isort==5.13.2
     # via
     #   -r requirements/doc.txt
     #   pylint
-jinja2==3.1.2
+jinja2==3.1.3
     # via
     #   -r requirements/doc.txt
     #   code-annotations
     #   sphinx
-markupsafe==2.1.3
+markupsafe==2.1.4
     # via
     #   -r requirements/doc.txt
     #   jinja2
@@ -131,7 +131,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/doc.txt
-more-itertools==10.1.0
+more-itertools==10.2.0
     # via
     #   -r requirements/doc.txt
     #   pytest
@@ -237,7 +237,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/doc.txt
-python-slugify==8.0.1
+python-slugify==8.0.2
     # via
     #   -r requirements/doc.txt
     #   code-annotations
@@ -346,7 +346,7 @@ virtualenv==20.25.0
     # via
     #   -r requirements/ci.txt
     #   tox
-wcwidth==0.2.12
+wcwidth==0.2.13
     # via
     #   -r requirements/doc.txt
     #   pytest
