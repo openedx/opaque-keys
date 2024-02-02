@@ -24,18 +24,18 @@ click-log==0.4.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-code-annotations==1.5.0
+code-annotations==1.6.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.4.0
+coverage[toml]==7.4.1
     # via
     #   -r requirements/test.txt
     #   coverage
     #   pytest-cov
 ddt==1.7.1
     # via -r requirements/test.txt
-dill==0.3.7
+dill==0.3.8
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -49,7 +49,7 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.97.0
+hypothesis==6.97.4
     # via -r requirements/test.txt
 isort==5.13.2
     # via
@@ -87,7 +87,7 @@ pbr==6.0.0
     # via
     #   -r requirements/test.txt
     #   stevedore
-platformdirs==4.1.0
+platformdirs==4.2.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -145,7 +145,7 @@ pytest-xdist==1.34.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.txt
-python-slugify==8.0.2
+python-slugify==8.0.3
     # via
     #   -r requirements/test.txt
     #   code-annotations
