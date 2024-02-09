@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-coverage==7.4.0
+coverage==7.4.1
     # via -r requirements/ci.in
 distlib==0.3.8
     # via virtualenv
@@ -14,7 +14,7 @@ filelock==3.13.1
     #   virtualenv
 packaging==23.2
     # via tox
-platformdirs==4.1.0
+platformdirs==4.2.0
     # via
     #   tox
     #   virtualenv
