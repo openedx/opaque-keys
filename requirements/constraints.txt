@@ -13,6 +13,7 @@
 
 # pytest>=5.6.0 fails to fetch the tests and hence all the tests fail
 pytest>= 6.2.5
+alabaster<=0.7.16
 
 
 pytest-xdist<2.0.0
