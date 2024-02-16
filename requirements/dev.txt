@@ -96,7 +96,7 @@ filelock==3.13.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.98.3
+hypothesis==6.98.6
     # via -r requirements/doc.txt
 idna==3.6
     # via
