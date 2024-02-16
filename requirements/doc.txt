@@ -6,10 +6,8 @@
 #
 accessible-pygments==0.0.4
     # via pydata-sphinx-theme
-alabaster==0.7.13
-    # via
-    #   -c requirements/constraints.txt
-    #   sphinx
+alabaster==0.7.16
+    # via sphinx
 astroid==3.0.3
     # via
     #   -r requirements/test.txt
@@ -127,8 +125,10 @@ py==1.11.0
     #   pytest-forked
 pycodestyle==2.11.1
     # via -r requirements/test.txt
-pydata-sphinx-theme==0.15.2
-    # via sphinx-book-theme
+pydata-sphinx-theme==0.14.4
+    # via
+    #   -c requirements/constraints.txt
+    #   sphinx-book-theme
 pygments==2.17.2
     # via
     #   accessible-pygments
