@@ -210,6 +210,7 @@ pyproject-hooks==1.0.0
     #   build
 pytest==7.4.4
     # via
+    #   -c requirements/constraints.txt
     #   -r requirements/doc.txt
     #   pytest-cov
     #   pytest-forked
