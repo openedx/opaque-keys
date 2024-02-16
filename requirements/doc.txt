@@ -201,8 +201,9 @@ sortedcontainers==2.4.0
     #   hypothesis
 soupsieve==2.5
     # via beautifulsoup4
-sphinx==7.2.6
+sphinx==7.1.2
     # via
+    #   -c requirements/constraints.txt
     #   -r requirements/doc.in
     #   pydata-sphinx-theme
     #   sphinx-book-theme
