@@ -54,7 +54,7 @@ dill==0.3.8
     # via
     #   -r requirements/test.txt
     #   pylint
-docutils==0.20.1
+docutils==0.19
     # via
     #   pydata-sphinx-theme
     #   readme-renderer
@@ -201,14 +201,16 @@ sortedcontainers==2.4.0
     #   hypothesis
 soupsieve==2.5
     # via beautifulsoup4
-sphinx==7.1.2
+sphinx==6.2.1
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/doc.in
     #   pydata-sphinx-theme
     #   sphinx-book-theme
-sphinx-book-theme==1.1.2
-    # via -r requirements/doc.in
+sphinx-book-theme==1.0.1
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/doc.in
 sphinxcontrib-applehelp==1.0.8
     # via sphinx
 sphinxcontrib-devhelp==1.0.6

@@ -16,6 +16,7 @@ pytest>= 6.2.5
 alabaster<=0.7.13
 pydata-sphinx-theme<=0.14.4
 sphinx<=7.1.2
+sphinx-book-theme<=1.0.1
 
 pytest-xdist<2.0.0
 

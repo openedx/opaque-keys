@@ -75,7 +75,7 @@ distlib==0.3.8
     # via
     #   -r requirements/ci.txt
     #   virtualenv
-docutils==0.20.1
+docutils==0.19
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
@@ -260,14 +260,16 @@ soupsieve==2.5
     # via
     #   -r requirements/doc.txt
     #   beautifulsoup4
-sphinx==7.1.2
+sphinx==6.2.1
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
     #   sphinx-book-theme
-sphinx-book-theme==1.1.2
-    # via -r requirements/doc.txt
+sphinx-book-theme==1.0.1
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/doc.txt
 sphinxcontrib-applehelp==1.0.8
     # via
     #   -r requirements/doc.txt
