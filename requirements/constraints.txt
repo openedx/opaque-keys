@@ -8,16 +8,4 @@
 # pin when possible.  Writing an issue against the offending project and
 # linking to it here is good.
 
-# This file contains all common constraints for edx-repos
--c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
-
-# pytest>=5.6.0 fails to fetch the tests and hence all the tests fail
-pytest<5.6.0
-
-pytest-xdist<2.0.0
-
-# pytest (from `test.in`) requires pluggy<1.
-# We must constrain it here so that `ci.in` (which doesn't
-# include pytest) doesn't generate `ci.txt` with a pluggy version >=1. 
-# Remove this pin when pytest no longer requires pluggy<1.
-pluggy<1
+lxml<5.0.0
