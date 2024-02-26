@@ -21,7 +21,7 @@ click-log==0.4.0
     # via edx-lint
 code-annotations==1.6.0
     # via edx-lint
-coverage[toml]==7.4.1
+coverage[toml]==7.4.2
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -35,7 +35,7 @@ exceptiongroup==1.2.0
     # via hypothesis
 execnet==2.0.2
     # via pytest-xdist
-hypothesis==6.98.6
+hypothesis==6.98.10
     # via -r requirements/test.in
 isort==5.13.2
     # via pylint
@@ -112,7 +112,7 @@ six==1.16.0
     #   pytest-xdist
 sortedcontainers==2.4.0
     # via hypothesis
-stevedore==5.1.0
+stevedore==5.2.0
     # via
     #   -r requirements/base.txt
     #   code-annotations
