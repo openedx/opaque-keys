@@ -1,3 +1,9 @@
+# 2.6.0
+
+* Added support for python 3.12
+* Dropped support for django 3.2
+
+
 # 2.5.1
 
 * Fixed - py.typed file wasn't installed properly via setuptools.
