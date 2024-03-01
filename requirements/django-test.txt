@@ -48,7 +48,7 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.98.12
+hypothesis==6.98.15
     # via -r requirements/test.txt
 iniconfig==2.0.0
     # via
@@ -161,7 +161,7 @@ tomli==2.0.1
     #   mypy
     #   pylint
     #   pytest
-tomlkit==0.12.3
+tomlkit==0.12.4
     # via
     #   -r requirements/test.txt
     #   pylint

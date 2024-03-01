@@ -67,7 +67,7 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.98.12
+hypothesis==6.98.15
     # via -r requirements/test.txt
 idna==3.6
     # via requests
@@ -175,7 +175,7 @@ pyyaml==6.0.1
     # via
     #   -r requirements/test.txt
     #   code-annotations
-readme-renderer==42.0
+readme-renderer==43.0
     # via -r requirements/doc.in
 requests==2.31.0
     # via sphinx
@@ -225,7 +225,7 @@ tomli==2.0.1
     #   mypy
     #   pylint
     #   pytest
-tomlkit==0.12.3
+tomlkit==0.12.4
     # via
     #   -r requirements/test.txt
     #   pylint
