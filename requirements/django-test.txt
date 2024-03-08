@@ -48,7 +48,7 @@ execnet==2.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.98.15
+hypothesis==6.98.17
     # via -r requirements/test.txt
 iniconfig==2.0.0
     # via

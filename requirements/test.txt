@@ -35,7 +35,7 @@ exceptiongroup==1.2.0
     #   pytest
 execnet==2.0.2
     # via pytest-xdist
-hypothesis==6.98.15
+hypothesis==6.98.17
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest

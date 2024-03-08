@@ -107,7 +107,7 @@ filelock==3.13.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.98.15
+hypothesis==6.98.17
     # via -r requirements/doc.txt
 idna==3.6
     # via
@@ -117,7 +117,7 @@ imagesize==1.4.1
     # via
     #   -r requirements/doc.txt
     #   sphinx
-importlib-metadata==7.0.1
+importlib-metadata==7.0.2
     # via
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
@@ -171,7 +171,7 @@ pbr==6.0.0
     # via
     #   -r requirements/doc.txt
     #   stevedore
-pip-tools==7.4.0
+pip-tools==7.4.1
     # via -r requirements/pip-tools.txt
 platformdirs==4.2.0
     # via
@@ -330,7 +330,7 @@ tomlkit==0.12.4
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.13.0
+tox==4.14.1
     # via -r requirements/ci.txt
 typing-extensions==4.10.0
     # via
