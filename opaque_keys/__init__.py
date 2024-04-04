@@ -14,7 +14,7 @@ from functools import total_ordering
 from stevedore.enabled import EnabledExtensionManager
 from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
 
-__version__ = '2.6.0'
+__version__ = '2.7.0'
 
 
 class InvalidKeyError(Exception):
