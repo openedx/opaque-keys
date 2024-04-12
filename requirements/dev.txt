@@ -62,7 +62,7 @@ click-log==0.4.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-code-annotations==1.7.0
+code-annotations==1.8.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -98,18 +98,18 @@ exceptiongroup==1.2.0
     #   -r requirements/doc.txt
     #   hypothesis
     #   pytest
-execnet==2.0.2
+execnet==2.1.1
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.13.3
+filelock==3.13.4
     # via
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.100.0
+hypothesis==6.100.1
     # via -r requirements/doc.txt
-idna==3.6
+idna==3.7
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -332,7 +332,7 @@ tomlkit==0.12.4
     #   pylint
 tox==4.14.2
     # via -r requirements/ci.txt
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via
     #   -r requirements/doc.txt
     #   astroid
