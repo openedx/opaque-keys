@@ -23,7 +23,7 @@ click-log==0.4.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-code-annotations==1.7.0
+code-annotations==1.8.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -39,16 +39,16 @@ dill==0.3.8
     #   pylint
 edx-lint==5.3.6
     # via -r requirements/test.txt
-exceptiongroup==1.2.0
+exceptiongroup==1.2.1
     # via
     #   -r requirements/test.txt
     #   hypothesis
     #   pytest
-execnet==2.0.2
+execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.100.0
+hypothesis==6.100.1
     # via -r requirements/test.txt
 iniconfig==2.0.0
     # via
@@ -165,7 +165,7 @@ tomlkit==0.12.4
     # via
     #   -r requirements/test.txt
     #   pylint
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via
     #   -r requirements/test.txt
     #   astroid

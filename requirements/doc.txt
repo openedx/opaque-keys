@@ -37,7 +37,7 @@ click-log==0.4.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-code-annotations==1.7.0
+code-annotations==1.8.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -58,18 +58,18 @@ docutils==0.19
     #   sphinx
 edx-lint==5.3.6
     # via -r requirements/test.txt
-exceptiongroup==1.2.0
+exceptiongroup==1.2.1
     # via
     #   -r requirements/test.txt
     #   hypothesis
     #   pytest
-execnet==2.0.2
+execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.100.0
+hypothesis==6.100.1
     # via -r requirements/test.txt
-idna==3.6
+idna==3.7
     # via requests
 imagesize==1.4.1
     # via sphinx
@@ -229,7 +229,7 @@ tomlkit==0.12.4
     # via
     #   -r requirements/test.txt
     #   pylint
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via
     #   -r requirements/test.txt
     #   astroid
