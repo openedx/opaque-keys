@@ -4,6 +4,7 @@ Package metadata for edx-opaque-keys.
 """
 import os
 import re
+from pathlib import Path
 
 from setuptools import find_packages, setup
 
@@ -90,9 +91,15 @@ def get_version(*file_paths):
 
 VERSION = get_version("opaque_keys", "__init__.py")
 
+# read the contents of your README file
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.rst").read_text()
+
 
 setup(
     name='edx-opaque-keys',
+    long_description=long_description,
+    long_description_content_type='text/x-rst',
     version=VERSION,
     author='edX',
     url='https://github.com/openedx/opaque-keys',
@@ -105,8 +112,7 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Framework :: Django",
-        "Framework :: Django :: 3.2",
-        "Framework :: Django :: 4.0",
+        "Framework :: Django :: 4.2",
     ],
     # We are including the tests because other libraries do use mixins from them.
     packages=find_packages(),
