@@ -62,7 +62,7 @@ click-log==0.4.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-code-annotations==1.7.0
+code-annotations==1.8.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -70,7 +70,7 @@ colorama==0.4.6
     # via
     #   -r requirements/ci.txt
     #   tox
-coverage[toml]==7.4.4
+coverage[toml]==7.5.0
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -93,23 +93,23 @@ docutils==0.19
     #   sphinx
 edx-lint==5.3.6
     # via -r requirements/doc.txt
-exceptiongroup==1.2.0
+exceptiongroup==1.2.1
     # via
     #   -r requirements/doc.txt
     #   hypothesis
     #   pytest
-execnet==2.0.2
+execnet==2.1.1
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.13.3
+filelock==3.13.4
     # via
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.100.0
+hypothesis==6.100.1
     # via -r requirements/doc.txt
-idna==3.6
+idna==3.7
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -173,14 +173,14 @@ pbr==6.0.0
     #   stevedore
 pip-tools==7.4.1
     # via -r requirements/pip-tools.txt
-platformdirs==4.2.0
+platformdirs==4.2.1
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   pylint
     #   tox
     #   virtualenv
-pluggy==1.4.0
+pluggy==1.5.0
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -219,8 +219,6 @@ pylint-plugin-utils==0.8.2
     #   -r requirements/doc.txt
     #   pylint-celery
     #   pylint-django
-pymongo==3.13.0
-    # via -r requirements/doc.txt
 pyproject-api==1.6.1
     # via
     #   -r requirements/ci.txt
@@ -332,7 +330,7 @@ tomlkit==0.12.4
     #   pylint
 tox==4.14.2
     # via -r requirements/ci.txt
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via
     #   -r requirements/doc.txt
     #   astroid
@@ -343,7 +341,7 @@ urllib3==2.2.1
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.25.1
+virtualenv==20.26.0
     # via
     #   -r requirements/ci.txt
     #   tox

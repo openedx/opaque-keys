@@ -6,9 +6,7 @@
 #
 pbr==6.0.0
     # via stevedore
-pymongo==3.13.0
-    # via -r requirements/base.in
 stevedore==5.2.0
     # via -r requirements/base.in
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via -r requirements/base.in

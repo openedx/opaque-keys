@@ -17,9 +17,9 @@ click==8.1.7
     #   edx-lint
 click-log==0.4.0
     # via edx-lint
-code-annotations==1.7.0
+code-annotations==1.8.0
     # via edx-lint
-coverage[toml]==7.4.4
+coverage[toml]==7.5.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -29,13 +29,13 @@ dill==0.3.8
     # via pylint
 edx-lint==5.3.6
     # via -r requirements/test.in
-exceptiongroup==1.2.0
+exceptiongroup==1.2.1
     # via
     #   hypothesis
     #   pytest
-execnet==2.0.2
+execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.100.0
+hypothesis==6.100.1
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest
@@ -59,9 +59,9 @@ pbr==6.0.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==4.2.0
+platformdirs==4.2.1
     # via pylint
-pluggy==1.4.0
+pluggy==1.5.0
     # via pytest
 pycodestyle==2.11.1
     # via -r requirements/test.in
@@ -79,8 +79,6 @@ pylint-plugin-utils==0.8.2
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==3.13.0
-    # via -r requirements/base.txt
 pytest==8.1.1
     # via
     #   -r requirements/test.in
@@ -112,7 +110,7 @@ tomli==2.0.1
     #   pytest
 tomlkit==0.12.4
     # via pylint
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via
     #   -r requirements/base.txt
     #   astroid
