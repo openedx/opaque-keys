@@ -1,3 +1,7 @@
+# 2.9.0
+
+* Upgrade pymongo to 4.4. It contains few breaking changes.
+
 # 2.6.0
 
 * Added support for python 3.12

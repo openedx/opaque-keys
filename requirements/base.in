@@ -1,7 +1,7 @@
 # Core requirements for using this application
 -c constraints.txt
 
-# migration guide here: https://pymongo.readthedocs.io/en/4.0/migrate-to-pymongo4.html
-pymongo>=2.7.2,<4.0
+# https://pymongo.readthedocs.io/en/4.4.0/migrate-to-pymongo4.html#son-items-now-returns-dict-items-object
+pymongo>=2.7.2,<4.4.1
 stevedore>=0.14.1
 typing-extensions
