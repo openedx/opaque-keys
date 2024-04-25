@@ -51,7 +51,7 @@ class TestAssetLocators(TestCase):
         source_key = key_cls(*source, deprecated=True)
         son = source_key.to_deprecated_son(prefix=prefix, tag=tag)
         self.assertEqual(
-            son.keys(),
+            list(son.keys()),
             [prefix + key for key in ('tag', 'org', 'course', 'category', 'name', 'revision')]
         )
 

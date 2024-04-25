@@ -260,7 +260,7 @@ class CourseLocator(BlockLocatorBase, CourseKey):
             DeprecationWarning,
             stacklevel=2
         )
-        return self.version_guid
+        return self.version_guid    # type: ignore
 
     @property
     def offering(self):
@@ -474,7 +474,7 @@ class LibraryLocator(BlockLocatorBase, CourseKey):
             raise ValueError(f"Invalid run. Should be '{self.RUN}' or None.")
 
         if version_guid:
-            version_guid = self.as_object_id(version_guid)
+            version_guid = self.as_object_id(version_guid)  # type: ignore
 
         for name, value in [['org', org], ['library', library], ['branch', branch]]:
             if not (value is None or self.ALLOWED_ID_RE.match(value)):

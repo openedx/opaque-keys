@@ -205,7 +205,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
     def test_to_deprecated_son(self, key_cls, prefix, tag, source):
         source_key = key_cls(*source, deprecated=True)
         son = source_key.to_deprecated_son(prefix=prefix, tag=tag)
-        self.assertEqual(son.keys(),
+        self.assertEqual(list(son.keys()),
                          [prefix + key for key in ('tag', 'org', 'course', 'category', 'name', 'revision')])
 
         self.assertEqual(son[prefix + 'tag'], tag)
