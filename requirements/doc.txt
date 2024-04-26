@@ -102,7 +102,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/test.txt
-mypy==1.9.0
+mypy==1.10.0
     # via -r requirements/test.txt
 mypy-extensions==1.0.0
     # via
