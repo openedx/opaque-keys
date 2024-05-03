@@ -106,12 +106,12 @@ execnet==2.1.1
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.13.4
+filelock==3.14.0
     # via
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.100.1
+hypothesis==6.100.2
     # via -r requirements/doc.txt
 idna==3.7
     # via
@@ -229,19 +229,19 @@ pyproject-api==1.6.1
     # via
     #   -r requirements/ci.txt
     #   tox
-pyproject-hooks==1.0.0
+pyproject-hooks==1.1.0
     # via
     #   -r requirements/pip-tools.txt
     #   build
     #   pip-tools
-pytest==8.1.1
+pytest==8.2.0
     # via
     #   -r requirements/doc.txt
     #   pytest-cov
     #   pytest-xdist
 pytest-cov==5.0.0
     # via -r requirements/doc.txt
-pytest-xdist==3.5.0
+pytest-xdist==3.6.1
     # via -r requirements/doc.txt
 python-slugify==8.0.4
     # via
@@ -327,14 +327,13 @@ tomli==2.0.1
     #   pip-tools
     #   pylint
     #   pyproject-api
-    #   pyproject-hooks
     #   pytest
     #   tox
 tomlkit==0.12.4
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.14.2
+tox==4.15.0
     # via -r requirements/ci.txt
 typing-extensions==4.11.0
     # via
@@ -347,7 +346,7 @@ urllib3==2.2.1
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.26.0
+virtualenv==20.26.1
     # via
     #   -r requirements/ci.txt
     #   tox
