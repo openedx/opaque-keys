@@ -39,7 +39,7 @@ exceptiongroup==1.2.1
     #   pytest
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.100.1
+hypothesis==6.100.2
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest
@@ -85,14 +85,14 @@ pylint-plugin-utils==0.8.2
     #   pylint-django
 pymongo==4.4.0
     # via -r requirements/base.txt
-pytest==8.1.1
+pytest==8.2.0
     # via
     #   -r requirements/test.in
     #   pytest-cov
     #   pytest-xdist
 pytest-cov==5.0.0
     # via -r requirements/test.in
-pytest-xdist==3.5.0
+pytest-xdist==3.6.1
     # via -r requirements/test.in
 python-slugify==8.0.4
     # via code-annotations
