@@ -21,18 +21,18 @@ code-annotations==1.8.0
     # via edx-lint
 coverage[toml]==7.5.0
     # via
-    #   -r requirements/test.in
+    #   -r test.in
     #   pytest-cov
 ddt==1.7.2
-    # via -r requirements/test.in
+    # via -r test.in
 dill==0.3.8
     # via pylint
 dnspython==2.6.1
     # via
-    #   -r requirements/base.txt
+    #   -r base.txt
     #   pymongo
 edx-lint==5.3.6
-    # via -r requirements/test.in
+    # via -r test.in
 exceptiongroup==1.2.1
     # via
     #   hypothesis
@@ -40,7 +40,7 @@ exceptiongroup==1.2.1
 execnet==2.1.1
     # via pytest-xdist
 hypothesis==6.100.2
-    # via -r requirements/test.in
+    # via -r test.in
 iniconfig==2.0.0
     # via pytest
 isort==5.13.2
@@ -52,23 +52,23 @@ markupsafe==2.1.5
 mccabe==0.7.0
     # via pylint
 mock==5.1.0
-    # via -r requirements/test.in
+    # via -r test.in
 mypy==1.10.0
-    # via -r requirements/test.in
+    # via -r test.in
 mypy-extensions==1.0.0
     # via mypy
 packaging==24.0
     # via pytest
 pbr==6.0.0
     # via
-    #   -r requirements/base.txt
+    #   -r base.txt
     #   stevedore
 platformdirs==4.2.1
     # via pylint
 pluggy==1.5.0
     # via pytest
 pycodestyle==2.11.1
-    # via -r requirements/test.in
+    # via -r test.in
 pylint==3.1.0
     # via
     #   edx-lint
@@ -83,17 +83,17 @@ pylint-plugin-utils==0.8.2
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.4.0
-    # via -r requirements/base.txt
+pymongo==4.6.3
+    # via -r base.txt
 pytest==8.2.0
     # via
-    #   -r requirements/test.in
+    #   -r test.in
     #   pytest-cov
     #   pytest-xdist
 pytest-cov==5.0.0
-    # via -r requirements/test.in
+    # via -r test.in
 pytest-xdist==3.6.1
-    # via -r requirements/test.in
+    # via -r test.in
 python-slugify==8.0.4
     # via code-annotations
 pyyaml==6.0.1
@@ -104,7 +104,7 @@ sortedcontainers==2.4.0
     # via hypothesis
 stevedore==5.2.0
     # via
-    #   -r requirements/base.txt
+    #   -r base.txt
     #   code-annotations
 text-unidecode==1.3
     # via python-slugify
@@ -118,7 +118,7 @@ tomlkit==0.12.4
     # via pylint
 typing-extensions==4.11.0
     # via
-    #   -r requirements/base.txt
+    #   -r base.txt
     #   astroid
     #   mypy
     #   pylint
