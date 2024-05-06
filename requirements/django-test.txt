@@ -6,172 +6,172 @@
 #
 astroid==3.1.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pylint
     #   pylint-celery
 attrs==23.2.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   hypothesis
 click==8.1.7
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   click-log
     #   code-annotations
     #   edx-lint
 click-log==0.4.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   edx-lint
 code-annotations==1.8.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   edx-lint
 coverage[toml]==7.5.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pytest-cov
 ddt==1.7.2
-    # via -r requirements/test.txt
+    # via -r test.txt
 dill==0.3.8
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pylint
 dnspython==2.6.1
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pymongo
 edx-lint==5.3.6
-    # via -r requirements/test.txt
+    # via -r test.txt
 exceptiongroup==1.2.1
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   hypothesis
     #   pytest
 execnet==2.1.1
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pytest-xdist
 hypothesis==6.100.2
-    # via -r requirements/test.txt
+    # via -r test.txt
 iniconfig==2.0.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pytest
 isort==5.13.2
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pylint
-jinja2==3.1.3
+jinja2==3.1.4
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   code-annotations
 markupsafe==2.1.5
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   jinja2
 mccabe==0.7.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pylint
 mock==5.1.0
-    # via -r requirements/test.txt
+    # via -r test.txt
 mypy==1.10.0
-    # via -r requirements/test.txt
+    # via -r test.txt
 mypy-extensions==1.0.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   mypy
 packaging==24.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pytest
 pbr==6.0.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   stevedore
 platformdirs==4.2.1
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pylint
 pluggy==1.5.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pytest
 pycodestyle==2.11.1
-    # via -r requirements/test.txt
+    # via -r test.txt
 pylint==3.1.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   edx-lint
     #   pylint-celery
     #   pylint-django
     #   pylint-plugin-utils
 pylint-celery==0.3
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   edx-lint
 pylint-django==2.5.5
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   edx-lint
 pylint-plugin-utils==0.8.2
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pylint-celery
     #   pylint-django
 pymongo==4.4.0
-    # via -r requirements/test.txt
+    # via -r test.txt
 pytest==8.2.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pytest-cov
     #   pytest-django
     #   pytest-xdist
 pytest-cov==5.0.0
-    # via -r requirements/test.txt
+    # via -r test.txt
 pytest-django==4.8.0
-    # via -r requirements/django-test.in
+    # via -r django-test.in
 pytest-xdist==3.6.1
-    # via -r requirements/test.txt
+    # via -r test.txt
 python-slugify==8.0.4
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   code-annotations
 pyyaml==6.0.1
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   code-annotations
 six==1.16.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   edx-lint
 sortedcontainers==2.4.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   hypothesis
 stevedore==5.2.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   code-annotations
 text-unidecode==1.3
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   python-slugify
 tomli==2.0.1
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   coverage
     #   mypy
     #   pylint
     #   pytest
 tomlkit==0.12.4
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   pylint
 typing-extensions==4.11.0
     # via
-    #   -r requirements/test.txt
+    #   -r test.txt
     #   astroid
     #   mypy
     #   pylint
