@@ -1,3 +1,7 @@
+# 2.10.0
+
+* Unpin pymongo and upgrade to the latest available version.
+
 # 2.9.0
 
 * Upgrade pymongo to 4.4. It contains few breaking changes.
