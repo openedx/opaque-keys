@@ -23,7 +23,7 @@ babel==2.15.0
     #   sphinx
 beautifulsoup4==4.12.3
     # via pydata-sphinx-theme
-certifi==2024.2.2
+certifi==2024.6.2
     # via requests
 charset-normalizer==3.3.2
     # via requests
@@ -71,7 +71,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.103.0
+hypothesis==6.103.1
     # via -r requirements/test.txt
 idna==3.7
     # via requests
@@ -138,7 +138,7 @@ pygments==2.18.0
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==3.2.2
+pylint==3.2.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -160,7 +160,7 @@ pylint-plugin-utils==0.8.2
     #   pylint-django
 pymongo==4.4.0
     # via -r requirements/test.txt
-pytest==8.2.1
+pytest==8.2.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -233,7 +233,7 @@ tomlkit==0.12.5
     # via
     #   -r requirements/test.txt
     #   pylint
-typing-extensions==4.12.0
+typing-extensions==4.12.1
     # via
     #   -r requirements/test.txt
     #   astroid
@@ -242,5 +242,5 @@ typing-extensions==4.12.0
     #   pylint
 urllib3==2.2.1
     # via requests
-zipp==3.19.0
+zipp==3.19.2
     # via importlib-metadata

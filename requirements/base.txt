@@ -12,5 +12,5 @@ pymongo==4.4.0
     # via -r requirements/base.in
 stevedore==5.2.0
     # via -r requirements/base.in
-typing-extensions==4.12.0
+typing-extensions==4.12.1
     # via -r requirements/base.in

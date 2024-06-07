@@ -52,7 +52,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.103.0
+hypothesis==6.103.1
     # via -r requirements/test.txt
 iniconfig==2.0.0
     # via
@@ -100,7 +100,7 @@ pluggy==1.5.0
     #   pytest
 pycodestyle==2.11.1
     # via -r requirements/test.txt
-pylint==3.2.2
+pylint==3.2.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -122,7 +122,7 @@ pylint-plugin-utils==0.8.2
     #   pylint-django
 pymongo==4.4.0
     # via -r requirements/test.txt
-pytest==8.2.1
+pytest==8.2.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -169,7 +169,7 @@ tomlkit==0.12.5
     # via
     #   -r requirements/test.txt
     #   pylint
-typing-extensions==4.12.0
+typing-extensions==4.12.1
     # via
     #   -r requirements/test.txt
     #   astroid

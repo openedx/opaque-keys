@@ -38,7 +38,7 @@ cachetools==5.3.3
     # via
     #   -r requirements/ci.txt
     #   tox
-certifi==2024.2.2
+certifi==2024.6.2
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -111,7 +111,7 @@ filelock==3.14.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.103.0
+hypothesis==6.103.1
     # via -r requirements/doc.txt
 idna==3.7
     # via
@@ -203,7 +203,7 @@ pygments==2.18.0
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==3.2.2
+pylint==3.2.3
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -234,7 +234,7 @@ pyproject-hooks==1.1.0
     #   -r requirements/pip-tools.txt
     #   build
     #   pip-tools
-pytest==8.2.1
+pytest==8.2.2
     # via
     #   -r requirements/doc.txt
     #   pytest-cov
@@ -333,9 +333,9 @@ tomlkit==0.12.5
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.15.0
+tox==4.15.1
     # via -r requirements/ci.txt
-typing-extensions==4.12.0
+typing-extensions==4.12.1
     # via
     #   -r requirements/doc.txt
     #   astroid
@@ -354,7 +354,7 @@ wheel==0.43.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-zipp==3.19.0
+zipp==3.19.2
     # via
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
