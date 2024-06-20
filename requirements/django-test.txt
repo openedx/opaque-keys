@@ -82,7 +82,7 @@ mypy-extensions==1.0.0
     # via
     #   -r requirements/test.txt
     #   mypy
-packaging==24.0
+packaging==24.1
     # via
     #   -r requirements/test.txt
     #   pytest
