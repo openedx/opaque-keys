@@ -71,13 +71,13 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.103.1
+hypothesis==6.103.2
     # via -r requirements/test.txt
 idna==3.7
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==7.1.0
+importlib-metadata==7.2.0
     # via sphinx
 iniconfig==2.0.0
     # via
@@ -128,7 +128,7 @@ pluggy==1.5.0
     # via
     #   -r requirements/test.txt
     #   pytest
-pycodestyle==2.11.1
+pycodestyle==2.12.0
     # via -r requirements/test.txt
 pydata-sphinx-theme==0.14.4
     # via sphinx-book-theme
@@ -240,7 +240,7 @@ typing-extensions==4.12.2
     #   mypy
     #   pydata-sphinx-theme
     #   pylint
-urllib3==2.2.1
+urllib3==2.2.2
     # via requests
 zipp==3.19.2
     # via importlib-metadata
