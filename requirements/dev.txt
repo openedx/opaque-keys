@@ -106,12 +106,12 @@ execnet==2.1.1
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.15.1
+filelock==3.15.3
     # via
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.103.1
+hypothesis==6.103.2
     # via -r requirements/doc.txt
 idna==3.7
     # via
@@ -121,7 +121,7 @@ imagesize==1.4.1
     # via
     #   -r requirements/doc.txt
     #   sphinx
-importlib-metadata==7.1.0
+importlib-metadata==7.2.0
     # via
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
@@ -190,7 +190,7 @@ pluggy==1.5.0
     #   -r requirements/doc.txt
     #   pytest
     #   tox
-pycodestyle==2.11.1
+pycodestyle==2.12.0
     # via -r requirements/doc.txt
 pydata-sphinx-theme==0.14.4
     # via
@@ -342,7 +342,7 @@ typing-extensions==4.12.2
     #   mypy
     #   pydata-sphinx-theme
     #   pylint
-urllib3==2.2.1
+urllib3==2.2.2
     # via
     #   -r requirements/doc.txt
     #   requests

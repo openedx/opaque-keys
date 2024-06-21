@@ -52,7 +52,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.103.1
+hypothesis==6.103.2
     # via -r requirements/test.txt
 iniconfig==2.0.0
     # via
@@ -98,7 +98,7 @@ pluggy==1.5.0
     # via
     #   -r requirements/test.txt
     #   pytest
-pycodestyle==2.11.1
+pycodestyle==2.12.0
     # via -r requirements/test.txt
 pylint==3.2.3
     # via
