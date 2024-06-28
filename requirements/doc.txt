@@ -41,7 +41,7 @@ code-annotations==1.8.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.5.3
+coverage[toml]==7.5.4
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -71,13 +71,13 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.103.2
+hypothesis==6.104.1
     # via -r requirements/test.txt
 idna==3.7
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==7.2.0
+importlib-metadata==8.0.0
     # via sphinx
 iniconfig==2.0.0
     # via
@@ -102,7 +102,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/test.txt
-mypy==1.10.0
+mypy==1.10.1
     # via -r requirements/test.txt
 mypy-extensions==1.0.0
     # via
@@ -138,7 +138,7 @@ pygments==2.18.0
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==3.2.3
+pylint==3.2.4
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -158,7 +158,7 @@ pylint-plugin-utils==0.8.2
     #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.7.3
+pymongo==4.8.0
     # via -r requirements/test.txt
 pytest==8.2.2
     # via
