@@ -39,7 +39,7 @@ exceptiongroup==1.2.1
     #   pytest
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.104.1
+hypothesis==6.105.0
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest
@@ -69,7 +69,7 @@ pluggy==1.5.0
     # via pytest
 pycodestyle==2.12.0
     # via -r requirements/test.in
-pylint==3.2.4
+pylint==3.2.5
     # via
     #   edx-lint
     #   pylint-celery
