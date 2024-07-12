@@ -8,7 +8,7 @@ accessible-pygments==0.0.4
     # via pydata-sphinx-theme
 alabaster==0.7.13
     # via sphinx
-astroid==3.2.2
+astroid==3.2.3
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -41,7 +41,7 @@ code-annotations==1.8.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.5.4
+coverage[toml]==7.6.0
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -71,7 +71,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.105.0
+hypothesis==6.106.0
     # via -r requirements/test.txt
 idna==3.7
     # via requests
@@ -108,7 +108,7 @@ mypy-extensions==1.0.0
     # via
     #   -r requirements/test.txt
     #   mypy
-nh3==0.2.17
+nh3==0.2.18
     # via readme-renderer
 packaging==24.1
     # via
@@ -229,7 +229,7 @@ tomli==2.0.1
     #   mypy
     #   pylint
     #   pytest
-tomlkit==0.12.5
+tomlkit==0.13.0
     # via
     #   -r requirements/test.txt
     #   pylint
