@@ -1360,48 +1360,17 @@ AssetKey.set_deprecated_fallback(AssetLocator)
 
 class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
     """
-    Implementation of the DefinitionKey type, for XBlock content stored in
-    Blockstore bundles. This is a low-level identifier used within the Open edX
+    DEPRECATED: Implementation of the DefinitionKey type, for XBlock content stored in
+    Blockstore bundles. This was a low-level identifier used within the Open edX
     system for identifying and retrieving OLX.
 
-    A "Definition" is a specific OLX file in a specific BundleVersion
-    (or sometimes rather than a BundleVersion, it may point to a named draft.)
-    The OLX file, and thus the definition key, defines Scope.content fields as
-    well as defaults for Scope.settings and Scope.children fields. However the
-    definition has no parent and no position in any particular course or other
-    context - both of which require a *usage key* and not just a definition key.
-    The same block definition (.olx file) can be used in multiple places in a
-    course, each with a different usage key.
-
-    Example serialized definition keys follow.
-
-    The 'html' type OLX file "html/introduction/definition.xml" in bundle
-    11111111-1111-1111-1111-111111111111, bundle version 5:
-
-        bundle-olx:11111111-1111-1111-1111-111111111111:5:html:html/introduction/definition.xml
-
-    The 'problem' type OLX file "problem324234.xml" in bundle
+    Example: The 'problem' type OLX file "problem324234.xml" in bundle
     22222222-2222-2222-2222-222222222222, draft 'studio-draft':
 
         bundle-olx:22222222-2222-2222-2222-222222222222:studio-draft:problem:problem/324234.xml
 
-    (The serialized version is somewhat long and verbose because it should
-    rarely be used except for debugging - the in-memory python key instance will
-    be used most of the time, and users will rarely/never see definition keys.)
-
-    User state should never be stored using a BundleDefinitionLocator as the
-    key. State should always be stored against a usage locator, which refers to
-    a particular definition being used in a particular context.
-
-    Each BundleDefinitionLocator holds the following data
-        1. Bundle UUID and [bundle version OR draft name]
-        2. Block type (e.g. 'html', 'problem', etc.)
-        3. Path to OLX file
-
-    Note that since the data in an .olx file can only ever change in a bundle
-    draft (not in a specific bundle version), an XBlock that is actively making
-    changes to its Scope.content/Scope.settings field values must have a
-    BundleDefinitionLocator with a draft name (not a bundle version).
+    This key type was deprecated along with Blockstore:
+    https://github.com/openedx/public-engineering/issues/238
     """
     CANONICAL_NAMESPACE = 'bundle-olx'
     KEY_FIELDS = ('bundle_uuid', 'block_type', 'olx_path', '_version_or_draft')
@@ -1425,6 +1394,7 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
         """
         Instantiate a new BundleDefinitionLocator
         """
+        warnings.warn("BundleDefinitionLocator and Blockstore are deprecated!" DeprecationWarning, stacklevel=2)
         if not isinstance(bundle_uuid, UUID):
             bundle_uuid_str = bundle_uuid
             bundle_uuid = UUID(bundle_uuid_str)
@@ -1526,7 +1496,7 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
 
 class LibraryLocatorV2(CheckFieldMixin, LearningContextKey):
     """
-    A key that represents a Blockstore-based content library.
+    A key that represents a Learning-Core-based content library.
 
     When serialized, these keys look like:
         lib:MITx:reallyhardproblems
@@ -1581,7 +1551,7 @@ class LibraryLocatorV2(CheckFieldMixin, LearningContextKey):
 
 class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
     """
-    An XBlock in a Blockstore-based content library.
+    An XBlock in a Learning-Core-based content library.
 
     When serialized, these keys look like:
         lb:MITx:reallyhardproblems:problem:problem1
