@@ -1394,7 +1394,7 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey):
         """
         Instantiate a new BundleDefinitionLocator
         """
-        warnings.warn("BundleDefinitionLocator and Blockstore are deprecated!" DeprecationWarning, stacklevel=2)
+        warnings.warn("BundleDefinitionLocator and Blockstore are deprecated!", DeprecationWarning, stacklevel=2)
         if not isinstance(bundle_uuid, UUID):
             bundle_uuid_str = bundle_uuid
             bundle_uuid = UUID(bundle_uuid_str)
