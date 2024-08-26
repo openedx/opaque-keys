@@ -95,7 +95,7 @@ docutils==0.21.2
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-edx-lint==5.3.7
+edx-lint==5.4.0
     # via -r requirements/doc.txt
 execnet==2.1.1
     # via
@@ -106,9 +106,9 @@ filelock==3.15.4
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.111.1
+hypothesis==6.111.2
     # via -r requirements/doc.txt
-idna==3.7
+idna==3.8
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -139,7 +139,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/doc.txt
-mypy==1.11.1
+mypy==1.11.2
     # via -r requirements/doc.txt
 mypy-extensions==1.0.0
     # via
@@ -293,7 +293,7 @@ sphinxcontrib-serializinghtml==2.0.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-stevedore==5.2.0
+stevedore==5.3.0
     # via
     #   -r requirements/doc.txt
     #   code-annotations

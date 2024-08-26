@@ -60,15 +60,15 @@ docutils==0.21.2
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-edx-lint==5.3.7
+edx-lint==5.4.0
     # via -r requirements/test.txt
 execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.111.1
+hypothesis==6.111.2
     # via -r requirements/test.txt
-idna==3.7
+idna==3.8
     # via requests
 imagesize==1.4.1
     # via sphinx
@@ -95,7 +95,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/test.txt
-mypy==1.11.1
+mypy==1.11.2
     # via -r requirements/test.txt
 mypy-extensions==1.0.0
     # via
@@ -205,7 +205,7 @@ sphinxcontrib-qthelp==2.0.0
     # via sphinx
 sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
-stevedore==5.2.0
+stevedore==5.3.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
