@@ -4,7 +4,7 @@ Tests of LibCollectionLocator
 import ddt
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.tests import LocatorBaseTest
-from opaque_keys.edx.locator import LibCollectionLocator
+from opaque_keys.edx.locator import LibCollectionLocator, LibraryLocatorV2
 
 
 @ddt.ddt
@@ -29,8 +29,10 @@ class TestLibCollectionLocator(LocatorBaseTest):
         org = 'TestX'
         lib = 'LibraryX'
         code = 'test-problem-bank'
-        coll_key = LibCollectionLocator(org=org, lib=lib, usage_id=code)
+        lib_key = LibraryLocatorV2(org=org, slug=lib)
+        coll_key = LibCollectionLocator(lib_key=lib_key, usage_id=code)
         lib_key = coll_key.context_key
+        self.assertEqual(str(coll_key), "lib-collection:TestX:LibraryX:test-problem-bank")
         self.assertEqual(coll_key.org, org)
         self.assertEqual(coll_key.lib, lib)
         self.assertEqual(coll_key.usage_id, code)
@@ -38,9 +40,9 @@ class TestLibCollectionLocator(LocatorBaseTest):
         self.assertEqual(lib_key.slug, lib)
 
     def test_coll_key_constructor_bad_ids(self):
+        lib_key = LibraryLocatorV2(org="TestX", slug="lib1")
+
         with self.assertRaises(ValueError):
-            LibCollectionLocator(org="!@#{$%^&*}", lib="lib1", usage_id='usage-id')
-        with self.assertRaises(ValueError):
-            LibCollectionLocator(org="TestX", lib="lib+1", usage_id='usage-id')
-        with self.assertRaises(ValueError):
-            LibCollectionLocator(org="TestX", lib="lib1", usage_id='usage-!@#{$%^&*}')
+            LibCollectionLocator(lib_key=lib_key, usage_id='usage-!@#{$%^&*}')
+        with self.assertRaises(TypeError):
+            LibCollectionLocator(lib_key=None, usage_id='usage')

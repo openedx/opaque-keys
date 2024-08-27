@@ -1632,6 +1632,7 @@ class LibCollectionLocator(CheckFieldMixin, LibCollectionKey):
     KEY_FIELDS = ('org', 'lib', 'usage_id')
     org: str
     lib: str
+    lib_key: LibraryLocatorV2
     usage_id: str
 
     __slots__ = KEY_FIELDS
@@ -1640,22 +1641,24 @@ class LibCollectionLocator(CheckFieldMixin, LibCollectionKey):
     # Allow usage IDs to contian unicode characters
     USAGE_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    def __init__(self, org: str, lib: str, usage_id: str):
+    def __init__(self, lib_key: LibraryLocatorV2, usage_id: str):
         """
         Construct a CollectionLocator
         """
-        self._check_key_string_field("org", org)
-        self._check_key_string_field("lib", lib)
+        if not isinstance(lib_key, LibraryLocatorV2):
+            raise TypeError("lib_key must be a LibraryLocatorV2")
+
         self._check_key_string_field("usage_id", usage_id, regexp=self.USAGE_ID_REGEXP)
         super().__init__(
-            org=org,
-            lib=lib,
+            org=lib_key.org,
+            lib=lib_key.slug,
+            lib_key=lib_key,
             usage_id=usage_id,
         )
 
     @property
     def context_key(self) -> LibraryLocatorV2:
-        return LibraryLocatorV2(self.org, self.lib)
+        return self.lib_key
 
     def _to_string(self) -> str:
         """
@@ -1670,6 +1673,7 @@ class LibCollectionLocator(CheckFieldMixin, LibCollectionKey):
         """
         try:
             (org, lib, usage_id) = serialized.split(':')
-            return cls(org, lib, usage_id)
+            lib_key = LibraryLocatorV2(org, lib)
+            return cls(lib_key, usage_id)
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
