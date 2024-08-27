@@ -15,7 +15,8 @@ from bson.son import SON
 from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
 
 from opaque_keys import OpaqueKey, InvalidKeyError
-from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, LearningContextKey, UsageKey, UsageKeyV2
+from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, \
+    LearningContextKey, UsageKey, UsageKeyV2, CollectionKey
 
 log = logging.getLogger(__name__)
 
@@ -1620,3 +1621,55 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
         # HTML5 allows ID values to contain any characters at all other than spaces.
         # These key types don't allow spaces either, so no transform is needed.
         return str(self)
+
+
+class CollectionLocator(CheckFieldMixin, CollectionKey):
+    """
+    When serialized, these keys look like:
+        lib-collection:org:lib:collection-id
+    """
+    CANONICAL_NAMESPACE = 'lib-collection'
+    KEY_FIELDS = ('org', 'lib', 'usage_id')
+    org: str
+    lib: str
+    usage_id: str
+
+    __slots__ = KEY_FIELDS
+    CHECKED_INIT = False
+
+    # Allow usage IDs to contian unicode characters
+    USAGE_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
+
+    def __init__(self, org: str, lib: str, usage_id: str):
+        """
+        Construct a CollectionLocator
+        """
+        self._check_key_string_field("org", org)
+        self._check_key_string_field("lib", lib)
+        self._check_key_string_field("usage_id", usage_id, regexp=self.USAGE_ID_REGEXP)
+        super().__init__(
+            org=org,
+            lib=lib,
+            usage_id=usage_id,
+        )
+
+    @property
+    def context_key(self) -> LibraryLocatorV2:
+        return LibraryLocatorV2(self.org, self.lib)
+
+    def _to_string(self) -> str:
+        """
+        Serialize this key as a string
+        """
+        return ":".join((self.org, self.lib, self.usage_id))
+
+    @classmethod
+    def _from_string(cls, serialized: str) -> Self:
+        """
+        Instantiate this key from a serialized string
+        """
+        try:
+            (org, lib, usage_id) = serialized.split(':')
+            return cls(org, lib, usage_id)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error

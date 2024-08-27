@@ -131,6 +131,7 @@ setup(
             'course-v1 = opaque_keys.edx.locator:CourseLocator',
             'library-v1 = opaque_keys.edx.locator:LibraryLocator',
             'lib = opaque_keys.edx.locator:LibraryLocatorV2',
+            'lib-collection = opaque_keys.edx.locator:CollectionLocator',
             # don't use slashes in any new code
             'slashes = opaque_keys.edx.locator:CourseLocator',
         ],
