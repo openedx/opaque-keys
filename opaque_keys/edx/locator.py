@@ -16,7 +16,7 @@ from typing_extensions import Self  # For python 3.11 plus, can just use "from t
 
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, \
-    LearningContextKey, UsageKey, UsageKeyV2, CollectionKey
+    LearningContextKey, UsageKey, UsageKeyV2, LibCollectionKey
 
 log = logging.getLogger(__name__)
 
@@ -1623,7 +1623,7 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
         return str(self)
 
 
-class CollectionLocator(CheckFieldMixin, CollectionKey):
+class LibCollectionLocator(CheckFieldMixin, LibCollectionKey):
     """
     When serialized, these keys look like:
         lib-collection:org:lib:collection-id

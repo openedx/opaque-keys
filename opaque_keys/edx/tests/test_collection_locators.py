@@ -1,16 +1,16 @@
 """
-Tests of CollectionLocator
+Tests of LibCollectionLocator
 """
 import ddt
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.tests import LocatorBaseTest
-from opaque_keys.edx.locator import CollectionLocator
+from opaque_keys.edx.locator import LibCollectionLocator
 
 
 @ddt.ddt
-class TestCollectionLocator(LocatorBaseTest):
+class TestLibCollectionLocator(LocatorBaseTest):
     """
-    Tests of :class:`.CollectionLocator`
+    Tests of :class:`.LibCollectionLocator`
     """
     @ddt.data(
         "org/lib/id/foo",
@@ -23,13 +23,13 @@ class TestCollectionLocator(LocatorBaseTest):
     )
     def test_coll_key_from_invalid_string(self, coll_id_str):
         with self.assertRaises(InvalidKeyError):
-            CollectionLocator.from_string(coll_id_str)
+            LibCollectionLocator.from_string(coll_id_str)
 
     def test_coll_key_constructor(self):
         org = 'TestX'
         lib = 'LibraryX'
         code = 'test-problem-bank'
-        coll_key = CollectionLocator(org=org, lib=lib, usage_id=code)
+        coll_key = LibCollectionLocator(org=org, lib=lib, usage_id=code)
         lib_key = coll_key.context_key
         self.assertEqual(coll_key.org, org)
         self.assertEqual(coll_key.lib, lib)
@@ -39,8 +39,8 @@ class TestCollectionLocator(LocatorBaseTest):
 
     def test_coll_key_constructor_bad_ids(self):
         with self.assertRaises(ValueError):
-            CollectionLocator(org="!@#{$%^&*}", lib="lib1", usage_id='usage-id')
+            LibCollectionLocator(org="!@#{$%^&*}", lib="lib1", usage_id='usage-id')
         with self.assertRaises(ValueError):
-            CollectionLocator(org="TestX", lib="lib+1", usage_id='usage-id')
+            LibCollectionLocator(org="TestX", lib="lib+1", usage_id='usage-id')
         with self.assertRaises(ValueError):
-            CollectionLocator(org="TestX", lib="lib1", usage_id='usage-!@#{$%^&*}')
+            LibCollectionLocator(org="TestX", lib="lib1", usage_id='usage-!@#{$%^&*}')

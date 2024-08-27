@@ -89,7 +89,7 @@ class CourseKey(LearningContextKey):
         raise NotImplementedError()
 
 
-class CollectionKey(LearningContextKey):
+class LibCollectionKey(LearningContextKey):
     """
     An :class:`opaque_keys.OpaqueKey` identifying a particular Library Collection object.
     """
