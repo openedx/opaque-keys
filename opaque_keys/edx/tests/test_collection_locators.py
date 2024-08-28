@@ -46,3 +46,21 @@ class TestLibCollectionLocator(LocatorBaseTest):
             LibCollectionLocator(lib_key=lib_key, usage_id='usage-!@#{$%^&*}')
         with self.assertRaises(TypeError):
             LibCollectionLocator(lib_key=None, usage_id='usage')
+
+    def test_coll_key_from_string(self):
+        org = 'TestX'
+        lib = 'LibraryX'
+        code = 'test-problem-bank'
+        str_key = f"lib-collection:{org}:{lib}:{code}"
+        coll_key = LibCollectionLocator.from_string(str_key)
+        lib_key = coll_key.context_key
+        self.assertEqual(str(coll_key), str_key)
+        self.assertEqual(coll_key.org, org)
+        self.assertEqual(coll_key.lib, lib)
+        self.assertEqual(coll_key.usage_id, code)
+        self.assertEqual(lib_key.org, org)
+        self.assertEqual(lib_key.slug, lib)
+
+    def test_coll_key_invalid_from_string(self):
+        with self.assertRaises(InvalidKeyError):
+            LibCollectionLocator.from_string("this-is-a-great-test")

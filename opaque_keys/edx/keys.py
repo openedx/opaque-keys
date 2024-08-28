@@ -112,7 +112,7 @@ class LibCollectionKey(LearningContextKey):
         raise NotImplementedError()
 
     @property
-    def context_key(self) -> LearningContextKey:
+    def context_key(self) -> LearningContextKey:  # pragma: no cover
         """
         Get the learning context key (LearningContextKey) for this XBlock usage.
         """
