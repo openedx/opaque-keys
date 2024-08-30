@@ -89,10 +89,11 @@ class CourseKey(LearningContextKey):
         raise NotImplementedError()
 
 
-class LibCollectionKey(LearningContextKey):
+class LibraryCollectionKey(OpaqueKey):
     """
     An :class:`opaque_keys.OpaqueKey` identifying a particular Library Collection object.
     """
+    KEY_TYPE = 'collection_key'
     __slots__ = ()
 
     @property
@@ -112,9 +113,9 @@ class LibCollectionKey(LearningContextKey):
         raise NotImplementedError()
 
     @property
-    def context_key(self) -> LearningContextKey:  # pragma: no cover
+    def library_key(self) -> LearningContextKey:  # pragma: no cover
         """
-        Get the learning context key (LearningContextKey) for this XBlock usage.
+        Get the key of the library that this collection belongs to.
         """
         raise NotImplementedError()
 
