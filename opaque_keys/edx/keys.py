@@ -4,11 +4,15 @@ OpaqueKey abstract classes for edx-platform object types (courses, definitions, 
 from __future__ import annotations
 import json
 from abc import abstractmethod
+from typing import TYPE_CHECKING
 import warnings
 
 from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
 
 from opaque_keys import OpaqueKey
+
+if TYPE_CHECKING:
+    from opaque_keys.edx.locator import LibraryLocatorV2
 
 
 class LearningContextKey(OpaqueKey):  # pylint: disable=abstract-method
@@ -97,7 +101,6 @@ class LibraryCollectionKey(OpaqueKey):
     __slots__ = ()
 
     @property
-    @abstractmethod
     def org(self) -> str | None:  # pragma: no cover
         """
         The organization that this collection belongs to.
@@ -105,15 +108,7 @@ class LibraryCollectionKey(OpaqueKey):
         raise NotImplementedError()
 
     @property
-    @abstractmethod
-    def lib(self) -> str | None:  # pragma: no cover
-        """
-        The lib for this collection.
-        """
-        raise NotImplementedError()
-
-    @property
-    def library_key(self) -> LearningContextKey:  # pragma: no cover
+    def library_key(self) -> LibraryLocatorV2:  # pragma: no cover
         """
         Get the key of the library that this collection belongs to.
         """

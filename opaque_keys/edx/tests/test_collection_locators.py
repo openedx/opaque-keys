@@ -30,12 +30,11 @@ class TestLibraryCollectionLocator(LocatorBaseTest):
         lib = 'LibraryX'
         code = 'test-problem-bank'
         lib_key = LibraryLocatorV2(org=org, slug=lib)
-        coll_key = LibraryCollectionLocator(lib_key=lib_key, usage_id=code)
+        coll_key = LibraryCollectionLocator(lib_key=lib_key, collection_id=code)
         lib_key = coll_key.library_key
         self.assertEqual(str(coll_key), "lib-collection:TestX:LibraryX:test-problem-bank")
         self.assertEqual(coll_key.org, org)
-        self.assertEqual(coll_key.lib, lib)
-        self.assertEqual(coll_key.usage_id, code)
+        self.assertEqual(coll_key.collection_id, code)
         self.assertEqual(lib_key.org, org)
         self.assertEqual(lib_key.slug, lib)
 
@@ -43,9 +42,9 @@ class TestLibraryCollectionLocator(LocatorBaseTest):
         lib_key = LibraryLocatorV2(org="TestX", slug="lib1")
 
         with self.assertRaises(ValueError):
-            LibraryCollectionLocator(lib_key=lib_key, usage_id='usage-!@#{$%^&*}')
+            LibraryCollectionLocator(lib_key=lib_key, collection_id='usage-!@#{$%^&*}')
         with self.assertRaises(TypeError):
-            LibraryCollectionLocator(lib_key=None, usage_id='usage')
+            LibraryCollectionLocator(lib_key=None, collection_id='usage')
 
     def test_coll_key_from_string(self):
         org = 'TestX'
@@ -56,8 +55,7 @@ class TestLibraryCollectionLocator(LocatorBaseTest):
         lib_key = coll_key.library_key
         self.assertEqual(str(coll_key), str_key)
         self.assertEqual(coll_key.org, org)
-        self.assertEqual(coll_key.lib, lib)
-        self.assertEqual(coll_key.usage_id, code)
+        self.assertEqual(coll_key.collection_id, code)
         self.assertEqual(lib_key.org, org)
         self.assertEqual(lib_key.slug, lib)
 
