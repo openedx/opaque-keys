@@ -23,7 +23,7 @@ babel==2.16.0
     #   sphinx
 beautifulsoup4==4.12.3
     # via pydata-sphinx-theme
-certifi==2024.7.4
+certifi==2024.8.30
     # via requests
 charset-normalizer==3.3.2
     # via requests
@@ -109,7 +109,7 @@ packaging==24.1
     #   pydata-sphinx-theme
     #   pytest
     #   sphinx
-pbr==6.0.0
+pbr==6.1.0
     # via
     #   -r requirements/test.txt
     #   stevedore
@@ -131,7 +131,7 @@ pygments==2.18.0
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==3.2.6
+pylint==3.2.7
     # via
     #   -r requirements/test.txt
     #   edx-lint
