@@ -29,22 +29,22 @@ class TestLibraryCollectionLocator(LocatorBaseTest):
         org = 'TestX'
         lib = 'LibraryX'
         code = 'test-problem-bank'
-        lib_key = LibraryLocatorV2(org=org, slug=lib)
-        coll_key = LibraryCollectionLocator(lib_key=lib_key, collection_id=code)
-        lib_key = coll_key.library_key
+        library_key = LibraryLocatorV2(org=org, slug=lib)
+        coll_key = LibraryCollectionLocator(library_key=library_key, collection_id=code)
+        library_key = coll_key.library_key
         self.assertEqual(str(coll_key), "lib-collection:TestX:LibraryX:test-problem-bank")
         self.assertEqual(coll_key.org, org)
         self.assertEqual(coll_key.collection_id, code)
-        self.assertEqual(lib_key.org, org)
-        self.assertEqual(lib_key.slug, lib)
+        self.assertEqual(library_key.org, org)
+        self.assertEqual(library_key.slug, lib)
 
     def test_coll_key_constructor_bad_ids(self):
-        lib_key = LibraryLocatorV2(org="TestX", slug="lib1")
+        library_key = LibraryLocatorV2(org="TestX", slug="lib1")
 
         with self.assertRaises(ValueError):
-            LibraryCollectionLocator(lib_key=lib_key, collection_id='usage-!@#{$%^&*}')
+            LibraryCollectionLocator(library_key=library_key, collection_id='usage-!@#{$%^&*}')
         with self.assertRaises(TypeError):
-            LibraryCollectionLocator(lib_key=None, collection_id='usage')
+            LibraryCollectionLocator(library_key=None, collection_id='usage')
 
     def test_coll_key_from_string(self):
         org = 'TestX'
@@ -52,12 +52,12 @@ class TestLibraryCollectionLocator(LocatorBaseTest):
         code = 'test-problem-bank'
         str_key = f"lib-collection:{org}:{lib}:{code}"
         coll_key = LibraryCollectionLocator.from_string(str_key)
-        lib_key = coll_key.library_key
+        library_key = coll_key.library_key
         self.assertEqual(str(coll_key), str_key)
         self.assertEqual(coll_key.org, org)
         self.assertEqual(coll_key.collection_id, code)
-        self.assertEqual(lib_key.org, org)
-        self.assertEqual(lib_key.slug, lib)
+        self.assertEqual(library_key.org, org)
+        self.assertEqual(library_key.slug, lib)
 
     def test_coll_key_invalid_from_string(self):
         with self.assertRaises(InvalidKeyError):

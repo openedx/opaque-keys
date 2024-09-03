@@ -98,19 +98,14 @@ class LibraryCollectionKey(OpaqueKey):
     An :class:`opaque_keys.OpaqueKey` identifying a particular Library Collection object.
     """
     KEY_TYPE = 'collection_key'
+    library_key: LibraryLocatorV2
+    collection_id: str
     __slots__ = ()
 
     @property
     def org(self) -> str | None:  # pragma: no cover
         """
         The organization that this collection belongs to.
-        """
-        raise NotImplementedError()
-
-    @property
-    def library_key(self) -> LibraryLocatorV2:  # pragma: no cover
-        """
-        Get the key of the library that this collection belongs to.
         """
         raise NotImplementedError()
 

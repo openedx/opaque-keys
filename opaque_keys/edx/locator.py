@@ -1629,8 +1629,8 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
         lib-collection:org:lib:collection-id
     """
     CANONICAL_NAMESPACE = 'lib-collection'
-    KEY_FIELDS = ('lib_key', 'collection_id')
-    lib_key: LibraryLocatorV2
+    KEY_FIELDS = ('library_key', 'collection_id')
+    library_key: LibraryLocatorV2
     collection_id: str
 
     __slots__ = KEY_FIELDS
@@ -1639,38 +1639,31 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
     # Allow usage IDs to contian unicode characters
     USAGE_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    def __init__(self, lib_key: LibraryLocatorV2, collection_id: str):
+    def __init__(self, library_key: LibraryLocatorV2, collection_id: str):
         """
         Construct a CollectionLocator
         """
-        if not isinstance(lib_key, LibraryLocatorV2):
-            raise TypeError("lib_key must be a LibraryLocatorV2")
+        if not isinstance(library_key, LibraryLocatorV2):
+            raise TypeError("library_key must be a LibraryLocatorV2")
 
         self._check_key_string_field("collection_id", collection_id, regexp=self.USAGE_ID_REGEXP)
         super().__init__(
-            lib_key=lib_key,
+            library_key=library_key,
             collection_id=collection_id,
         )
-
-    @property
-    def library_key(self) -> LibraryLocatorV2:
-        """
-        Get the key of the library that this collection belongs to.
-        """
-        return self.lib_key
 
     @property
     def org(self) -> str | None:  # pragma: no cover
         """
         The organization that this collection belongs to.
         """
-        return self.lib_key.org
+        return self.library_key.org
 
     def _to_string(self) -> str:
         """
         Serialize this key as a string
         """
-        return ":".join((self.lib_key.org, self.lib_key.slug, self.collection_id))
+        return ":".join((self.library_key.org, self.library_key.slug, self.collection_id))
 
     @classmethod
     def _from_string(cls, serialized: str) -> Self:
@@ -1679,7 +1672,7 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
         """
         try:
             (org, lib_slug, collection_id) = serialized.split(':')
-            lib_key = LibraryLocatorV2(org, lib_slug)
-            return cls(lib_key, collection_id)
+            library_key = LibraryLocatorV2(org, lib_slug)
+            return cls(library_key, collection_id)
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
