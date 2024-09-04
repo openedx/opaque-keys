@@ -1636,8 +1636,8 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
-    # Allow usage IDs to contian unicode characters
-    USAGE_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
+    # Allow collection IDs to contian unicode characters
+    COLLECTION_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
     def __init__(self, library_key: LibraryLocatorV2, collection_id: str):
         """
@@ -1646,7 +1646,7 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
         if not isinstance(library_key, LibraryLocatorV2):
             raise TypeError("library_key must be a LibraryLocatorV2")
 
-        self._check_key_string_field("collection_id", collection_id, regexp=self.USAGE_ID_REGEXP)
+        self._check_key_string_field("collection_id", collection_id, regexp=self.COLLECTION_ID_REGEXP)
         super().__init__(
             library_key=library_key,
             collection_id=collection_id,
