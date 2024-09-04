@@ -153,6 +153,9 @@ setup(
         ],
         'block_type': [
             'block-type-v1 = opaque_keys.edx.block_types:BlockTypeKeyV1',
-        ]
+        ],
+        'collection_key': [
+            'lib-collection = opaque_keys.edx.locator:LibraryCollectionLocator',
+        ],
     }
 )

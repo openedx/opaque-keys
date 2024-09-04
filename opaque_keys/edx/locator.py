@@ -15,7 +15,8 @@ from bson.son import SON
 from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
 
 from opaque_keys import OpaqueKey, InvalidKeyError
-from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, LearningContextKey, UsageKey, UsageKeyV2
+from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, \
+    LearningContextKey, UsageKey, UsageKeyV2, LibraryCollectionKey
 
 log = logging.getLogger(__name__)
 
@@ -1620,3 +1621,58 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
         # HTML5 allows ID values to contain any characters at all other than spaces.
         # These key types don't allow spaces either, so no transform is needed.
         return str(self)
+
+
+class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
+    """
+    When serialized, these keys look like:
+        lib-collection:org:lib:collection-id
+    """
+    CANONICAL_NAMESPACE = 'lib-collection'
+    KEY_FIELDS = ('library_key', 'collection_id')
+    library_key: LibraryLocatorV2
+    collection_id: str
+
+    __slots__ = KEY_FIELDS
+    CHECKED_INIT = False
+
+    # Allow collection IDs to contian unicode characters
+    COLLECTION_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
+
+    def __init__(self, library_key: LibraryLocatorV2, collection_id: str):
+        """
+        Construct a CollectionLocator
+        """
+        if not isinstance(library_key, LibraryLocatorV2):
+            raise TypeError("library_key must be a LibraryLocatorV2")
+
+        self._check_key_string_field("collection_id", collection_id, regexp=self.COLLECTION_ID_REGEXP)
+        super().__init__(
+            library_key=library_key,
+            collection_id=collection_id,
+        )
+
+    @property
+    def org(self) -> str | None:  # pragma: no cover
+        """
+        The organization that this collection belongs to.
+        """
+        return self.library_key.org
+
+    def _to_string(self) -> str:
+        """
+        Serialize this key as a string
+        """
+        return ":".join((self.library_key.org, self.library_key.slug, self.collection_id))
+
+    @classmethod
+    def _from_string(cls, serialized: str) -> Self:
+        """
+        Instantiate this key from a serialized string
+        """
+        try:
+            (org, lib_slug, collection_id) = serialized.split(':')
+            library_key = LibraryLocatorV2(org, lib_slug)
+            return cls(library_key, collection_id)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error

@@ -4,11 +4,15 @@ OpaqueKey abstract classes for edx-platform object types (courses, definitions, 
 from __future__ import annotations
 import json
 from abc import abstractmethod
+from typing import TYPE_CHECKING
 import warnings
 
 from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
 
 from opaque_keys import OpaqueKey
+
+if TYPE_CHECKING:
+    from opaque_keys.edx.locator import LibraryLocatorV2
 
 
 class LearningContextKey(OpaqueKey):  # pylint: disable=abstract-method
@@ -85,6 +89,23 @@ class CourseKey(LearningContextKey):
 
         This function should not actually create any new ids, but should simply
         return one that already exists.
+        """
+        raise NotImplementedError()
+
+
+class LibraryCollectionKey(OpaqueKey):
+    """
+    An :class:`opaque_keys.OpaqueKey` identifying a particular Library Collection object.
+    """
+    KEY_TYPE = 'collection_key'
+    library_key: LibraryLocatorV2
+    collection_id: str
+    __slots__ = ()
+
+    @property
+    def org(self) -> str | None:  # pragma: no cover
+        """
+        The organization that this collection belongs to.
         """
         raise NotImplementedError()
 

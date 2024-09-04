@@ -1,3 +1,7 @@
+# 2.11.0
+
+* Added LibraryCollectionKey and LibraryCollectionLocator
+
 # 2.10.0
 
 * Unpin pymongo and upgrade to the latest available version.
