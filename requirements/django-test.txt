@@ -47,7 +47,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.111.2
+hypothesis==6.112.0
     # via -r requirements/test.txt
 iniconfig==2.0.0
     # via
@@ -85,7 +85,7 @@ pbr==6.1.0
     # via
     #   -r requirements/test.txt
     #   stevedore
-platformdirs==4.2.2
+platformdirs==4.3.2
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -125,7 +125,7 @@ pytest==8.3.2
     #   pytest-xdist
 pytest-cov==5.0.0
     # via -r requirements/test.txt
-pytest-django==4.8.0
+pytest-django==4.9.0
     # via -r requirements/django-test.in
 pytest-xdist==3.6.1
     # via -r requirements/test.txt
