@@ -59,7 +59,7 @@ pbr==6.1.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==4.2.2
+platformdirs==4.3.2
     # via pylint
 pluggy==1.5.0
     # via pytest

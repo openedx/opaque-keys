@@ -113,7 +113,7 @@ pbr==6.1.0
     # via
     #   -r requirements/test.txt
     #   stevedore
-platformdirs==4.2.2
+platformdirs==4.3.2
     # via
     #   -r requirements/test.txt
     #   pylint
