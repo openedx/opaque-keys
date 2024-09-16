@@ -35,7 +35,7 @@ edx-lint==5.4.0
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.112.0
+hypothesis==6.112.1
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest
@@ -59,7 +59,7 @@ pbr==6.1.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==4.3.2
+platformdirs==4.3.3
     # via pylint
 pluggy==1.5.0
     # via pytest
@@ -81,7 +81,7 @@ pylint-plugin-utils==0.8.2
     #   pylint-django
 pymongo==4.8.0
     # via -r requirements/base.txt
-pytest==8.3.2
+pytest==8.3.3
     # via
     #   -r requirements/test.in
     #   pytest-cov
