@@ -299,7 +299,7 @@ def _instances_of_course_locator(cls, **kwargs):
         org=kwargs.get('org', deprecated_course_ids()),
         course=kwargs.get('course', deprecated_course_ids()),
         run=kwargs.get('run', deprecated_course_ids()),
-        branch=kwargs.get('branch', deprecated_course_ids() | strategies.none()),  # pylint: disable=unsupported-binary-operation
+        branch=kwargs.get('branch', deprecated_course_ids() | strategies.none()),
         deprecated=strategies.just(True),
     ) | strategies.builds(
         cls,
