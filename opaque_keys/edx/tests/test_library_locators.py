@@ -130,10 +130,10 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
 
         branch2 = "br2"
         branch2_key = lib_key.for_branch(branch2)
-        self.assertEqual(branch2_key.branch, branch2)  # pylint: disable=no-member
+        self.assertEqual(branch2_key.branch, branch2)
 
         normal_branch = lib_key.for_branch(None)
-        self.assertEqual(normal_branch.branch, None)  # pylint: disable=no-member
+        self.assertEqual(normal_branch.branch, None)
 
     def test_version_only_lib_key(self):
         version_only_lib_key = LibraryLocator(version_guid=ObjectId('519665f6223ebd6980884f2b'))

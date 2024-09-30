@@ -31,7 +31,7 @@ class OpaqueKeyMetaclass(ABCMeta):
     Metaclass for :class:`OpaqueKey`. Sets the default value for the values in ``KEY_FIELDS`` to
     ``None``.
     """
-    def __new__(mcs, name, bases, attrs):  # pylint: disable=arguments-differ
+    def __new__(mcs, name, bases, attrs):
         if '__slots__' not in attrs:
             for field in attrs.get('KEY_FIELDS', []):
                 attrs.setdefault(field, None)
@@ -95,9 +95,9 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
     """
     __slots__ = ('_initialized', 'deprecated')
 
-    KEY_FIELDS: tuple[str, ...]
-    CANONICAL_NAMESPACE: str
-    KEY_TYPE: str
+    KEY_FIELDS: tuple[str, ...]  # pylint: disable=declare-non-slot
+    CANONICAL_NAMESPACE: str  # pylint: disable=declare-non-slot
+    KEY_TYPE: str  # pylint: disable=declare-non-slot
     NAMESPACE_SEPARATOR = ':'
     CHECKED_INIT: bool = True
 
