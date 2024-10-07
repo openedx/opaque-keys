@@ -12,7 +12,7 @@ alabaster==1.0.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==3.3.4
+astroid==3.3.5
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -30,7 +30,7 @@ beautifulsoup4==4.12.3
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
-build==1.2.2
+build==1.2.2.post1
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
@@ -85,7 +85,7 @@ distlib==0.3.8
     # via
     #   -r requirements/ci.txt
     #   virtualenv
-dnspython==2.6.1
+dnspython==2.7.0
     # via
     #   -r requirements/doc.txt
     #   pymongo
@@ -106,7 +106,7 @@ filelock==3.16.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.112.2
+hypothesis==6.112.4
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -212,7 +212,7 @@ pylint-plugin-utils==0.8.2
     #   -r requirements/doc.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.9.1
+pymongo==4.10.1
     # via -r requirements/doc.txt
 pyproject-api==1.8.0
     # via
@@ -305,7 +305,7 @@ tomlkit==0.13.2
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.20.0
+tox==4.21.2
     # via -r requirements/ci.txt
 typing-extensions==4.12.2
     # via
