@@ -12,7 +12,7 @@ alabaster==1.0.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==3.2.4
+astroid==3.3.5
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -30,7 +30,7 @@ beautifulsoup4==4.12.3
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
-build==1.2.1
+build==1.2.2.post1
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
@@ -46,7 +46,7 @@ chardet==5.2.0
     # via
     #   -r requirements/ci.txt
     #   tox
-charset-normalizer==3.3.2
+charset-normalizer==3.4.0
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -70,22 +70,22 @@ colorama==0.4.6
     # via
     #   -r requirements/ci.txt
     #   tox
-coverage[toml]==7.6.1
+coverage[toml]==7.6.3
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   pytest-cov
 ddt==1.7.2
     # via -r requirements/doc.txt
-dill==0.3.8
+dill==0.3.9
     # via
     #   -r requirements/doc.txt
     #   pylint
-distlib==0.3.8
+distlib==0.3.9
     # via
     #   -r requirements/ci.txt
     #   virtualenv
-dnspython==2.6.1
+dnspython==2.7.0
     # via
     #   -r requirements/doc.txt
     #   pymongo
@@ -101,14 +101,14 @@ execnet==2.1.1
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.15.4
+filelock==3.16.1
     # via
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.111.2
+hypothesis==6.115.0
     # via -r requirements/doc.txt
-idna==3.8
+idna==3.10
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -129,7 +129,7 @@ jinja2==3.1.4
     #   -r requirements/doc.txt
     #   code-annotations
     #   sphinx
-markupsafe==2.1.5
+markupsafe==3.0.1
     # via
     #   -r requirements/doc.txt
     #   jinja2
@@ -166,7 +166,7 @@ pbr==6.1.0
     #   stevedore
 pip-tools==7.4.1
     # via -r requirements/pip-tools.txt
-platformdirs==4.2.2
+platformdirs==4.3.6
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -192,7 +192,7 @@ pygments==2.18.0
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==3.2.7
+pylint==3.3.1
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -203,7 +203,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-pylint-django==2.5.5
+pylint-django==2.6.1
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -212,18 +212,18 @@ pylint-plugin-utils==0.8.2
     #   -r requirements/doc.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.8.0
+pymongo==4.10.1
     # via -r requirements/doc.txt
-pyproject-api==1.7.1
+pyproject-api==1.8.0
     # via
     #   -r requirements/ci.txt
     #   tox
-pyproject-hooks==1.1.0
+pyproject-hooks==1.2.0
     # via
     #   -r requirements/pip-tools.txt
     #   build
     #   pip-tools
-pytest==8.3.2
+pytest==8.3.3
     # via
     #   -r requirements/doc.txt
     #   pytest-cov
@@ -262,7 +262,7 @@ soupsieve==2.6
     # via
     #   -r requirements/doc.txt
     #   beautifulsoup4
-sphinx==8.0.2
+sphinx==8.1.3
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
@@ -305,18 +305,18 @@ tomlkit==0.13.2
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.18.0
+tox==4.21.2
     # via -r requirements/ci.txt
 typing-extensions==4.12.2
     # via
     #   -r requirements/doc.txt
     #   mypy
     #   pydata-sphinx-theme
-urllib3==2.2.2
+urllib3==2.2.3
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.26.3
+virtualenv==20.26.6
     # via
     #   -r requirements/ci.txt
     #   tox
