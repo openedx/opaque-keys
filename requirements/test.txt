@@ -19,7 +19,7 @@ click-log==0.4.0
     # via edx-lint
 code-annotations==1.8.0
     # via edx-lint
-coverage[toml]==7.6.1
+coverage[toml]==7.6.3
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -35,7 +35,7 @@ edx-lint==5.4.0
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.112.4
+hypothesis==6.115.0
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest
@@ -43,7 +43,7 @@ isort==5.13.2
     # via pylint
 jinja2==3.1.4
     # via code-annotations
-markupsafe==2.1.5
+markupsafe==3.0.1
     # via jinja2
 mccabe==0.7.0
     # via pylint
@@ -73,7 +73,7 @@ pylint==3.3.1
     #   pylint-plugin-utils
 pylint-celery==0.3
     # via edx-lint
-pylint-django==2.5.5
+pylint-django==2.6.1
     # via edx-lint
 pylint-plugin-utils==0.8.2
     # via

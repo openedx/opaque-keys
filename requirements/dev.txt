@@ -46,7 +46,7 @@ chardet==5.2.0
     # via
     #   -r requirements/ci.txt
     #   tox
-charset-normalizer==3.3.2
+charset-normalizer==3.4.0
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -70,7 +70,7 @@ colorama==0.4.6
     # via
     #   -r requirements/ci.txt
     #   tox
-coverage[toml]==7.6.1
+coverage[toml]==7.6.3
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -81,7 +81,7 @@ dill==0.3.9
     # via
     #   -r requirements/doc.txt
     #   pylint
-distlib==0.3.8
+distlib==0.3.9
     # via
     #   -r requirements/ci.txt
     #   virtualenv
@@ -106,7 +106,7 @@ filelock==3.16.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.112.4
+hypothesis==6.115.0
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -129,7 +129,7 @@ jinja2==3.1.4
     #   -r requirements/doc.txt
     #   code-annotations
     #   sphinx
-markupsafe==2.1.5
+markupsafe==3.0.1
     # via
     #   -r requirements/doc.txt
     #   jinja2
@@ -203,7 +203,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-pylint-django==2.5.5
+pylint-django==2.6.1
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -262,7 +262,7 @@ soupsieve==2.6
     # via
     #   -r requirements/doc.txt
     #   beautifulsoup4
-sphinx==8.0.2
+sphinx==8.1.3
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
