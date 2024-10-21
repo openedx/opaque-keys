@@ -70,7 +70,7 @@ colorama==0.4.6
     # via
     #   -r requirements/ci.txt
     #   tox
-coverage[toml]==7.6.3
+coverage[toml]==7.6.4
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -106,7 +106,7 @@ filelock==3.16.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.115.0
+hypothesis==6.115.3
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -129,7 +129,7 @@ jinja2==3.1.4
     #   -r requirements/doc.txt
     #   code-annotations
     #   sphinx
-markupsafe==3.0.1
+markupsafe==3.0.2
     # via
     #   -r requirements/doc.txt
     #   jinja2
@@ -139,7 +139,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/doc.txt
-mypy==1.11.2
+mypy==1.12.1
     # via -r requirements/doc.txt
 mypy-extensions==1.0.0
     # via
@@ -305,7 +305,7 @@ tomlkit==0.13.2
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.21.2
+tox==4.23.0
     # via -r requirements/ci.txt
 typing-extensions==4.12.2
     # via
@@ -316,7 +316,7 @@ urllib3==2.2.3
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.26.6
+virtualenv==20.27.0
     # via
     #   -r requirements/ci.txt
     #   tox
