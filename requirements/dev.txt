@@ -6,154 +6,154 @@
 #
 accessible-pygments==0.0.5
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pydata-sphinx-theme
 alabaster==1.0.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx
 astroid==3.3.5
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pylint
     #   pylint-celery
 attrs==24.2.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   hypothesis
 babel==2.16.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pydata-sphinx-theme
     #   sphinx
 beautifulsoup4==4.12.3
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pydata-sphinx-theme
 build==1.2.2.post1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/pip-tools.txt
+    #   -r requirements/pip-tools.txt
     #   pip-tools
 cachetools==5.5.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
+    #   -r requirements/ci.txt
     #   tox
 certifi==2024.8.30
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   requests
 chardet==5.2.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
+    #   -r requirements/ci.txt
     #   tox
 charset-normalizer==3.4.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   requests
 click==8.1.7
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/pip-tools.txt
+    #   -r requirements/doc.txt
+    #   -r requirements/pip-tools.txt
     #   click-log
     #   code-annotations
     #   edx-lint
     #   pip-tools
 click-log==0.4.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   edx-lint
 code-annotations==1.8.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   edx-lint
 colorama==0.4.6
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
+    #   -r requirements/ci.txt
     #   tox
 coverage[toml]==7.6.4
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/doc.txt
     #   pytest-cov
 ddt==1.7.2
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    # via -r requirements/doc.txt
 dill==0.3.9
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pylint
 distlib==0.3.9
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
+    #   -r requirements/ci.txt
     #   virtualenv
 dnspython==2.7.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pymongo
 docutils==0.21.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-edx-lint==5.4.0
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+edx-lint==5.4.1
+    # via -r requirements/doc.txt
 execnet==2.1.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pytest-xdist
 filelock==3.16.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
+    #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.115.5
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+hypothesis==6.116.0
+    # via -r requirements/doc.txt
 idna==3.10
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   requests
 imagesize==1.4.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx
 iniconfig==2.0.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pytest
 isort==5.13.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pylint
 jinja2==3.1.4
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   code-annotations
     #   sphinx
 markupsafe==3.0.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   jinja2
 mccabe==0.7.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pylint
 mock==5.1.0
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    # via -r requirements/doc.txt
 mypy==1.13.0
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    # via -r requirements/doc.txt
 mypy-extensions==1.0.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   mypy
 nh3==0.2.18
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   readme-renderer
 packaging==24.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/pip-tools.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/doc.txt
+    #   -r requirements/pip-tools.txt
     #   build
     #   pyproject-api
     #   pytest
@@ -161,167 +161,167 @@ packaging==24.1
     #   tox
 pbr==6.1.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   stevedore
 pip-tools==7.4.1
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/pip-tools.txt
+    # via -r requirements/pip-tools.txt
 platformdirs==4.3.6
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/doc.txt
     #   pylint
     #   tox
     #   virtualenv
 pluggy==1.5.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/ci.txt
+    #   -r requirements/doc.txt
     #   pytest
     #   tox
 pycodestyle==2.12.1
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    # via -r requirements/doc.txt
 pydata-sphinx-theme==0.16.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx-book-theme
 pygments==2.18.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   accessible-pygments
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
 pylint==3.3.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   edx-lint
     #   pylint-celery
     #   pylint-django
     #   pylint-plugin-utils
 pylint-celery==0.3
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   edx-lint
 pylint-django==2.6.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   edx-lint
 pylint-plugin-utils==0.8.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pylint-celery
     #   pylint-django
 pymongo==4.10.1
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    # via -r requirements/doc.txt
 pyproject-api==1.8.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
+    #   -r requirements/ci.txt
     #   tox
 pyproject-hooks==1.2.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/pip-tools.txt
+    #   -r requirements/pip-tools.txt
     #   build
     #   pip-tools
 pytest==8.3.3
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pytest-cov
     #   pytest-xdist
-pytest-cov==5.0.0
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+pytest-cov==6.0.0
+    # via -r requirements/doc.txt
 pytest-xdist==3.6.1
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    # via -r requirements/doc.txt
 python-slugify==8.0.4
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   code-annotations
 pyyaml==6.0.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   code-annotations
 readme-renderer==44.0
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    # via -r requirements/doc.txt
 requests==2.32.3
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx
 six==1.16.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   edx-lint
 snowballstemmer==2.2.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx
 sortedcontainers==2.4.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   hypothesis
 soupsieve==2.6
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   beautifulsoup4
 sphinx==8.1.3
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pydata-sphinx-theme
     #   sphinx-book-theme
 sphinx-book-theme==1.1.3
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    # via -r requirements/doc.txt
 sphinxcontrib-applehelp==2.0.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx
 sphinxcontrib-devhelp==2.0.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx
 sphinxcontrib-htmlhelp==2.1.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx
 sphinxcontrib-jsmath==1.0.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx
 sphinxcontrib-qthelp==2.0.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx
 sphinxcontrib-serializinghtml==2.0.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   sphinx
 stevedore==5.3.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   code-annotations
 text-unidecode==1.3
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   python-slugify
 tomlkit==0.13.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   pylint
 tox==4.23.2
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
+    # via -r requirements/ci.txt
 typing-extensions==4.12.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   mypy
     #   pydata-sphinx-theme
 urllib3==2.2.3
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/doc.txt
+    #   -r requirements/doc.txt
     #   requests
-virtualenv==20.27.0
+virtualenv==20.27.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/ci.txt
+    #   -r requirements/ci.txt
     #   tox
 wheel==0.44.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/pip-tools.txt
+    #   -r requirements/pip-tools.txt
     #   pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
