@@ -10,12 +10,12 @@ alabaster==1.0.0
     # via sphinx
 astroid==3.3.5
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
 attrs==24.2.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   hypothesis
 babel==2.16.0
     # via
@@ -29,99 +29,99 @@ charset-normalizer==3.4.0
     # via requests
 click==8.1.7
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   click-log
     #   code-annotations
     #   edx-lint
 click-log==0.4.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   edx-lint
 code-annotations==1.8.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   edx-lint
 coverage[toml]==7.6.4
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pytest-cov
 ddt==1.7.2
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    # via -r requirements/test.txt
 dill==0.3.9
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pylint
 dnspython==2.7.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pymongo
 docutils==0.21.2
     # via
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-edx-lint==5.4.0
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+edx-lint==5.4.1
+    # via -r requirements/test.txt
 execnet==2.1.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.115.5
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+hypothesis==6.116.0
+    # via -r requirements/test.txt
 idna==3.10
     # via requests
 imagesize==1.4.1
     # via sphinx
 iniconfig==2.0.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pytest
 isort==5.13.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pylint
 jinja2==3.1.4
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   code-annotations
     #   sphinx
 markupsafe==3.0.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   jinja2
 mccabe==0.7.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pylint
 mock==5.1.0
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    # via -r requirements/test.txt
 mypy==1.13.0
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    # via -r requirements/test.txt
 mypy-extensions==1.0.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   mypy
 nh3==0.2.18
     # via readme-renderer
 packaging==24.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pytest
     #   sphinx
 pbr==6.1.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   stevedore
 platformdirs==4.3.6
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pylint
 pluggy==1.5.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pytest
 pycodestyle==2.12.1
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    # via -r requirements/test.txt
 pydata-sphinx-theme==0.16.0
     # via sphinx-book-theme
 pygments==2.18.0
@@ -132,42 +132,42 @@ pygments==2.18.0
     #   sphinx
 pylint==3.3.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   edx-lint
     #   pylint-celery
     #   pylint-django
     #   pylint-plugin-utils
 pylint-celery==0.3
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   edx-lint
 pylint-django==2.6.1
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   edx-lint
 pylint-plugin-utils==0.8.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
 pymongo==4.10.1
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    # via -r requirements/test.txt
 pytest==8.3.3
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pytest-cov
     #   pytest-xdist
-pytest-cov==5.0.0
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+pytest-cov==6.0.0
+    # via -r requirements/test.txt
 pytest-xdist==3.6.1
-    # via -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    # via -r requirements/test.txt
 python-slugify==8.0.4
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   code-annotations
 pyyaml==6.0.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   code-annotations
 readme-renderer==44.0
     # via -r requirements/doc.in
@@ -175,13 +175,13 @@ requests==2.32.3
     # via sphinx
 six==1.16.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   edx-lint
 snowballstemmer==2.2.0
     # via sphinx
 sortedcontainers==2.4.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   hypothesis
 soupsieve==2.6
     # via beautifulsoup4
@@ -206,19 +206,19 @@ sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 stevedore==5.3.0
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   code-annotations
 text-unidecode==1.3
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   python-slugify
 tomlkit==0.13.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   pylint
 typing-extensions==4.12.2
     # via
-    #   -r /home/runner/work/opaque-keys/opaque-keys/requirements/test.txt
+    #   -r requirements/test.txt
     #   mypy
     #   pydata-sphinx-theme
 urllib3==2.2.3
