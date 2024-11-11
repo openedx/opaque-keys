@@ -106,7 +106,7 @@ filelock==3.16.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.116.0
+hypothesis==6.118.7
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -149,7 +149,7 @@ nh3==0.2.18
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
-packaging==24.1
+packaging==24.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -319,7 +319,7 @@ virtualenv==20.27.1
     # via
     #   -r requirements/ci.txt
     #   tox
-wheel==0.44.0
+wheel==0.45.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
