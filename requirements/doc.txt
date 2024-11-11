@@ -66,7 +66,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.116.0
+hypothesis==6.118.7
     # via -r requirements/test.txt
 idna==3.10
     # via requests
@@ -103,7 +103,7 @@ mypy-extensions==1.0.0
     #   mypy
 nh3==0.2.18
     # via readme-renderer
-packaging==24.1
+packaging==24.2
     # via
     #   -r requirements/test.txt
     #   pytest
