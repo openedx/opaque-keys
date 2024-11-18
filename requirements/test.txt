@@ -17,9 +17,9 @@ click==8.1.7
     #   edx-lint
 click-log==0.4.0
     # via edx-lint
-code-annotations==1.8.0
+code-annotations==1.8.1
     # via edx-lint
-coverage[toml]==7.6.4
+coverage[toml]==7.6.7
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -35,7 +35,7 @@ edx-lint==5.4.1
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.118.7
+hypothesis==6.119.3
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest
