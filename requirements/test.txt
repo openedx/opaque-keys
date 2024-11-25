@@ -17,9 +17,9 @@ click==8.1.7
     #   edx-lint
 click-log==0.4.0
     # via edx-lint
-code-annotations==1.8.1
+code-annotations==1.8.2
     # via edx-lint
-coverage[toml]==7.6.7
+coverage[toml]==7.6.8
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -35,7 +35,7 @@ edx-lint==5.4.1
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.119.3
+hypothesis==6.119.4
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest
@@ -98,7 +98,7 @@ six==1.16.0
     # via edx-lint
 sortedcontainers==2.4.0
     # via hypothesis
-stevedore==5.3.0
+stevedore==5.4.0
     # via
     #   -r requirements/base.txt
     #   code-annotations
