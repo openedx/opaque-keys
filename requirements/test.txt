@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==3.3.5
+astroid==3.3.6
     # via
     #   pylint
     #   pylint-celery
@@ -19,7 +19,7 @@ click-log==0.4.0
     # via edx-lint
 code-annotations==2.0.0
     # via edx-lint
-coverage[toml]==7.6.8
+coverage[toml]==7.6.9
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -35,7 +35,7 @@ edx-lint==5.4.1
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.122.1
+hypothesis==6.122.3
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest
@@ -94,7 +94,7 @@ python-slugify==8.0.4
     # via code-annotations
 pyyaml==6.0.2
     # via code-annotations
-six==1.16.0
+six==1.17.0
     # via edx-lint
 sortedcontainers==2.4.0
     # via hypothesis
