@@ -4,16 +4,16 @@
 #
 #    make upgrade
 #
-astroid==3.3.6
+astroid==3.3.7
     # via
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-attrs==24.2.0
+attrs==24.3.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
-click==8.1.7
+click==8.1.8
     # via
     #   -r requirements/test.txt
     #   click-log
@@ -47,7 +47,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.122.3
+hypothesis==6.122.6
     # via -r requirements/test.txt
 iniconfig==2.0.0
     # via
@@ -57,7 +57,7 @@ isort==5.13.2
     # via
     #   -r requirements/test.txt
     #   pylint
-jinja2==3.1.4
+jinja2==3.1.5
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -71,7 +71,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/test.txt
-mypy==1.13.0
+mypy==1.14.0
     # via -r requirements/test.txt
 mypy-extensions==1.0.0
     # via
