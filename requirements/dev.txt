@@ -12,12 +12,12 @@ alabaster==1.0.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==3.3.6
+astroid==3.3.7
     # via
     #   -r requirements/doc.txt
     #   pylint
     #   pylint-celery
-attrs==24.2.0
+attrs==24.3.0
     # via
     #   -r requirements/doc.txt
     #   hypothesis
@@ -50,7 +50,7 @@ charset-normalizer==3.4.0
     # via
     #   -r requirements/doc.txt
     #   requests
-click==8.1.7
+click==8.1.8
     # via
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
@@ -106,7 +106,7 @@ filelock==3.16.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.122.3
+hypothesis==6.122.6
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -124,7 +124,7 @@ isort==5.13.2
     # via
     #   -r requirements/doc.txt
     #   pylint
-jinja2==3.1.4
+jinja2==3.1.5
     # via
     #   -r requirements/doc.txt
     #   code-annotations
@@ -139,13 +139,13 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/doc.txt
-mypy==1.13.0
+mypy==1.14.0
     # via -r requirements/doc.txt
 mypy-extensions==1.0.0
     # via
     #   -r requirements/doc.txt
     #   mypy
-nh3==0.2.19
+nh3==0.2.20
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
@@ -180,7 +180,7 @@ pluggy==1.5.0
     #   tox
 pycodestyle==2.12.1
     # via -r requirements/doc.txt
-pydata-sphinx-theme==0.16.0
+pydata-sphinx-theme==0.16.1
     # via
     #   -r requirements/doc.txt
     #   sphinx-book-theme
@@ -311,7 +311,7 @@ typing-extensions==4.12.2
     #   -r requirements/doc.txt
     #   mypy
     #   pydata-sphinx-theme
-urllib3==2.2.3
+urllib3==2.3.0
     # via
     #   -r requirements/doc.txt
     #   requests
