@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==3.3.7
+astroid==3.3.8
     # via
     #   pylint
     #   pylint-celery
@@ -19,7 +19,7 @@ click-log==0.4.0
     # via edx-lint
 code-annotations==2.1.0
     # via edx-lint
-coverage[toml]==7.6.9
+coverage[toml]==7.6.10
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -35,7 +35,7 @@ edx-lint==5.4.1
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.122.6
+hypothesis==6.123.2
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest
@@ -65,7 +65,7 @@ pluggy==1.5.0
     # via pytest
 pycodestyle==2.12.1
     # via -r requirements/test.in
-pylint==3.3.2
+pylint==3.3.3
     # via
     #   edx-lint
     #   pylint-celery

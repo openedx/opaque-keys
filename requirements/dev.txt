@@ -12,7 +12,7 @@ alabaster==1.0.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==3.3.7
+astroid==3.3.8
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -46,7 +46,7 @@ chardet==5.2.0
     # via
     #   -r requirements/ci.txt
     #   tox
-charset-normalizer==3.4.0
+charset-normalizer==3.4.1
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -70,7 +70,7 @@ colorama==0.4.6
     # via
     #   -r requirements/ci.txt
     #   tox
-coverage[toml]==7.6.9
+coverage[toml]==7.6.10
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -106,7 +106,7 @@ filelock==3.16.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.122.6
+hypothesis==6.123.2
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -191,7 +191,7 @@ pygments==2.18.0
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==3.3.2
+pylint==3.3.3
     # via
     #   -r requirements/doc.txt
     #   edx-lint
