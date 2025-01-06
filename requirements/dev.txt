@@ -139,7 +139,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/doc.txt
-mypy==1.14.0
+mypy==1.14.1
     # via -r requirements/doc.txt
 mypy-extensions==1.0.0
     # via
@@ -184,7 +184,7 @@ pydata-sphinx-theme==0.16.1
     # via
     #   -r requirements/doc.txt
     #   sphinx-book-theme
-pygments==2.18.0
+pygments==2.19.0
     # via
     #   -r requirements/doc.txt
     #   accessible-pygments
@@ -315,7 +315,7 @@ urllib3==2.3.0
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.28.0
+virtualenv==20.28.1
     # via
     #   -r requirements/ci.txt
     #   tox

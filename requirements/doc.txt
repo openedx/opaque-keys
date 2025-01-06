@@ -95,7 +95,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/test.txt
-mypy==1.14.0
+mypy==1.14.1
     # via -r requirements/test.txt
 mypy-extensions==1.0.0
     # via
@@ -124,7 +124,7 @@ pycodestyle==2.12.1
     # via -r requirements/test.txt
 pydata-sphinx-theme==0.16.1
     # via sphinx-book-theme
-pygments==2.18.0
+pygments==2.19.0
     # via
     #   accessible-pygments
     #   pydata-sphinx-theme
