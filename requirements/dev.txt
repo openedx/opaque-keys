@@ -106,7 +106,7 @@ filelock==3.16.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.123.2
+hypothesis==6.123.15
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -184,7 +184,7 @@ pydata-sphinx-theme==0.16.1
     # via
     #   -r requirements/doc.txt
     #   sphinx-book-theme
-pygments==2.19.0
+pygments==2.19.1
     # via
     #   -r requirements/doc.txt
     #   accessible-pygments
@@ -311,8 +311,9 @@ typing-extensions==4.12.2
     #   -r requirements/doc.txt
     #   mypy
     #   pydata-sphinx-theme
-urllib3==2.3.0
+urllib3==2.2.3
     # via
+    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/doc.txt
     #   requests
 virtualenv==20.28.1
