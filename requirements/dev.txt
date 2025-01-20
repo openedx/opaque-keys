@@ -62,7 +62,7 @@ click-log==0.4.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-code-annotations==2.1.0
+code-annotations==2.2.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -106,7 +106,7 @@ filelock==3.16.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.123.15
+hypothesis==6.124.1
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -316,7 +316,7 @@ urllib3==2.2.3
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.28.1
+virtualenv==20.29.1
     # via
     #   -r requirements/ci.txt
     #   tox
