@@ -17,7 +17,7 @@ astroid==3.3.8
     #   -r requirements/doc.txt
     #   pylint
     #   pylint-celery
-attrs==24.3.0
+attrs==25.1.0
     # via
     #   -r requirements/doc.txt
     #   hypothesis
@@ -34,7 +34,7 @@ build==1.2.2.post1
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-cachetools==5.5.0
+cachetools==5.5.1
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -95,18 +95,18 @@ docutils==0.21.2
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-edx-lint==5.4.1
+edx-lint==5.6.0
     # via -r requirements/doc.txt
 execnet==2.1.1
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.16.1
+filelock==3.17.0
     # via
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.124.1
+hypothesis==6.124.7
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -213,7 +213,7 @@ pylint-plugin-utils==0.8.2
     #   pylint-django
 pymongo==4.10.1
     # via -r requirements/doc.txt
-pyproject-api==1.8.0
+pyproject-api==1.9.0
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -304,7 +304,7 @@ tomlkit==0.13.2
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.23.2
+tox==4.24.1
     # via -r requirements/ci.txt
 typing-extensions==4.12.2
     # via
