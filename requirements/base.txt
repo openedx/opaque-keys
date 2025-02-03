@@ -8,7 +8,7 @@ dnspython==2.7.0
     # via pymongo
 pbr==6.1.0
     # via stevedore
-pymongo==4.10.1
+pymongo==4.11
     # via -r requirements/base.in
 stevedore==5.4.0
     # via -r requirements/base.in

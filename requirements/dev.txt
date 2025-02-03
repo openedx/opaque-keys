@@ -21,12 +21,12 @@ attrs==25.1.0
     # via
     #   -r requirements/doc.txt
     #   hypothesis
-babel==2.16.0
+babel==2.17.0
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.12.3
+beautifulsoup4==4.13.0
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
@@ -38,7 +38,7 @@ cachetools==5.5.1
     # via
     #   -r requirements/ci.txt
     #   tox
-certifi==2024.12.14
+certifi==2025.1.31
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -106,7 +106,7 @@ filelock==3.17.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.124.7
+hypothesis==6.124.9
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -120,7 +120,7 @@ iniconfig==2.0.0
     # via
     #   -r requirements/doc.txt
     #   pytest
-isort==5.13.2
+isort==6.0.0
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -191,7 +191,7 @@ pygments==2.19.1
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-pylint==3.3.3
+pylint==3.3.4
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -211,7 +211,7 @@ pylint-plugin-utils==0.8.2
     #   -r requirements/doc.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.10.1
+pymongo==4.11
     # via -r requirements/doc.txt
 pyproject-api==1.9.0
     # via
@@ -309,6 +309,7 @@ tox==4.24.1
 typing-extensions==4.12.2
     # via
     #   -r requirements/doc.txt
+    #   beautifulsoup4
     #   mypy
     #   pydata-sphinx-theme
 urllib3==2.2.3
