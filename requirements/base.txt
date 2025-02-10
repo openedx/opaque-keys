@@ -6,7 +6,7 @@
 #
 dnspython==2.7.0
     # via pymongo
-pbr==6.1.0
+pbr==6.1.1
     # via stevedore
 pymongo==4.11
     # via -r requirements/base.in
@@ -14,3 +14,6 @@ stevedore==5.4.0
     # via -r requirements/base.in
 typing-extensions==4.12.2
     # via -r requirements/base.in
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

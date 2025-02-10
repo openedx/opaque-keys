@@ -26,7 +26,7 @@ babel==2.17.0
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.13.0
+beautifulsoup4==4.13.3
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
@@ -70,7 +70,7 @@ colorama==0.4.6
     # via
     #   -r requirements/ci.txt
     #   tox
-coverage[toml]==7.6.10
+coverage[toml]==7.6.11
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -106,7 +106,7 @@ filelock==3.17.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.124.9
+hypothesis==6.125.2
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -139,7 +139,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.1.0
     # via -r requirements/doc.txt
-mypy==1.14.1
+mypy==1.15.0
     # via -r requirements/doc.txt
 mypy-extensions==1.0.0
     # via
@@ -159,7 +159,7 @@ packaging==24.2
     #   pytest
     #   sphinx
     #   tox
-pbr==6.1.0
+pbr==6.1.1
     # via
     #   -r requirements/doc.txt
     #   stevedore
