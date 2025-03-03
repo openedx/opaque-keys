@@ -106,7 +106,7 @@ filelock==3.17.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.127.1
+hypothesis==6.127.4
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -120,7 +120,7 @@ iniconfig==2.0.0
     # via
     #   -r requirements/doc.txt
     #   pytest
-isort==6.0.0
+isort==6.0.1
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -145,7 +145,7 @@ mypy-extensions==1.0.0
     # via
     #   -r requirements/doc.txt
     #   mypy
-nh3==0.2.20
+nh3==0.2.21
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
@@ -223,7 +223,7 @@ pyproject-hooks==1.2.0
     #   -r requirements/pip-tools.txt
     #   build
     #   pip-tools
-pytest==8.3.4
+pytest==8.3.5
     # via
     #   -r requirements/doc.txt
     #   pytest-cov
@@ -266,7 +266,7 @@ soupsieve==2.6
     # via
     #   -r requirements/doc.txt
     #   beautifulsoup4
-sphinx==8.2.1
+sphinx==8.2.3
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme

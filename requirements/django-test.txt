@@ -47,13 +47,13 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.127.1
+hypothesis==6.127.4
     # via -r requirements/test.txt
 iniconfig==2.0.0
     # via
     #   -r requirements/test.txt
     #   pytest
-isort==6.0.0
+isort==6.0.1
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -117,7 +117,7 @@ pylint-plugin-utils==0.8.2
     #   pylint-django
 pymongo==4.11.1
     # via -r requirements/test.txt
-pytest==8.3.4
+pytest==8.3.5
     # via
     #   -r requirements/test.txt
     #   pytest-cov
