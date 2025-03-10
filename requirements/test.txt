@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==3.3.8
+astroid==3.3.9
     # via
     #   pylint
     #   pylint-celery
@@ -35,19 +35,19 @@ edx-lint==5.6.0
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.127.4
+hypothesis==6.128.1
     # via -r requirements/test.in
 iniconfig==2.0.0
     # via pytest
 isort==6.0.1
     # via pylint
-jinja2==3.1.5
+jinja2==3.1.6
     # via code-annotations
 markupsafe==3.0.2
     # via jinja2
 mccabe==0.7.0
     # via pylint
-mock==5.1.0
+mock==5.2.0
     # via -r requirements/test.in
 mypy==1.15.0
     # via -r requirements/test.in
@@ -65,7 +65,7 @@ pluggy==1.5.0
     # via pytest
 pycodestyle==2.12.1
     # via -r requirements/test.in
-pylint==3.3.4
+pylint==3.3.5
     # via
     #   edx-lint
     #   pylint-celery
@@ -79,7 +79,7 @@ pylint-plugin-utils==0.8.2
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.11.1
+pymongo==4.11.2
     # via -r requirements/base.txt
 pytest==8.3.5
     # via
