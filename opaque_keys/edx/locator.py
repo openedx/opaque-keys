@@ -1651,6 +1651,13 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryElementKey):
             collection_id=collection_id,
         )
 
+    @property
+    def org(self) -> str | None:  # pragma: no cover
+        """
+        The organization that this object belongs to.
+        """
+        return self.library_key.org
+
     def _to_string(self) -> str:
         """
         Serialize this key as a string
@@ -1700,6 +1707,13 @@ class LibraryContainerLocator(CheckFieldMixin, LibraryElementKey):
             container_type=container_type,
             container_id=container_id,
         )
+
+    @property
+    def org(self) -> str | None:  # pragma: no cover
+        """
+        The organization that this object belongs to.
+        """
+        return self.library_key.org
 
     def _to_string(self) -> str:
         """

@@ -103,11 +103,12 @@ class LibraryElementKey(OpaqueKey):
     __slots__ = ()
 
     @property
+    @abstractmethod
     def org(self) -> str | None:  # pragma: no cover
         """
         The organization that this object belongs to.
         """
-        return self.library_key.org
+        raise NotImplementedError()
 
 
 class DefinitionKey(OpaqueKey):
