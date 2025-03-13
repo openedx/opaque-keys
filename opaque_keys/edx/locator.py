@@ -16,7 +16,7 @@ from typing_extensions import Self  # For python 3.11 plus, can just use "from t
 
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, \
-    LearningContextKey, UsageKey, UsageKeyV2, LibraryCollectionKey
+    LearningContextKey, UsageKey, UsageKeyV2, LibraryElementKey
 
 log = logging.getLogger(__name__)
 
@@ -1623,14 +1623,13 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
         return str(self)
 
 
-class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
+class LibraryCollectionLocator(CheckFieldMixin, LibraryElementKey):
     """
     When serialized, these keys look like:
         lib-collection:org:lib:collection-id
     """
     CANONICAL_NAMESPACE = 'lib-collection'
     KEY_FIELDS = ('library_key', 'collection_id')
-    library_key: LibraryLocatorV2
     collection_id: str
 
     __slots__ = KEY_FIELDS
@@ -1646,18 +1645,11 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
         if not isinstance(library_key, LibraryLocatorV2):
             raise TypeError("library_key must be a LibraryLocatorV2")
 
-        self._check_key_string_field("collection_id", collection_id, regexp=self.COLLECTION_ID_REGEXP)
+        self._check_key_string_field("object_id", collection_id, regexp=self.COLLECTION_ID_REGEXP)
         super().__init__(
             library_key=library_key,
             collection_id=collection_id,
         )
-
-    @property
-    def org(self) -> str | None:  # pragma: no cover
-        """
-        The organization that this collection belongs to.
-        """
-        return self.library_key.org
 
     def _to_string(self) -> str:
         """

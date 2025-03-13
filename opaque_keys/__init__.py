@@ -188,6 +188,9 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         try:
             namespace, rest = cls._separate_namespace(serialized)
             key_class = cls.get_namespace_plugin(namespace)
+            print("OOOOOOOOOOOO")
+            print(key_class)
+            print(cls)
             if not issubclass(key_class, cls):
                 # CourseKey.from_string() should never return a non-course LearningContextKey,
                 # but they share the same namespace.
@@ -233,6 +236,11 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         # Ensure all extensions are loaded. Extensions may modify the deprecated_fallback attribute of the class, so
         # they must be loaded before processing any keys.
         drivers = cls._drivers()
+
+        print("IIIIIIIIIIIIIII")
+        print(namespace)
+        print(drivers)
+        print(drivers.__dict__)
 
         try:
             return drivers[namespace].plugin
