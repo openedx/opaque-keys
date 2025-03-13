@@ -1645,7 +1645,7 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryElementKey):
         if not isinstance(library_key, LibraryLocatorV2):
             raise TypeError("library_key must be a LibraryLocatorV2")
 
-        self._check_key_string_field("object_id", collection_id, regexp=self.COLLECTION_ID_REGEXP)
+        self._check_key_string_field("collection_id", collection_id, regexp=self.COLLECTION_ID_REGEXP)
         super().__init__(
             library_key=library_key,
             collection_id=collection_id,
@@ -1666,5 +1666,60 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryElementKey):
             (org, lib_slug, collection_id) = serialized.split(':')
             library_key = LibraryLocatorV2(org, lib_slug)
             return cls(library_key, collection_id)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
+
+
+class LibraryContainerLocator(CheckFieldMixin, LibraryElementKey):
+    """
+    When serialized, these keys look like:
+        lct:org:lib:ct-type:ct-id
+    """
+    CANONICAL_NAMESPACE = 'lct'  # "Library Container"
+    KEY_FIELDS = ('library_key', 'container_type', 'container_id')
+    container_type: str
+    container_id: str
+
+    __slots__ = KEY_FIELDS
+    CHECKED_INIT = False
+
+    # Allow container IDs to contian unicode characters
+    CONTAINER_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
+
+    def __init__(self, library_key: LibraryLocatorV2, container_type: str, container_id: str):
+        """
+        Construct a CollectionLocator
+        """
+        if not isinstance(library_key, LibraryLocatorV2):
+            raise TypeError("library_key must be a LibraryLocatorV2")
+
+        self._check_key_string_field("container_type", container_type)
+        self._check_key_string_field("container_id", container_id, regexp=self.CONTAINER_ID_REGEXP)
+        super().__init__(
+            library_key=library_key,
+            container_type=container_type,
+            container_id=container_id,
+        )
+
+    def _to_string(self) -> str:
+        """
+        Serialize this key as a string
+        """
+        return ":".join((
+            self.library_key.org,
+            self.library_key.slug,
+            self.container_type,
+            self.container_id
+        ))
+
+    @classmethod
+    def _from_string(cls, serialized: str) -> Self:
+        """
+        Instantiate this key from a serialized string
+        """
+        try:
+            (org, lib_slug, container_type, container_id) = serialized.split(':')
+            library_key = LibraryLocatorV2(org, lib_slug)
+            return cls(library_key, container_type, container_id)
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
