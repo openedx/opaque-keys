@@ -1,6 +1,6 @@
 # 2.12.0
 
-* Refactor: Rename LibraryCollectionKey to LibraryElementKey.
+* Refactor: Rename LibraryCollectionKey to LibraryItemKey.
 * Added LibraryContainerLocator.
 
 # 2.11.0

@@ -93,10 +93,9 @@ class CourseKey(LearningContextKey):
         raise NotImplementedError()
 
 
-class LibraryElementKey(OpaqueKey):
+class LibraryItemKey(OpaqueKey):
     """
-    An :class:`opaque_keys.OpaqueKey` identifying a particular element in a library
-    that is not an Xblock.
+    An :class:`opaque_keys.OpaqueKey` identifying a particular item in a library.
     """
     KEY_TYPE = 'library_element_key'
     library_key: LibraryLocatorV2
