@@ -93,19 +93,19 @@ class CourseKey(LearningContextKey):
         raise NotImplementedError()
 
 
-class LibraryCollectionKey(OpaqueKey):
+class LibraryItemKey(OpaqueKey):
     """
-    An :class:`opaque_keys.OpaqueKey` identifying a particular Library Collection object.
+    An :class:`opaque_keys.OpaqueKey` identifying a particular item in a library.
     """
-    KEY_TYPE = 'collection_key'
+    KEY_TYPE = 'library_element_key'
     library_key: LibraryLocatorV2
-    collection_id: str
     __slots__ = ()
 
     @property
+    @abstractmethod
     def org(self) -> str | None:  # pragma: no cover
         """
-        The organization that this collection belongs to.
+        The organization that this object belongs to.
         """
         raise NotImplementedError()
 

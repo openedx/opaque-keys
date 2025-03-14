@@ -16,7 +16,7 @@ from typing_extensions import Self  # For python 3.11 plus, can just use "from t
 
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, \
-    LearningContextKey, UsageKey, UsageKeyV2, LibraryCollectionKey
+    LearningContextKey, UsageKey, UsageKeyV2, LibraryItemKey
 
 log = logging.getLogger(__name__)
 
@@ -1623,14 +1623,13 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
         return str(self)
 
 
-class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
+class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
     """
     When serialized, these keys look like:
         lib-collection:org:lib:collection-id
     """
     CANONICAL_NAMESPACE = 'lib-collection'
     KEY_FIELDS = ('library_key', 'collection_id')
-    library_key: LibraryLocatorV2
     collection_id: str
 
     __slots__ = KEY_FIELDS
@@ -1655,7 +1654,7 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
     @property
     def org(self) -> str | None:  # pragma: no cover
         """
-        The organization that this collection belongs to.
+        The organization that this Collection belongs to.
         """
         return self.library_key.org
 
@@ -1674,5 +1673,67 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryCollectionKey):
             (org, lib_slug, collection_id) = serialized.split(':')
             library_key = LibraryLocatorV2(org, lib_slug)
             return cls(library_key, collection_id)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, serialized) from error
+
+
+class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
+    """
+    When serialized, these keys look like:
+        lct:org:lib:ct-type:ct-id
+    """
+    CANONICAL_NAMESPACE = 'lct'  # "Library Container"
+    KEY_FIELDS = ('library_key', 'container_type', 'container_id')
+    container_type: str
+    container_id: str
+
+    __slots__ = KEY_FIELDS
+    CHECKED_INIT = False
+
+    # Allow container IDs to contian unicode characters
+    CONTAINER_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
+
+    def __init__(self, library_key: LibraryLocatorV2, container_type: str, container_id: str):
+        """
+        Construct a CollectionLocator
+        """
+        if not isinstance(library_key, LibraryLocatorV2):
+            raise TypeError("library_key must be a LibraryLocatorV2")
+
+        self._check_key_string_field("container_type", container_type)
+        self._check_key_string_field("container_id", container_id, regexp=self.CONTAINER_ID_REGEXP)
+        super().__init__(
+            library_key=library_key,
+            container_type=container_type,
+            container_id=container_id,
+        )
+
+    @property
+    def org(self) -> str | None:  # pragma: no cover
+        """
+        The organization that this Container belongs to.
+        """
+        return self.library_key.org
+
+    def _to_string(self) -> str:
+        """
+        Serialize this key as a string
+        """
+        return ":".join((
+            self.library_key.org,
+            self.library_key.slug,
+            self.container_type,
+            self.container_id
+        ))
+
+    @classmethod
+    def _from_string(cls, serialized: str) -> Self:
+        """
+        Instantiate this key from a serialized string
+        """
+        try:
+            (org, lib_slug, container_type, container_id) = serialized.split(':')
+            library_key = LibraryLocatorV2(org, lib_slug)
+            return cls(library_key, container_type, container_id)
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
