@@ -16,7 +16,7 @@ from typing_extensions import Self  # For python 3.11 plus, can just use "from t
 
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, \
-    LearningContextKey, UsageKey, UsageKeyV2, LibraryElementKey
+    LearningContextKey, UsageKey, UsageKeyV2, LibraryItemKey
 
 log = logging.getLogger(__name__)
 
@@ -1623,7 +1623,7 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
         return str(self)
 
 
-class LibraryCollectionLocator(CheckFieldMixin, LibraryElementKey):
+class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
     """
     When serialized, these keys look like:
         lib-collection:org:lib:collection-id
@@ -1654,7 +1654,7 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryElementKey):
     @property
     def org(self) -> str | None:  # pragma: no cover
         """
-        The organization that this object belongs to.
+        The organization that this Collection belongs to.
         """
         return self.library_key.org
 
@@ -1677,7 +1677,7 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryElementKey):
             raise InvalidKeyError(cls, serialized) from error
 
 
-class LibraryContainerLocator(CheckFieldMixin, LibraryElementKey):
+class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
     """
     When serialized, these keys look like:
         lct:org:lib:ct-type:ct-id
@@ -1711,7 +1711,7 @@ class LibraryContainerLocator(CheckFieldMixin, LibraryElementKey):
     @property
     def org(self) -> str | None:  # pragma: no cover
         """
-        The organization that this object belongs to.
+        The organization that this Container belongs to.
         """
         return self.library_key.org
 
