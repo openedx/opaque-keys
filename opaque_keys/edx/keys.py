@@ -97,7 +97,7 @@ class LibraryItemKey(OpaqueKey):
     """
     An :class:`opaque_keys.OpaqueKey` identifying a particular item in a library.
     """
-    KEY_TYPE = 'library_element_key'
+    KEY_TYPE = 'library_item_key'
     library_key: LibraryLocatorV2
     __slots__ = ()
 
