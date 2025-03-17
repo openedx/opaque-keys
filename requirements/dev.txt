@@ -17,7 +17,7 @@ astroid==3.3.9
     #   -r requirements/doc.txt
     #   pylint
     #   pylint-celery
-attrs==25.1.0
+attrs==25.3.0
     # via
     #   -r requirements/doc.txt
     #   hypothesis
@@ -70,7 +70,7 @@ colorama==0.4.6
     # via
     #   -r requirements/ci.txt
     #   tox
-coverage[toml]==7.6.12
+coverage[toml]==7.7.0
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -101,12 +101,12 @@ execnet==2.1.1
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.17.0
+filelock==3.18.0
     # via
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.128.1
+hypothesis==6.129.3
     # via -r requirements/doc.txt
 idna==3.10
     # via

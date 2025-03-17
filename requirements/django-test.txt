@@ -9,7 +9,7 @@ astroid==3.3.9
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-attrs==25.1.0
+attrs==25.3.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
@@ -27,7 +27,7 @@ code-annotations==2.2.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.6.12
+coverage[toml]==7.7.0
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -47,7 +47,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.128.1
+hypothesis==6.129.3
     # via -r requirements/test.txt
 iniconfig==2.0.0
     # via
