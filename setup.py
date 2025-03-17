@@ -183,7 +183,7 @@ setup(
         'block_type': [
             'block-type-v1 = opaque_keys.edx.block_types:BlockTypeKeyV1',
         ],
-        'library_element_key': [
+        'library_item_key': [
             'lib-collection = opaque_keys.edx.locator:LibraryCollectionLocator',
             'lct = opaque_keys.edx.locator:LibraryContainerLocator',
         ],
