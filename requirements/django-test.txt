@@ -27,7 +27,7 @@ code-annotations==2.2.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.7.0
+coverage[toml]==7.7.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -47,9 +47,9 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.129.3
+hypothesis==6.130.2
     # via -r requirements/test.txt
-iniconfig==2.0.0
+iniconfig==2.1.0
     # via
     #   -r requirements/test.txt
     #   pytest
@@ -85,7 +85,7 @@ pbr==6.1.1
     # via
     #   -r requirements/test.txt
     #   stevedore
-platformdirs==4.3.6
+platformdirs==4.3.7
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -95,7 +95,7 @@ pluggy==1.5.0
     #   pytest
 pycodestyle==2.12.1
     # via -r requirements/test.txt
-pylint==3.3.5
+pylint==3.3.6
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -115,7 +115,7 @@ pylint-plugin-utils==0.8.2
     #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.11.2
+pymongo==4.11.3
     # via -r requirements/test.txt
 pytest==8.3.5
     # via
