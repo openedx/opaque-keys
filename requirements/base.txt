@@ -12,7 +12,7 @@ pymongo==4.11.3
     # via -r requirements/base.in
 stevedore==5.4.1
     # via -r requirements/base.in
-typing-extensions==4.12.2
+typing-extensions==4.13.0
     # via -r requirements/base.in
 
 # The following packages are considered to be unsafe in a requirements file:
