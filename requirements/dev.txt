@@ -106,7 +106,7 @@ filelock==3.18.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.130.5
+hypothesis==6.130.9
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -228,7 +228,7 @@ pytest==8.3.5
     #   -r requirements/doc.txt
     #   pytest-cov
     #   pytest-xdist
-pytest-cov==6.0.0
+pytest-cov==6.1.1
     # via -r requirements/doc.txt
 pytest-xdist==3.6.1
     # via -r requirements/doc.txt
@@ -311,7 +311,7 @@ tomlkit==0.13.2
     #   pylint
 tox==4.25.0
     # via -r requirements/ci.txt
-typing-extensions==4.13.0
+typing-extensions==4.13.1
     # via
     #   -r requirements/doc.txt
     #   beautifulsoup4
@@ -322,7 +322,7 @@ urllib3==2.2.3
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.29.3
+virtualenv==20.30.0
     # via
     #   -r requirements/ci.txt
     #   tox
