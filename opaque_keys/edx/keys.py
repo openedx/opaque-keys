@@ -114,6 +114,15 @@ class LibraryItemKey(OpaqueKey):
     def library_key(self):
         return self.lib_key
 
+    @property
+    @abstractmethod
+    def context_key(self) -> LearningContextKey:
+        """
+        Get the learning context key (LearningContextKey) for this XBlock usage.
+        May be a course key, library key, or some other LearningContextKey type.
+        """
+        raise NotImplementedError()
+
 
 class DefinitionKey(OpaqueKey):
     """

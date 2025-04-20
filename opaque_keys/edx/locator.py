@@ -1675,6 +1675,10 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
 
+    @property
+    def context_key(self) -> LibraryLocatorV2:
+        return self.library_key
+
 
 class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
     """
@@ -1713,6 +1717,10 @@ class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
         The organization that this Container belongs to.
         """
         return self.lib_key.org
+
+    @property
+    def context_key(self) -> LibraryLocatorV2:
+        return self.library_key
 
     def _to_string(self) -> str:
         """
