@@ -4,10 +4,10 @@ OpaqueKey abstract classes for edx-platform object types (courses, definitions, 
 from __future__ import annotations
 import json
 from abc import abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 import warnings
 
-from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
+from typing_extensions import deprecated  # For python 3.13+ can use 'from warnings import deprecated'
 
 from opaque_keys import OpaqueKey
 
@@ -98,7 +98,7 @@ class LibraryItemKey(OpaqueKey):
     An :class:`opaque_keys.OpaqueKey` identifying a particular item in a library.
     """
     KEY_TYPE = 'library_item_key'
-    library_key: LibraryLocatorV2
+    lib_key: LibraryLocatorV2
     __slots__ = ()
 
     @property
@@ -108,6 +108,11 @@ class LibraryItemKey(OpaqueKey):
         The organization that this object belongs to.
         """
         raise NotImplementedError()
+
+    @property
+    @deprecated("Use lib_key instead")
+    def library_key(self):
+        return self.lib_key
 
 
 class DefinitionKey(OpaqueKey):

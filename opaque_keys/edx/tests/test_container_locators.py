@@ -30,34 +30,34 @@ class TestLibraryContainerLocator(LocatorBaseTest):
         lib = 'LibraryX'
         container_type = 'unit'
         container_id = 'test-container'
-        library_key = LibraryLocatorV2(org=org, slug=lib)
+        lib_key = LibraryLocatorV2(org=org, slug=lib)
         container_key = LibraryContainerLocator(
-            library_key=library_key,
+            lib_key=lib_key,
             container_type=container_type,
             container_id=container_id,
         )
-        library_key = container_key.library_key
+        lib_key = container_key.lib_key
         self.assertEqual(str(container_key), "lct:TestX:LibraryX:unit:test-container")
         self.assertEqual(container_key.org, org)
         self.assertEqual(container_key.container_type, container_type)
         self.assertEqual(container_key.container_id, container_id)
-        self.assertEqual(library_key.org, org)
-        self.assertEqual(library_key.slug, lib)
+        self.assertEqual(lib_key.org, org)
+        self.assertEqual(lib_key.slug, lib)
 
     def test_key_constructor_bad_ids(self):
-        library_key = LibraryLocatorV2(org="TestX", slug="lib1")
+        lib_key = LibraryLocatorV2(org="TestX", slug="lib1")
 
         with self.assertRaises(TypeError):
-            LibraryContainerLocator(library_key=None, container_type='unit', container_id='usage')
+            LibraryContainerLocator(lib_key=None, container_type='unit', container_id='usage')
 
         with self.assertRaises(ValueError):
-            LibraryContainerLocator(library_key=library_key, container_type='unit', container_id='usage-!@#{$%^&*}')
+            LibraryContainerLocator(lib_key=lib_key, container_type='unit', container_id='usage-!@#{$%^&*}')
 
     def test_key_constructor_bad_type(self):
-        library_key = LibraryLocatorV2(org="TestX", slug="lib1")
+        lib_key = LibraryLocatorV2(org="TestX", slug="lib1")
 
         with self.assertRaises(ValueError):
-            LibraryContainerLocator(library_key=library_key, container_type='unit-!@#{$%^&*}', container_id='usage')
+            LibraryContainerLocator(lib_key=lib_key, container_type='unit-!@#{$%^&*}', container_id='usage')
 
     def test_key_from_string(self):
         org = 'TestX'
@@ -66,10 +66,10 @@ class TestLibraryContainerLocator(LocatorBaseTest):
         container_id = 'test-container'
         str_key = f"lct:{org}:{lib}:{container_type}:{container_id}"
         container_key = LibraryContainerLocator.from_string(str_key)
-        library_key = container_key.library_key
+        lib_key = container_key.lib_key
         self.assertEqual(str(container_key), str_key)
         self.assertEqual(container_key.org, org)
         self.assertEqual(container_key.container_type, container_type)
         self.assertEqual(container_key.container_id, container_id)
-        self.assertEqual(library_key.org, org)
-        self.assertEqual(library_key.slug, lib)
+        self.assertEqual(lib_key.org, org)
+        self.assertEqual(lib_key.slug, lib)
