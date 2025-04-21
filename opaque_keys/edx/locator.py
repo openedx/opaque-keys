@@ -1680,6 +1680,13 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
         return self.library_key
 
 
+class LibraryContainerUsageLocator(LibraryUsageLocatorV2):
+    """
+    Virtual usage_key to represet LibraryContainerLocator
+    """
+    CANONICAL_NAMESPACE = 'lb-mapped'
+
+
 class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
     """
     When serialized, these keys look like:
@@ -1721,6 +1728,25 @@ class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
     @property
     def context_key(self) -> LibraryLocatorV2:
         return self.library_key
+
+    @property
+    def lib_usage_key(self) -> LibraryContainerUsageLocator:
+        usage_key = LibraryContainerUsageLocator(
+            lib_key=self.library_key,
+            block_type=self.container_type,
+            usage_id=self.container_id,
+        )
+        return usage_key
+
+    @classmethod
+    def from_usage_key(cls, usage_key: LibraryContainerUsageLocator) -> Self:
+        if not isinstance(usage_key, LibraryContainerUsageLocator):
+            raise InvalidKeyError(cls, str(usage_key))
+        try:
+            key_str = str(usage_key).replace(LibraryContainerUsageLocator.CANONICAL_NAMESPACE, cls.CANONICAL_NAMESPACE, 1)
+            return cls.from_string(key_str)
+        except (ValueError, TypeError) as error:
+            raise InvalidKeyError(cls, str(usage_key)) from error
 
     def _to_string(self) -> str:
         """
