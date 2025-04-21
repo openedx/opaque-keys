@@ -26,7 +26,7 @@ babel==2.17.0
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.13.3
+beautifulsoup4==4.13.4
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
@@ -77,7 +77,7 @@ coverage[toml]==7.8.0
     #   pytest-cov
 ddt==1.7.2
     # via -r requirements/doc.txt
-dill==0.3.9
+dill==0.4.0
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -106,7 +106,7 @@ filelock==3.18.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.131.0
+hypothesis==6.131.6
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -149,7 +149,7 @@ nh3==0.2.21
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
-packaging==24.2
+packaging==25.0
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -262,7 +262,7 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/doc.txt
     #   hypothesis
-soupsieve==2.6
+soupsieve==2.7
     # via
     #   -r requirements/doc.txt
     #   beautifulsoup4

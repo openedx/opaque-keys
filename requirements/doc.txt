@@ -21,7 +21,7 @@ babel==2.17.0
     # via
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.13.3
+beautifulsoup4==4.13.4
     # via pydata-sphinx-theme
 certifi==2025.1.31
     # via requests
@@ -47,7 +47,7 @@ coverage[toml]==7.8.0
     #   pytest-cov
 ddt==1.7.2
     # via -r requirements/test.txt
-dill==0.3.9
+dill==0.4.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -66,7 +66,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.131.0
+hypothesis==6.131.6
     # via -r requirements/test.txt
 idna==3.10
     # via requests
@@ -103,7 +103,7 @@ mypy-extensions==1.0.0
     #   mypy
 nh3==0.2.21
     # via readme-renderer
-packaging==24.2
+packaging==25.0
     # via
     #   -r requirements/test.txt
     #   pydata-sphinx-theme
@@ -186,7 +186,7 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
-soupsieve==2.6
+soupsieve==2.7
     # via beautifulsoup4
 sphinx==8.2.3
     # via
