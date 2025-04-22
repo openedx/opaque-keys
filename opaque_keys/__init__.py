@@ -10,9 +10,9 @@ from __future__ import annotations
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
 from functools import total_ordering
+from typing import Self
 
 from stevedore.enabled import EnabledExtensionManager
-from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
 
 __version__ = '2.12.0'
 
