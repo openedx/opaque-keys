@@ -1,3 +1,9 @@
+# 2.13.0
+
+* Breaking change to the new LibraryContainerLocator and
+  LibraryCollectionLocator keys: rename 'library_key' to 'lib_key'
+* Updated some imports now that we require python 3.11+
+
 # 2.12.0
 
 * Refactor: Rename LibraryCollectionKey to LibraryItemKey.

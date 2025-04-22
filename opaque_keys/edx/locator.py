@@ -5,14 +5,13 @@ from __future__ import annotations
 import inspect
 import logging
 import re
-from typing import Any
+from typing import Any, Self
 import warnings
 from uuid import UUID
 
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from bson.son import SON
-from typing_extensions import Self  # For python 3.11 plus, can just use "from typing import Self"
 
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, \
@@ -412,8 +411,8 @@ LearningContextKey.set_deprecated_fallback(CourseLocator)
 
 class LibraryLocator(BlockLocatorBase, CourseKey):
     """
-    Locates a library. Libraries are XBlock structures with a 'library' block
-    at their root.
+    Locates a legacy (v1) library. Legacy libraries are XBlock structures with a
+    'library' block at their root.
 
     Libraries are treated analogously to courses for now. Once opaque keys are
     better supported, they will no longer have the 'run' property, and may no
@@ -1065,8 +1064,8 @@ UsageKey.set_deprecated_fallback(BlockUsageLocator)
 
 class LibraryUsageLocator(BlockUsageLocator):
     """
-    Just like BlockUsageLocator, but this points to a block stored in a library,
-    not a course.
+    Just like BlockUsageLocator, but this points to a block stored in a legacy
+    (v1) modulestore library.
     """
     CANONICAL_NAMESPACE = 'lib-block-v1'
     KEY_FIELDS = ('library_key', 'block_type', 'block_id')
@@ -1629,7 +1628,7 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
         lib-collection:org:lib:collection-id
     """
     CANONICAL_NAMESPACE = 'lib-collection'
-    KEY_FIELDS = ('library_key', 'collection_id')
+    KEY_FIELDS = ('lib_key', 'collection_id')
     collection_id: str
 
     __slots__ = KEY_FIELDS
@@ -1638,16 +1637,16 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
     # Allow collection IDs to contian unicode characters
     COLLECTION_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    def __init__(self, library_key: LibraryLocatorV2, collection_id: str):
+    def __init__(self, lib_key: LibraryLocatorV2, collection_id: str):
         """
         Construct a CollectionLocator
         """
-        if not isinstance(library_key, LibraryLocatorV2):
-            raise TypeError("library_key must be a LibraryLocatorV2")
+        if not isinstance(lib_key, LibraryLocatorV2):
+            raise TypeError("lib_key must be a LibraryLocatorV2")
 
         self._check_key_string_field("collection_id", collection_id, regexp=self.COLLECTION_ID_REGEXP)
         super().__init__(
-            library_key=library_key,
+            lib_key=lib_key,
             collection_id=collection_id,
         )
 
@@ -1656,13 +1655,13 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
         """
         The organization that this Collection belongs to.
         """
-        return self.library_key.org
+        return self.lib_key.org
 
     def _to_string(self) -> str:
         """
         Serialize this key as a string
         """
-        return ":".join((self.library_key.org, self.library_key.slug, self.collection_id))
+        return ":".join((self.lib_key.org, self.lib_key.slug, self.collection_id))
 
     @classmethod
     def _from_string(cls, serialized: str) -> Self:
@@ -1671,8 +1670,8 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
         """
         try:
             (org, lib_slug, collection_id) = serialized.split(':')
-            library_key = LibraryLocatorV2(org, lib_slug)
-            return cls(library_key, collection_id)
+            lib_key = LibraryLocatorV2(org, lib_slug)
+            return cls(lib_key, collection_id)
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
 
@@ -1683,7 +1682,7 @@ class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
         lct:org:lib:ct-type:ct-id
     """
     CANONICAL_NAMESPACE = 'lct'  # "Library Container"
-    KEY_FIELDS = ('library_key', 'container_type', 'container_id')
+    KEY_FIELDS = ('lib_key', 'container_type', 'container_id')
     container_type: str
     container_id: str
 
@@ -1693,17 +1692,17 @@ class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
     # Allow container IDs to contian unicode characters
     CONTAINER_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    def __init__(self, library_key: LibraryLocatorV2, container_type: str, container_id: str):
+    def __init__(self, lib_key: LibraryLocatorV2, container_type: str, container_id: str):
         """
         Construct a CollectionLocator
         """
-        if not isinstance(library_key, LibraryLocatorV2):
-            raise TypeError("library_key must be a LibraryLocatorV2")
+        if not isinstance(lib_key, LibraryLocatorV2):
+            raise TypeError("lib_key must be a LibraryLocatorV2")
 
         self._check_key_string_field("container_type", container_type)
         self._check_key_string_field("container_id", container_id, regexp=self.CONTAINER_ID_REGEXP)
         super().__init__(
-            library_key=library_key,
+            lib_key=lib_key,
             container_type=container_type,
             container_id=container_id,
         )
@@ -1713,15 +1712,15 @@ class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
         """
         The organization that this Container belongs to.
         """
-        return self.library_key.org
+        return self.lib_key.org
 
     def _to_string(self) -> str:
         """
         Serialize this key as a string
         """
         return ":".join((
-            self.library_key.org,
-            self.library_key.slug,
+            self.lib_key.org,
+            self.lib_key.slug,
             self.container_type,
             self.container_id
         ))
@@ -1733,7 +1732,7 @@ class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
         """
         try:
             (org, lib_slug, container_type, container_id) = serialized.split(':')
-            library_key = LibraryLocatorV2(org, lib_slug)
-            return cls(library_key, container_type, container_id)
+            lib_key = LibraryLocatorV2(org, lib_slug)
+            return cls(lib_key, container_type, container_id)
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
