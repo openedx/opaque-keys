@@ -167,7 +167,6 @@ setup(
             'block-v1 = opaque_keys.edx.locator:BlockUsageLocator',
             'lib-block-v1 = opaque_keys.edx.locator:LibraryUsageLocator',
             'lb = opaque_keys.edx.locator:LibraryUsageLocatorV2',
-            'lb-mapped = opaque_keys.edx.locator:LibraryContainerUsageLocator',
             'location = opaque_keys.edx.locations:DeprecatedLocation',
             'aside-usage-v1 = opaque_keys.edx.asides:AsideUsageKeyV1',
             'aside-usage-v2 = opaque_keys.edx.asides:AsideUsageKeyV2',
