@@ -1677,7 +1677,7 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
 
     @property
     def context_key(self) -> LibraryLocatorV2:
-        return self.library_key
+        return self.lib_key
 
 
 class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
@@ -1720,7 +1720,7 @@ class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
 
     @property
     def context_key(self) -> LibraryLocatorV2:
-        return self.library_key
+        return self.lib_key
 
     def _to_string(self) -> str:
         """
