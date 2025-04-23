@@ -114,6 +114,15 @@ class LibraryItemKey(OpaqueKey):
     def library_key(self):
         return self.lib_key
 
+    @property
+    @abstractmethod
+    def context_key(self) -> LearningContextKey:
+        """
+        Get the learning context key (LearningContextKey) for this item.
+        Will be a library key in this case.
+        """
+        raise NotImplementedError()
+
 
 class DefinitionKey(OpaqueKey):
     """

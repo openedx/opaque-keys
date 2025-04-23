@@ -1,3 +1,7 @@
+# Unreleased
+
+* Added ``context_key`` to LibraryContainerLocator and LibraryCollectionLocator
+
 # 2.13.0
 
 * Breaking change to the new LibraryContainerLocator and

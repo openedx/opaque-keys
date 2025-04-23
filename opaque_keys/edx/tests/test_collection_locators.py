@@ -52,12 +52,14 @@ class TestLibraryCollectionLocator(LocatorBaseTest):
         code = 'test-problem-bank'
         str_key = f"lib-collection:{org}:{lib}:{code}"
         coll_key = LibraryCollectionLocator.from_string(str_key)
+        assert str(coll_key) == str_key
+        assert coll_key.org == org
+        assert coll_key.collection_id == code
         lib_key = coll_key.lib_key
-        self.assertEqual(str(coll_key), str_key)
-        self.assertEqual(coll_key.org, org)
-        self.assertEqual(coll_key.collection_id, code)
-        self.assertEqual(lib_key.org, org)
-        self.assertEqual(lib_key.slug, lib)
+        assert isinstance(lib_key, LibraryLocatorV2)
+        assert lib_key.org == org
+        assert lib_key.slug == lib
+        assert coll_key.context_key == lib_key
 
     def test_coll_key_invalid_from_string(self):
         with self.assertRaises(InvalidKeyError):

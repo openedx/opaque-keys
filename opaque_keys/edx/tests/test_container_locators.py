@@ -66,10 +66,12 @@ class TestLibraryContainerLocator(LocatorBaseTest):
         container_id = 'test-container'
         str_key = f"lct:{org}:{lib}:{container_type}:{container_id}"
         container_key = LibraryContainerLocator.from_string(str_key)
+        assert str(container_key) == str_key
+        assert container_key.org == org
+        assert container_key.container_type == container_type
+        assert container_key.container_id == container_id
         lib_key = container_key.lib_key
-        self.assertEqual(str(container_key), str_key)
-        self.assertEqual(container_key.org, org)
-        self.assertEqual(container_key.container_type, container_type)
-        self.assertEqual(container_key.container_id, container_id)
-        self.assertEqual(lib_key.org, org)
-        self.assertEqual(lib_key.slug, lib)
+        assert isinstance(lib_key, LibraryLocatorV2)
+        assert lib_key.org == org
+        assert lib_key.slug == lib
+        assert container_key.context_key == lib_key
