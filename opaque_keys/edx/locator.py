@@ -15,7 +15,7 @@ from bson.son import SON
 
 from opaque_keys import OpaqueKey, InvalidKeyError
 from opaque_keys.edx.keys import AssetKey, CourseKey, DefinitionKey, \
-    LearningContextKey, UsageKey, UsageKeyV2, LibraryItemKey
+    LearningContextKey, UsageKey, UsageKeyV2, ContainerKey, CollectionKey
 
 log = logging.getLogger(__name__)
 
@@ -1622,13 +1622,14 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
         return str(self)
 
 
-class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
+class LibraryCollectionLocator(CheckFieldMixin, CollectionKey):
     """
     When serialized, these keys look like:
         lib-collection:org:lib:collection-id
     """
     CANONICAL_NAMESPACE = 'lib-collection'
     KEY_FIELDS = ('lib_key', 'collection_id')
+    lib_key: LibraryLocatorV2
     collection_id: str
 
     __slots__ = KEY_FIELDS
@@ -1675,14 +1676,19 @@ class LibraryCollectionLocator(CheckFieldMixin, LibraryItemKey):
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
 
+    @property
+    def context_key(self) -> LibraryLocatorV2:
+        return self.lib_key
 
-class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
+
+class LibraryContainerLocator(CheckFieldMixin, ContainerKey):
     """
     When serialized, these keys look like:
         lct:org:lib:ct-type:ct-id
     """
     CANONICAL_NAMESPACE = 'lct'  # "Library Container"
     KEY_FIELDS = ('lib_key', 'container_type', 'container_id')
+    lib_key: LibraryLocatorV2
     container_type: str
     container_id: str
 
@@ -1713,6 +1719,10 @@ class LibraryContainerLocator(CheckFieldMixin, LibraryItemKey):
         The organization that this Container belongs to.
         """
         return self.lib_key.org
+
+    @property
+    def context_key(self) -> LibraryLocatorV2:
+        return self.lib_key
 
     def _to_string(self) -> str:
         """

@@ -12,7 +12,7 @@ from unittest import mock
 import pytest
 
 from opaque_keys.edx.django.models import OpaqueKeyField, UsageKeyField
-from opaque_keys.edx.keys import CourseKey, UsageKey
+from opaque_keys.edx.keys import CollectionKey, ContainerKey, CourseKey, UsageKey
 
 from .models import ComplexModel, Container, ExampleModel
 
@@ -68,10 +68,14 @@ class TestKeyFieldImplementation(TestCase):
         super().setUp()
         self.course_key = CourseKey.from_string('course-v1:edX+FUN101x+3T2017')
         self.usage_key = UsageKey.from_string('block-v1:edX+FUN101x+3T2017+type@html+block@12345678')
+        self.collection_key = CollectionKey.from_string('lib-collection:TestX:LibraryX:test-problem-bank')
+        self.container_key = ContainerKey.from_string('lct:TestX:LibraryX:unit:test-container')
         self.model = ComplexModel(
             id='foobar',
             course_key=self.course_key,
-            usage_key=self.usage_key
+            usage_key=self.usage_key,
+            collection_key=self.collection_key,
+            container_key=self.container_key,
         )
         self.model.save()
 
