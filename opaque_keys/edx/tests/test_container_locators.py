@@ -4,6 +4,7 @@ Tests of LibraryContainerLocator
 import ddt
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.tests import LocatorBaseTest
+from opaque_keys.edx.keys import ContainerKey
 from opaque_keys.edx.locator import LibraryContainerLocator, LibraryLocatorV2
 
 
@@ -37,12 +38,13 @@ class TestLibraryContainerLocator(LocatorBaseTest):
             container_id=container_id,
         )
         lib_key = container_key.lib_key
-        self.assertEqual(str(container_key), "lct:TestX:LibraryX:unit:test-container")
-        self.assertEqual(container_key.org, org)
-        self.assertEqual(container_key.container_type, container_type)
-        self.assertEqual(container_key.container_id, container_id)
-        self.assertEqual(lib_key.org, org)
-        self.assertEqual(lib_key.slug, lib)
+        assert str(container_key) == "lct:TestX:LibraryX:unit:test-container"
+        assert container_key.org == org
+        assert container_key.container_type == container_type
+        assert container_key.container_id == container_id
+        assert lib_key.org == org
+        assert lib_key.slug == lib
+        assert isinstance(container_key, ContainerKey)
 
     def test_key_constructor_bad_ids(self):
         lib_key = LibraryLocatorV2(org="TestX", slug="lib1")
@@ -66,10 +68,13 @@ class TestLibraryContainerLocator(LocatorBaseTest):
         container_id = 'test-container'
         str_key = f"lct:{org}:{lib}:{container_type}:{container_id}"
         container_key = LibraryContainerLocator.from_string(str_key)
+        assert container_key == ContainerKey.from_string(str_key)
+        assert str(container_key) == str_key
+        assert container_key.org == org
+        assert container_key.container_type == container_type
+        assert container_key.container_id == container_id
         lib_key = container_key.lib_key
-        self.assertEqual(str(container_key), str_key)
-        self.assertEqual(container_key.org, org)
-        self.assertEqual(container_key.container_type, container_type)
-        self.assertEqual(container_key.container_id, container_id)
-        self.assertEqual(lib_key.org, org)
-        self.assertEqual(lib_key.slug, lib)
+        assert isinstance(lib_key, LibraryLocatorV2)
+        assert lib_key.org == org
+        assert lib_key.slug == lib
+        assert container_key.context_key == lib_key

@@ -4,15 +4,10 @@ OpaqueKey abstract classes for edx-platform object types (courses, definitions, 
 from __future__ import annotations
 import json
 from abc import abstractmethod
-from typing import TYPE_CHECKING, Self
+from typing import Self
 import warnings
 
-from typing_extensions import deprecated  # For python 3.13+ can use 'from warnings import deprecated'
-
 from opaque_keys import OpaqueKey
-
-if TYPE_CHECKING:
-    from opaque_keys.edx.locator import LibraryLocatorV2
 
 
 class LearningContextKey(OpaqueKey):  # pylint: disable=abstract-method
@@ -91,28 +86,6 @@ class CourseKey(LearningContextKey):
         return one that already exists.
         """
         raise NotImplementedError()
-
-
-class LibraryItemKey(OpaqueKey):
-    """
-    An :class:`opaque_keys.OpaqueKey` identifying a particular item in a library.
-    """
-    KEY_TYPE = 'library_item_key'
-    lib_key: LibraryLocatorV2
-    __slots__ = ()
-
-    @property
-    @abstractmethod
-    def org(self) -> str | None:  # pragma: no cover
-        """
-        The organization that this object belongs to.
-        """
-        raise NotImplementedError()
-
-    @property
-    @deprecated("Use lib_key instead")
-    def library_key(self):
-        return self.lib_key
 
 
 class DefinitionKey(OpaqueKey):
@@ -279,6 +252,40 @@ class UsageKeyV2(UsageKey):
         if course_key == self.context_key:
             return self
         raise ValueError("Cannot use map_into_course like that with this key type.")
+
+
+class ContainerKey(OpaqueKey):
+    """
+    An :class:`opaque_keys.OpaqueKey` identifying a container (a non-XBlock
+    structure like a unit, section, or subsection).
+    """
+    KEY_TYPE = 'container_key'
+    __slots__ = ()
+
+    @property
+    @abstractmethod
+    def context_key(self) -> LearningContextKey:  # pragma: no cover
+        """
+        Get the learning context key (LearningContextKey) for this container.
+        """
+        raise NotImplementedError()
+
+
+class CollectionKey(OpaqueKey):
+    """
+    An :class:`opaque_keys.OpaqueKey` identifying a collection (a group of
+    content, mostly used in libraries to organize components/containers).
+    """
+    KEY_TYPE = 'collection_key'
+    __slots__ = ()
+
+    @property
+    @abstractmethod
+    def context_key(self) -> LearningContextKey:  # pragma: no cover
+        """
+        Get the learning context key (LearningContextKey) for this collection.
+        """
+        raise NotImplementedError()
 
 
 class AsideDefinitionKey(DefinitionKey):

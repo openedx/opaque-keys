@@ -3,6 +3,7 @@ Useful django models for implementing XBlock infrastructure in django.
 If Django is unavailable, none of the classes below will work as intended.
 """
 from __future__ import annotations
+
 import logging
 import warnings
 
@@ -17,8 +18,7 @@ except ImportError:  # pragma: no cover
     IsNull = object
 
 from opaque_keys import OpaqueKey
-from opaque_keys.edx.keys import BlockTypeKey, CourseKey, LearningContextKey, UsageKey
-
+from opaque_keys.edx.keys import BlockTypeKey, CourseKey, LearningContextKey, ContainerKey, CollectionKey, UsageKey
 
 log = logging.getLogger(__name__)
 
@@ -222,6 +222,28 @@ class UsageKeyField(OpaqueKeyField):
     # Declare the field types for the django-stubs mypy type hint plugin:
     _pyi_private_set_type: UsageKey | str | None
     _pyi_private_get_type: UsageKey | None
+
+
+class ContainerKeyField(OpaqueKeyField):
+    """
+    A django Field that stores a ContainerKey object as a string.
+    """
+    description = "A Location object, saved to the DB in the form of a string"
+    KEY_CLASS = ContainerKey
+    # Declare the field types for the django-stubs mypy type hint plugin:
+    _pyi_private_set_type: ContainerKey | str | None
+    _pyi_private_get_type: ContainerKey | None
+
+
+class CollectionKeyField(OpaqueKeyField):
+    """
+    A django Field that stores a CollectionKey object as a string.
+    """
+    description = "A Location object, saved to the DB in the form of a string"
+    KEY_CLASS = CollectionKey
+    # Declare the field types for the django-stubs mypy type hint plugin:
+    _pyi_private_set_type: CollectionKey | str | None
+    _pyi_private_get_type: CollectionKey | None
 
 
 class LocationKeyField(UsageKeyField):

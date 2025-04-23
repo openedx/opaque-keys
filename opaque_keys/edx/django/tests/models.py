@@ -10,7 +10,12 @@ except ImportError:  # pragma: no cover
     Model = object
 
 from opaque_keys.edx.django.models import (
-    BlockTypeKeyField, CourseKeyField, CreatorMixin, UsageKeyField
+    BlockTypeKeyField,
+    CollectionKeyField,
+    ContainerKeyField,
+    CourseKeyField,
+    CreatorMixin,
+    UsageKeyField,
 )
 
 
@@ -64,3 +69,5 @@ class ComplexModel(Model):
     course_key = CourseKeyField(max_length=255, validators=[is_edx])
     block_type_key = BlockTypeKeyField(max_length=255, blank=True)
     usage_key = UsageKeyField(max_length=255, blank=False)
+    collection_key = CollectionKeyField(max_length=255, blank=False)
+    container_key = ContainerKeyField(max_length=255, blank=False)

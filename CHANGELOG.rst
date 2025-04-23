@@ -1,3 +1,7 @@
+# 3.0.0
+
+* Breaking: LibraryItemKey is replaced by CollectionKey and ContainerKey
+
 # 2.13.0
 
 * Breaking change to the new LibraryContainerLocator and
