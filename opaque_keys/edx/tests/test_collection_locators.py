@@ -67,3 +67,5 @@ class TestLibraryCollectionLocator(LocatorBaseTest):
     def test_coll_key_invalid_from_string(self):
         with self.assertRaises(InvalidKeyError):
             LibraryCollectionLocator.from_string("this-is-a-great-test")
+        with self.assertRaises(InvalidKeyError):
+            LibraryCollectionLocator.from_string("lib-collection:TestX:LibraryX:test:too:many:colons")
