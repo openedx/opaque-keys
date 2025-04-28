@@ -38,7 +38,7 @@ cachetools==5.5.2
     # via
     #   -r requirements/ci.txt
     #   tox
-certifi==2025.1.31
+certifi==2025.4.26
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -106,7 +106,7 @@ filelock==3.18.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.131.6
+hypothesis==6.131.9
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -141,7 +141,7 @@ mock==5.2.0
     # via -r requirements/doc.txt
 mypy==1.15.0
     # via -r requirements/doc.txt
-mypy-extensions==1.0.0
+mypy-extensions==1.1.0
     # via
     #   -r requirements/doc.txt
     #   mypy

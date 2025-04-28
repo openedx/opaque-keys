@@ -23,7 +23,7 @@ babel==2.17.0
     #   sphinx
 beautifulsoup4==4.13.4
     # via pydata-sphinx-theme
-certifi==2025.1.31
+certifi==2025.4.26
     # via requests
 charset-normalizer==3.4.1
     # via requests
@@ -66,7 +66,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.131.6
+hypothesis==6.131.9
     # via -r requirements/test.txt
 idna==3.10
     # via requests
@@ -97,7 +97,7 @@ mock==5.2.0
     # via -r requirements/test.txt
 mypy==1.15.0
     # via -r requirements/test.txt
-mypy-extensions==1.0.0
+mypy-extensions==1.1.0
     # via
     #   -r requirements/test.txt
     #   mypy
