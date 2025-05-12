@@ -12,7 +12,7 @@ alabaster==1.0.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==3.3.9
+astroid==3.3.10
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -50,7 +50,7 @@ charset-normalizer==3.4.2
     # via
     #   -r requirements/doc.txt
     #   requests
-click==8.1.8
+click==8.2.0
     # via
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
@@ -106,7 +106,7 @@ filelock==3.18.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.131.9
+hypothesis==6.131.15
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -166,7 +166,7 @@ pbr==6.1.1
     #   stevedore
 pip-tools==7.4.1
     # via -r requirements/pip-tools.txt
-platformdirs==4.3.7
+platformdirs==4.3.8
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -254,7 +254,7 @@ six==1.17.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-snowballstemmer==2.2.0
+snowballstemmer==3.0.1
     # via
     #   -r requirements/doc.txt
     #   sphinx
@@ -322,7 +322,7 @@ urllib3==2.2.3
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.30.0
+virtualenv==20.31.2
     # via
     #   -r requirements/ci.txt
     #   tox
