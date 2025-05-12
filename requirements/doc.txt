@@ -8,7 +8,7 @@ accessible-pygments==0.0.5
     # via pydata-sphinx-theme
 alabaster==1.0.0
     # via sphinx
-astroid==3.3.9
+astroid==3.3.10
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -27,7 +27,7 @@ certifi==2025.4.26
     # via requests
 charset-normalizer==3.4.2
     # via requests
-click==8.1.8
+click==8.2.0
     # via
     #   -r requirements/test.txt
     #   click-log
@@ -66,7 +66,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.131.9
+hypothesis==6.131.15
     # via -r requirements/test.txt
 idna==3.10
     # via requests
@@ -113,7 +113,7 @@ pbr==6.1.1
     # via
     #   -r requirements/test.txt
     #   stevedore
-platformdirs==4.3.7
+platformdirs==4.3.8
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -180,7 +180,7 @@ six==1.17.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-snowballstemmer==2.2.0
+snowballstemmer==3.0.1
     # via sphinx
 sortedcontainers==2.4.0
     # via
