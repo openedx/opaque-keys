@@ -106,7 +106,7 @@ filelock==3.18.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.131.15
+hypothesis==6.131.18
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -173,7 +173,7 @@ platformdirs==4.3.8
     #   pylint
     #   tox
     #   virtualenv
-pluggy==1.5.0
+pluggy==1.6.0
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -212,9 +212,9 @@ pylint-plugin-utils==0.8.2
     #   -r requirements/doc.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.12.1
+pymongo==4.13.0
     # via -r requirements/doc.txt
-pyproject-api==1.9.0
+pyproject-api==1.9.1
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -309,7 +309,7 @@ tomlkit==0.13.2
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.25.0
+tox==4.26.0
     # via -r requirements/ci.txt
 typing-extensions==4.13.2
     # via
