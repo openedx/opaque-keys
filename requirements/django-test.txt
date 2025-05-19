@@ -47,7 +47,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.131.15
+hypothesis==6.131.18
     # via -r requirements/test.txt
 iniconfig==2.1.0
     # via
@@ -89,7 +89,7 @@ platformdirs==4.3.8
     # via
     #   -r requirements/test.txt
     #   pylint
-pluggy==1.5.0
+pluggy==1.6.0
     # via
     #   -r requirements/test.txt
     #   pytest
@@ -115,7 +115,7 @@ pylint-plugin-utils==0.8.2
     #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.12.1
+pymongo==4.13.0
     # via -r requirements/test.txt
 pytest==8.3.5
     # via
