@@ -34,7 +34,7 @@ build==1.2.2.post1
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-cachetools==5.5.2
+cachetools==6.0.0
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -50,7 +50,7 @@ charset-normalizer==3.4.2
     # via
     #   -r requirements/doc.txt
     #   requests
-click==8.2.0
+click==8.2.1
     # via
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
@@ -70,7 +70,7 @@ colorama==0.4.6
     # via
     #   -r requirements/ci.txt
     #   tox
-coverage[toml]==7.8.0
+coverage[toml]==7.8.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -106,7 +106,7 @@ filelock==3.18.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.131.18
+hypothesis==6.131.28
     # via -r requirements/doc.txt
 idna==3.10
     # via

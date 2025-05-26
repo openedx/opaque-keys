@@ -13,7 +13,7 @@ attrs==25.3.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
-click==8.2.0
+click==8.2.1
     # via
     #   -r requirements/test.txt
     #   click-log
@@ -27,7 +27,7 @@ code-annotations==2.3.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.8.0
+coverage[toml]==7.8.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -47,7 +47,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.131.18
+hypothesis==6.131.28
     # via -r requirements/test.txt
 iniconfig==2.1.0
     # via
