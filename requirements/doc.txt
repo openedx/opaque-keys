@@ -66,7 +66,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.131.28
+hypothesis==6.132.0
     # via -r requirements/test.txt
 idna==3.10
     # via requests
@@ -95,7 +95,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/test.txt
-mypy==1.15.0
+mypy==1.16.0
     # via -r requirements/test.txt
 mypy-extensions==1.1.0
     # via
@@ -109,6 +109,10 @@ packaging==25.0
     #   pydata-sphinx-theme
     #   pytest
     #   sphinx
+pathspec==0.12.1
+    # via
+    #   -r requirements/test.txt
+    #   mypy
 pbr==6.1.1
     # via
     #   -r requirements/test.txt
@@ -160,7 +164,7 @@ pytest==8.3.5
     #   pytest-xdist
 pytest-cov==6.1.1
     # via -r requirements/test.txt
-pytest-xdist==3.6.1
+pytest-xdist==3.7.0
     # via -r requirements/test.txt
 python-slugify==8.0.4
     # via
