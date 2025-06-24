@@ -66,7 +66,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.135.10
+hypothesis==6.135.14
     # via -r requirements/test.txt
 idna==3.10
     # via requests
@@ -95,7 +95,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/test.txt
-mypy==1.16.0
+mypy==1.16.1
     # via -r requirements/test.txt
 mypy-extensions==1.1.0
     # via
@@ -126,11 +126,11 @@ pluggy==1.6.0
     #   -r requirements/test.txt
     #   pytest
     #   pytest-cov
-pycodestyle==2.13.0
+pycodestyle==2.14.0
     # via -r requirements/test.txt
 pydata-sphinx-theme==0.15.4
     # via sphinx-book-theme
-pygments==2.19.1
+pygments==2.19.2
     # via
     #   -r requirements/test.txt
     #   accessible-pygments
@@ -153,14 +153,14 @@ pylint-django==2.6.1
     # via
     #   -r requirements/test.txt
     #   edx-lint
-pylint-plugin-utils==0.8.2
+pylint-plugin-utils==0.9.0
     # via
     #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.13.1
+pymongo==4.13.2
     # via -r requirements/test.txt
-pytest==8.4.0
+pytest==8.4.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov

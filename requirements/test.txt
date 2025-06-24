@@ -35,7 +35,7 @@ edx-lint==5.6.0
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.135.10
+hypothesis==6.135.14
     # via -r requirements/test.in
 iniconfig==2.1.0
     # via pytest
@@ -49,7 +49,7 @@ mccabe==0.7.0
     # via pylint
 mock==5.2.0
     # via -r requirements/test.in
-mypy==1.16.0
+mypy==1.16.1
     # via -r requirements/test.in
 mypy-extensions==1.1.0
     # via mypy
@@ -67,9 +67,9 @@ pluggy==1.6.0
     # via
     #   pytest
     #   pytest-cov
-pycodestyle==2.13.0
+pycodestyle==2.14.0
     # via -r requirements/test.in
-pygments==2.19.1
+pygments==2.19.2
     # via pytest
 pylint==3.3.7
     # via
@@ -81,13 +81,13 @@ pylint-celery==0.3
     # via edx-lint
 pylint-django==2.6.1
     # via edx-lint
-pylint-plugin-utils==0.8.2
+pylint-plugin-utils==0.9.0
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.13.1
+pymongo==4.13.2
     # via -r requirements/base.txt
-pytest==8.4.0
+pytest==8.4.1
     # via
     #   -r requirements/test.in
     #   pytest-cov
