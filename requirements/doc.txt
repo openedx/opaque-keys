@@ -66,7 +66,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.135.14
+hypothesis==6.135.16
     # via -r requirements/test.txt
 idna==3.10
     # via requests
