@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==3.3.10
+astroid==3.3.11
     # via
     #   pylint
     #   pylint-celery
@@ -35,7 +35,7 @@ edx-lint==5.6.0
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.135.26
+hypothesis==6.135.29
     # via -r requirements/test.in
 iniconfig==2.1.0
     # via pytest
