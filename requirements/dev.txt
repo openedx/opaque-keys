@@ -38,7 +38,7 @@ cachetools==6.1.0
     # via
     #   -r requirements/ci.txt
     #   tox
-certifi==2025.7.9
+certifi==2025.7.14
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -81,7 +81,7 @@ dill==0.4.0
     # via
     #   -r requirements/doc.txt
     #   pylint
-distlib==0.3.9
+distlib==0.4.0
     # via
     #   -r requirements/ci.txt
     #   virtualenv
@@ -106,7 +106,7 @@ filelock==3.18.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.135.29
+hypothesis==6.136.1
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -139,13 +139,13 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/doc.txt
-mypy==1.16.1
+mypy==1.17.0
     # via -r requirements/doc.txt
 mypy-extensions==1.1.0
     # via
     #   -r requirements/doc.txt
     #   mypy
-nh3==0.2.21
+nh3==0.3.0
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
@@ -315,7 +315,7 @@ tomlkit==0.13.3
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.27.0
+tox==4.28.0
     # via -r requirements/ci.txt
 typing-extensions==4.14.1
     # via
