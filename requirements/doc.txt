@@ -23,7 +23,7 @@ babel==2.17.0
     #   sphinx
 beautifulsoup4==4.13.4
     # via pydata-sphinx-theme
-certifi==2025.7.14
+certifi==2025.8.3
     # via requests
 charset-normalizer==3.4.2
     # via requests
@@ -66,7 +66,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.136.4
+hypothesis==6.136.7
     # via -r requirements/test.txt
 idna==3.10
     # via requests
@@ -95,7 +95,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/test.txt
-mypy==1.17.0
+mypy==1.17.1
     # via -r requirements/test.txt
 mypy-extensions==1.1.0
     # via
@@ -232,10 +232,8 @@ typing-extensions==4.14.1
     #   beautifulsoup4
     #   mypy
     #   pydata-sphinx-theme
-urllib3==2.2.3
-    # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
-    #   requests
+urllib3==2.5.0
+    # via requests
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
