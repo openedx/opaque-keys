@@ -30,7 +30,7 @@ beautifulsoup4==4.13.4
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
-build==1.2.2.post1
+build==1.3.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
@@ -38,7 +38,7 @@ cachetools==6.1.0
     # via
     #   -r requirements/ci.txt
     #   tox
-certifi==2025.7.14
+certifi==2025.8.3
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -106,7 +106,7 @@ filelock==3.18.0
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.136.4
+hypothesis==6.136.7
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -139,7 +139,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/doc.txt
-mypy==1.17.0
+mypy==1.17.1
     # via -r requirements/doc.txt
 mypy-extensions==1.1.0
     # via
@@ -168,7 +168,7 @@ pbr==6.1.1
     # via
     #   -r requirements/doc.txt
     #   stevedore
-pip-tools==7.4.1
+pip-tools==7.5.0
     # via -r requirements/pip-tools.txt
 platformdirs==4.3.8
     # via
@@ -315,7 +315,7 @@ tomlkit==0.13.3
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.28.3
+tox==4.28.4
     # via -r requirements/ci.txt
 typing-extensions==4.14.1
     # via
@@ -323,12 +323,11 @@ typing-extensions==4.14.1
     #   beautifulsoup4
     #   mypy
     #   pydata-sphinx-theme
-urllib3==2.2.3
+urllib3==2.5.0
     # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.32.0
+virtualenv==20.33.0
     # via
     #   -r requirements/ci.txt
     #   tox

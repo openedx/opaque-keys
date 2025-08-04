@@ -47,7 +47,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.136.4
+hypothesis==6.136.7
     # via -r requirements/test.txt
 iniconfig==2.1.0
     # via
@@ -71,7 +71,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/test.txt
-mypy==1.17.0
+mypy==1.17.1
     # via -r requirements/test.txt
 mypy-extensions==1.1.0
     # via
