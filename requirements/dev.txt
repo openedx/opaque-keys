@@ -26,7 +26,7 @@ babel==2.17.0
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.13.4
+beautifulsoup4==4.13.5
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
@@ -70,7 +70,7 @@ colorama==0.4.6
     # via
     #   -r requirements/ci.txt
     #   tox
-coverage[toml]==7.10.4
+coverage[toml]==7.10.5
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -106,7 +106,7 @@ filelock==3.19.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.138.2
+hypothesis==6.138.3
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -164,7 +164,7 @@ pathspec==0.12.1
     # via
     #   -r requirements/doc.txt
     #   mypy
-pbr==7.0.0
+pbr==7.0.1
     # via
     #   -r requirements/doc.txt
     #   stevedore
@@ -218,7 +218,7 @@ pylint-plugin-utils==0.9.0
     #   -r requirements/doc.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.14.0
+pymongo==4.14.1
     # via -r requirements/doc.txt
 pyproject-api==1.9.1
     # via
@@ -248,7 +248,7 @@ pyyaml==6.0.2
     #   code-annotations
 readme-renderer==44.0
     # via -r requirements/doc.txt
-requests==2.32.4
+requests==2.32.5
     # via
     #   -r requirements/doc.txt
     #   sphinx

@@ -19,7 +19,7 @@ click-log==0.4.0
     # via edx-lint
 code-annotations==2.3.0
     # via edx-lint
-coverage[toml]==7.10.4
+coverage[toml]==7.10.5
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -35,7 +35,7 @@ edx-lint==5.6.0
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.138.2
+hypothesis==6.138.3
     # via -r requirements/test.in
 iniconfig==2.1.0
     # via pytest
@@ -57,7 +57,7 @@ packaging==25.0
     # via pytest
 pathspec==0.12.1
     # via mypy
-pbr==7.0.0
+pbr==7.0.1
     # via
     #   -r requirements/base.txt
     #   stevedore
@@ -85,7 +85,7 @@ pylint-plugin-utils==0.9.0
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.14.0
+pymongo==4.14.1
     # via -r requirements/base.txt
 pytest==8.4.1
     # via
