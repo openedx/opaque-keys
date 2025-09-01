@@ -27,7 +27,7 @@ code-annotations==2.3.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.10.5
+coverage[toml]==7.10.6
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -47,7 +47,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.138.3
+hypothesis==6.138.10
     # via -r requirements/test.txt
 iniconfig==2.1.0
     # via
@@ -85,11 +85,7 @@ pathspec==0.12.1
     # via
     #   -r requirements/test.txt
     #   mypy
-pbr==7.0.1
-    # via
-    #   -r requirements/test.txt
-    #   stevedore
-platformdirs==4.3.8
+platformdirs==4.4.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -154,7 +150,7 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
-stevedore==5.4.1
+stevedore==5.5.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
@@ -166,10 +162,7 @@ tomlkit==0.13.3
     # via
     #   -r requirements/test.txt
     #   pylint
-typing-extensions==4.14.1
+typing-extensions==4.15.0
     # via
     #   -r requirements/test.txt
     #   mypy
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
