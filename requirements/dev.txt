@@ -85,7 +85,7 @@ distlib==0.4.0
     # via
     #   -r requirements/ci.txt
     #   virtualenv
-dnspython==2.7.0
+dnspython==2.8.0
     # via
     #   -r requirements/doc.txt
     #   pymongo
@@ -106,7 +106,7 @@ filelock==3.19.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.138.10
+hypothesis==6.138.14
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -225,12 +225,12 @@ pyproject-hooks==1.2.0
     #   -r requirements/pip-tools.txt
     #   build
     #   pip-tools
-pytest==8.4.1
+pytest==8.4.2
     # via
     #   -r requirements/doc.txt
     #   pytest-cov
     #   pytest-xdist
-pytest-cov==6.2.1
+pytest-cov==6.3.0
     # via -r requirements/doc.txt
 pytest-xdist==3.8.0
     # via -r requirements/doc.txt
@@ -311,7 +311,7 @@ tomlkit==0.13.3
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.29.0
+tox==4.30.2
     # via -r requirements/ci.txt
 typing-extensions==4.15.0
     # via

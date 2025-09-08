@@ -37,7 +37,7 @@ dill==0.4.0
     # via
     #   -r requirements/test.txt
     #   pylint
-dnspython==2.7.0
+dnspython==2.8.0
     # via
     #   -r requirements/test.txt
     #   pymongo
@@ -47,7 +47,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.138.10
+hypothesis==6.138.14
     # via -r requirements/test.txt
 iniconfig==2.1.0
     # via
@@ -122,13 +122,13 @@ pylint-plugin-utils==0.9.0
     #   pylint-django
 pymongo==4.14.1
     # via -r requirements/test.txt
-pytest==8.4.1
+pytest==8.4.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
     #   pytest-django
     #   pytest-xdist
-pytest-cov==6.2.1
+pytest-cov==6.3.0
     # via -r requirements/test.txt
 pytest-django==4.11.1
     # via -r requirements/django-test.in
