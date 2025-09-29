@@ -26,7 +26,7 @@ babel==2.17.0
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.13.5
+beautifulsoup4==4.14.0
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
@@ -106,7 +106,7 @@ filelock==3.19.1
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.139.2
+hypothesis==6.140.2
     # via -r requirements/doc.txt
 idna==3.10
     # via
@@ -129,7 +129,7 @@ jinja2==3.1.6
     #   -r requirements/doc.txt
     #   code-annotations
     #   sphinx
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via
     #   -r requirements/doc.txt
     #   jinja2
@@ -238,7 +238,7 @@ python-slugify==8.0.4
     # via
     #   -r requirements/doc.txt
     #   code-annotations
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via
     #   -r requirements/doc.txt
     #   code-annotations
