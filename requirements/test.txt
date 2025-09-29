@@ -35,7 +35,7 @@ edx-lint==5.6.0
     # via -r requirements/test.in
 execnet==2.1.1
     # via pytest-xdist
-hypothesis==6.139.2
+hypothesis==6.140.2
     # via -r requirements/test.in
 iniconfig==2.1.0
     # via pytest
@@ -43,7 +43,7 @@ isort==6.0.1
     # via pylint
 jinja2==3.1.6
     # via code-annotations
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via jinja2
 mccabe==0.7.0
     # via pylint
@@ -94,7 +94,7 @@ pytest-xdist==3.8.0
     # via -r requirements/test.in
 python-slugify==8.0.4
     # via code-annotations
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via code-annotations
 six==1.17.0
     # via edx-lint
