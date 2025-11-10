@@ -13,10 +13,6 @@ astroid==3.3.11
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-attrs==25.4.0
-    # via
-    #   -r requirements/test.txt
-    #   hypothesis
 babel==2.17.0
     # via
     #   pydata-sphinx-theme
@@ -41,7 +37,7 @@ code-annotations==2.3.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.11.0
+coverage[toml]==7.11.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -66,7 +62,7 @@ execnet==2.1.1
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.144.0
+hypothesis==6.147.0
     # via -r requirements/test.txt
 idna==3.11
     # via requests
@@ -156,7 +152,7 @@ pylint-plugin-utils==0.9.0
     #   pylint-django
 pymongo==4.15.3
     # via -r requirements/test.txt
-pytest==8.4.2
+pytest==9.0.0
     # via
     #   -r requirements/test.txt
     #   pytest-cov
