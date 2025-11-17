@@ -8,7 +8,7 @@ astroid==3.3.11
     # via
     #   pylint
     #   pylint-celery
-click==8.3.0
+click==8.3.1
     # via
     #   click-log
     #   code-annotations
@@ -17,7 +17,7 @@ click-log==0.4.0
     # via edx-lint
 code-annotations==2.3.0
     # via edx-lint
-coverage[toml]==7.11.2
+coverage[toml]==7.11.3
     # via
     #   -r requirements/test.in
     #   pytest-cov
@@ -31,9 +31,9 @@ dnspython==2.8.0
     #   pymongo
 edx-lint==5.6.0
     # via -r requirements/test.in
-execnet==2.1.1
+execnet==2.1.2
     # via pytest-xdist
-hypothesis==6.147.0
+hypothesis==6.148.1
     # via -r requirements/test.in
 iniconfig==2.3.0
     # via pytest
@@ -79,9 +79,9 @@ pylint-plugin-utils==0.9.0
     # via
     #   pylint-celery
     #   pylint-django
-pymongo==4.15.3
+pymongo==4.15.4
     # via -r requirements/base.txt
-pytest==9.0.0
+pytest==9.0.1
     # via
     #   -r requirements/test.in
     #   pytest-cov
