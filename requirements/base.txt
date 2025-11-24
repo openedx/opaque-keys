@@ -8,7 +8,7 @@ dnspython==2.8.0
     # via pymongo
 pymongo==4.15.4
     # via -r requirements/base.in
-stevedore==5.5.0
+stevedore==5.6.0
     # via -r requirements/base.in
 typing-extensions==4.15.0
     # via -r requirements/base.in
