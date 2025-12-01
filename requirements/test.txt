@@ -33,7 +33,7 @@ edx-lint==5.6.0
     # via -r requirements/test.in
 execnet==2.1.2
     # via pytest-xdist
-hypothesis==6.148.2
+hypothesis==6.148.3
     # via -r requirements/test.in
 iniconfig==2.3.0
     # via pytest
@@ -41,13 +41,15 @@ isort==6.1.0
     # via pylint
 jinja2==3.1.6
     # via code-annotations
+librt==0.6.3
+    # via mypy
 markupsafe==3.0.3
     # via jinja2
 mccabe==0.7.0
     # via pylint
 mock==5.2.0
     # via -r requirements/test.in
-mypy==1.18.2
+mypy==1.19.0
     # via -r requirements/test.in
 mypy-extensions==1.1.0
     # via mypy
