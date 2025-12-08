@@ -62,7 +62,7 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.148.3
+hypothesis==6.148.7
     # via -r requirements/test.txt
 idna==3.11
     # via requests
@@ -81,7 +81,7 @@ jinja2==3.1.6
     #   -r requirements/test.txt
     #   code-annotations
     #   sphinx
-librt==0.6.3
+librt==0.7.3
     # via
     #   -r requirements/test.txt
     #   mypy
@@ -113,7 +113,7 @@ pathspec==0.12.1
     # via
     #   -r requirements/test.txt
     #   mypy
-platformdirs==4.5.0
+platformdirs==4.5.1
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -154,9 +154,9 @@ pylint-plugin-utils==0.9.0
     #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.15.4
+pymongo==4.15.5
     # via -r requirements/test.txt
-pytest==9.0.1
+pytest==9.0.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -191,7 +191,7 @@ sortedcontainers==2.4.0
     #   hypothesis
 soupsieve==2.8
     # via beautifulsoup4
-sphinx==9.0.0
+sphinx==9.0.4
     # via
     #   -r requirements/doc.in
     #   pydata-sphinx-theme
@@ -228,5 +228,5 @@ typing-extensions==4.15.0
     #   beautifulsoup4
     #   mypy
     #   pydata-sphinx-theme
-urllib3==2.5.0
+urllib3==2.6.0
     # via requests
