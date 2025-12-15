@@ -134,6 +134,7 @@ def fields_for_key(cls, field):  # pylint: disable=unused-argument
     return strategies.text(min_size=1)
 
 
+# pylint: disable=unreachable
 @strategies.composite
 def _aside_v1_exclusions(draw, strategy):
     """
