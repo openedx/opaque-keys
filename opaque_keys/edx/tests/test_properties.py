@@ -178,7 +178,7 @@ def perturbed_strings(string_strategy):
 def test_perturbed_serializations(key_type, serialized, perturbed):
     assume(serialized != perturbed)
 
-    original_key = key_type.from_string(serialized)
+    original_key = key_type.from_string(serialized)  # pylint: disable=unreachable
 
     try:
         perturbed_key = key_type.from_string(perturbed)
@@ -198,6 +198,6 @@ def test_perturbed_serializations(key_type, serialized, perturbed):
 def test_unique_deserialization(key_type, serialized, perturbed):
     assume(serialized != perturbed)
 
-    original_key = key_type.from_string(serialized)
+    original_key = key_type.from_string(serialized)  # pylint: disable=unreachable
     perturbed_key = key_type.from_string(perturbed)
     assert original_key != perturbed_key

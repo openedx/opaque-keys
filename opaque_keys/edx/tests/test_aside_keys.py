@@ -41,6 +41,7 @@ class TestEncode(TestCase):
         decoded = _decode_v1(encoded)
         self.assertEqual(text, decoded)
 
+    # pylint: disable=unreachable
     @given(left=ENCODING_TEXT, right=ENCODING_TEXT)
     @settings(suppress_health_check=[HealthCheck.too_slow])
     def test_join_v1_roundtrip(self, left, right):
@@ -50,6 +51,7 @@ class TestEncode(TestCase):
         (_left, _right) = _split_keys_v1(joined)
         self.assertEqual((left, right), (_left, _right))
 
+    # pylint: disable=unreachable
     @given(left=ENCODING_TEXT, right=ENCODING_TEXT)
     @settings(suppress_health_check=[HealthCheck.too_slow, HealthCheck.filter_too_much])
     def test_join_v1_error(self, left, right):
