@@ -37,7 +37,7 @@ code-annotations==2.3.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.13.0
+coverage[toml]==7.13.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -62,7 +62,7 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.148.7
+hypothesis==6.148.8
     # via -r requirements/test.txt
 idna==3.11
     # via requests
@@ -81,7 +81,7 @@ jinja2==3.1.6
     #   -r requirements/test.txt
     #   code-annotations
     #   sphinx
-librt==0.7.4
+librt==0.7.5
     # via
     #   -r requirements/test.txt
     #   mypy
