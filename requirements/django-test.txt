@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-astroid==3.3.11
+astroid==4.0.3
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -43,13 +43,13 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.148.8
+hypothesis==6.148.12
     # via -r requirements/test.txt
 iniconfig==2.3.0
     # via
     #   -r requirements/test.txt
     #   pytest
-isort==6.1.0
+isort==7.0.0
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -57,7 +57,7 @@ jinja2==3.1.6
     # via
     #   -r requirements/test.txt
     #   code-annotations
-librt==0.7.5
+librt==0.7.7
     # via
     #   -r requirements/test.txt
     #   mypy
@@ -100,7 +100,7 @@ pygments==2.19.2
     # via
     #   -r requirements/test.txt
     #   pytest
-pylint==3.3.9
+pylint==4.0.4
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -111,7 +111,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
-pylint-django==2.6.1
+pylint-django==2.7.0
     # via
     #   -r requirements/test.txt
     #   edx-lint

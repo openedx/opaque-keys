@@ -12,7 +12,7 @@ alabaster==1.0.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==3.3.11
+astroid==4.0.3
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -34,7 +34,7 @@ cachetools==6.2.4
     # via
     #   -r requirements/ci.txt
     #   tox
-certifi==2025.11.12
+certifi==2026.1.4
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -97,12 +97,12 @@ execnet==2.1.2
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.20.1
+filelock==3.20.2
     # via
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.148.8
+hypothesis==6.148.12
     # via -r requirements/doc.txt
 idna==3.11
     # via
@@ -116,7 +116,7 @@ iniconfig==2.3.0
     # via
     #   -r requirements/doc.txt
     #   pytest
-isort==6.1.0
+isort==7.0.0
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -125,7 +125,7 @@ jinja2==3.1.6
     #   -r requirements/doc.txt
     #   code-annotations
     #   sphinx
-librt==0.7.5
+librt==0.7.7
     # via
     #   -r requirements/doc.txt
     #   mypy
@@ -194,7 +194,7 @@ pygments==2.19.2
     #   pytest
     #   readme-renderer
     #   sphinx
-pylint==3.3.9
+pylint==4.0.4
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -205,7 +205,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-pylint-django==2.6.1
+pylint-django==2.7.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -311,7 +311,7 @@ tomlkit==0.13.3
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.32.0
+tox==4.33.0
     # via -r requirements/ci.txt
 typing-extensions==4.15.0
     # via
