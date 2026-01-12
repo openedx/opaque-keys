@@ -62,7 +62,7 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.148.12
+hypothesis==6.150.0
     # via -r requirements/test.txt
 idna==3.11
     # via requests
@@ -109,7 +109,7 @@ packaging==25.0
     #   pydata-sphinx-theme
     #   pytest
     #   sphinx
-pathspec==0.12.1
+pathspec==1.0.3
     # via
     #   -r requirements/test.txt
     #   mypy
@@ -154,7 +154,7 @@ pylint-plugin-utils==0.9.0
     #   -r requirements/test.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.15.5
+pymongo==4.16.0
     # via -r requirements/test.txt
 pytest==9.0.2
     # via
@@ -228,5 +228,5 @@ typing-extensions==4.15.0
     #   beautifulsoup4
     #   mypy
     #   pydata-sphinx-theme
-urllib3==2.6.2
+urllib3==2.6.3
     # via requests
