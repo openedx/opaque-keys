@@ -23,13 +23,13 @@ code-annotations==2.3.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.13.1
+coverage[toml]==7.13.2
     # via
     #   -r requirements/test.txt
     #   pytest-cov
 ddt==1.7.2
     # via -r requirements/test.txt
-dill==0.4.0
+dill==0.4.1
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -43,7 +43,7 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.150.2
+hypothesis==6.151.0
     # via -r requirements/test.txt
 iniconfig==2.3.0
     # via
@@ -77,7 +77,7 @@ mypy-extensions==1.1.0
     # via
     #   -r requirements/test.txt
     #   mypy
-packaging==25.0
+packaging==26.0
     # via
     #   -r requirements/test.txt
     #   pytest
