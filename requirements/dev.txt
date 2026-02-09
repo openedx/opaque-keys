@@ -12,7 +12,7 @@ alabaster==1.0.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-astroid==4.0.3
+astroid==4.0.4
     # via
     #   -r requirements/doc.txt
     #   pylint
