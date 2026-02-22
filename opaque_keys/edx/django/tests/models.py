@@ -66,8 +66,9 @@ class ComplexModel(Model):
     """A Django Model for testing Course/Usage/Location/BlockType Key fields."""
 
     id = CharField(primary_key=True, max_length=255)  # pylint: disable=invalid-name
-    course_key = CourseKeyField(max_length=255, validators=[is_edx])
-    block_type_key = BlockTypeKeyField(max_length=255, blank=True)
-    usage_key = UsageKeyField(max_length=255, blank=False)
-    collection_key = CollectionKeyField(max_length=255, blank=False)
-    container_key = ContainerKeyField(max_length=255, blank=False)
+    course_key = CourseKeyField(validators=[is_edx])
+    course_key_cs = CourseKeyField(case_sensitive=True, max_length=100)
+    block_type_key = BlockTypeKeyField(blank=True)
+    usage_key = UsageKeyField(blank=False)
+    collection_key = CollectionKeyField(blank=False)
+    container_key = ContainerKeyField(blank=False)

@@ -73,6 +73,7 @@ class TestKeyFieldImplementation(TestCase):
         self.model = ComplexModel(
             id='foobar',
             course_key=self.course_key,
+            course_key_cs=self.course_key,
             usage_key=self.usage_key,
             collection_key=self.collection_key,
             container_key=self.container_key,
@@ -90,6 +91,43 @@ class TestKeyFieldImplementation(TestCase):
     def test_fetch_from_db_with_str(self):
         fetched = ComplexModel.objects.filter(course_key=str(self.course_key)).first()
         self.assertEqual(fetched, self.model)
+
+    def test_fetch_from_db_with_str_case_insensitive(self):
+        """Fetching keys should be case-insensitive by default for backwards compatibility"""
+        assert str(self.course_key).lower() != str(self.course_key)
+        fetched = ComplexModel.objects.get(course_key=str(self.course_key).lower())
+        assert str(fetched.course_key) == str(self.model.course_key)  # fetched has the correct capitalization though
+
+    def test_fetch_from_db_with_str_case_sensitive(self):
+        """Fetching keys should be case-sensitive when case_sensitive=True"""
+        assert str(self.course_key).lower() != str(self.course_key)
+        with self.assertRaises(ComplexModel.DoesNotExist):
+            ComplexModel.objects.get(course_key_cs=str(self.course_key).lower())
+        # But this works:
+        fetched = ComplexModel.objects.get(course_key_cs=str(self.course_key))
+        assert fetched.course_key == self.course_key
+
+    def test_custom_max_length(self):
+        """
+        Test that fields can override max_length to be different from the default of 255
+        """
+        key_100 = CourseKey.from_string(
+            "course-v1:fiftyfiftyfiftyfiftyfiftyfiftyfiftyfiftyfiftyfifty+thishasten+twenty-eight-more-characters",
+        )
+        key_101 = CourseKey.from_string(
+            "course-v1:fiftyfiftyfiftyfiftyfiftyfiftyfiftyfiftyfiftyfifty+thishasten+twenty-eight-more-charactersX",
+        )
+        # Note that ComplexModel.course_key_cs specifies max_length=100. So this should work:
+        assert len(str(key_100)) == 100
+        self.model.course_key_cs = key_100
+        self.model.full_clean()
+        # But this should fail:
+        assert len(str(key_101)) == 101
+        self.model.course_key_cs = key_101
+        with self.assertRaises(ValidationError):
+            self.model.full_clean()
+        # Note: we do not test the actual database constraints on length, because SQLite does not enforce it.
+        # But the Django validation above reflects the same limits, and MySQL should enforce them.
 
     def test_validation_no_errors(self):
         self.model.clean_fields()

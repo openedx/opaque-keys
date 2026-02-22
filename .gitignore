@@ -15,6 +15,9 @@ __pycache__/
 codekit-config.json
 .pycharm_helpers/
 
+# Virtual environment
+.venv
+
 # Distribution / packaging
 .Python
 env/
