@@ -96,7 +96,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
 
     def __init__(self, *args, **kwargs):
         if self.KEY_CLASS is None:
-            raise ValueError('Must specify KEY_CLASS in OpaqueKeyField subclasses')
+            raise ValueError('Must specify KEY_CLASS in OpaqueKeyField subclasses')  # pragma: no cover
         kwargs.setdefault("max_length", 255)  # Default max length for all opaque key fields
         self.case_sensitive = kwargs.pop("case_sensitive", False)  # see self.db_parameters() for details
         super().__init__(*args, **kwargs)
@@ -179,7 +179,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
 
         if connection.vendor == "sqlite":
             db_params["collation"] = "BINARY" if self.case_sensitive else "NOCASE"
-        elif connection.vendor == "mysql":
+        elif connection.vendor == "mysql":  # pragma: no cover
             db_params["collation"] = "utf8mb4_bin" if self.case_sensitive else "utf8mb4_unicode_ci"
             # We're using utf8mb4_unicode_ci to keep MariaDB compatibility, since their collation support diverges after
             # this. MySQL is now on utf8mb4_0900_ai_ci based on Unicode 9, while MariaDB has uca1400_ai_ci (Unicode 14).
