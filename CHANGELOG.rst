@@ -1,7 +1,7 @@
 # 3.1.0
 
 * The Django OpaqueKeyField subclasses like CourseKeyField now specify a default
-  max_length of 255 characters.
+  max_length of 255 characters (previously, no default was specified).
 * The Django OpaqueKeyField subclasses now are case-insensitive on SQLite by
   default, to match the behavior they had on MySQL.
 * The Django OpaqueKeyField subclasses can now be made case-sensitive by passing
