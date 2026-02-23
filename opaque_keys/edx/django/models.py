@@ -184,10 +184,11 @@ class OpaqueKeyField(CreatorMixin, CharField):
             # We're using utf8mb4_unicode_ci to keep MariaDB compatibility, since their collation support diverges after
             # this. MySQL is now on utf8mb4_0900_ai_ci based on Unicode 9, while MariaDB has uca1400_ai_ci (Unicode 14).
         elif connection.vendor == "postgresql":  # pragma: no cover
-            pass  # PostgreSQL only provides case-sensitive collations by default. To create a case-insensitive column,
-                  # we'd first need to use a migration to create a custom case-insensitive collation, but we don't use
-                  # migrations for this opaque-keys library. Anyhow, using case-sensitivity across the board is less
-                  # likely to cause bugs than the opposite.
+            # PostgreSQL only provides case-sensitive collations by default. To create a case-insensitive column,
+            # we'd first need to use a migration to create a custom case-insensitive collation, but we don't use
+            # migrations for this opaque-keys library. Anyhow, using case-sensitivity across the board is less
+            # likely to cause bugs than the opposite.
+            pass
 
         return db_params
 
