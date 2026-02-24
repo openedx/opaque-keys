@@ -9,7 +9,7 @@ import warnings
 
 try:
     from django.core.exceptions import ValidationError
-    from django.db.models import CharField
+    from django.db.models import CharField, Field
     from django.db.models.lookups import IsNull
 except ImportError:  # pragma: no cover
     # Django is unavailable, none of the classes below will work,
@@ -96,8 +96,9 @@ class OpaqueKeyField(CreatorMixin, CharField):
 
     def __init__(self, *args, **kwargs):
         if self.KEY_CLASS is None:
-            raise ValueError('Must specify KEY_CLASS in OpaqueKeyField subclasses')
-
+            raise ValueError('Must specify KEY_CLASS in OpaqueKeyField subclasses')  # pragma: no cover
+        kwargs.setdefault("max_length", 255)  # Default max length for all opaque key fields
+        self.case_sensitive = kwargs.pop("case_sensitive", False)  # see self.db_parameters() for details
         super().__init__(*args, **kwargs)
 
     def to_python(self, value):  # pylint: disable=missing-function-docstring
@@ -164,6 +165,44 @@ class OpaqueKeyField(CreatorMixin, CharField):
 
         return super().run_validators(value)
 
+    def db_parameters(self, connection):
+        """
+        Return database parameters for this field. This adds collation info, to
+        make the key field case-sensitive (optionally).
+
+        Previously, these fields were case-sensitive on SQLite and
+        case-insensitive on MySQL, which was not ideal. Now they are generally
+        case-insensitive by default (for backwards compatibility), and
+        case-sensitive if case_sensitive=True is specified (recommended!).
+        """
+        db_params = Field.db_parameters(self, connection)
+
+        if connection.vendor == "sqlite":
+            db_params["collation"] = "BINARY" if self.case_sensitive else "NOCASE"
+        elif connection.vendor == "mysql":  # pragma: no cover
+            db_params["collation"] = "utf8mb4_bin" if self.case_sensitive else "utf8mb4_unicode_ci"
+            # We're using utf8mb4_unicode_ci to keep MariaDB compatibility, since their collation support diverges after
+            # this. MySQL is now on utf8mb4_0900_ai_ci based on Unicode 9, while MariaDB has uca1400_ai_ci (Unicode 14).
+        elif connection.vendor == "postgresql":  # pragma: no cover
+            # PostgreSQL only provides case-sensitive collations by default. To create a case-insensitive column,
+            # we'd first need to use a migration to create a custom case-insensitive collation, but we don't use
+            # migrations for this opaque-keys library. Anyhow, using case-sensitivity across the board is less
+            # likely to cause bugs than the opposite.
+            pass
+
+        return db_params
+
+    def deconstruct(self):
+        """
+        How to serialize our Field for the migration file.
+
+        Just add our custom "case_sensitive" field if needed.
+        """
+        name, path, args, kwargs = super().deconstruct()
+        if self.case_sensitive:
+            kwargs["case_sensitive"] = True
+        return name, path, args, kwargs
+
 
 class OpaqueKeyFieldEmptyLookupIsNull(IsNull):
     """
@@ -191,6 +230,10 @@ class LearningContextKeyField(OpaqueKeyField):
     CourseKeyField instead, but if you are writing something more generic that
     could apply to any learning context (libraries, etc.), use this instead of
     CourseKeyField.
+
+    It is highly recommended to specify `case_sensitive=True`, because we
+    generally want the performance, exactness, and consistency of case-sensitive
+    values, but the default behavior is case-insensitive (except on PostgreSQL).
     """
     description = "A LearningContextKey object, saved to the DB in the form of a string"
     KEY_CLASS = LearningContextKey
@@ -205,6 +248,10 @@ class LearningContextKeyField(OpaqueKeyField):
 class CourseKeyField(OpaqueKeyField):
     """
     A django Field that stores a CourseKey object as a string.
+
+    It is highly recommended to specify `case_sensitive=True`, because we
+    generally want the performance, exactness, and consistency of case-sensitive
+    values, but the default behavior is case-insensitive (except on PostgreSQL).
     """
     description = "A CourseKey object, saved to the DB in the form of a string"
     KEY_CLASS = CourseKey
@@ -216,6 +263,10 @@ class CourseKeyField(OpaqueKeyField):
 class UsageKeyField(OpaqueKeyField):
     """
     A django Field that stores a UsageKey object as a string.
+
+    It is highly recommended to specify `case_sensitive=True`, because we
+    generally want the performance, exactness, and consistency of case-sensitive
+    values, but the default behavior is case-insensitive (except on PostgreSQL).
     """
     description = "A Location object, saved to the DB in the form of a string"
     KEY_CLASS = UsageKey
@@ -227,6 +278,10 @@ class UsageKeyField(OpaqueKeyField):
 class ContainerKeyField(OpaqueKeyField):
     """
     A django Field that stores a ContainerKey object as a string.
+
+    It is highly recommended to specify `case_sensitive=True`, because we
+    generally want the performance, exactness, and consistency of case-sensitive
+    values, but the default behavior is case-insensitive (except on PostgreSQL).
     """
     description = "A Location object, saved to the DB in the form of a string"
     KEY_CLASS = ContainerKey
@@ -238,6 +293,10 @@ class ContainerKeyField(OpaqueKeyField):
 class CollectionKeyField(OpaqueKeyField):
     """
     A django Field that stores a CollectionKey object as a string.
+
+    It is highly recommended to specify `case_sensitive=True`, because we
+    generally want the performance, exactness, and consistency of case-sensitive
+    values, but the default behavior is case-insensitive (except on PostgreSQL).
     """
     description = "A Location object, saved to the DB in the form of a string"
     KEY_CLASS = CollectionKey
@@ -249,6 +308,10 @@ class CollectionKeyField(OpaqueKeyField):
 class LocationKeyField(UsageKeyField):
     """
     A django Field that stores a UsageKey object as a string.
+
+    It is highly recommended to specify `case_sensitive=True`, because we
+    generally want the performance, exactness, and consistency of case-sensitive
+    values, but the default behavior is case-insensitive (except on PostgreSQL).
     """
 
     def __init__(self, *args, **kwargs):
@@ -259,6 +322,10 @@ class LocationKeyField(UsageKeyField):
 class BlockTypeKeyField(OpaqueKeyField):
     """
     A django Field that stores a BlockTypeKey object as a string.
+
+    It is highly recommended to specify `case_sensitive=True`, because we
+    generally want the performance, exactness, and consistency of case-sensitive
+    values, but the default behavior is case-insensitive (except on PostgreSQL).
     """
     description = "A BlockTypeKey object, saved to the DB in the form of a string."
     KEY_CLASS = BlockTypeKey
