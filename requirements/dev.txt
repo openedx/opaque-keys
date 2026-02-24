@@ -38,7 +38,7 @@ certifi==2026.1.4
     # via
     #   -r requirements/doc.txt
     #   requests
-chardet==5.2.0
+chardet==6.0.0.post1
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -97,12 +97,12 @@ execnet==2.1.2
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.24.1
+filelock==3.24.3
     # via
     #   -r requirements/ci.txt
     #   tox
     #   virtualenv
-hypothesis==6.151.6
+hypothesis==6.151.9
     # via -r requirements/doc.txt
 idna==3.11
     # via
@@ -116,7 +116,7 @@ iniconfig==2.3.0
     # via
     #   -r requirements/doc.txt
     #   pytest
-isort==7.0.0
+isort==8.0.0
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -125,7 +125,7 @@ jinja2==3.1.6
     #   -r requirements/doc.txt
     #   code-annotations
     #   sphinx
-librt==0.8.0
+librt==0.8.1
     # via
     #   -r requirements/doc.txt
     #   mypy
@@ -167,7 +167,7 @@ pathspec==1.0.4
     #   mypy
 pip-tools==7.5.3
     # via -r requirements/pip-tools.txt
-platformdirs==4.9.1
+platformdirs==4.9.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -195,7 +195,7 @@ pygments==2.19.2
     #   pytest
     #   readme-renderer
     #   sphinx
-pylint==4.0.4
+pylint==4.0.5
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -300,7 +300,7 @@ sphinxcontrib-serializinghtml==2.0.0
     # via
     #   -r requirements/doc.txt
     #   sphinx
-stevedore==5.6.0
+stevedore==5.7.0
     # via
     #   -r requirements/doc.txt
     #   code-annotations
@@ -312,7 +312,7 @@ tomlkit==0.14.0
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.36.0
+tox==4.44.0
     # via -r requirements/ci.txt
 typing-extensions==4.15.0
     # via
@@ -324,7 +324,7 @@ urllib3==2.6.3
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.36.1
+virtualenv==20.38.0
     # via
     #   -r requirements/ci.txt
     #   tox
