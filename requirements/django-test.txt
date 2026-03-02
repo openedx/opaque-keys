@@ -49,7 +49,7 @@ iniconfig==2.3.0
     # via
     #   -r requirements/test.txt
     #   pytest
-isort==8.0.0
+isort==8.0.1
     # via
     #   -r requirements/test.txt
     #   pylint
