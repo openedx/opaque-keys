@@ -34,14 +34,10 @@ cachetools==7.0.1
     # via
     #   -r requirements/ci.txt
     #   tox
-certifi==2026.1.4
+certifi==2026.2.25
     # via
     #   -r requirements/doc.txt
     #   requests
-chardet==6.0.0.post1
-    # via
-    #   -r requirements/ci.txt
-    #   tox
 charset-normalizer==3.4.4
     # via
     #   -r requirements/doc.txt
@@ -97,9 +93,10 @@ execnet==2.1.2
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.24.3
+filelock==3.25.0
     # via
     #   -r requirements/ci.txt
+    #   python-discovery
     #   tox
     #   virtualenv
 hypothesis==6.151.9
@@ -116,7 +113,7 @@ iniconfig==2.3.0
     # via
     #   -r requirements/doc.txt
     #   pytest
-isort==8.0.0
+isort==8.0.1
     # via
     #   -r requirements/doc.txt
     #   pylint
@@ -172,6 +169,7 @@ platformdirs==4.9.2
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
     #   pylint
+    #   python-discovery
     #   tox
     #   virtualenv
 pluggy==1.6.0
@@ -235,6 +233,10 @@ pytest-cov==7.0.0
     # via -r requirements/doc.txt
 pytest-xdist==3.8.0
     # via -r requirements/doc.txt
+python-discovery==1.1.0
+    # via
+    #   -r requirements/ci.txt
+    #   virtualenv
 python-slugify==8.0.4
     # via
     #   -r requirements/doc.txt
@@ -312,7 +314,7 @@ tomlkit==0.14.0
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.44.0
+tox==4.47.0
     # via -r requirements/ci.txt
 typing-extensions==4.15.0
     # via
@@ -324,7 +326,7 @@ urllib3==2.6.3
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==20.38.0
+virtualenv==21.1.0
     # via
     #   -r requirements/ci.txt
     #   tox
