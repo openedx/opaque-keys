@@ -19,7 +19,7 @@ click-log==0.4.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-code-annotations==2.3.0
+code-annotations==2.3.2
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -85,7 +85,7 @@ pathspec==1.0.4
     # via
     #   -r requirements/test.txt
     #   mypy
-platformdirs==4.9.2
+platformdirs==4.9.4
     # via
     #   -r requirements/test.txt
     #   pylint
