@@ -157,34 +157,34 @@ setup(
             'dict = opaque_keys.tests.test_opaque_keys:DictKey',
         ],
         'context_key': [
-            'course-v1 = opaque_keys.edx.locator:CourseLocator',
-            'library-v1 = opaque_keys.edx.locator:LibraryLocator',
-            'lib = opaque_keys.edx.locator:LibraryLocatorV2',
+            'course-v1 = openedx_keys.api:CourseKeyV1',
+            'library-v1 = openedx_keys.api:LibraryKeyV1',
+            'lib = openedx_keys.api:LibraryKeyV2',
             # don't use slashes in any new code
-            'slashes = opaque_keys.edx.locator:CourseLocator',
+            'slashes = openedx_keys.api:CourseKeyV1',
         ],
         'usage_key': [
-            'block-v1 = opaque_keys.edx.locator:BlockUsageLocator',
-            'lib-block-v1 = opaque_keys.edx.locator:LibraryUsageLocator',
-            'lb = opaque_keys.edx.locator:LibraryUsageLocatorV2',
+            'block-v1 = openedx_keys.api:UsageKeyV1',
+            'lib-block-v1 = openedx_keys.api:LibraryKeyV1',
+            'lb = openedx_keys.api:LibraryUsageKeyV2',,
             'location = opaque_keys.edx.locations:DeprecatedLocation',
-            'aside-usage-v1 = opaque_keys.edx.asides:AsideUsageKeyV1',
-            'aside-usage-v2 = opaque_keys.edx.asides:AsideUsageKeyV2',
+            'aside-usage-v1 = openedx_keys.api:AsideUsageKeyV1',
+            'aside-usage-v2 = opaque_keys.api:AsideUsageKeyV2',
         ],
         'asset_key': [
-            'asset-v1 = opaque_keys.edx.locator:AssetLocator',
+            'asset-v1 = openedx_keys.api:AssetKeyV1',
         ],
         'definition_key': [
-            'def-v1 = opaque_keys.edx.locator:DefinitionLocator',
-            'aside-def-v1 = opaque_keys.edx.asides:AsideDefinitionKeyV1',
-            'aside-def-v2 = opaque_keys.edx.asides:AsideDefinitionKeyV2',
+            'def-v1 = openedx_keys.api:DefinitionKeyV1',
+            'aside-def-v1 = openedx_keys.api:AsideDefinitionKeyV1',
+            'aside-def-v2 = openedx_keys.api:AsideDefinitionKeyV2',
             'bundle-olx = opaque_keys.edx.locator:BundleDefinitionLocator',
         ],
         'block_type': [
             'block-type-v1 = opaque_keys.edx.block_types:BlockTypeKeyV1',
         ],
         'collection_key': [
-            'lib-collection = opaque_keys.edx.locator:LibraryCollectionLocator',
+            'lib-collection = openedx_keys.api:CollectionKeyV2',
         ],
         'container_key': [
             'lct = opaque_keys.edx.locator:LibraryContainerLocator',
