@@ -28,10 +28,10 @@ from opaque_keys.edx.django.models import (
     ContainerKeyField,
     CourseKeyField,
     LearningContextKeyField,
-    OpaqueKeyField,
     UsageKeyField,
-    # EXCLUDED:
-    # CreatorMixin (should be private)
+    # EXCLUDED
+    # CreatorMixin (unused)
+    # OpaqueKeyField (unused and silly)
     # OpaqueKeyFieldEmptyLookupIsNull (unused)
     # LocationKeyField (deprecated)
 )
@@ -42,9 +42,9 @@ from opaque_keys.edx.keys import (
     BlockTypeKey,
     ContainerKey,
     LearningContextKey as ContextKey,
-    CourseKey as ContextKeyV1,
+    CourseKey as CourselikeKey,
     UsageKey,
-    UsageKeyV2,
+    UsageKeyV2 as ContentUsageKey,
     # EXCLUDED:
     # CourseObjectMixin (should be private)
     # CollectionKey (implementation detail of CollectionKeyV2)
@@ -52,17 +52,17 @@ from opaque_keys.edx.keys import (
     # i4xEncoder (deprecated)
 )
 from opaque_keys.edx.locator import (
-    AssetLocator as AssetKeyV1,
-    LibraryCollectionLocator as CollectionKeyV2,
-    CourseLocator as CourseKeyV1,
-    DefinitionLocator as DefinitionKeyV1,
-    LibraryContainerLocator as LibraryContainerKeyV2,
-    LibraryLocator as LibraryKeyV1,
-    LibraryLocatorV2 as LibraryKeyV2,
-    LibraryUsageLocator as LibraryUsageKeyV1,
-    LibraryUsageLocatorV2 as LibraryUsageKeyV2,
+    LibraryCollectionLocator as CollectionKey,
+    AssetLocator as CourseRunAssetKey,
+    DefinitionLocator as CourseRunDefinitionKey,
+    CourseLocator as CourseRunKey,
+    BlockUsageLocator as CourseRunUsageKey,
+    LibraryLocator as LegacyLibraryKey,
+    LibraryUsageLocator as LecacyLibraryUsageKey,
+    LibraryLocatorV2 as LibraryKey,
+    LibraryContainerLocator as LibraryContainerKey,
+    LibraryUsageLocatorV2 as LibraryUsageKey,
     LocalId,
-    BlockUsageLocator as UsageKeyV1,
     # EXCLUDED:
     # BlockLocatorBase (implementation detail)
     # BundleDefinitionLocator (deprecated)
