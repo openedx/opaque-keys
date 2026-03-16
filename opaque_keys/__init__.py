@@ -7,10 +7,12 @@ an application, while concealing the particulars of the serialization
 formats, and allowing new serialization formats to be installed transparently.
 """
 from __future__ import annotations
+
+import typing as t
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+from dataclasses import dataclass
 from functools import total_ordering
-from typing import Self
 
 from stevedore.enabled import EnabledExtensionManager
 
@@ -26,20 +28,9 @@ class InvalidKeyError(Exception):
         super().__init__(f'{key_class}: {serialized}')
 
 
-class OpaqueKeyMetaclass(ABCMeta):
-    """
-    Metaclass for :class:`OpaqueKey`. Sets the default value for the values in ``KEY_FIELDS`` to
-    ``None``.
-    """
-    def __new__(mcs, name, bases, attrs):
-        if '__slots__' not in attrs:
-            for field in attrs.get('KEY_FIELDS', []):
-                attrs.setdefault(field, None)
-        return super().__new__(mcs, name, bases, attrs)
-
-
 @total_ordering
-class OpaqueKey(metaclass=OpaqueKeyMetaclass):
+@dataclass(slots=True)
+class OpaqueKey:
     """
     A base-class for implementing pluggable opaque keys. Individual key subclasses identify
     particular types of resources, without specifying the actual form of the key (or
@@ -93,13 +84,12 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
     Serialization of an :class:`OpaqueKey` is performed by using the :func:`unicode` builtin.
     Deserialization is performed by the :meth:`from_string` method.
     """
-    __slots__ = ('_initialized', 'deprecated')
-
-    KEY_FIELDS: tuple[str, ...]  # pylint: disable=declare-non-slot
-    CANONICAL_NAMESPACE: str  # pylint: disable=declare-non-slot
-    KEY_TYPE: str  # pylint: disable=declare-non-slot
-    NAMESPACE_SEPARATOR = ':'
-    CHECKED_INIT: bool = True
+    _initialized: bool
+    deprecated: bool
+    CHECKED_INIT: t.ClassVar[bool] = True
+    NAMESPACE_SEPARATOR: t.ClassVar[str] = ':'
+    CANONICAL_NAMESPACE: t.ClassVar[str]
+    KEY_TYPE: t.ClassVar[str]
 
     # ============= ABSTRACT METHODS ==============
     @classmethod
@@ -170,7 +160,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
         return self.NAMESPACE_SEPARATOR.join([self.CANONICAL_NAMESPACE, self._to_string()])
 
     @classmethod
-    def from_string(cls, serialized: str) -> Self:
+    def from_string(cls, serialized: str) -> t.Self:
         """
         Return a :class:`OpaqueKey` object deserialized from
         the `serialized` argument. This object will be an instance
@@ -242,7 +232,7 @@ class OpaqueKey(metaclass=OpaqueKeyMetaclass):
             # a particular unknown namespace (like i4x)
             raise InvalidKeyError(cls, f'{namespace}:*') from error
 
-    LOADED_DRIVERS: dict[type[OpaqueKey], EnabledExtensionManager] = defaultdict()
+    LOADED_DRIVERS: t.ClassVar[dict[type[OpaqueKey], EnabledExtensionManager]] = defaultdict()
 
     @classmethod
     def _drivers(cls: type[OpaqueKey]):
