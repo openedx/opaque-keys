@@ -37,7 +37,7 @@ dnspython==2.8.0
     # via
     #   -r requirements/test.txt
     #   pymongo
-edx-lint==5.6.0
+edx-lint==6.0.0
     # via -r requirements/test.txt
 execnet==2.1.2
     # via

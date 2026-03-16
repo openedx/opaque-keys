@@ -21,7 +21,7 @@ beautifulsoup4==4.14.3
     # via pydata-sphinx-theme
 certifi==2026.2.25
     # via requests
-charset-normalizer==3.4.5
+charset-normalizer==3.4.6
     # via requests
 click==8.3.1
     # via
@@ -56,7 +56,7 @@ docutils==0.22.4
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-edx-lint==5.6.0
+edx-lint==6.0.0
     # via -r requirements/test.txt
 execnet==2.1.2
     # via
@@ -106,7 +106,6 @@ nh3==0.3.3
 packaging==26.0
     # via
     #   -r requirements/test.txt
-    #   pydata-sphinx-theme
     #   pytest
     #   sphinx
 pathspec==1.0.4
@@ -124,7 +123,7 @@ pluggy==1.6.0
     #   pytest-cov
 pycodestyle==2.14.0
     # via -r requirements/test.txt
-pydata-sphinx-theme==0.15.4
+pydata-sphinx-theme==0.16.1
     # via sphinx-book-theme
 pygments==2.19.2
     # via
@@ -196,7 +195,7 @@ sphinx==9.0.4
     #   -r requirements/doc.in
     #   pydata-sphinx-theme
     #   sphinx-book-theme
-sphinx-book-theme==1.1.4
+sphinx-book-theme==1.2.0
     # via -r requirements/doc.in
 sphinxcontrib-applehelp==2.0.0
     # via sphinx
