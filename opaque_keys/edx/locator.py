@@ -1625,30 +1625,30 @@ class LibraryUsageLocatorV2(CheckFieldMixin, UsageKeyV2):
 class LibraryCollectionLocator(CheckFieldMixin, CollectionKey):
     """
     When serialized, these keys look like:
-        lib-collection:org:lib:collection-id
+        lib-collection:{org_code}:{library_code}:{collection_code}
     """
     CANONICAL_NAMESPACE = 'lib-collection'
-    KEY_FIELDS = ('lib_key', 'collection_id')
+    KEY_FIELDS = ('lib_key', 'collection_code')
     lib_key: LibraryLocatorV2
-    collection_id: str
+    collection_code: str
 
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
     # Allow collection IDs to contian unicode characters
-    COLLECTION_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
+    COLLECTION_CODE_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    def __init__(self, lib_key: LibraryLocatorV2, collection_id: str):
+    def __init__(self, lib_key: LibraryLocatorV2, collection_code: str):
         """
         Construct a CollectionLocator
         """
         if not isinstance(lib_key, LibraryLocatorV2):
             raise TypeError("lib_key must be a LibraryLocatorV2")
 
-        self._check_key_string_field("collection_id", collection_id, regexp=self.COLLECTION_ID_REGEXP)
+        self._check_key_string_field("collection_code", collection_code, regexp=self.COLLECTION_CODE_REGEXP)
         super().__init__(
             lib_key=lib_key,
-            collection_id=collection_id,
+            collection_code=collection_code,
         )
 
     @property
@@ -1657,6 +1657,13 @@ class LibraryCollectionLocator(CheckFieldMixin, CollectionKey):
         The organization that this Collection belongs to.
         """
         return self.lib_key.org
+
+    @property
+    def collection_id(self) -> str:
+        """
+        Backcompat alias for collection_code
+        """
+        return self.collection_code
 
     def _to_string(self) -> str:
         """
@@ -1670,9 +1677,9 @@ class LibraryCollectionLocator(CheckFieldMixin, CollectionKey):
         Instantiate this key from a serialized string
         """
         try:
-            (org, lib_slug, collection_id) = serialized.split(':')
-            lib_key = LibraryLocatorV2(org, lib_slug)
-            return cls(lib_key, collection_id)
+            (org, library_code, collection_code) = serialized.split(':')
+            lib_key = LibraryLocatorV2(org, library_code)
+            return cls(lib_key, collection_code)
         except (ValueError, TypeError) as error:
             raise InvalidKeyError(cls, serialized) from error
 

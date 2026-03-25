@@ -1,3 +1,9 @@
+# 4.0.0
+
+* Breaking: ``LibraryCollectionLocator.collection_id`` is renamed to ``LibraryCollectionLocator.collection_code``.
+  There is a readonly ``collection_id`` property for backwards compatibility, but calls to the constructor
+  which use the ``collection_id=`` kwarg must be updated to ``collection_code=``.
+
 # 3.1.0
 
 * The Django OpaqueKeyField subclasses like CourseKeyField now specify a default

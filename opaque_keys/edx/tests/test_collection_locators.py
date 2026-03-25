@@ -31,11 +31,11 @@ class TestLibraryCollectionLocator(LocatorBaseTest):
         lib = 'LibraryX'
         code = 'test-problem-bank'
         lib_key = LibraryLocatorV2(org=org, slug=lib)
-        coll_key = LibraryCollectionLocator(lib_key=lib_key, collection_id=code)
+        coll_key = LibraryCollectionLocator(lib_key=lib_key, collection_code=code)
         lib_key = coll_key.lib_key
         assert str(coll_key) == "lib-collection:TestX:LibraryX:test-problem-bank"
         assert coll_key.org == org
-        assert coll_key.collection_id == code
+        assert coll_key.collection_code == code
         assert lib_key.org == org
         assert lib_key.slug == lib
         assert isinstance(coll_key, CollectionKey)
@@ -44,9 +44,9 @@ class TestLibraryCollectionLocator(LocatorBaseTest):
         lib_key = LibraryLocatorV2(org="TestX", slug="lib1")
 
         with self.assertRaises(ValueError):
-            LibraryCollectionLocator(lib_key=lib_key, collection_id='usage-!@#{$%^&*}')
+            LibraryCollectionLocator(lib_key=lib_key, collection_code='usage-!@#{$%^&*}')
         with self.assertRaises(TypeError):
-            LibraryCollectionLocator(lib_key=None, collection_id='usage')
+            LibraryCollectionLocator(lib_key=None, collection_code='usage')
 
     def test_coll_key_from_string(self):
         org = 'TestX'
@@ -57,7 +57,7 @@ class TestLibraryCollectionLocator(LocatorBaseTest):
         assert coll_key == CollectionKey.from_string(str_key)
         assert str(coll_key) == str_key
         assert coll_key.org == org
-        assert coll_key.collection_id == code
+        assert coll_key.collection_code == code
         lib_key = coll_key.lib_key
         assert isinstance(lib_key, LibraryLocatorV2)
         assert lib_key.org == org
