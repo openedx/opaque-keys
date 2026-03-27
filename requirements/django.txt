@@ -4,3 +4,4 @@
 #
 #    make upgrade
 #
+django==5.2
