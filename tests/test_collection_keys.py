@@ -3,7 +3,7 @@ Tests of LibraryCollectionLocator
 """
 import ddt
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.tests import LocatorBaseTest
+from test_utils import LocatorBaseTest
 from opaque_keys.edx.keys import CollectionKey
 from opaque_keys.edx.locator import LibraryCollectionLocator, LibraryLocatorV2
 

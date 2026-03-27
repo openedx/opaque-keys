@@ -16,7 +16,7 @@ from opaque_keys.edx.locator import (
     LibraryUsageLocator,
     LibraryUsageLocatorV2,
 )
-from opaque_keys.edx.tests import LocatorBaseTest
+from test_utils import LocatorBaseTest
 
 BLOCK_PREFIX = BlockUsageLocator.BLOCK_PREFIX
 BLOCK_TYPE_PREFIX = BlockUsageLocator.BLOCK_TYPE_PREFIX

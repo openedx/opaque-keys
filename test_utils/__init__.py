@@ -1,5 +1,8 @@
 """
-Utilities for other Location tests to use
+Shared test helpers for opaque-keys tests.
+
+This package is not collected by pytest (no test_*.py files here).
+Import LocatorBaseTest and TestDeprecated for use in test files.
 """
 import warnings
 from contextlib import contextmanager

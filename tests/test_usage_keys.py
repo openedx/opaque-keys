@@ -10,7 +10,7 @@ from bson.objectid import ObjectId
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import UsageKey
 from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator, LocalId
-from opaque_keys.edx.tests import LocatorBaseTest
+from test_utils import LocatorBaseTest
 
 # Pairs for testing the clean* functions.
 # The first item in the tuple is the input string.

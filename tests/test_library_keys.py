@@ -10,7 +10,7 @@ from bson.objectid import ObjectId
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey, LearningContextKey
 from opaque_keys.edx.locator import LibraryUsageLocator, LibraryLocator, LibraryLocatorV2, CourseLocator, AssetLocator
-from opaque_keys.edx.tests import LocatorBaseTest, TestDeprecated
+from test_utils import LocatorBaseTest, TestDeprecated
 
 
 @ddt.ddt

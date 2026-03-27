@@ -3,7 +3,7 @@ Tests of LibraryContainerLocator
 """
 import ddt
 from opaque_keys import InvalidKeyError
-from opaque_keys.edx.tests import LocatorBaseTest
+from test_utils import LocatorBaseTest
 from opaque_keys.edx.keys import ContainerKey
 from opaque_keys.edx.locator import LibraryContainerLocator, LibraryLocatorV2
 

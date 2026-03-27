@@ -7,7 +7,7 @@ from opaque_keys import InvalidKeyError
 
 from opaque_keys.edx.locator import AssetLocator, BlockUsageLocator, CourseLocator
 from opaque_keys.edx.locations import AssetLocation, Location, SlashSeparatedCourseKey
-from opaque_keys.edx.tests import TestDeprecated
+from test_utils import TestDeprecated
 from opaque_keys.edx.keys import CourseKey, UsageKey
 
 # Allow protected method access throughout this test file

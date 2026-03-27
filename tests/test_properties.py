@@ -9,7 +9,7 @@ from hypothesis import strategies, given, assume, example, HealthCheck, settings
 from hypothesis.strategies._internal.core import cacheable
 from opaque_keys.edx.keys import CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey
 from opaque_keys import InvalidKeyError
-from opaque_keys.tests.strategies import keys_of_type
+from test_utils.strategies import keys_of_type
 
 KEY_TYPES = (CourseKey, UsageKey, DefinitionKey, BlockTypeKey, AssetKey)
 KEY_CLASSES = {
