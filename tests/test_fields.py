@@ -1,20 +1,21 @@
 """
-Tests the functionality of django.models.
+Tests for opaque_keys.edx.django.models (OpaqueKeyField and subclasses).
+
+Requires Django and pytest-django.  Skipped automatically when Django is not installed.
 """
-
-try:
-    from django.test import TestCase
-    from django.core.exceptions import ValidationError
-except ImportError:  # pragma: no cover
-    TestCase = object
-
-from unittest import mock
 import pytest
 
-from opaque_keys.edx.django.models import OpaqueKeyField, UsageKeyField
-from opaque_keys.edx.keys import CollectionKey, ContainerKey, CourseKey, UsageKey
+# Skip the entire module if pytest-django is not available (i.e., the non-Django tox env).
+pytest.importorskip('pytest_django')
 
-from .models import ComplexModel, Container, ExampleModel
+from unittest import mock  # noqa: E402
+
+from django.core.exceptions import ValidationError  # noqa: E402
+from django.test import TestCase  # noqa: E402
+
+from opaque_keys.edx.django.models import OpaqueKeyField, UsageKeyField  # noqa: E402
+from opaque_keys.edx.keys import CollectionKey, ContainerKey, CourseKey, UsageKey  # noqa: E402
+from opaque_keys.edx.django.tests.models import ComplexModel, Container, ExampleModel  # noqa: E402
 
 
 #  pylint: disable=unused-argument
