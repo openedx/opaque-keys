@@ -101,6 +101,11 @@ class CourseRunDefinitionKey(_Locator, DefinitionKey):
         """The XBlock type of this definition."""
         return self.__dict__.get('type_code', None)
 
+    @type_code.setter
+    def type_code(self, value) -> None:
+        """Allow OpaqueKey._unchecked_init to set this field via setattr."""
+        self.__dict__['type_code'] = value
+
     @property
     def block_type(self) -> str:
         """Deprecated. Use type_code."""
@@ -209,6 +214,15 @@ class AsideDefinitionKeyV2(AsideDefinitionKey):  # pylint: disable=abstract-meth
 
     def replace(self, **kwargs):
         """Replace KEY_FIELDS; also delegates inner definition_key field replacements."""
+        # Translate deprecated field names
+        for old, new in [('aside_type', 'aside_type_code'), ('block_type', 'type_code')]:
+            if old in kwargs and new not in kwargs:
+                warnings.warn(
+                    f"{old!r} is deprecated; use {new!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                kwargs[new] = kwargs.pop(old)
         if 'definition_key' in kwargs:
             for attr in self.DEFINITION_KEY_FIELDS:
                 kwargs.pop(attr, None)

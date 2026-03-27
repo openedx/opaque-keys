@@ -244,7 +244,7 @@ class TestCourseKeys(LocatorBaseTest, TestDeprecated):
         run = '2014_T2'
         offering = f'{course}/{run}'
         test_branch = 'published'
-        with self.assertDeprecationWarning(count=2):
+        with self.assertDeprecationWarning(count=5):
             testobj = CourseLocator(org=org, offering=offering, branch=test_branch)
             with self.assertRaises(InvalidKeyError):
                 CourseLocator(org=org, offering='', branch=test_branch)

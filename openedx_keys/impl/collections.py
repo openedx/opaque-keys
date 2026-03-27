@@ -42,8 +42,18 @@ class CollectionKey(CheckFieldMixin, OpaqueKey):  # pylint: disable=abstract-met
 
     COLLECTION_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    def __init__(self, lib_key, collection_code):
+    def __init__(self, lib_key, collection_code=None, **kwargs):
         """Construct a CollectionKey."""
+        # Translate deprecated kwarg aliases at the START, before validation.
+        if 'collection_id' in kwargs:
+            warnings.warn(
+                "Keyword argument 'collection_id' is deprecated; use 'collection_code' instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            if collection_code is not None:
+                raise TypeError("Cannot supply both 'collection_id' (deprecated) and 'collection_code'")
+            collection_code = kwargs.pop('collection_id')
         if not isinstance(lib_key, LibraryKey):
             raise TypeError("lib_key must be a LibraryKey")
         self._check_key_string_field(

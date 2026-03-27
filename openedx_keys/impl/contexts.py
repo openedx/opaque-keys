@@ -224,9 +224,28 @@ class CourseRunKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
             branch: e.g. 'draft', 'published', 'staged', 'beta'
             version_guid: optional unique id for the version
         """
-        # Handle old kwarg names via BackcompatInitMixin before we get here,
-        # but also handle any remaining old-name kwargs that arrived via **kwargs
-        # (they would have been translated already by the mixin).
+        # Translate deprecated kwarg aliases at the START, before validation.
+        # BackcompatInitMixin runs via super() after validation, so we must
+        # handle these here to ensure validation sees the correct values.
+        for old, new_name in [('org', 'org_code'), ('course', 'course_code'), ('run', 'run_code')]:
+            if old in kwargs:
+                warnings.warn(
+                    f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                if new_name == 'org_code' and org_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'course_code' and course_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'run_code' and run_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'org_code':
+                    org_code = kwargs.pop(old)
+                elif new_name == 'course_code':
+                    course_code = kwargs.pop(old)
+                else:
+                    run_code = kwargs.pop(old)
 
         offering_arg = kwargs.pop('offering', None)
         if offering_arg:
@@ -422,6 +441,18 @@ class CourseRunKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
             run_code=self.run_code
         )
 
+    def replace(self, **kwargs) -> Self:
+        """Replace KEY_FIELDS; also accepts deprecated field name aliases."""
+        for old, new_name in [('org', 'org_code'), ('course', 'course_code'), ('run', 'run_code')]:
+            if old in kwargs and new_name not in kwargs:
+                warnings.warn(
+                    f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                kwargs[new_name] = kwargs.pop(old)
+        return super().replace(**kwargs)
+
     def version_agnostic(self) -> Self:
         """Return a copy without version info."""
         return self.replace(version_guid=None)
@@ -539,6 +570,23 @@ class LegacyLibraryKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
     ):
         if 'offering' in kwargs:
             raise ValueError("'offering' is not a valid field for a LegacyLibraryKey.")
+
+        # Translate deprecated kwarg aliases at the START, before validation.
+        for old, new_name in [('org', 'org_code'), ('library', 'library_code')]:
+            if old in kwargs:
+                warnings.warn(
+                    f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                if new_name == 'org_code' and org_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'library_code' and library_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'org_code':
+                    org_code = kwargs.pop(old)
+                else:
+                    library_code = kwargs.pop(old)
 
         # 'course' is a deprecated alias for 'library_code' (pre-rename)
         if 'course' in kwargs:
@@ -702,6 +750,18 @@ class LegacyLibraryKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
             type_code = kwargs.pop('asset_type')
         return CourseRunAssetKey(self, type_code, path, deprecated=False)
 
+    def replace(self, **kwargs) -> Self:
+        """Replace KEY_FIELDS; also accepts deprecated field name aliases."""
+        for old, new_name in [('org', 'org_code'), ('library', 'library_code')]:
+            if old in kwargs and new_name not in kwargs:
+                warnings.warn(
+                    f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                kwargs[new_name] = kwargs.pop(old)
+        return super().replace(**kwargs)
+
     def version_agnostic(self):
         """Return a copy without version info."""
         return self.replace(version_guid=None)
@@ -800,12 +860,28 @@ class LibraryKey(BackcompatInitMixin, CheckFieldMixin, ContextKey):
     # Allow library slugs to contain unicode characters
     SLUG_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    def __init__(self, org_code, library_code):
+    def __init__(self, org_code=None, library_code=None, **kwargs):
+        # Translate deprecated kwarg aliases at the START, before validation.
+        for old, new_name in [('org', 'org_code'), ('slug', 'library_code')]:
+            if old in kwargs:
+                warnings.warn(
+                    f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                if new_name == 'org_code' and org_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'library_code' and library_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'org_code':
+                    org_code = kwargs.pop(old)
+                else:
+                    library_code = kwargs.pop(old)
         self._check_key_string_field("org_code", org_code)
         self._check_key_string_field(
             "library_code", library_code, regexp=self.SLUG_REGEXP
         )
-        super().__init__(org_code=org_code, library_code=library_code)
+        super().__init__(org_code=org_code, library_code=library_code, **kwargs)
 
     @property
     def org(self):
@@ -826,6 +902,18 @@ class LibraryKey(BackcompatInitMixin, CheckFieldMixin, ContextKey):
             stacklevel=2,
         )
         return self.library_code
+
+    def replace(self, **kwargs) -> Self:
+        """Replace KEY_FIELDS; also accepts deprecated field name aliases."""
+        for old, new_name in [('org', 'org_code'), ('slug', 'library_code')]:
+            if old in kwargs and new_name not in kwargs:
+                warnings.warn(
+                    f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                kwargs[new_name] = kwargs.pop(old)
+        return super().replace(**kwargs)
 
     def _to_string(self) -> str:
         return ":".join((self.org_code, self.library_code))

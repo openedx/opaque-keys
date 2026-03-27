@@ -175,8 +175,31 @@ class CourseRunUsageKey(BackcompatInitMixin, CourselikeUsageKey):
     DEPRECATED_INVALID_CHARS_NAME = re.compile(r"[^\w.:%-]", re.UNICODE)
     DEPRECATED_INVALID_HTML_CHARS = re.compile(r"[^\w-]", re.UNICODE)
 
-    def __init__(self, course_key, type_code, block_code, **kwargs):
+    def __init__(self, course_key, type_code=None, block_code=None, **kwargs):
         """Construct a CourseRunUsageKey."""
+        # Translate deprecated kwarg aliases at the START, before validation.
+        for old, new_name in [('block_type', 'type_code'), ('block_id', 'block_code'),
+                               ('category', 'type_code'), ('name', 'block_code')]:
+            if old in kwargs:
+                warnings.warn(
+                    f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                if new_name == 'type_code' and type_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'block_code' and block_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'type_code':
+                    type_code = kwargs.pop(old)
+                else:
+                    block_code = kwargs.pop(old)
+        # Validate course_key type before accessing .deprecated
+        from openedx_keys.impl.contexts import CourselikeKey  # pylint: disable=import-outside-toplevel
+        if not isinstance(course_key, CourselikeKey):
+            raise TypeError(
+                f"course_key must be a CourselikeKey, got {type(course_key)!r}"
+            )
         # Always use the deprecated status of the course key
         deprecated = kwargs['deprecated'] = course_key.deprecated
         block_code = self._parse_block_ref(block_code, deprecated)
@@ -195,7 +218,11 @@ class CourseRunUsageKey(BackcompatInitMixin, CourselikeUsageKey):
         for key in CourseRunKey.KEY_FIELDS:
             if key in kwargs:
                 course_key_kwargs[key] = kwargs.pop(key)
-        # Support old CourseLocator field names in replace()
+        # Translate old CourseLocator field names (deprecated) → new KEY_FIELDS
+        for old, new_name in [('org', 'org_code'), ('course', 'course_code'), ('run', 'run_code')]:
+            if old in kwargs and new_name not in course_key_kwargs:
+                course_key_kwargs[new_name] = kwargs.pop(old)
+        # Support other old CourseLocator field names in replace()
         if 'revision' in kwargs and 'branch' not in course_key_kwargs:
             course_key_kwargs['branch'] = kwargs.pop('revision')
         if 'version' in kwargs and 'version_guid' not in course_key_kwargs:
@@ -524,8 +551,25 @@ class LegacyLibraryUsageKey(CourseRunUsageKey):
     library_key: LegacyLibraryKey
     type_code: str
 
-    def __init__(self, library_key, type_code, block_code, **kwargs):
+    def __init__(self, library_key, type_code=None, block_code=None, **kwargs):
         """Construct a LegacyLibraryUsageKey."""
+        # Translate deprecated kwarg aliases at the START, before validation.
+        for old, new_name in [('block_type', 'type_code'), ('block_id', 'block_code'),
+                               ('category', 'type_code'), ('name', 'block_code')]:
+            if old in kwargs:
+                warnings.warn(
+                    f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                if new_name == 'type_code' and type_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'block_code' and block_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'type_code':
+                    type_code = kwargs.pop(old)
+                else:
+                    block_code = kwargs.pop(old)
         if library_key.deprecated or kwargs.get('deprecated', False):
             raise InvalidKeyError(
                 self.__class__, "LegacyLibraryUsageKeys are never deprecated."
@@ -562,6 +606,10 @@ class LegacyLibraryUsageKey(CourseRunUsageKey):
         for key in LegacyLibraryKey.KEY_FIELDS:
             if key in kwargs:
                 lib_key_kwargs[key] = kwargs.pop(key)
+        # Translate old LibraryLocator field names into lib_key_kwargs
+        for old, new_name in [('org', 'org_code'), ('library', 'library_code')]:
+            if old in kwargs and new_name not in lib_key_kwargs:
+                lib_key_kwargs[new_name] = kwargs.pop(old)
         if 'version' in kwargs and 'version_guid' not in lib_key_kwargs:
             lib_key_kwargs['version_guid'] = kwargs.pop('version')
         if lib_key_kwargs:
@@ -667,8 +715,24 @@ class LibraryUsageKey(BackcompatInitMixin, CheckFieldMixin, ContentUsageKey):
 
     USAGE_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    def __init__(self, lib_key, type_code, usage_code):
+    def __init__(self, lib_key, type_code=None, usage_code=None, **kwargs):
         """Construct a LibraryUsageKey."""
+        # Translate deprecated kwarg aliases at the START, before validation.
+        for old, new_name in [('block_type', 'type_code'), ('usage_id', 'usage_code')]:
+            if old in kwargs:
+                warnings.warn(
+                    f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                if new_name == 'type_code' and type_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'usage_code' and usage_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'type_code':
+                    type_code = kwargs.pop(old)
+                else:
+                    usage_code = kwargs.pop(old)
         if not isinstance(lib_key, LibraryKey):
             raise TypeError("lib_key must be a LibraryKey")
         self._check_key_string_field("type_code", type_code)
@@ -913,6 +977,17 @@ class AsideUsageKeyV2(AsideUsageKey):  # pylint: disable=abstract-method
 
     def replace(self, **kwargs):
         """Replace KEY_FIELDS; also delegates inner usage_key field replacements."""
+        # Translate deprecated field names
+        for old, new in [('aside_type', 'aside_type_code'),
+                         ('block_id', 'block_code'),
+                         ('block_type', 'type_code')]:
+            if old in kwargs and new not in kwargs:
+                warnings.warn(
+                    f"{old!r} is deprecated; use {new!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                kwargs[new] = kwargs.pop(old)
         if 'usage_key' in kwargs:
             for attr in self.USAGE_KEY_ATTRS:
                 kwargs.pop(attr, None)

@@ -64,8 +64,25 @@ class LibraryContainerKey(BackcompatInitMixin, CheckFieldMixin, ContainerKey):
 
     CONTAINER_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    def __init__(self, lib_key, container_type_code, container_code):
+    def __init__(self, lib_key, container_type_code=None, container_code=None, **kwargs):
         """Construct a LibraryContainerKey."""
+        # Translate deprecated kwarg aliases at the START, before validation.
+        for old, new_name in [('container_type', 'container_type_code'),
+                               ('container_id', 'container_code')]:
+            if old in kwargs:
+                warnings.warn(
+                    f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+                if new_name == 'container_type_code' and container_type_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'container_code' and container_code is not None:
+                    raise TypeError(f"Cannot supply both {old!r} (deprecated) and {new_name!r}")
+                if new_name == 'container_type_code':
+                    container_type_code = kwargs.pop(old)
+                else:
+                    container_code = kwargs.pop(old)
         if not isinstance(lib_key, LibraryKey):
             raise TypeError("lib_key must be a LibraryKey")
         self._check_key_string_field("container_type_code", container_type_code)

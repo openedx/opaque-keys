@@ -31,6 +31,7 @@ from openedx_keys.impl.contexts import (
     CourseRunKey,
     _Locator,
 )
+from openedx_keys.impl.definitions import DefinitionKey
 from openedx_keys.impl.usages import CourseRunUsageKey
 
 try:
@@ -192,15 +193,13 @@ class VersionTree:
 # BundleDefinitionLocator
 # ---------------------------------------------------------------------------
 
-class BundleDefinitionLocator(CheckFieldMixin, _Locator):
+class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey, _Locator):  # pylint: disable=abstract-method
     """
     DEPRECATED: Definition key for XBlock content stored in Blockstore bundles.
 
     This key type was deprecated along with Blockstore:
     https://github.com/openedx/public-engineering/issues/238
     """
-    # We subclass _Locator (not DefinitionKey) to avoid KEY_TYPE collision.
-    # The locator infrastructure provides as_object_id and _check_key_string_field.
     KEY_TYPE = 'definition_key'
     CANONICAL_NAMESPACE = 'bundle-olx'
     KEY_FIELDS = ('bundle_uuid', 'block_type', 'olx_path', '_version_or_draft')
@@ -265,6 +264,11 @@ class BundleDefinitionLocator(CheckFieldMixin, _Locator):
             olx_path=olx_path,
             _version_or_draft=_version_or_draft,
         )
+
+    @property
+    def type_code(self) -> str:
+        """Return block_type as type_code (DefinitionKey abstract property implementation)."""
+        return self.block_type
 
     @property
     def bundle_version(self) -> int | None:

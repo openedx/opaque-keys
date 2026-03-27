@@ -58,7 +58,7 @@ class TestLibraryLocators(LocatorBaseTest, TestDeprecated):
         org = 'TestX'
         code = 'test-problem-bank'
         lib_key = LibraryLocator(org=org, library=code)
-        with self.assertDeprecationWarning():
+        with self.assertDeprecationWarning(count=2):
             lib_key2 = LibraryLocator(org=org, course=code)
         self.assertEqual(lib_key, lib_key2)
         self.assertEqual(lib_key2.library, code)

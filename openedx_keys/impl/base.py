@@ -115,7 +115,7 @@ class BackcompatInitMixin:
     def __init__(self, **kwargs):
         for old, new in self.RENAMED_KWARGS.items():
             if old in kwargs:
-                if new in kwargs:
+                if new in kwargs and kwargs[new] is not None:
                     raise TypeError(
                         f"Cannot supply both {old!r} (deprecated) and {new!r}"
                     )

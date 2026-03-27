@@ -365,7 +365,7 @@ class TestBlockUsageLocators(LocatorBaseTest):
         )
         testobj = UsageKey.from_string(testurn)
         expected = (
-            f"BlockUsageLocator(CourseLocator({'mit.eecs'!r}, {'6002x'!r}, "
+            f"CourseRunUsageKey(CourseRunKey({'mit.eecs'!r}, {'6002x'!r}, "
             f"{'2014_T2'!r}, {'published'!r}, None), {'problem'!r}, {'HW3'!r})"
         )
         self.assertEqual(expected, str(repr(testobj)))

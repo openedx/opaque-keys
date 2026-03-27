@@ -53,4 +53,4 @@ def __getattr__(name):
             stacklevel=2,
         )
         return new_cls
-    raise ImportError(f"cannot import name {name!r} from {__name__!r}")
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

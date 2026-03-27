@@ -198,7 +198,7 @@ def _fields_for_aside_usage_key_v2(cls, field):  # pylint: disable=missing-funct
 def _fields_for_library_locator(cls, field):  # pylint: disable=missing-function-docstring
     if field == 'version_guid':
         return version_guids()
-    if field in ('org', 'library', 'branch'):
+    if field in ('org', 'library', 'branch', 'org_code', 'library_code'):
         return allowed_locator_ids()
     if field == 'deprecated':
         return strategies.just(False)
@@ -208,9 +208,9 @@ def _fields_for_library_locator(cls, field):  # pylint: disable=missing-function
 @fields_for_key.register(LibraryLocatorV2)
 @cacheable
 def _fields_for_library_locator_v2(cls, field):  # pylint: disable=missing-function-docstring
-    if field == 'org':
+    if field in ('org', 'org_code'):
         return ascii_identifier()
-    if field == 'slug':
+    if field in ('slug', 'library_code'):
         return strategies.text(alphabet=unicode_letters_and_digits(), min_size=1)
     return fields_for_key(super(LibraryLocatorV2, cls).__class__, field)
 
@@ -220,7 +220,7 @@ def _fields_for_library_locator_v2(cls, field):  # pylint: disable=missing-funct
 def _fields_for_definition_locator(cls, field):  # pylint: disable=missing-function-docstring
     if field == 'definition_id':
         return version_guids()
-    if field == 'block_type':
+    if field in ('block_type', 'type_code'):
         return allowed_locator_ids()
     return fields_for_key(super(DefinitionLocator, cls).__class__, field)
 
@@ -244,9 +244,9 @@ def _fields_for_bundle_def_locator(cls, field):  # pylint: disable=missing-funct
 def _fields_for_library_usage_locator_v2(cls, field):  # pylint: disable=missing-function-docstring
     if field == 'lib_key':
         return instances_of_key(LibraryLocatorV2)
-    if field == 'block_type':
+    if field in ('block_type', 'type_code'):
         return ascii_identifier()
-    if field == 'usage_id':
+    if field in ('usage_id', 'usage_code'):
         return strategies.text(alphabet=unicode_letters_and_digits(), min_size=1)
     return fields_for_key(super(LibraryUsageLocatorV2, cls).__class__, field)
 
