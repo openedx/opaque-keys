@@ -163,8 +163,8 @@ class VersionTree:
                 f"locator {locator} must be a concrete subclass of Locator"
             )
         version = (
-            (hasattr(locator, 'version_guid') and locator.version_guid)
-            or (hasattr(locator, 'definition_id') and locator.definition_id)
+            (hasattr(locator, 'version_guid') and locator.version_guid) or
+            (hasattr(locator, 'definition_id') and locator.definition_id)
         )
         if not version:
             raise ValueError(
@@ -232,9 +232,9 @@ class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey, _Locator):
         )
 
         if (
-            (bundle_version is not None)
-            + (draft_name is not None)
-            + (_version_or_draft is not None)
+            (bundle_version is not None) +
+            (draft_name is not None) +
+            (_version_or_draft is not None)
         ) != 1:
             raise ValueError(
                 "Exactly one of [bundle_version, draft_name, _version_or_draft] "

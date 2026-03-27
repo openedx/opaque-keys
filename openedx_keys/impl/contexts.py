@@ -300,12 +300,12 @@ class CourseRunKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
             )
 
         if (
-            not self.deprecated
-            and self.version_guid is None
-            and (
-                self.org_code is None
-                or self.course_code is None
-                or self.run_code is None
+            not self.deprecated and
+            self.version_guid is None and
+            (
+                self.org_code is None or
+                self.course_code is None or
+                self.run_code is None
             )
         ):
             raise InvalidKeyError(
