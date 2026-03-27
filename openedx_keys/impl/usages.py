@@ -28,7 +28,6 @@ from openedx_keys.impl.contexts import (
     LegacyLibraryKey,
     LibraryKey,
     _BlockLocatorBase,
-    _Locator,
 )
 
 __all__ = [
@@ -48,7 +47,7 @@ __all__ = [
 # Abstract base classes
 # ---------------------------------------------------------------------------
 
-class UsageKey(CourseObjectMixin, OpaqueKey):  # pylint: disable=abstract-method
+class UsageKey(CourseObjectMixin, OpaqueKey):
     """
     An OpaqueKey identifying an XBlock usage. Unchanged name.
     """
@@ -79,7 +78,7 @@ class UsageKey(CourseObjectMixin, OpaqueKey):  # pylint: disable=abstract-method
         return self.course_key
 
 
-class ContentUsageKey(UsageKey):  # pylint: disable=abstract-method
+class ContentUsageKey(UsageKey):
     """
     An OpaqueKey identifying an XBlock used in a specific learning context.
     Renamed from UsageKeyV2.
@@ -179,7 +178,7 @@ class CourseRunUsageKey(BackcompatInitMixin, CourselikeUsageKey):
         """Construct a CourseRunUsageKey."""
         # Translate deprecated kwarg aliases at the START, before validation.
         for old, new_name in [('block_type', 'type_code'), ('block_id', 'block_code'),
-                               ('category', 'type_code'), ('name', 'block_code')]:
+                              ('category', 'type_code'), ('name', 'block_code')]:
             if old in kwargs:
                 warnings.warn(
                     f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
@@ -195,7 +194,6 @@ class CourseRunUsageKey(BackcompatInitMixin, CourselikeUsageKey):
                 else:
                     block_code = kwargs.pop(old)
         # Validate course_key type before accessing .deprecated
-        from openedx_keys.impl.contexts import CourselikeKey  # pylint: disable=import-outside-toplevel
         if not isinstance(course_key, CourselikeKey):
             raise TypeError(
                 f"course_key must be a CourselikeKey, got {type(course_key)!r}"
@@ -271,7 +269,7 @@ class CourseRunUsageKey(BackcompatInitMixin, CourselikeUsageKey):
     def _from_string(cls, serialized: str) -> Self:
         """Deserialize from a string."""
         # Allow access to _from_string protected method
-        course_key = CourseRunKey._from_string(serialized)  # pylint: disable=protected-access
+        course_key = CourseRunKey._from_string(serialized)
         parsed_parts = cls.parse_url(serialized)
         block_code = parsed_parts.get('block_id', None)
         if block_code is None:
@@ -555,7 +553,7 @@ class LegacyLibraryUsageKey(CourseRunUsageKey):
         """Construct a LegacyLibraryUsageKey."""
         # Translate deprecated kwarg aliases at the START, before validation.
         for old, new_name in [('block_type', 'type_code'), ('block_id', 'block_code'),
-                               ('category', 'type_code'), ('name', 'block_code')]:
+                              ('category', 'type_code'), ('name', 'block_code')]:
             if old in kwargs:
                 warnings.warn(
                     f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",
@@ -689,7 +687,7 @@ class LegacyLibraryUsageKey(CourseRunUsageKey):
 # LibraryUsageKey  (nee LibraryUsageLocatorV2)
 # ---------------------------------------------------------------------------
 
-class LibraryUsageKey(BackcompatInitMixin, CheckFieldMixin, ContentUsageKey):
+class LibraryUsageKey(BackcompatInitMixin, CheckFieldMixin, ContentUsageKey):  # pylint: disable=abstract-method
     """
     Identifies an XBlock in a Learning-Core-based content library.
 
@@ -882,7 +880,7 @@ def _split_keys_v2(joined):
     return _decode_v2(left), _decode_v2(right)
 
 
-class AsideUsageKey(UsageKey):  # pylint: disable=abstract-method
+class AsideUsageKey(UsageKey):
     """
     A usage key for an aside. Abstract; unchanged name.
     """

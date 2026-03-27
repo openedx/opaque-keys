@@ -6,13 +6,13 @@ that existing code importing from here continues to work.  Abstract base
 classes are re-exported directly (not via __getattr__) so that
 isinstance/issubclass checks and stevedore's check_func pass correctly.
 """
-import warnings
+import warnings  # pylint: disable=unused-import
 
 # ---------------------------------------------------------------------------
 # Direct re-exports of abstract bases (renamed ones become the same object as
 # the new name, so issubclass checks work without changes in downstream code).
 # ---------------------------------------------------------------------------
-from openedx_keys.api import (  # noqa: F401
+from openedx_keys.api import (  # noqa: F401  pylint: disable=unused-import
     ContextKey as LearningContextKey,
     CourselikeKey as CourseKey,
     DefinitionKey,
@@ -26,7 +26,7 @@ from openedx_keys.api import (  # noqa: F401
     AsideUsageKey,
     i4xEncoder,
 )
-from openedx_keys.legacy_api import BlockTypeKey  # noqa: F401
+from openedx_keys.legacy_api import BlockTypeKey  # noqa: F401  pylint: disable=unused-import
 
 # ---------------------------------------------------------------------------
 # __getattr__ is NOT needed here: every name that used to live in this module

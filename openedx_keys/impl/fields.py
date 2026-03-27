@@ -15,7 +15,6 @@ Renames from opaque_keys.edx.django.models:
 from __future__ import annotations
 
 import logging
-import warnings
 
 try:
     from django.core.exceptions import ValidationError
@@ -118,7 +117,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         self.case_sensitive = kwargs.pop("case_sensitive", False)
         super().__init__(*args, **kwargs)
 
-    def to_python(self, value):  # pylint: disable=missing-function-docstring
+    def to_python(self, value):
         if value is self.Empty or value is None:
             return None
 
@@ -146,7 +145,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
             return self.KEY_CLASS.from_string(value)
         return value
 
-    def get_prep_value(self, value):  # pylint: disable=missing-function-docstring
+    def get_prep_value(self, value):
         if value is self.Empty or value is None:
             return ''
 
@@ -172,14 +171,14 @@ class OpaqueKeyField(CreatorMixin, CharField):
     def validate(self, value, model_instance):
         """Validate Empty values, otherwise defer to the parent."""
         if self.blank or value is not self.Empty:
-            return super().validate(value, model_instance)
+            return super().validate(value, model_instance)  # pylint: disable=no-member
         raise ValidationError(self.error_messages['blank'])
 
     def run_validators(self, value):
         """Validate Empty values, otherwise defer to the parent."""
         if value is self.Empty:
             return None
-        return super().run_validators(value)
+        return super().run_validators(value)  # pylint: disable=no-member
 
     def db_parameters(self, connection):
         """
@@ -200,7 +199,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
 
     def deconstruct(self):
         """Serialize this field for migrations."""
-        name, path, args, kwargs = super().deconstruct()
+        name, path, args, kwargs = super().deconstruct()  # pylint: disable=no-member
         if self.case_sensitive:
             kwargs["case_sensitive"] = True
         return name, path, args, kwargs

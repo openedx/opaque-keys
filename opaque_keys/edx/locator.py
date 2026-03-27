@@ -7,7 +7,7 @@ CheckFieldMixin are re-exported directly.  Unknown names raise ImportError.
 """
 import warnings
 
-from openedx_keys.api import (  # noqa: F401
+from openedx_keys.api import (  # noqa: F401  pylint: disable=unused-import
     LocalId,
     CheckFieldMixin,
     CourseRunKey as _CourseRunKey,
@@ -22,7 +22,7 @@ from openedx_keys.api import (  # noqa: F401
     LibraryContainerKey as _LibraryContainerKey,
     CourselikeUsageKey as _CourselikeUsageKey,
 )
-from openedx_keys.legacy_api import (  # noqa: F401
+from openedx_keys.legacy_api import (  # noqa: F401  pylint: disable=unused-import
     VersionTree,
     BundleDefinitionLocator,
 )

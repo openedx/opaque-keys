@@ -6,7 +6,7 @@ LearningContextKeyField is a deprecated alias for ContextKeyField.
 """
 import warnings
 
-from openedx_keys.impl.fields import (  # noqa: F401
+from openedx_keys.impl.fields import (  # noqa: F401  pylint: disable=unused-import
     _Creator,
     CreatorMixin,
     OpaqueKeyField,
@@ -17,7 +17,7 @@ from openedx_keys.impl.fields import (  # noqa: F401
     ContainerKeyField,
     CollectionKeyField,
 )
-from openedx_keys.legacy_api import (  # noqa: F401
+from openedx_keys.legacy_api import (  # noqa: F401  pylint: disable=unused-import
     BlockTypeKeyField,
     LocationKeyField,
 )

@@ -20,7 +20,7 @@ __all__ = [
 ]
 
 
-class CollectionKey(CheckFieldMixin, OpaqueKey):  # pylint: disable=abstract-method
+class CollectionKey(CheckFieldMixin, OpaqueKey):
     """
     An OpaqueKey identifying a content collection inside a library.
 

@@ -5,11 +5,11 @@ Re-exports AsideDefinitionKeyV1/V2 and AsideUsageKeyV1/V2 from openedx_keys.
 All helper functions (_encode_v1, _decode_v1, etc.) are also re-exported for
 any downstream code that imports them directly.
 """
-from openedx_keys.impl.definitions import (  # noqa: F401
+from openedx_keys.impl.definitions import (  # noqa: F401  pylint: disable=unused-import
     AsideDefinitionKeyV1,
     AsideDefinitionKeyV2,
 )
-from openedx_keys.impl.usages import (  # noqa: F401
+from openedx_keys.impl.usages import (  # noqa: F401  pylint: disable=unused-import
     AsideUsageKeyV1,
     AsideUsageKeyV2,
     _decode_v1,

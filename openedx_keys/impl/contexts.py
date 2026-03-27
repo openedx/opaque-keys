@@ -45,7 +45,7 @@ class ContextKey(OpaqueKey):  # pylint: disable=abstract-method
     is_course = False
 
 
-class CourselikeKey(ContextKey):  # pylint: disable=abstract-method
+class CourselikeKey(ContextKey):
     """
     An OpaqueKey identifying a course-like learning context (course or legacy
     library). Renamed from CourseKey.
@@ -95,7 +95,7 @@ class CourselikeKey(ContextKey):  # pylint: disable=abstract-method
 # Locator base classes (ported from locator.py)
 # ---------------------------------------------------------------------------
 
-class _Locator(OpaqueKey):  # pylint: disable=abstract-method
+class _Locator(OpaqueKey):
     """
     Internal base class shared by CourseRunKey and related locator types.
     Provides shared constants and as_object_id helper.
@@ -265,7 +265,7 @@ class CourseRunKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
                 fields.append(run_code)
             if branch is not None:
                 fields.append(branch)
-            if not all(self.DEPRECATED_ALLOWED_ID_RE.match(f) for f in fields):
+            if not all(self.DEPRECATED_ALLOWED_ID_RE.match(f) for f in fields):  # type: ignore[arg-type]
                 raise InvalidKeyError(self.__class__, fields)
 
         else:
@@ -355,7 +355,7 @@ class CourseRunKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
         return self.run_code
 
     @property
-    def version(self) -> str | None:
+    def version(self) -> ObjectId | None:
         """Deprecated. Use version_guid."""
         warnings.warn(
             "version is no longer supported as a property of Locators. "
@@ -388,7 +388,7 @@ class CourseRunKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
 
         Old kwarg names (block_type, block_id) are accepted with warnings.
         """
-        from openedx_keys.impl.usages import CourseRunUsageKey  # pylint: disable=import-outside-toplevel
+        from openedx_keys.impl.usages import CourseRunUsageKey  # pylint: disable=import-outside-toplevel,cyclic-import
         if 'block_type' in kwargs and type_code is None:
             warnings.warn(
                 "block_type kwarg is deprecated; use type_code instead.",
@@ -416,7 +416,7 @@ class CourseRunKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
 
         Old kwarg name (asset_type) is accepted with a warning.
         """
-        from openedx_keys.impl.assets import CourseRunAssetKey  # pylint: disable=import-outside-toplevel
+        from openedx_keys.impl.assets import CourseRunAssetKey  # pylint: disable=import-outside-toplevel,cyclic-import
         if 'asset_type' in kwargs and type_code is None:
             warnings.warn(
                 "asset_type kwarg is deprecated; use type_code instead.",
@@ -436,7 +436,7 @@ class CourseRunKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
             DeprecationWarning,
             stacklevel=2,
         )
-        from openedx_keys.impl.usages import CourseRunUsageKey  # pylint: disable=import-outside-toplevel
+        from openedx_keys.impl.usages import CourseRunUsageKey  # pylint: disable=import-outside-toplevel,cyclic-import
         return CourseRunUsageKey.from_string(location_url).replace(
             run_code=self.run_code
         )
@@ -507,11 +507,11 @@ class CourseRunKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
                 parts.append(f"{self.BRANCH_PREFIX}@{self.branch}")
         if self.version_guid:
             parts.append(f"{self.VERSION_PREFIX}@{self.version_guid}")
-        return "+".join(parts)
+        return "+".join(parts)  # type: ignore[arg-type]
 
     def _to_deprecated_string(self) -> str:
         """Return old-style 'org/course/run'."""
-        return '/'.join([self.org_code, self.course_code, self.run_code])
+        return '/'.join([self.org_code, self.course_code, self.run_code])  # type: ignore[list-item]
 
     @classmethod
     def _from_deprecated_string(cls, serialized: str) -> Self:
@@ -717,7 +717,7 @@ class LegacyLibraryKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
 
     def make_usage_key(self, type_code=None, block_code=None, **kwargs):
         """Return a LegacyLibraryUsageKey."""
-        from openedx_keys.impl.usages import LegacyLibraryUsageKey  # pylint: disable=import-outside-toplevel
+        from openedx_keys.impl.usages import LegacyLibraryUsageKey  # pylint: disable=import-outside-toplevel,cyclic-import
         if 'block_type' in kwargs and type_code is None:
             warnings.warn(
                 "block_type kwarg is deprecated; use type_code instead.",
@@ -740,7 +740,7 @@ class LegacyLibraryKey(BackcompatInitMixin, _BlockLocatorBase, CourselikeKey):
 
     def make_asset_key(self, type_code=None, path=None, **kwargs):
         """Return a CourseRunAssetKey."""
-        from openedx_keys.impl.assets import CourseRunAssetKey  # pylint: disable=import-outside-toplevel
+        from openedx_keys.impl.assets import CourseRunAssetKey  # pylint: disable=import-outside-toplevel,cyclic-import
         if 'asset_type' in kwargs and type_code is None:
             warnings.warn(
                 "asset_type kwarg is deprecated; use type_code instead.",

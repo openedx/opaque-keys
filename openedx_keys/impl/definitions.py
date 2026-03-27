@@ -16,13 +16,8 @@ from abc import abstractmethod
 from typing import Self
 
 from opaque_keys import InvalidKeyError, OpaqueKey
-from openedx_keys.impl.base import BackcompatInitMixin
 from openedx_keys.impl.contexts import _Locator
 from openedx_keys.impl.usages import (
-    _decode_v1,
-    _decode_v2,
-    _encode_v1,
-    _encode_v2,
     _join_keys_v1,
     _join_keys_v2,
     _split_keys_v1,
@@ -38,7 +33,7 @@ __all__ = [
 ]
 
 
-class DefinitionKey(OpaqueKey):  # pylint: disable=abstract-method
+class DefinitionKey(OpaqueKey):
     """
     An OpaqueKey identifying an XBlock definition. Unchanged name.
     """
@@ -83,7 +78,6 @@ class CourseRunDefinitionKey(_Locator, DefinitionKey):
         deprecated: bool = False,  # pylint: disable=unused-argument
         **kwargs,
     ):
-        from bson.objectid import ObjectId  # pylint: disable=import-outside-toplevel
         if isinstance(definition_id, str):
             try:
                 definition_id = self.as_object_id(definition_id)
@@ -96,10 +90,10 @@ class CourseRunDefinitionKey(_Locator, DefinitionKey):
             **kwargs,
         )
 
-    @property
+    @property  # type: ignore[no-redef]
     def type_code(self) -> str:
         """The XBlock type of this definition."""
-        return self.__dict__.get('type_code', None)
+        return self.__dict__.get('type_code', None)  # type: ignore[return-value]
 
     @type_code.setter
     def type_code(self, value) -> None:
@@ -118,7 +112,9 @@ class CourseRunDefinitionKey(_Locator, DefinitionKey):
 
     def _to_string(self) -> str:
         """Return a string representing this definition key."""
-        return f"{self.definition_id!s}+{self.BLOCK_TYPE_PREFIX}@{self.type_code}"
+        return (  # pylint: disable=no-member
+            f"{self.definition_id!s}+{self.BLOCK_TYPE_PREFIX}@{self.type_code}"  # type: ignore[attr-defined]
+        )
 
     URL_RE = re.compile(
         fr"^(?P<definition_id>[a-f0-9]+)\+{_Locator.BLOCK_TYPE_PREFIX}"
@@ -143,14 +139,14 @@ class CourseRunDefinitionKey(_Locator, DefinitionKey):
     @property
     def version(self):
         """Returns the ObjectId referencing this specific location."""
-        return self.definition_id
+        return self.definition_id  # pylint: disable=no-member  # type: ignore[attr-defined]
 
 
 # ---------------------------------------------------------------------------
 # AsideDefinitionKey and implementations
 # ---------------------------------------------------------------------------
 
-class AsideDefinitionKey(DefinitionKey):  # pylint: disable=abstract-method
+class AsideDefinitionKey(DefinitionKey):
     """
     A definition key for an aside. Unchanged name.
     """

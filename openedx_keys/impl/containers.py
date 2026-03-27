@@ -22,7 +22,7 @@ __all__ = [
 ]
 
 
-class ContainerKey(OpaqueKey):  # pylint: disable=abstract-method
+class ContainerKey(OpaqueKey):
     """
     An OpaqueKey identifying a container (unit, section, subsection, etc.).
     Unchanged name.
@@ -68,7 +68,7 @@ class LibraryContainerKey(BackcompatInitMixin, CheckFieldMixin, ContainerKey):
         """Construct a LibraryContainerKey."""
         # Translate deprecated kwarg aliases at the START, before validation.
         for old, new_name in [('container_type', 'container_type_code'),
-                               ('container_id', 'container_code')]:
+                              ('container_id', 'container_code')]:
             if old in kwargs:
                 warnings.warn(
                     f"Keyword argument {old!r} is deprecated; use {new_name!r} instead.",

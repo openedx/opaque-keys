@@ -21,23 +21,15 @@ from abc import abstractmethod
 from typing import Any
 from uuid import UUID
 
-from bson.objectid import ObjectId
-
 from opaque_keys import InvalidKeyError, OpaqueKey
 from openedx_keys.impl.base import CheckFieldMixin
 from openedx_keys.impl.assets import CourseRunAssetKey
 from openedx_keys.impl.contexts import (
-    ContextKey,
     CourseRunKey,
     _Locator,
 )
 from openedx_keys.impl.definitions import DefinitionKey
 from openedx_keys.impl.usages import CourseRunUsageKey
-
-try:
-    from django.db.models import CharField
-except ImportError:  # pragma: no cover
-    CharField = object  # type: ignore[assignment, misc]
 
 from openedx_keys.impl.fields import OpaqueKeyField, UsageKeyField
 
@@ -46,7 +38,7 @@ from openedx_keys.impl.fields import OpaqueKeyField, UsageKeyField
 # BlockTypeKey hierarchy
 # ---------------------------------------------------------------------------
 
-class BlockTypeKey(OpaqueKey):  # pylint: disable=abstract-method
+class BlockTypeKey(OpaqueKey):
     """
     A key class encoding XBlock family block types.
     Not promoted to the clean API.
@@ -193,7 +185,7 @@ class VersionTree:
 # BundleDefinitionLocator
 # ---------------------------------------------------------------------------
 
-class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey, _Locator):  # pylint: disable=abstract-method
+class BundleDefinitionLocator(CheckFieldMixin, DefinitionKey, _Locator):
     """
     DEPRECATED: Definition key for XBlock content stored in Blockstore bundles.
 
@@ -433,13 +425,13 @@ class LocationBase:
     def _check_location_part(cls, val, regexp):
         """Deprecated. See CourseRunKey._check_location_part."""
         cls._deprecation_warning()
-        return CourseRunKey._check_location_part(val, regexp)
+        return CourseRunKey._check_location_part(val, regexp)  # pylint: disable=protected-access
 
     @classmethod
     def _clean(cls, value, invalid):
         """Deprecated. See CourseRunUsageKey._clean."""
         cls._deprecation_warning()
-        return CourseRunUsageKey._clean(value, invalid)
+        return CourseRunUsageKey._clean(value, invalid)  # pylint: disable=protected-access
 
     @classmethod
     def clean(cls, value):
@@ -486,10 +478,10 @@ class LocationBase:
     def _from_deprecated_son(cls, id_dict, run):
         """Deprecated. See CourseRunUsageKey._from_deprecated_son."""
         cls._deprecation_warning()
-        return CourseRunUsageKey._from_deprecated_son(id_dict, run)
+        return CourseRunUsageKey._from_deprecated_son(id_dict, run)  # pylint: disable=protected-access
 
 
-class Location(LocationBase, CourseRunUsageKey):
+class Location(LocationBase, CourseRunUsageKey):  # pylint: disable=abstract-method
     """Deprecated. Use CourseRunUsageKey."""
 
     DEPRECATED_TAG = 'i4x'
@@ -507,7 +499,7 @@ class Location(LocationBase, CourseRunUsageKey):
         )
 
 
-class DeprecatedLocation(CourseRunUsageKey):
+class DeprecatedLocation(CourseRunUsageKey):  # pylint: disable=abstract-method
     """
     The short-lived location:org+course+run+block_type+block_id syntax.
     """
@@ -547,7 +539,7 @@ class DeprecatedLocation(CourseRunUsageKey):
         return "+".join(parts)
 
 
-class AssetLocation(LocationBase, CourseRunAssetKey):
+class AssetLocation(LocationBase, CourseRunAssetKey):  # pylint: disable=abstract-method
     """Deprecated. Use CourseRunAssetKey."""
 
     DEPRECATED_TAG = 'c4x'

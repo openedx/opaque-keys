@@ -22,7 +22,7 @@ __all__ = [
 ]
 
 
-class AssetKey(CourseObjectMixin, OpaqueKey):  # pylint: disable=abstract-method
+class AssetKey(CourseObjectMixin, OpaqueKey):
     """
     An OpaqueKey identifying a course asset. Unchanged name.
     """
