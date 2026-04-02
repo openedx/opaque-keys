@@ -33,11 +33,11 @@ class TestLibraryContainerLocator(LocatorBaseTest):
         container_id = 'test-container'
         lib_key = LibraryLocatorV2(org=org, slug=lib)
         container_key = LibraryContainerLocator(
-            lib_key=lib_key,
+            library_key=lib_key,
             container_type=container_type,
             container_id=container_id,
         )
-        lib_key = container_key.lib_key
+        lib_key = container_key.library_key
         assert str(container_key) == "lct:TestX:LibraryX:unit:test-container"
         assert container_key.org == org
         assert container_key.container_type == container_type
@@ -50,16 +50,16 @@ class TestLibraryContainerLocator(LocatorBaseTest):
         lib_key = LibraryLocatorV2(org="TestX", slug="lib1")
 
         with self.assertRaises(TypeError):
-            LibraryContainerLocator(lib_key=None, container_type='unit', container_id='usage')
+            LibraryContainerLocator(library_key=None, container_type='unit', container_id='usage')
 
         with self.assertRaises(ValueError):
-            LibraryContainerLocator(lib_key=lib_key, container_type='unit', container_id='usage-!@#{$%^&*}')
+            LibraryContainerLocator(library_key=lib_key, container_type='unit', container_id='usage-!@#{$%^&*}')
 
     def test_key_constructor_bad_type(self):
         lib_key = LibraryLocatorV2(org="TestX", slug="lib1")
 
         with self.assertRaises(ValueError):
-            LibraryContainerLocator(lib_key=lib_key, container_type='unit-!@#{$%^&*}', container_id='usage')
+            LibraryContainerLocator(library_key=lib_key, container_type='unit-!@#{$%^&*}', container_id='usage')
 
     def test_key_from_string(self):
         org = 'TestX'
@@ -73,7 +73,7 @@ class TestLibraryContainerLocator(LocatorBaseTest):
         assert container_key.org == org
         assert container_key.container_type == container_type
         assert container_key.container_id == container_id
-        lib_key = container_key.lib_key
+        lib_key = container_key.library_key
         assert isinstance(lib_key, LibraryLocatorV2)
         assert lib_key.org == org
         assert lib_key.slug == lib
