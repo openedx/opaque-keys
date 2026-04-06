@@ -8,7 +8,7 @@ astroid==4.0.4
     # via
     #   pylint
     #   pylint-celery
-click==8.3.1
+click==8.3.2
     # via
     #   click-log
     #   code-annotations
@@ -33,7 +33,7 @@ edx-lint==6.0.0
     # via -r requirements/test.in
 execnet==2.1.2
     # via pytest-xdist
-hypothesis==6.151.10
+hypothesis==6.151.11
     # via -r requirements/test.in
 iniconfig==2.3.0
     # via pytest
