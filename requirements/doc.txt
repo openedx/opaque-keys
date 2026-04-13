@@ -62,7 +62,7 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.151.11
+hypothesis==6.151.12
     # via -r requirements/test.txt
 idna==3.11
     # via requests
@@ -81,7 +81,7 @@ jinja2==3.1.6
     #   -r requirements/test.txt
     #   code-annotations
     #   sphinx
-librt==0.8.1
+librt==0.9.0
     # via
     #   -r requirements/test.txt
     #   mypy
@@ -112,7 +112,7 @@ pathspec==1.0.4
     # via
     #   -r requirements/test.txt
     #   mypy
-platformdirs==4.9.4
+platformdirs==4.9.6
     # via
     #   -r requirements/test.txt
     #   pylint
@@ -155,7 +155,7 @@ pylint-plugin-utils==0.9.0
     #   pylint-django
 pymongo==4.16.0
     # via -r requirements/test.txt
-pytest==9.0.2
+pytest==9.0.3
     # via
     #   -r requirements/test.txt
     #   pytest-cov
