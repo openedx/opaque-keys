@@ -93,13 +93,13 @@ execnet==2.1.2
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.25.2
+filelock==3.29.0
     # via
     #   -r requirements/ci.txt
     #   python-discovery
     #   tox
     #   virtualenv
-hypothesis==6.151.12
+hypothesis==6.152.1
     # via -r requirements/doc.txt
 idna==3.11
     # via
@@ -136,7 +136,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/doc.txt
-mypy==1.20.0
+mypy==1.20.1
     # via -r requirements/doc.txt
 mypy-extensions==1.1.0
     # via
@@ -146,7 +146,7 @@ nh3==0.3.4
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
-packaging==26.0
+packaging==26.1
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -318,7 +318,7 @@ tomlkit==0.14.0
     # via
     #   -r requirements/doc.txt
     #   pylint
-tox==4.52.1
+tox==4.53.0
     # via -r requirements/ci.txt
 typing-extensions==4.15.0
     # via
@@ -330,7 +330,7 @@ urllib3==2.6.3
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==21.2.1
+virtualenv==21.2.4
     # via
     #   -r requirements/ci.txt
     #   tox
