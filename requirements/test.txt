@@ -33,7 +33,7 @@ edx-lint==6.0.0
     # via -r requirements/test.in
 execnet==2.1.2
     # via pytest-xdist
-hypothesis==6.151.12
+hypothesis==6.152.1
     # via -r requirements/test.in
 iniconfig==2.3.0
     # via pytest
@@ -49,11 +49,11 @@ mccabe==0.7.0
     # via pylint
 mock==5.2.0
     # via -r requirements/test.in
-mypy==1.20.0
+mypy==1.20.1
     # via -r requirements/test.in
 mypy-extensions==1.1.0
     # via mypy
-packaging==26.0
+packaging==26.1
     # via pytest
 pathspec==1.0.4
     # via mypy
