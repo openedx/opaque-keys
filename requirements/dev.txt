@@ -26,15 +26,15 @@ beautifulsoup4==4.14.3
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
-build==1.4.3
+build==1.4.4
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-cachetools==7.0.5
+cachetools==7.0.6
     # via
     #   -r requirements/ci.txt
     #   tox
-certifi==2026.2.25
+certifi==2026.4.22
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -42,7 +42,7 @@ charset-normalizer==3.4.7
     # via
     #   -r requirements/doc.txt
     #   requests
-click==8.3.2
+click==8.3.3
     # via
     #   -r requirements/doc.txt
     #   -r requirements/pip-tools.txt
@@ -99,9 +99,9 @@ filelock==3.29.0
     #   python-discovery
     #   tox
     #   virtualenv
-hypothesis==6.152.1
+hypothesis==6.152.3
     # via -r requirements/doc.txt
-idna==3.11
+idna==3.13
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -136,17 +136,17 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/doc.txt
-mypy==1.20.1
+mypy==1.20.2
     # via -r requirements/doc.txt
 mypy-extensions==1.1.0
     # via
     #   -r requirements/doc.txt
     #   mypy
-nh3==0.3.4
+nh3==0.3.5
     # via
     #   -r requirements/doc.txt
     #   readme-renderer
-packaging==26.1
+packaging==26.2
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -157,7 +157,7 @@ packaging==26.1
     #   sphinx
     #   tox
     #   wheel
-pathspec==1.0.4
+pathspec==1.1.0
     # via
     #   -r requirements/doc.txt
     #   mypy
@@ -212,7 +212,7 @@ pylint-plugin-utils==0.9.0
     #   -r requirements/doc.txt
     #   pylint-celery
     #   pylint-django
-pymongo==4.16.0
+pymongo==4.17.0
     # via -r requirements/doc.txt
 pyproject-api==1.10.0
     # via
@@ -334,7 +334,7 @@ virtualenv==21.2.4
     # via
     #   -r requirements/ci.txt
     #   tox
-wheel==0.46.3
+wheel==0.47.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
