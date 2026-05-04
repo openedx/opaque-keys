@@ -26,11 +26,11 @@ beautifulsoup4==4.14.3
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
-build==1.4.4
+build==1.5.0
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
-cachetools==7.0.6
+cachetools==7.1.1
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -87,7 +87,7 @@ docutils==0.22.4
     #   pydata-sphinx-theme
     #   readme-renderer
     #   sphinx
-edx-lint==6.0.0
+edx-lint==6.1.0
     # via -r requirements/doc.txt
 execnet==2.1.2
     # via
@@ -99,7 +99,7 @@ filelock==3.29.0
     #   python-discovery
     #   tox
     #   virtualenv
-hypothesis==6.152.3
+hypothesis==6.152.4
     # via -r requirements/doc.txt
 idna==3.13
     # via
@@ -157,7 +157,7 @@ packaging==26.2
     #   sphinx
     #   tox
     #   wheel
-pathspec==1.1.0
+pathspec==1.1.1
     # via
     #   -r requirements/doc.txt
     #   mypy
@@ -317,8 +317,9 @@ tomli-w==1.2.0
 tomlkit==0.14.0
     # via
     #   -r requirements/doc.txt
+    #   edx-lint
     #   pylint
-tox==4.53.0
+tox==4.53.1
     # via -r requirements/ci.txt
 typing-extensions==4.15.0
     # via
@@ -330,7 +331,7 @@ urllib3==2.6.3
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==21.2.4
+virtualenv==21.3.0
     # via
     #   -r requirements/ci.txt
     #   tox

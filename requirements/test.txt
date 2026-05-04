@@ -29,11 +29,11 @@ dnspython==2.8.0
     # via
     #   -r requirements/base.txt
     #   pymongo
-edx-lint==6.0.0
+edx-lint==6.1.0
     # via -r requirements/test.in
 execnet==2.1.2
     # via pytest-xdist
-hypothesis==6.152.3
+hypothesis==6.152.4
     # via -r requirements/test.in
 iniconfig==2.3.0
     # via pytest
@@ -55,7 +55,7 @@ mypy-extensions==1.1.0
     # via mypy
 packaging==26.2
     # via pytest
-pathspec==1.1.0
+pathspec==1.1.1
     # via mypy
 platformdirs==4.9.6
     # via pylint
@@ -107,7 +107,9 @@ stevedore==5.7.0
 text-unidecode==1.3
     # via python-slugify
 tomlkit==0.14.0
-    # via pylint
+    # via
+    #   edx-lint
+    #   pylint
 typing-extensions==4.15.0
     # via
     #   -r requirements/base.txt
