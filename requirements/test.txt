@@ -10,7 +10,7 @@ astroid==4.0.4
     # via
     #   pylint
     #   pylint-celery
-click==8.4.0
+click==8.4.1
     # via
     #   click-log
     #   code-annotations
@@ -35,7 +35,7 @@ edx-lint==6.1.0
     # via -r requirements/test.in
 execnet==2.1.2
     # via pytest-xdist
-hypothesis==6.152.7
+hypothesis==6.152.9
     # via -r requirements/test.in
 iniconfig==2.3.0
     # via pytest
@@ -102,7 +102,7 @@ six==1.17.0
     # via edx-lint
 sortedcontainers==2.4.0
     # via hypothesis
-stevedore==5.7.0
+stevedore==5.8.0
     # via
     #   -r requirements/base.txt
     #   code-annotations

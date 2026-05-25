@@ -13,7 +13,7 @@ astroid==4.0.4
     #   -r requirements/test.txt
     #   pylint
     #   pylint-celery
-click==8.4.0
+click==8.4.1
     # via
     #   -r requirements/test.txt
     #   click-log
@@ -47,7 +47,7 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.152.7
+hypothesis==6.152.9
     # via -r requirements/test.txt
 iniconfig==2.3.0
     # via
@@ -154,7 +154,7 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/test.txt
     #   hypothesis
-stevedore==5.7.0
+stevedore==5.8.0
     # via
     #   -r requirements/test.txt
     #   code-annotations
