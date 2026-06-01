@@ -41,7 +41,7 @@ code-annotations==3.0.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.14.0
+coverage[toml]==7.14.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -66,9 +66,9 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.152.9
+hypothesis==6.155.1
     # via -r requirements/test.txt
-idna==3.16
+idna==3.17
     # via requests
 imagesize==2.0.0
     # via sphinx
@@ -116,7 +116,7 @@ pathspec==1.1.1
     # via
     #   -r requirements/test.txt
     #   mypy
-platformdirs==4.9.6
+platformdirs==4.10.0
     # via
     #   -r requirements/test.txt
     #   pylint
