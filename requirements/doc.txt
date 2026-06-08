@@ -21,7 +21,7 @@ babel==2.18.0
     # via
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.14.3
+beautifulsoup4==4.15.0
     # via pydata-sphinx-theme
 certifi==2026.5.20
     # via requests
@@ -66,9 +66,9 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.155.1
+hypothesis==6.155.2
     # via -r requirements/test.txt
-idna==3.17
+idna==3.18
     # via requests
 imagesize==2.0.0
     # via sphinx
@@ -186,7 +186,7 @@ six==1.17.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-snowballstemmer==3.1.0
+snowballstemmer==3.1.1
     # via sphinx
 sortedcontainers==2.4.0
     # via
