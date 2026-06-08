@@ -35,7 +35,7 @@ edx-lint==6.1.0
     # via -r requirements/test.in
 execnet==2.1.2
     # via pytest-xdist
-hypothesis==6.155.1
+hypothesis==6.155.2
     # via -r requirements/test.in
 iniconfig==2.3.0
     # via pytest
