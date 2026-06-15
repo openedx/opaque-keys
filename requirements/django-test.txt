@@ -104,7 +104,7 @@ pygments==2.20.0
     # via
     #   -r requirements/test.txt
     #   pytest
-pylint==4.0.5
+pylint==4.0.6
     # via
     #   -r requirements/test.txt
     #   edx-lint
@@ -126,7 +126,7 @@ pylint-plugin-utils==0.9.0
     #   pylint-django
 pymongo==4.17.0
     # via -r requirements/test.txt
-pytest==9.0.3
+pytest==9.1.0
     # via
     #   -r requirements/test.txt
     #   pytest-cov

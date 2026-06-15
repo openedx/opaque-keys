@@ -77,7 +77,7 @@ dill==0.4.1
     # via
     #   -r requirements/doc.txt
     #   pylint
-distlib==0.4.1
+distlib==0.4.3
     # via
     #   -r requirements/ci.txt
     #   virtualenv
@@ -97,7 +97,7 @@ execnet==2.1.2
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.29.1
+filelock==3.29.4
     # via
     #   -r requirements/ci.txt
     #   python-discovery
@@ -196,7 +196,7 @@ pygments==2.20.0
     #   pytest
     #   readme-renderer
     #   sphinx
-pylint==4.0.5
+pylint==4.0.6
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -227,7 +227,7 @@ pyproject-hooks==1.2.0
     #   -r requirements/pip-tools.txt
     #   build
     #   pip-tools
-pytest==9.0.3
+pytest==9.1.0
     # via
     #   -r requirements/doc.txt
     #   pytest-cov
@@ -236,7 +236,7 @@ pytest-cov==7.1.0
     # via -r requirements/doc.txt
 pytest-xdist==3.8.0
     # via -r requirements/doc.txt
-python-discovery==1.4.0
+python-discovery==1.4.2
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -249,7 +249,7 @@ pyyaml==6.0.3
     # via
     #   -r requirements/doc.txt
     #   code-annotations
-readme-renderer==44.0
+readme-renderer==45.0
     # via -r requirements/doc.txt
 requests==2.34.2
     # via
@@ -335,7 +335,7 @@ urllib3==2.7.0
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==21.4.2
+virtualenv==21.5.0
     # via
     #   -r requirements/ci.txt
     #   tox
