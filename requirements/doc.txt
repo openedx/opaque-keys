@@ -25,7 +25,7 @@ beautifulsoup4==4.15.0
     # via pydata-sphinx-theme
 certifi==2026.6.17
     # via requests
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
     # via requests
 click==8.4.2
     # via
@@ -41,7 +41,7 @@ code-annotations==3.0.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.15.0
+coverage[toml]==7.15.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -66,7 +66,7 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.156.1
+hypothesis==6.156.6
     # via -r requirements/test.txt
 idna==3.18
     # via requests
@@ -85,7 +85,7 @@ jinja2==3.1.6
     #   -r requirements/test.txt
     #   code-annotations
     #   sphinx
-librt==0.12.0
+librt==0.13.0
     # via
     #   -r requirements/test.txt
     #   mypy
@@ -99,7 +99,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/test.txt
-mypy==2.1.0
+mypy==2.2.0
     # via -r requirements/test.txt
 mypy-extensions==1.1.0
     # via
@@ -148,7 +148,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
-pylint-django==2.7.0
+pylint-django==2.8.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
