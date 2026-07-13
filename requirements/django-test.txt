@@ -27,7 +27,7 @@ code-annotations==3.0.0
     # via
     #   -r requirements/test.txt
     #   edx-lint
-coverage[toml]==7.15.0
+coverage[toml]==7.15.1
     # via
     #   -r requirements/test.txt
     #   pytest-cov
@@ -47,7 +47,7 @@ execnet==2.1.2
     # via
     #   -r requirements/test.txt
     #   pytest-xdist
-hypothesis==6.156.1
+hypothesis==6.156.6
     # via -r requirements/test.txt
 iniconfig==2.3.0
     # via
@@ -61,7 +61,7 @@ jinja2==3.1.6
     # via
     #   -r requirements/test.txt
     #   code-annotations
-librt==0.12.0
+librt==0.13.0
     # via
     #   -r requirements/test.txt
     #   mypy
@@ -75,7 +75,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/test.txt
-mypy==2.1.0
+mypy==2.2.0
     # via -r requirements/test.txt
 mypy-extensions==1.1.0
     # via
@@ -115,7 +115,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/test.txt
     #   edx-lint
-pylint-django==2.7.0
+pylint-django==2.8.0
     # via
     #   -r requirements/test.txt
     #   edx-lint

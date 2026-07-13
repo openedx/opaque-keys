@@ -30,7 +30,7 @@ beautifulsoup4==4.15.0
     # via
     #   -r requirements/doc.txt
     #   pydata-sphinx-theme
-build==1.5.0
+build==1.5.1
     # via
     #   -r requirements/pip-tools.txt
     #   pip-tools
@@ -42,7 +42,7 @@ certifi==2026.6.17
     # via
     #   -r requirements/doc.txt
     #   requests
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
     # via
     #   -r requirements/doc.txt
     #   requests
@@ -66,7 +66,7 @@ colorama==0.4.6
     # via
     #   -r requirements/ci.txt
     #   tox
-coverage[toml]==7.15.0
+coverage[toml]==7.15.1
     # via
     #   -r requirements/ci.txt
     #   -r requirements/doc.txt
@@ -97,13 +97,13 @@ execnet==2.1.2
     # via
     #   -r requirements/doc.txt
     #   pytest-xdist
-filelock==3.29.5
+filelock==3.29.7
     # via
     #   -r requirements/ci.txt
     #   python-discovery
     #   tox
     #   virtualenv
-hypothesis==6.156.1
+hypothesis==6.156.6
     # via -r requirements/doc.txt
 idna==3.18
     # via
@@ -126,7 +126,7 @@ jinja2==3.1.6
     #   -r requirements/doc.txt
     #   code-annotations
     #   sphinx
-librt==0.12.0
+librt==0.13.0
     # via
     #   -r requirements/doc.txt
     #   mypy
@@ -140,7 +140,7 @@ mccabe==0.7.0
     #   pylint
 mock==5.2.0
     # via -r requirements/doc.txt
-mypy==2.1.0
+mypy==2.2.0
     # via -r requirements/doc.txt
 mypy-extensions==1.1.0
     # via
@@ -207,7 +207,7 @@ pylint-celery==0.3
     # via
     #   -r requirements/doc.txt
     #   edx-lint
-pylint-django==2.7.0
+pylint-django==2.8.0
     # via
     #   -r requirements/doc.txt
     #   edx-lint
@@ -236,7 +236,7 @@ pytest-cov==7.1.0
     # via -r requirements/doc.txt
 pytest-xdist==3.8.0
     # via -r requirements/doc.txt
-python-discovery==1.4.3
+python-discovery==1.4.4
     # via
     #   -r requirements/ci.txt
     #   tox
@@ -323,7 +323,7 @@ tomlkit==0.15.0
     #   -r requirements/doc.txt
     #   edx-lint
     #   pylint
-tox==4.56.1
+tox==4.56.4
     # via -r requirements/ci.txt
 typing-extensions==4.16.0
     # via
@@ -335,7 +335,7 @@ urllib3==2.7.0
     # via
     #   -r requirements/doc.txt
     #   requests
-virtualenv==21.5.1
+virtualenv==21.6.1
     # via
     #   -r requirements/ci.txt
     #   tox
