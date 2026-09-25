@@ -1687,30 +1687,30 @@ class LibraryContainerLocator(CheckFieldMixin, ContainerKey):
         lct:org:lib:ct-type:ct-id
     """
     CANONICAL_NAMESPACE = 'lct'  # "Library Container"
-    KEY_FIELDS = ('lib_key', 'container_type', 'container_id')
-    lib_key: LibraryLocatorV2
+    KEY_FIELDS = ('lib_key', 'container_type', 'container_code')
+    library_key: LibraryLocatorV2
     container_type: str
-    container_id: str
+    container_code: str
 
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
 
     # Allow container IDs to contian unicode characters
-    CONTAINER_ID_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
+    CONTAINER_CODE_REGEXP = re.compile(r'^[\w\-.]+$', flags=re.UNICODE)
 
-    def __init__(self, lib_key: LibraryLocatorV2, container_type: str, container_id: str):
+    def __init__(self, library_key: LibraryLocatorV2, container_type: str, container_code: str):
         """
         Construct a CollectionLocator
         """
-        if not isinstance(lib_key, LibraryLocatorV2):
+        if not isinstance(library_key, LibraryLocatorV2):
             raise TypeError("lib_key must be a LibraryLocatorV2")
 
         self._check_key_string_field("container_type", container_type)
-        self._check_key_string_field("container_id", container_id, regexp=self.CONTAINER_ID_REGEXP)
+        self._check_key_string_field("container_code", container_code, regexp=self.CONTAINER_CODE_REGEXP)
         super().__init__(
-            lib_key=lib_key,
+            lib_key=library_key,
             container_type=container_type,
-            container_id=container_id,
+            container_code=container_code,
         )
 
     @property
@@ -1718,21 +1718,21 @@ class LibraryContainerLocator(CheckFieldMixin, ContainerKey):
         """
         The organization that this Container belongs to.
         """
-        return self.lib_key.org
+        return self.library_key.org
 
     @property
     def context_key(self) -> LibraryLocatorV2:
-        return self.lib_key
+        return self.library_key
 
     def _to_string(self) -> str:
         """
         Serialize this key as a string
         """
         return ":".join((
-            self.lib_key.org,
-            self.lib_key.slug,
+            self.library_key.org,
+            self.library_key.slug,
             self.container_type,
-            self.container_id
+            self.container_code,
         ))
 
     @classmethod
