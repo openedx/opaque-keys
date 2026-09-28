@@ -20,7 +20,7 @@ requirements: ## install development environment requirements
 
 test: ## run tests
 	uv sync --group django42
-	uv run pytest -v --disable-pytest-warnings --nomigrations
+	pytest -v --disable-pytest-warnings --nomigrations
 
 upgrade: ## update the uv.lock to use the latest releases satisfying our constraints
 	uv run --with edx-lint edx_lint write_uv_constraints pyproject.toml
