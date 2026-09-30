@@ -155,7 +155,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         """Validate Empty values, otherwise defer to the parent"""
         # raise validation error if the use of this field says it can't be blank but it is
         if self.blank or value is not self.Empty:
-            return super().validate(value, model_instance)
+            return super().validate(value, model_instance)  # pylint: disable=no-member
         raise ValidationError(self.error_messages['blank'])
 
     def run_validators(self, value):
@@ -163,7 +163,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
         if value is self.Empty:
             return None
 
-        return super().run_validators(value)
+        return super().run_validators(value)  # pylint: disable=no-member
 
     def db_parameters(self, connection):
         """
@@ -198,7 +198,7 @@ class OpaqueKeyField(CreatorMixin, CharField):
 
         Just add our custom "case_sensitive" field if needed.
         """
-        name, path, args, kwargs = super().deconstruct()
+        name, path, args, kwargs = super().deconstruct()  # pylint: disable=no-member
         if self.case_sensitive:
             kwargs["case_sensitive"] = True
         return name, path, args, kwargs

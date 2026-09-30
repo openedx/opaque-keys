@@ -1,7 +1,0 @@
-# Core requirements for using this application
--c constraints.txt
-
-# https://pymongo.readthedocs.io/en/4.4.0/migrate-to-pymongo4.html#son-items-now-returns-dict-items-object
-pymongo
-stevedore>=0.14.1
-typing-extensions

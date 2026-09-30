@@ -12,9 +12,11 @@ from collections import defaultdict
 from functools import total_ordering
 from typing import Self
 
+from importlib.metadata import version
+
 from stevedore.enabled import EnabledExtensionManager
 
-__version__ = '4.0.0'
+__version__ = version("edx-opaque-keys")
 
 
 class InvalidKeyError(Exception):

@@ -1,5 +1,0 @@
-# Requirements for running tests in Github Actions
--c constraints.txt
-
-coverage                  # Be able to generate coverage data.
-tox                       # Virtualenv management for tests

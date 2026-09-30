@@ -32,7 +32,7 @@ class TestCreatorMixin(TestCase):
 
     def test_char_field_is_converted_to_container(self):
         expected = Container('key-1').transform()
-        self.assertEqual(expected, self.model.key.transform())
+        self.assertEqual(expected, self.model.key.transform())  # pylint: disable=no-member
 
     def test_load_model_from_db(self):
         fetched_model = ExampleModel.objects.get(key='key-1')
@@ -65,7 +65,7 @@ class TestOpaqueKeyField(TestCase):
 class TestKeyFieldImplementation(TestCase):
     """Tests for all of the subclasses of OpaqueKeyField."""
     def setUp(self):
-        super().setUp()
+        super().setUp()  # pylint: disable=no-member
         self.course_key = CourseKey.from_string('course-v1:edX+FUN101x+3T2017')
         self.usage_key = UsageKey.from_string('block-v1:edX+FUN101x+3T2017+type@html+block@12345678')
         self.collection_key = CollectionKey.from_string('lib-collection:TestX:LibraryX:test-problem-bank')
@@ -81,7 +81,7 @@ class TestKeyFieldImplementation(TestCase):
         self.model.save()
 
     def tearDown(self):
-        super().tearDown()
+        super().tearDown()  # pylint: disable=no-member
         self.model.delete()
 
     def test_fetch_from_db(self):

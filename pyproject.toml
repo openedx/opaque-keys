@@ -1,0 +1,189 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edx-opaque-keys"
+dynamic = ["version"]
+description = "Create and introspect course and xblock identities through a clear and consistent API"
+readme = "README.rst"
+license = "AGPL-3.0-only"
+license-files = ["LICENSE"]
+authors = [
+    {name = "Open edX Project", email = "oscm@openedx.org"},
+]
+requires-python = ">=3.12"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+]
+dependencies = [
+    "pymongo",
+    "stevedore>=0.14.1",
+    "typing-extensions",
+]
+
+[project.optional-dependencies]
+django = []
+
+[project.urls]
+Homepage = "https://github.com/openedx/opaque-keys"
+
+[project.entry-points."opaque_keys.testing"]
+base10 = "opaque_keys.tests.test_opaque_keys:Base10Key"
+hex = "opaque_keys.tests.test_opaque_keys:HexKey"
+dict = "opaque_keys.tests.test_opaque_keys:DictKey"
+
+[project.entry-points."context_key"]
+course-v1 = "opaque_keys.edx.locator:CourseLocator"
+library-v1 = "opaque_keys.edx.locator:LibraryLocator"
+lib = "opaque_keys.edx.locator:LibraryLocatorV2"
+# don't use slashes in any new code
+slashes = "opaque_keys.edx.locator:CourseLocator"
+
+[project.entry-points."usage_key"]
+block-v1 = "opaque_keys.edx.locator:BlockUsageLocator"
+lib-block-v1 = "opaque_keys.edx.locator:LibraryUsageLocator"
+lb = "opaque_keys.edx.locator:LibraryUsageLocatorV2"
+location = "opaque_keys.edx.locations:DeprecatedLocation"
+aside-usage-v1 = "opaque_keys.edx.asides:AsideUsageKeyV1"
+aside-usage-v2 = "opaque_keys.edx.asides:AsideUsageKeyV2"
+
+[project.entry-points."asset_key"]
+asset-v1 = "opaque_keys.edx.locator:AssetLocator"
+
+[project.entry-points."definition_key"]
+def-v1 = "opaque_keys.edx.locator:DefinitionLocator"
+aside-def-v1 = "opaque_keys.edx.asides:AsideDefinitionKeyV1"
+aside-def-v2 = "opaque_keys.edx.asides:AsideDefinitionKeyV2"
+bundle-olx = "opaque_keys.edx.locator:BundleDefinitionLocator"
+
+[project.entry-points."block_type"]
+block-type-v1 = "opaque_keys.edx.block_types:BlockTypeKeyV1"
+
+[project.entry-points."collection_key"]
+lib-collection = "opaque_keys.edx.locator:LibraryCollectionLocator"
+
+[project.entry-points."container_key"]
+lct = "opaque_keys.edx.locator:LibraryContainerLocator"
+
+[tool.setuptools_scm]
+version_scheme = "only-version"
+local_scheme = "no-local-version"
+fallback_version = "0.0.0"
+
+[tool.setuptools]
+include-package-data = true
+# Package lives in src/ but is installed without the src prefix,
+# e.g. src/opaque_keys/ is installed as opaque_keys.
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+# Includes opaque_keys's own tests, since other libraries import test mixins
+# from them (see setup.py's original comment to that effect). The top-level
+# `settings` test-settings package that setup.py's bare find_packages() used
+# to also bundle is no longer included now that packages are only
+# discovered under src/ -- it lives at the repo root for local test runs
+# only, which is the correct scope for it.
+include = ["opaque_keys*"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["tests*", "*.tests*", "spec*", "*.spec*"]
+
+[tool.coverage.run]
+branch = true
+source = ["src/opaque_keys"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/__pycache__/*",
+    "*/settings.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[dependency-groups]
+# Base test packages, no Django involved.
+test-base = [
+    "coverage",
+    "ddt",
+    "edx-lint",
+    "hypothesis",
+    "mock",
+    "mypy",
+    "pycodestyle",
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+]
+# Core functionality tests, without the optional Django integration installed at all.
+test = [
+    {include-group = "test-base"},
+]
+# Tests that exercise the "django" extra. Update the Django pin here when bumping
+# the default supported version; add a new group (e.g. django52) for testing
+# additional Django versions side-by-side.
+django42 = [
+    {include-group = "test-base"},
+    "Django>=4.2,<5.0",
+    "pytest-django",
+]
+quality = [
+    {include-group = "django42"},
+]
+doc = [
+    {include-group = "test"},
+    "sphinx-book-theme",
+    "readme_renderer",
+    "Sphinx",
+]
+# Minimal CI group: just what's needed to invoke tox.
+ci = [
+    {include-group = "quality"},
+    "tox",
+    "tox-uv",
+]
+dev = [
+    {include-group = "quality"},
+    {include-group = "ci"},
+    {include-group = "doc"},
+]
+
+[tool.uv]
+package = true
+
+#  DO NOT EDIT constraint-dependencies DIRECTLY.
+#  This list is managed by `edx_lint write_uv_constraints`
+#  and will be overwritten the next time `make upgrade` is run.
+#  - GLOBAL constraints: edit edx_lint/files/common_constraints.txt
+#  - REPO-SPECIFIC constraints: edit [tool.edx_lint].uv_constraints in this file
+constraint-dependencies = [
+    "Django<6.0",
+    "elasticsearch<7.14.0",
+]
+[tool.edx_lint]
+uv_constraints = []
+
+[tool.semantic_release]
+build_command = "python -m pip install --upgrade build && SETUPTOOLS_SCM_PRETEND_VERSION=$NEW_VERSION python -m build"
+major_on_zero = false
+allow_zero_version = true
+tag_format = "v{version}"
+

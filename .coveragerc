@@ -1,4 +1,0 @@
-[run]
-branch = True
-source = ./opaque_keys
-omit = ./.tox/*

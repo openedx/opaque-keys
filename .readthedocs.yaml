@@ -20,7 +20,10 @@ formats:
    - pdf
    - epub
 
-# Optionally set the version of Python and requirements required to build your docs
+# Install dependencies via uv, using the "doc" dependency group from pyproject.toml
 python:
    install:
-   - requirements: requirements/doc.txt
+   - method: uv
+     command: sync
+     groups:
+        - doc
