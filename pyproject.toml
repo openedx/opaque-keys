@@ -7,7 +7,7 @@ name = "edx-opaque-keys"
 dynamic = ["version"]
 description = "Create and introspect course and xblock identities through a clear and consistent API"
 readme = "README.rst"
-license = "AGPL-3.0"
+license = "AGPL-3.0-only"
 license-files = ["LICENSE"]
 authors = [
     {name = "Open edX Project", email = "oscm@openedx.org"},
