@@ -86,15 +86,8 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-# Includes opaque_keys's own tests, since other libraries import test mixins
-# from them (see setup.py's original comment to that effect). The top-level
-# `settings` test-settings package that setup.py's bare find_packages() used
-# to also bundle is no longer included now that packages are only
-# discovered under src/ -- it lives at the repo root for local test runs
-# only, which is the correct scope for it.
-#
-# ccx_keys was merged in from the former edx-ccx-keys distribution. Its tests
-# are not included, matching how edx-ccx-keys was packaged.
+# opaque_keys's tests are packaged, because consumers import test mixins from
+# them. ccx_keys's tests are not packaged.
 include = ["opaque_keys*", "ccx_keys"]
 
 [tool.setuptools.exclude-package-data]
