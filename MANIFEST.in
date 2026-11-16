@@ -3,3 +3,4 @@ include LICENSE
 include README.rst
 recursive-include src/opaque_keys *.html *.png *.gif *js *.css *jpg *jpeg *svg *py
 include src/opaque_keys/py.typed
+recursive-include src/ccx_keys *py

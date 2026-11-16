@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 4
 
    opaque_keys
+   ccx_keys
 
 
 Indices and tables
