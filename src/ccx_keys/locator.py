@@ -1,5 +1,8 @@
 """ Locator module. """
+from __future__ import annotations
+
 import re
+from typing import Any, NoReturn, Self
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import UsageKey
@@ -16,15 +19,18 @@ class CCXLocator(CourseLocator, CCXKey):
     """Concrete implementation of an Opaque Key for CCX courses"""
 
     CANONICAL_NAMESPACE = 'ccx-v1'
-    KEY_FIELDS = CourseLocator.KEY_FIELDS + ('ccx',)
+    # mypy infers CourseLocator.KEY_FIELDS as a fixed-length tuple, so it rejects a longer one here.
+    KEY_FIELDS = CourseLocator.KEY_FIELDS + ('ccx',)  # type: ignore[assignment]
+    ccx: str
+
     __slots__ = KEY_FIELDS
     CHECKED_INIT = False
-    CCX_PREFIX = 'ccx'
-    deprecated = False
+    CCX_PREFIX: str = 'ccx'
+    deprecated: bool = False
 
     # pep8 and pylint don't agree on the indentation in this block; let's make
     # pep8 happy and ignore pylint as that's easier to do.
-    URL_RE_SOURCE = r"""
+    URL_RE_SOURCE: str = r"""
         ((?P<org>{ALLOWED_ID_CHARS}+)\+(?P<course>{ALLOWED_ID_CHARS}+)(\+(?P<run>{ALLOWED_ID_CHARS}+))?{SEP})??
         ({BRANCH_PREFIX}@(?P<branch>{ALLOWED_ID_CHARS}+){SEP})?
         ({VERSION_PREFIX}@(?P<version_guid>[A-F0-9]+){SEP})?
@@ -41,11 +47,11 @@ class CCXLocator(CourseLocator, CCXKey):
         SEP=r'(\+(?=.)|\Z)',  # Separator: requires a non-trailing '+' or end of string
     )
 
-    URL_RE = re.compile(
+    URL_RE: re.Pattern[str] = re.compile(
         '^' + URL_RE_SOURCE + r'\Z', re.IGNORECASE | re.VERBOSE | re.UNICODE
     )
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         """constructor for a ccx locator"""
         # for a ccx locator we require a ccx id to be passed.
         if 'ccx' not in kwargs:
@@ -57,7 +63,7 @@ class CCXLocator(CourseLocator, CCXKey):
         super().__init__(**kwargs)
 
     @classmethod
-    def from_course_locator(cls, course_locator, ccx):
+    def from_course_locator(cls, course_locator: CourseLocator, ccx: str) -> Self:
         """Construct a CCXLocator given a CourseLocator and a ccx id"""
         new_obj = cls(
             org=course_locator.org,
@@ -70,7 +76,7 @@ class CCXLocator(CourseLocator, CCXKey):
         )
         return new_obj
 
-    def to_course_locator(self):
+    def to_course_locator(self) -> CourseLocator:
         """
         Returns a CourseLocator representing this location.
         """
@@ -82,7 +88,7 @@ class CCXLocator(CourseLocator, CCXKey):
             version_guid=self.version_guid
         )
 
-    def _to_string(self):
+    def _to_string(self) -> str:
         """
         Return a string representing this location.
         """
@@ -91,16 +97,16 @@ class CCXLocator(CourseLocator, CCXKey):
         string += f"+{self.CCX_PREFIX}@{self.ccx}"
         return string
 
-    def _to_deprecated_string(self):
+    def _to_deprecated_string(self) -> NoReturn:
         """ CCXLocators are never deprecated. """
         raise NotImplementedError
 
     @classmethod
-    def _from_deprecated_string(cls, serialized):
+    def _from_deprecated_string(cls, serialized: str) -> NoReturn:
         """ CCXLocators are never deprecated. """
         raise NotImplementedError
 
-    def make_usage_key(self, block_type, block_id):
+    def make_usage_key(self, block_type: str, block_id: str) -> CCXBlockUsageLocator:
         return CCXBlockUsageLocator(
             course_key=self,
             block_type=block_type,
@@ -108,7 +114,7 @@ class CCXLocator(CourseLocator, CCXKey):
             deprecated=False
         )
 
-    def make_asset_key(self, asset_type, path):
+    def make_asset_key(self, asset_type: str, path: str) -> AssetLocator:
         return AssetLocator(
             self.to_course_locator(),
             asset_type,
@@ -121,15 +127,16 @@ class CCXBlockUsageLocator(BlockUsageLocator, UsageKey):
     """Concrete implementation of a usage key for blocks in CCXs"""
 
     CANONICAL_NAMESPACE = 'ccx-block-v1'
+    course_key: CCXLocator
 
-    URL_RE = re.compile(
+    URL_RE: re.Pattern[str] = re.compile(
         '^' + CCXLocator.URL_RE_SOURCE + r'\Z', re.IGNORECASE | re.VERBOSE | re.UNICODE
     )
 
-    def replace(self, **kwargs):
+    def replace(self, **kwargs: Any) -> Self:
         # BlockUsageLocator allows for the replacement of 'KEY_FIELDS' in 'self.course_key'.
         # This includes the deprecated 'KEY_FIELDS' of CourseLocator `'revision'` and `'version'`.
-        course_key_kwargs = {}
+        course_key_kwargs: dict[str, Any] = {}
         for key in CCXLocator.KEY_FIELDS:
             if key in kwargs:
                 course_key_kwargs[key] = kwargs.pop(key)
@@ -139,7 +146,7 @@ class CCXBlockUsageLocator(BlockUsageLocator, UsageKey):
         return super().replace(**kwargs)
 
     @classmethod
-    def _from_string(cls, serialized):
+    def _from_string(cls, serialized: str) -> Self:
         """
         Requests CCXLocator to deserialize its part and then adds the local
         deserialization of block
@@ -153,11 +160,11 @@ class CCXBlockUsageLocator(BlockUsageLocator, UsageKey):
         return cls(course_key, parsed_parts.get('block_type'), block_id)
 
     @property
-    def ccx(self):
+    def ccx(self) -> str:
         """Returns the ccx for this object's course_key."""
         return self.course_key.ccx
 
-    def to_block_locator(self):
+    def to_block_locator(self) -> BlockUsageLocator:
         """
         Returns a BlockUsageLocator for this location.
         """
@@ -167,11 +174,11 @@ class CCXBlockUsageLocator(BlockUsageLocator, UsageKey):
             block_id=self.block_id
         )
 
-    def _to_deprecated_string(self):
+    def _to_deprecated_string(self) -> NoReturn:
         """ CCXBlockUsageLocators are never deprecated. """
         raise NotImplementedError
 
     @classmethod
-    def _from_deprecated_string(cls, serialized):
+    def _from_deprecated_string(cls, serialized: str) -> NoReturn:
         """ CCXBlockUsageLocators are never deprecated."""
         raise NotImplementedError
