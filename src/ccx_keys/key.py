@@ -1,6 +1,7 @@
 """ Key module. """
+from __future__ import annotations
 
-from abc import abstractproperty
+from abc import abstractmethod
 
 from opaque_keys.edx.keys import CourseKey
 
@@ -8,7 +9,8 @@ from opaque_keys.edx.keys import CourseKey
 class CCXKey(CourseKey):
     """ Custom course key. """
 
-    @abstractproperty  # pylint: disable=deprecated-decorator
-    def ccx(self):
+    @property
+    @abstractmethod
+    def ccx(self) -> str:
         """The id of the ccx for this key"""
         raise NotImplementedError()
