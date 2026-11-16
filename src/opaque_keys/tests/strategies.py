@@ -8,6 +8,8 @@ import string
 from hypothesis import strategies, assume
 from hypothesis.strategies._internal.core import cacheable
 
+from ccx_keys.locator import CCXBlockUsageLocator, CCXLocator
+
 from opaque_keys.edx.block_types import BlockTypeKeyV1, XBLOCK_V1, XMODULE_V1
 from opaque_keys.edx.asides import (
     AsideDefinitionKeyV2, AsideUsageKeyV2, AsideDefinitionKeyV1, AsideUsageKeyV1
@@ -339,6 +341,33 @@ def _instances_of_block_usage(cls, **kwargs):  # pylint: disable=missing-functio
         )
 
     return kwargs.get('course_key', instances_of_key(CourseLocator)).flatmap(locator_for_course)
+
+
+@instances_of_key.register(CCXLocator)
+@cacheable
+def _instances_of_ccx_locator(cls, **kwargs):
+
+    return strategies.builds(
+        cls,
+        org=kwargs.get('org', allowed_locator_ids()),
+        course=kwargs.get('course', allowed_locator_ids()),
+        run=kwargs.get('run', allowed_locator_ids()),
+        branch=kwargs.get('branch', allowed_locator_ids()),
+        version_guid=kwargs.get('version_guid', version_guids()),
+        ccx=kwargs.get('ccx', strategies.integers(min_value=0).map(str)),
+    )
+
+
+@instances_of_key.register(CCXBlockUsageLocator)
+@cacheable
+def _instances_of_ccx_block_usage(cls, **kwargs):
+
+    return strategies.builds(
+        cls,
+        course_key=kwargs.get('course_key', instances_of_key(CCXLocator)),
+        block_id=kwargs.get('block_id', allowed_locator_ids()),
+        block_type=kwargs.get('block_type', allowed_locator_ids()),
+    )
 
 
 @instances_of_key.register(LibraryUsageLocator)
